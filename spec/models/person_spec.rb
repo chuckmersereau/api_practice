@@ -359,9 +359,23 @@ describe Person do
       expect(person.anniversary_year).to eq(1988)
     end
 
-    it 'handles a missing year' do
+    it 'returns a placeholder for a missing year' do
+      person.anniversary_day = 1
+      person.anniversary_month = 1
       person.anniversary_year = nil
       expect(person.anniversary_year).to eq(1900)
+    end
+
+    it 'does not return a placeholder year if day and month are also missing' do
+      person.anniversary_day = nil
+      person.anniversary_month = nil
+      person.anniversary_year = nil
+      expect(person.anniversary_year).to eq(nil)
+      person.anniversary_day = 1
+      expect(person.anniversary_year).to eq(nil)
+      person.anniversary_day = nil
+      person.anniversary_month = 1
+      expect(person.anniversary_year).to eq(nil)
     end
   end
 
@@ -377,9 +391,23 @@ describe Person do
       expect(person.birthday_year).to eq(1988)
     end
 
-    it 'handles a missing year' do
+    it 'returns a placeholder for a missing year' do
+      person.birthday_day = 1
+      person.birthday_month = 1
       person.birthday_year = nil
       expect(person.birthday_year).to eq(1900)
+    end
+
+    it 'does not return a placeholder year if day and month are also missing' do
+      person.birthday_day = nil
+      person.birthday_month = nil
+      person.birthday_year = nil
+      expect(person.birthday_year).to eq(nil)
+      person.birthday_day = 1
+      expect(person.birthday_year).to eq(nil)
+      person.birthday_day = nil
+      person.birthday_month = 1
+      expect(person.birthday_year).to eq(nil)
     end
   end
 end
