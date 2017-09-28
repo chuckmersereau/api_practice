@@ -371,15 +371,12 @@ describe TntImport do
   context '#import_appeals' do
     def test_appeal_import(import)
       account_list = import.account_list
+
+      account_list.users << create(:user)
+      @offline_org = create(:offline_org)
+      account_list.users.first.organization_accounts << create(:organization_account, organization: @offline_org)
+
       tnt_import = TntImport.new(import)
-      contact = create(:contact, name: 'Doe, John', account_list: account_list)
-      donor_account = create(:donor_account, account_number: '432294333')
-      contact.donor_accounts << donor_account
-      account_list.contacts << contact
-      designation_account = create(:designation_account)
-      account_list.account_list_entries << create(:account_list_entry, designation_account: designation_account)
-      donation = donor_account.donations.create(amount: 50, donation_date: Date.new(2005, 6, 10),
-                                                designation_account: designation_account)
 
       expect do
         tnt_import.send(:import)
@@ -387,11 +384,10 @@ describe TntImport do
       appeal = Appeal.first
       expect(appeal.name).to eq('CSU')
       expect(appeal.created_at).to eq(Time.zone.local(2005, 5, 21, 12, 56, 40))
-      expect(appeal.contacts.count).to eq(2)
-      expect(appeal.contacts.pluck(:name)).to include('Smith, John and Jane')
-      expect(appeal.contacts.pluck(:name)).to include('Doe, John')
-      expect(appeal.donations.first).to eq(donation)
-      donation.reload
+      expect(appeal.contacts.pluck(:name)).to eq(['Smith, John and Jane'])
+
+      donation = appeal.donations.first
+      expect(donation.tnt_id).to eq('ICWMY')
       expect(donation.appeal).to eq(appeal)
       expect(donation.appeal_amount).to eq(25)
 
@@ -404,18 +400,18 @@ describe TntImport do
       expect(donation.appeal_amount).to eq(25)
       appeal.reload
       expect(appeal.created_at).to eq(Time.zone.local(2005, 5, 21, 12, 56, 40))
-      expect(appeal.contacts.count).to eq(2)
+      expect(appeal.contacts.pluck(:name)).to eq(['Smith, John and Jane'])
     end
 
     context 'version 3.1 and lower, appeals are called "Appeal"' do
       it 'imports an appeal as well as its contacts and donations' do
-        test_appeal_import(create(:tnt_import_appeals))
+        test_appeal_import(create(:tnt_import_3_0_appeals))
       end
     end
 
     context 'version 3.2 and higher, appeals are called "Campaign"' do
       it 'imports an appeal as well as its contacts and donations' do
-        test_appeal_import(create(:tnt_import_campaigns))
+        test_appeal_import(create(:tnt_import_3_2_campaigns))
       end
     end
 
@@ -458,7 +454,7 @@ describe TntImport do
     end
 
     it 'associates contacts with tnt appeal ids' do
-      tnt_import = TntImport.new(create(:tnt_import_appeals))
+      tnt_import = TntImport.new(create(:tnt_import_3_0_appeals))
       contact_ids_by_tnt_appeal_id = tnt_import.send(:import_history, import.send(:import_contacts))
       expect(contact_ids_by_tnt_appeal_id.size).to eq(1)
       contact_ids = contact_ids_by_tnt_appeal_id['-2079150908']

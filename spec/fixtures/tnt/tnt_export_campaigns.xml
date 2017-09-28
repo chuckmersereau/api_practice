@@ -147,12 +147,21 @@
         <PersonallyReceived>false</PersonallyReceived>
         <AvailableOnWeb>true</AvailableOnWeb>
         <PledgeFulfillmentType>0</PledgeFulfillmentType>
-        <CampaignID>-2079150908</CampaignID>
-        <CampaignAmount>25</CampaignAmount>
         <OrgGiftCode>ICWMY</OrgGiftCode>
         <OrgMotivationCode>S00000</OrgMotivationCode>
       </row>
     </Gift>
+    <GiftSplit>
+      <row id="1136769896">
+        <LastEdit>2003-01-11 18:49:34</LastEdit>
+        <GiftID>-2100979831</GiftID>
+        <CampaignID>-2079150908</CampaignID>
+        <Amount>25</Amount>
+        <CurrencyID>1184906156</CurrencyID>
+        <BaseAmount>25</BaseAmount>
+        <BaseCurrencyID>1184906156</BaseCurrencyID>
+      </row>
+    </GiftSplit>
     <Donor>
       <row id="-78585162">
         <LastEdit>2003-01-11 18:47:55</LastEdit>

@@ -1,5 +1,6 @@
 class TntImport::GiftsImport
   include Concerns::TntImport::DateHelpers
+  include Concerns::TntImport::AppealHelpers
   include LocalizationHelper
   attr_reader :contact_ids_by_tnt_contact_id, :xml_tables, :account_list, :organization, :user
 
@@ -14,7 +15,7 @@ class TntImport::GiftsImport
   end
 
   def import
-    return {} unless @account_list.organization_accounts.count == 1 && xml_tables['Gift'].present?
+    return {} unless account_list.organization_accounts.count == 1 && xml_tables['Gift'].present?
 
     xml_tables['Gift'].each do |row|
       tnt_contact_id = row['ContactID']
@@ -53,12 +54,12 @@ class TntImport::GiftsImport
       tnt_id: row['OrgGiftCode']
     )
 
-    add_donation_to_first_appeal_and_add_other_appeals_to_memo(donation, row)
+    add_donation_to_first_appeal_and_add_other_appeals_to_memo(donation, row, donor_account)
 
     donation
   end
 
-  def add_donation_to_first_appeal_and_add_other_appeals_to_memo(mpdx_donation, tnt_gift)
+  def add_donation_to_first_appeal_and_add_other_appeals_to_memo(mpdx_donation, tnt_gift, donor_account)
     # Version 3.2 of Tnt changed the relationship beteween Gifts and Appeals:
     # In 3.1 a Gift can only belong to one Appeal, through a foreign key on the Gift table.
     # In 3.2 a Gift can be split and belong to many Appeals, through a new GiftSplit table.
@@ -67,12 +68,20 @@ class TntImport::GiftsImport
     else
       add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_2(mpdx_donation, tnt_gift)
     end
+
+    add_donor_account_contacts_to_appeal(donor_account, mpdx_donation.reload.appeal)
+  end
+
+  def add_donor_account_contacts_to_appeal(donor_account, appeal)
+    return unless donor_account && appeal
+    contact_ids = donor_account.contacts.where(account_list: account_list).ids
+    appeal.bulk_add_contacts(contact_ids: contact_ids)
   end
 
   def add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_1(mpdx_donation, tnt_gift)
     appeal = account_list_appeal_by_tnt_id(tnt_gift['AppealID'])
     new_memo = generate_new_donation_memo(mpdx_donation)
-    mpdx_donation.update(appeal: appeal, memo: new_memo)
+    mpdx_donation.update(appeal: appeal, memo: new_memo, appeal_amount: tnt_gift[appeal_amount_name])
   end
 
   def add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_2(mpdx_donation, tnt_gift)
@@ -84,9 +93,11 @@ class TntImport::GiftsImport
 
     appeal = gift_split_with_appeal ? account_list_appeal_by_tnt_id(gift_split_with_appeal['CampaignID']) : nil
 
+    appeal_amount = appeal ? gift_split_with_appeal['Amount'] : nil
+
     new_memo = generate_new_donation_memo(mpdx_donation, (gift_splits - [gift_split_with_appeal]))
 
-    mpdx_donation.update(appeal: appeal, memo: new_memo)
+    mpdx_donation.update(appeal: appeal, memo: new_memo, appeal_amount: appeal_amount)
   end
 
   def generate_new_donation_memo(donation, gift_splits = [])
@@ -121,7 +132,7 @@ class TntImport::GiftsImport
   end
 
   def account_list_appeals
-    @account_list_appeals ||= @account_list.appeals
+    @account_list_appeals ||= account_list.appeals
   end
 
   def account_list_appeal_by_tnt_id(tnt_id)
@@ -133,6 +144,8 @@ class TntImport::GiftsImport
     return donor_account if donor_account
 
     donor_account = Retryable.retryable(tries: 3) do
+      # The donor accounts are importer earlier in the process (TntImport::DonorAccountsImport),
+      # but in case the contact didn't receive one:
       # Find a unique donor account_number for this contact. Try the current max numeric account number
       # plus one. If that is a collision due to a race condition, an exception will be raised as there is a
       # unique constraint on (organization_id, account_number) for donor_accounts. Just wait and try
