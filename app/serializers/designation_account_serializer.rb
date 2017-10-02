@@ -13,7 +13,9 @@ class DesignationAccountSerializer < ApplicationSerializer
   has_many :balances
 
   def display_name
+    return _('Unknown') if object.name.blank? && object.designation_number.blank?
     return object.designation_number if object.name.blank?
+    return object.name if object.designation_number.blank?
     "#{object.name} (#{object.designation_number})"
   end
 

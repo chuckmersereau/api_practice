@@ -74,16 +74,28 @@ describe DesignationAccountSerializer do
   end
 
   describe '#display_name' do
-    context 'designation_account has name' do
-      let(:designation_account) { create(:designation_account) }
+    context 'designation_account has name and number' do
+      let(:designation_account) { create(:designation_account, name: 'Name', designation_number:  'Number') }
       it 'returns donor_account name (number)' do
-        expect(serializer.display_name).to eq "#{designation_account.name} (#{designation_account.designation_number})"
+        expect(serializer.display_name).to eq 'Name (Number)'
       end
     end
     context 'designation_account has no name' do
-      let(:designation_account) { create(:designation_account, name: nil) }
+      let(:designation_account) { create(:designation_account, name: nil, designation_number: 'Number') }
       it 'returns donor_account number' do
-        expect(serializer.display_name).to eq designation_account.designation_number
+        expect(serializer.display_name).to eq 'Number'
+      end
+    end
+    context 'designation_account has no number' do
+      let(:designation_account) { create(:designation_account, name: 'Name', designation_number: nil) }
+      it 'returns donor_account name' do
+        expect(serializer.display_name).to eq 'Name'
+      end
+    end
+    context 'designation_account has no name and no number' do
+      let(:designation_account) { create(:designation_account, name: nil, designation_number: nil) }
+      it 'returns donor_account name' do
+        expect(serializer.display_name).to eq 'Unknown'
       end
     end
   end
