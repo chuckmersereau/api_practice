@@ -39,7 +39,9 @@ resource 'Appeals > AppealContacts' do
     end
 
     get '/api/v2/appeals/:appeal_id/appeal_contacts' do
-      parameter 'account_list_id', 'Account List ID', scope: :filters
+      parameter 'account_list_id',   'Account List ID', scope: :filters
+      parameter 'filter[completed]', 'Filter by if contact has pledged to appeal; Accepts value "true" or "false"', required: false
+
       response_field 'data',       'Data', type: 'Array[Object]'
 
       example 'AppealContact [LIST]', document: documentation_scope do
