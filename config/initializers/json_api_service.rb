@@ -9,7 +9,7 @@ JsonApiService.configure do |config|
     key_accounts: 'Person::KeyAccount',
     linkedin_accounts: 'Person::LinkedinAccount',
     organization_accounts: 'Person::OrganizationAccount',
-    primary_appeal: 'Appeal',
+    primary_appeals: 'Appeal',
     salary_organization_id: 'Organization',
     twitter_accounts: 'Person::TwitterAccount',
     user_options: 'User::Option',
