@@ -2,17 +2,18 @@ require 'json_api_service'
 
 JsonApiService.configure do |config|
   config.custom_references = {
-    comments: 'ActivityComment',
     background_batch_requests: 'BackgroundBatch::Request',
+    comments: 'ActivityComment',
     facebook_accounts: 'Person::FacebookAccount',
     google_accounts: 'Person::GoogleAccount',
     key_accounts: 'Person::KeyAccount',
     linkedin_accounts: 'Person::LinkedinAccount',
     organization_accounts: 'Person::OrganizationAccount',
+    primary_appeal: 'Appeal',
+    salary_organization_id: 'Organization',
     twitter_accounts: 'Person::TwitterAccount',
     user_options: 'User::Option',
-    websites: 'Person::Website',
-    salary_organization_id: 'Organization'
+    websites: 'Person::Website'
   }
 
   config.ignored_foreign_keys = {
