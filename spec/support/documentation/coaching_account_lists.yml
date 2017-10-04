@@ -1,0 +1,82 @@
+attributes: &attrs
+  active_mpd_finish_at:
+    description:
+      The date the active MPD finishes
+    type: date
+  active_mpd_monthly_goal:
+    description:
+      The financial goal of the Account List for the active MPD
+    type: number
+  active_mpd_start_at:
+    description:
+      The date the active MPD begins
+    type: date
+  currency:
+    description:
+      The currency code for the Account List, such as 'USD', 'CAD'
+    type: string
+  default_currency:
+    description:
+      The default currency code, 'USD'
+    type: string
+  home_country:
+    description:
+      The country of the Account List
+    type: string
+  monthly_goal:
+    description:
+      The monthly financial goal of the Account List
+    type: number
+  name:
+    description:
+      The name of the Account List
+    type: string
+  settings:
+    description:
+      List of settings associated to this Account List
+    type: Object
+  tester:
+    description:
+      Whether or not the Account List is a testing account
+    type: boolean
+  total_pledges:
+    description:
+      The total amount of pledges donated for the Account List
+    type: float
+  weeks_on_mpd:
+    description:
+      The number of weeks between the MPD start and finish
+    type: number
+
+relationships: &rels
+  notification_preferences:
+    data:
+      description:
+        An array of Notification Preference references for the Account List
+      type: '[Notification Preference]'
+  organization_accounts:
+    data:
+      description:
+        An array of Organization Accounts connected to the Account List
+      type: '[Organization Account]'
+  organization_accounts:
+    data:
+      description:
+        An array of Users connected to the Account List
+      type: '[User]'
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Coached Account List Objects
+      type: '[Account List]'
+
+  show:
+    <<: *obj

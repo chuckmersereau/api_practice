@@ -30,6 +30,23 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
 
   include_examples 'index_examples'
 
+  describe 'filtering' do
+    before { api_login(user) }
+
+    context 'pledged_to_appeal filter' do
+      let!(:user) { create(:user_with_account) }
+
+      before { create(:pledge, contact: contact, appeal: appeal, account_list: account_list) }
+
+      it 'filters results' do
+        get :index, appeal_id: appeal_id, filter: { pledged_to_appeal: 'true' }
+
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)['data'].length).to eq(1)
+      end
+    end
+  end
+
   describe '#create' do
     let!(:contact) { create(:contact, account_list: account_list) }
     include_context 'common_variables'

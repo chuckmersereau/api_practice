@@ -43,7 +43,7 @@ class ImportGiftsAndAppealsFromTntWorker
 
   def contact_ids_by_tnt_appeal_id
     @contact_ids_by_tnt_appeal_id ||= tnt_appeal_ids.each_with_object({}).each do |tnt_appeal_id, hash|
-      appeal = Appeal.find_by(tnt_id: tnt_appeal_id)
+      appeal = account_list.appeals.find_by(tnt_id: tnt_appeal_id)
       contact_ids = appeal&.contacts&.pluck(:id) || []
       hash[tnt_appeal_id] = contact_ids
     end

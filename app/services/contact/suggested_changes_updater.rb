@@ -6,6 +6,7 @@ class Contact::SuggestedChangesUpdater
   end
 
   def update_status_suggestions
+    return if status_confirmed_recently?
     build_suggested_changes
     contact.update_columns(updates)
   end
@@ -27,10 +28,13 @@ class Contact::SuggestedChangesUpdater
 
   def updates
     {
-      status_validated_at: Time.current,
       suggested_changes: suggested_changes,
       status_valid: suggested_changes.blank?
     }
+  end
+
+  def status_confirmed_recently?
+    contact.status_confirmed_at && contact.status_confirmed_at > 1.year.ago
   end
 
   def build_suggested_changes

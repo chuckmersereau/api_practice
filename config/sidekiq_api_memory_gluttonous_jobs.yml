@@ -26,6 +26,7 @@
   - ["api_default",                                      2]
   - ["api_google_contacts_sync_enqueuer_worker",         10]
   - ["api_google_email_sync_enqueuer_worker",            2]
+  - ["api_google_plus_account_fetcher_worker",           1]
   - ["api_google_sync_data_worker",                      1]
   - ["api_import",                                       10]
   - ["api_import_csv",                                   10]

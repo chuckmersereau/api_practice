@@ -1,12 +1,12 @@
-class UserSerializer < ApplicationSerializer
-  attributes :first_name,
-             :last_name,
-             :preferences
-
+class UserSerializer < PersonSerializer
+  attributes :preferences
   has_many :account_lists
-  has_many :email_addresses
 
   belongs_to :master_person
+
+  def person_exhibit
+    exhibit(object.becomes(Person))
+  end
 
   def preferences
     object.preferences.merge(

@@ -126,6 +126,10 @@ class ApplicationFilter
     string.split(',').select(&:present?).map(&:strip)
   end
 
+  def cast_bool_value(string)
+    ActiveRecord::Type::Boolean.new.type_cast_from_user(string)
+  end
+
   def valid_filters?(filters)
     return false unless filters[name].present?
     return false if filters[name].is_a?(Array)

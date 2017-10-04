@@ -16,9 +16,11 @@ class EmailAddress < ApplicationRecord
                           :valid_values].freeze
 
   belongs_to :person, touch: true
+  has_one :google_plus_account
 
   before_save :strip_email_attribute
   before_create :set_valid_values
+  after_create :start_google_plus_account_fetcher_job, unless: :checked_for_google_plus_account
 
   validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
   validates :email, :remote_id, :location, updatable_only_when_source_is_mpdx: true
@@ -86,6 +88,10 @@ class EmailAddress < ApplicationRecord
   end
 
   private
+
+  def start_google_plus_account_fetcher_job
+    GooglePlusAccountFetcherWorker.perform_async(id)
+  end
 
   def strip_email_attribute
     self.email = self.class.strip_email(email)

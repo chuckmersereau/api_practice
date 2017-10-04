@@ -28,7 +28,7 @@ describe TntImport::AppealsImport do
   end
 
   context 'version 3.1 and lower' do
-    before { import.file = File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_appeals.xml')) }
+    before { import.file = File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_0_export_appeals.xml')) }
 
     it 'expects the right xml version' do
       expect(xml.version).to eq 3.0

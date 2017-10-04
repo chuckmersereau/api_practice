@@ -2,6 +2,15 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 29 September 2017
+- Added ?pledged_to_appeal filter to appeal/:id/appeal_contacts endpoint.
+
+## 28 September 2017
+- Add all person fields to the /user endpoint.
+
+## 27 September 2017
+- Removed Burmese, Vietnamese, Japanese and Persian to list available languages.
+
 ## 19 September 2017
 - Added the /contacts/people endpoint to get and delete a person without the contact id.
 

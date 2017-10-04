@@ -699,6 +699,8 @@ describe Contact do
 
       before do
         person_and_email_address
+        contact.tag_list.add('example_tag')
+        contact.save
       end
 
       it 'notifies the mail chimp account of changes on certain fields' do
@@ -715,6 +717,24 @@ describe Contact do
           mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.people.first.primary_email_address.email = 'new@email.com'
+        contact.send(:check_state_for_mail_chimp_sync)
+        contact.send(:sync_with_mail_chimp)
+      end
+
+      it 'notifies the mail chimp account of changes when tags are added' do
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account.id, 'primary_list_id', [contact.id]
+        )
+        contact.tag_list.add('second_example_tag')
+        contact.send(:check_state_for_mail_chimp_sync)
+        contact.send(:sync_with_mail_chimp)
+      end
+
+      it 'notifies the mail chimp account of changes when tags are removed' do
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account.id, 'primary_list_id', [contact.id]
+        )
+        contact.tag_list.remove('example_tag')
         contact.send(:check_state_for_mail_chimp_sync)
         contact.send(:sync_with_mail_chimp)
       end
@@ -1208,6 +1228,76 @@ describe Contact do
 
     it 'does not returns the amount with gift aid added when no_gift_aid is set to true' do
       expect(contact_with_gift_aid_organization.amount_with_gift_aid(100.00)).to eq(125.00)
+    end
+  end
+
+  describe '#set_status_confirmed_at' do
+    let!(:contact) { create(:contact) }
+
+    it 'changes status_confirmed_at to the current time if it changed from false to true' do
+      contact.update!(status_valid: false)
+      contact.reload
+      travel_to Time.current do
+        expect do
+          contact.status_valid = true
+          contact.save!
+        end.to change { contact.reload.status_confirmed_at }.from(nil).to(Time.current)
+      end
+    end
+
+    it 'does not change status_confirmed_at if status_valid was not changed' do
+      expect do
+        contact.name = 'Testing'
+        contact.save
+      end.to_not change { contact.reload.status_confirmed_at }.from(nil)
+    end
+
+    it 'does not change status_confirmed_at if status_valid was previously true' do
+      contact = create(:contact, status_valid: true)
+      expect(contact.status_valid).to eq(true)
+      expect do
+        contact.status_valid = nil
+        contact.save
+      end.to_not change { contact.reload.status_confirmed_at }.from(nil)
+
+      contact = create(:contact, status_valid: true)
+      expect(contact.status_valid).to eq(true)
+      expect do
+        contact.status_valid = false
+        contact.save
+      end.to_not change { contact.reload.status_confirmed_at }.from(nil)
+    end
+
+    it 'does not change status_confirmed_at if status_valid was previously nil' do
+      contact = create(:contact)
+      expect(contact.status_valid).to eq(nil)
+      expect do
+        contact.status_valid = false
+        contact.save
+      end.to_not change { contact.reload.status_confirmed_at }.from(nil)
+
+      contact = create(:contact)
+      expect(contact.status_valid).to eq(nil)
+      expect do
+        contact.status_valid = true
+        contact.save
+      end.to_not change { contact.reload.status_confirmed_at }.from(nil)
+    end
+
+    it 'does not change status_confirmed_at if not changing to true' do
+      contact = create(:contact, status_valid: false)
+      expect(contact.status_valid).to eq(false)
+      expect do
+        contact.status_valid = nil
+        contact.save
+      end.to_not change { contact.reload.status_confirmed_at }.from(nil)
+
+      contact = create(:contact, status_valid: false)
+      expect(contact.status_valid).to eq(false)
+      expect do
+        contact.status_valid = false
+        contact.save
+      end.to_not change { contact.reload.status_confirmed_at }.from(nil)
     end
   end
 end

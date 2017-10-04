@@ -63,12 +63,12 @@ FactoryGirl.define do
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_row_multi_email.yaml')) }
   end
 
-  factory :tnt_import_appeals, parent: :tnt_import do
+  factory :tnt_import_3_0_appeals, parent: :tnt_import do
     association :account_list
-    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_appeals.xml')) }
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_0_export_appeals.xml')) }
   end
 
-  factory :tnt_import_campaigns, parent: :tnt_import do
+  factory :tnt_import_3_2_campaigns, parent: :tnt_import do
     association :account_list
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_campaigns.xml')) }
   end

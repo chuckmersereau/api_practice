@@ -18,10 +18,28 @@ resource 'Users' do
 
   let(:resource_attributes) do
     %w(
-      created_at
+      anniversary_day
+      anniversary_month
+      anniversary_year
+      avatar
+      birthday_day
+      birthday_month
+      birthday_year
+      deceased
+      employer
       first_name
+      gender
       last_name
+      legal_first_name
+      marital_status
+      middle_name
+      occupation
+      optout_enewsletter
+      parent_contacts
       preferences
+      title
+      suffix
+      created_at
       updated_at
       updated_in_db_at
     )
@@ -32,6 +50,12 @@ resource 'Users' do
       account_lists
       email_addresses
       master_person
+      facebook_accounts
+      family_relationships
+      linkedin_accounts
+      phone_numbers
+      twitter_accounts
+      websites
     )
   end
 
@@ -45,12 +69,31 @@ resource 'Users' do
       response_field 'type',          'Will be User',                               type: 'String'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       type: 'String'
-        response_field 'first_name',       'User first name',  type: 'String'
-        response_field 'last_name',        'User last name',   type: 'String'
-        response_field 'preferences',      'User preferences', type: 'Object'
-        response_field 'updated_at',       'Updated At',       type: 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
+        response_field 'anniversary_day',    'Anniversary Day',              type: 'Number'
+        response_field 'anniversary_month',  'Anniversary Month',            type: 'Number'
+        response_field 'anniversary_year',   'Anniversary Year',             type: 'Number'
+        response_field 'avatar',             'Avatar',                       type: 'String'
+        response_field 'birthday_day',       'Birthday Day',                 type: 'Number'
+        response_field 'birthday_month',     'Birthday Month',               type: 'Number'
+        response_field 'birthday_year',      'Birthday Year',                type: 'Number'
+        response_field 'created_at',         'Created At',                   type: 'String'
+        response_field 'deceased',           'Deceased',                     type: 'Boolean'
+        response_field 'employer',           'Employer',                     type: 'String'
+        response_field 'first_name',         'First Name',                   type: 'String'
+        response_field 'gender',             'Gender',                       type: 'String'
+        response_field 'last_name',          'Last Name',                    type: 'String'
+        response_field 'legal_first_name',   'Legal First Name',             type: 'String'
+        response_field 'marital_status',     'Marital Status',               type: 'String'
+        response_field 'master_person_id',   'Master Person ID',             type: 'Number'
+        response_field 'middle_name',        'Middle Name',                  type: 'String'
+        response_field 'occupation',         'Occupation',                   type: 'String'
+        response_field 'optout_enewsletter', 'Optout of Enewsletter or not', type: 'Boolean'
+        response_field 'parent_contacts',    'Array of Parent Contact Ids',  type: 'Array'
+        response_field 'suffix',             'Suffix',                       type: 'String'
+        response_field 'title',              'Title',                        type: 'String'
+        response_field 'preferences',        'User preferences',             type: 'Object'
+        response_field 'updated_at',         'Updated At',                   type: 'String'
+        response_field 'updated_in_db_at',   'Updated In Db At',             type: 'String'
       end
 
       example 'Retrieve the current user', document: documentation_scope do

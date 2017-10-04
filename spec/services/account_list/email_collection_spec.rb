@@ -7,7 +7,7 @@ describe AccountList::EmailCollection do
     expect(AccountList::EmailCollection.new(account_list)).to be_a(AccountList::EmailCollection)
   end
 
-  describe '#grouped_by_email' do
+  describe '#select_by_email' do
     let!(:contact_1) { create(:contact_with_person, account_list: account_list).reload }
     let!(:person_1) { contact_1.primary_person }
     let!(:email_address_1) { create(:email_address, person: person_1) }
@@ -19,11 +19,16 @@ describe AccountList::EmailCollection do
     let!(:email_address_3) { create(:email_address, email: " #{email_address_2.email.upcase} ", person: person_3) }
     let!(:email_address_4) { create(:email_address, person: person_2, deleted: true) }
 
-    it 'normalizes and groups the data by emails without the deleted emails' do
-      emails = AccountList::EmailCollection.new(account_list).grouped_by_email
-      expect(emails[email_address_1.email]).to match_array([{ contact_id: contact_1.id, person_id: person_1.id, email: email_address_1.email }])
-      expect(emails[email_address_2.email]).to match_array([{ contact_id: contact_2.id, person_id: person_2.id, email: email_address_2.email },
-                                                            { contact_id: contact_2.id, person_id: person_3.id, email: email_address_3.email }])
+    it 'selects the data by normalized emails without the deleted emails' do
+      collection = AccountList::EmailCollection.new(account_list)
+      expect(collection.select_by_email(email_address_1.email)).to match_array([{ contact_id: contact_1.id, person_id: person_1.id, email: email_address_1.email }])
+      expect(collection.select_by_email(" #{email_address_1.email.upcase} ")).to match_array([{ contact_id: contact_1.id, person_id: person_1.id, email: email_address_1.email }])
+      expect(collection.select_by_email(email_address_2.email)).to match_array([{ contact_id: contact_2.id, person_id: person_2.id, email: email_address_2.email },
+                                                                                { contact_id: contact_2.id, person_id: person_3.id, email: email_address_3.email }])
+    end
+
+    it 'handles a nil argument' do
+      expect(AccountList::EmailCollection.new(account_list).select_by_email(nil)).to eq([])
     end
   end
 end

@@ -170,7 +170,7 @@ class Contact < ApplicationRecord
   accepts_nested_attributes_for :contact_referrals_to_me, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :contacts_referred_by_me, reject_if: :all_blank, allow_destroy: false
 
-  before_save :set_notes_saved_at, :update_late_at, :check_state_for_mail_chimp_sync
+  before_save :set_notes_saved_at, :update_late_at, :check_state_for_mail_chimp_sync, :set_status_confirmed_at
   after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
   after_create :create_people_from_contact, if: :prefill_attributes_on_create
   before_destroy :delete_from_letter_services, :delete_people
@@ -761,12 +761,17 @@ class Contact < ApplicationRecord
   end
 
   def relevant_nested_attribute_changed?
-    people.any? do |person|
-      person.primary_email_address&.email_changed? ||
-        person.first_name_changed? ||
-        person.last_name_changed? ||
-        person.optout_enewsletter_changed?
-    end
+    any_tags_change? ||
+      people.any? do |person|
+        person.primary_email_address&.email_changed? ||
+          person.first_name_changed? ||
+          person.last_name_changed? ||
+          person.optout_enewsletter_changed?
+      end
+  end
+
+  def any_tags_change?
+    taggings.count != tag_list.count
   end
 
   def sync_with_mail_chimp
@@ -840,5 +845,10 @@ class Contact < ApplicationRecord
     else
       1 # default
     end
+  end
+
+  def set_status_confirmed_at
+    return unless status_valid_changed? && status_valid_was == false && status_valid == true
+    self.status_confirmed_at = Time.current
   end
 end

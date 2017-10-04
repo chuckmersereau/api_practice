@@ -5,11 +5,16 @@ class AccountList::EmailCollection
     @account_list = account_list
   end
 
-  def grouped_by_email
-    @grouped_by_email ||= group_collection_by_email
+  def select_by_email(email)
+    return [] unless email
+    grouped_by_email[normalize_email(email)]
   end
 
   private
+
+  def grouped_by_email
+    @grouped_by_email ||= group_collection_by_email
+  end
 
   def fetch_email_collection_for_account_list
     account_list
@@ -24,7 +29,8 @@ class AccountList::EmailCollection
     fetch_email_collection_for_account_list.each_with_object({}) do |record_data_array, hash|
       contact_id, person_id, email = record_data_array
 
-      normalized_email = email.downcase.strip
+      normalized_email = normalize_email(email)
+
       record_data_hash = {
         contact_id: contact_id,
         person_id: person_id,
@@ -34,5 +40,9 @@ class AccountList::EmailCollection
       hash[normalized_email] ||= []
       hash[normalized_email] << record_data_hash
     end
+  end
+
+  def normalize_email(email)
+    email.downcase.strip
   end
 end

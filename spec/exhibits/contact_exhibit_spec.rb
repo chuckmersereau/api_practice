@@ -49,22 +49,35 @@ describe ContactExhibit do
 
     it 'ignore images with nil content' do
       person = double(facebook_account: nil,
+                      primary_email_address: nil,
                       primary_picture: double(image: double(url: nil)),
                       gender: nil)
       allow(contact).to receive(:primary_person).and_return(person)
       expect(exhib.avatar).to eq('https://mpdx.org/images/avatar.png')
     end
 
-    it 'uses make facebook image if remote_id present' do
+    it 'uses facebook image if remote_id present' do
       person = double(facebook_account: double(remote_id: 1234),
                       primary_picture: double(image: double(url: nil)))
       allow(contact).to receive(:primary_person).and_return(person)
       expect(exhib.avatar).to eq('https://graph.facebook.com/1234/picture?type=square')
     end
 
+    it 'uses google plus avatar if relevant google_account profile_picture_url' do
+      google_plus_account = double(profile_picture_link: 'https://google.com/image')
+      email_address = double(google_plus_account: google_plus_account)
+      person = double(facebook_account: double(remote_id: nil),
+                      primary_email_address: email_address,
+                      primary_picture: double(image: double(url: nil)))
+      allow(contact).to receive(:primary_person).and_return(person)
+      expect(exhib.avatar).to eq('https://google.com/image?size=200')
+    end
+
     it 'uses default avatar if facebook remote_id not present' do
+      email_address = double(google_plus_account: nil)
       person = double(facebook_account: double(remote_id: nil),
                       primary_picture: double(image: double(url: nil)),
+                      primary_email_address: email_address,
                       gender: nil)
       allow(contact).to receive(:primary_person).and_return(person)
       expect(exhib.avatar).to eq('https://mpdx.org/images/avatar.png')
