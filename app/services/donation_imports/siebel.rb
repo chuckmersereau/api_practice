@@ -9,11 +9,15 @@ class DonationImports::Siebel < DonationImports::Base
     false
   end
 
-  private
+  def requires_username_and_password?
+    self.class.requires_username_and_password?
+  end
 
   def import_profiles
     ProfileImporter.new(self).import_profiles
   end
+
+  private
 
   def import_donors
     DonorImporter.new(self).import_donors
