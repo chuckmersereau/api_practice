@@ -5,6 +5,12 @@ class Api::V2::Reports::MonthlyGivingGraphsController < Api::V2Controller
     render_report
   end
 
+  protected
+
+  def account_lists
+    @account_lists ||= current_user.readable_account_lists
+  end
+
   private
 
   def authorize_report

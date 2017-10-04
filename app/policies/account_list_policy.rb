@@ -1,11 +1,11 @@
 class AccountListPolicy < ApplicationPolicy
   def initialize(context, resource)
     @resource = resource
-    @user = context.class.name == 'User' ? context : context.user
+    @user = context.is_a?(User) ? context : context.user
   end
 
   def show?
-    super || coaching_account_list?
+    resource_owner? || coaching_account_list?
   end
 
   private

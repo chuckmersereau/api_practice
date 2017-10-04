@@ -165,6 +165,10 @@ class User < Person
     super(preferences.merge(preferences_attributes)) if preferences_attributes
   end
 
+  def readable_account_lists
+    AccountList.readable_by(self)
+  end
+
   private
 
   def default_account_list_is_valid
