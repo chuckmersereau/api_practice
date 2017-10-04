@@ -3,7 +3,7 @@ class Contact::Filter::Status < Contact::Filter::Base
     status_filters = parse_list(filters[:status])
     status_filters << 'null' if (status_filters.include? '') && !status_filters.include?('null')
     status_filters << '' if (status_filters.include? 'null') && !status_filters.include?('')
-    status_filters += Contact.active_statuses if status_filters.include?('active')
+    status_filters += Contact.active_statuses + ['null'] if status_filters.include?('active')
     status_filters += Contact.inactive_statuses if status_filters.include?('hidden')
 
     if status_filters.include? 'null'
