@@ -7,7 +7,7 @@ describe TntImport::GiftsImport do
 
   context '#import gifts for offline orgs' do
     before do
-      stub_request(:post, 'http://foo:bar@example.com/profiles')
+      stub_request(:post, 'http://example.com/profiles')
         .with(body: { 'Action' => 'Profiles', 'Password' => 'Test1234', 'UserName' => 'test@test.com' })
         .to_return(body: '')
 

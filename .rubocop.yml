@@ -15,7 +15,7 @@ AllCops:
 
   UseCache: true
   CacheRootDirectory: 'cache/'
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 
 Rails:
   Enabled: true

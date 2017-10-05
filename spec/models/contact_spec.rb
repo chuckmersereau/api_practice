@@ -1012,10 +1012,10 @@ describe Contact do
 
   context '#mail_chimp_open_rate' do
     before do
-      stub_request(:get, 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0/')
+      stub_request(:get, 'https://us4.api.mailchimp.com/3.0/')
         .to_return(status: 200, body: '', headers: {})
 
-      stub_request(:get, "https://apikey:fake-us4@us4.api.mailchimp.com/3.0/lists/MyString/members/#{Digest::MD5.hexdigest(email.email.downcase)}")
+      stub_request(:get, "https://us4.api.mailchimp.com/3.0/lists/MyString/members/#{Digest::MD5.hexdigest(email.email.downcase)}")
         .to_return(status: 200, body: { 'stats' => { 'avg_open_rate' => 89 } }.to_json, headers: {})
     end
 

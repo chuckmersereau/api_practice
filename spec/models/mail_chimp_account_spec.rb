@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe MailChimpAccount do
-  let(:api_prefix) { 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0' }
+  let(:api_prefix) { 'https://us4.api.mailchimp.com/3.0' }
   let(:primary_list_id) { '1e72b58b72' }
   let(:primary_list_id_2) { '29a77ba541' }
   let(:mail_chimp_account) { create(:mail_chimp_account, api_key: 'fake-us4', primary_list_id: primary_list_id, account_list: account_list) }

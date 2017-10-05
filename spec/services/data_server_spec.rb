@@ -99,7 +99,7 @@ describe DataServer do
   describe 'import donors' do
     it 'should update the addresses_url on the org if the url changed' do
       stub_request(:post, /.*addresses/).to_return(body: "whatever\nRedirectQueryIni=foo")
-      stub_request(:post, 'http://foo:bar@foo/')
+      stub_request(:post, 'http://foo/')
       expect do
         @data_server.import_donors(profile)
       end.to change(@org, :addresses_url).to('foo')
@@ -441,14 +441,14 @@ describe DataServer do
 
   describe 'get_response' do
     it 'should raise a DataServerError if the first line of the response is ERROR' do
-      stub_request(:post, 'http://foo:bar@example.com').to_return(body: "ERROR\nmessage")
+      stub_request(:post, 'http://example.com').to_return(body: "ERROR\nmessage")
       expect do
         @data_server.send(:get_response, 'http://example.com', {})
       end.to raise_error(DataServerError, "ERROR\nmessage")
     end
 
     def expect_bad_passsword_err(data_server_body)
-      stub_request(:post, 'http://foo:bar@example.com').to_return(body: data_server_body)
+      stub_request(:post, 'http://example.com').to_return(body: data_server_body)
       expect do
         @data_server.send(:get_response, 'http://example.com', {})
       end.to raise_error(OrgAccountInvalidCredentialsError, 'Your username and password for MyString are invalid.')
@@ -492,7 +492,7 @@ describe DataServer do
     end
 
     it 'correctly parses special characters in utf-8' do
-      stub_request(:post, 'http://foo:bar@example.com').to_return(body: 'Agapé')
+      stub_request(:post, 'http://example.com').to_return(body: 'Agapé')
       expect(@data_server.send(:get_response, 'http://example.com', {}))
         .to eq('Agapé')
     end
