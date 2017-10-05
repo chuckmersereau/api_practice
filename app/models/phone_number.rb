@@ -32,7 +32,8 @@ class PhoneNumber < ApplicationRecord
     normalized_number.clean_up_number
     normalized_or_not = [normalized_number.number, attributes[:number]]
 
-    if number = person.phone_numbers.find_by(number: normalized_or_not)
+    number = person.phone_numbers.find_by(number: normalized_or_not)
+    if number
       number.update_attributes(attributes)
     else
       attributes['primary'] = (person.phone_numbers.present? ? false : true) if attributes['primary'].nil?

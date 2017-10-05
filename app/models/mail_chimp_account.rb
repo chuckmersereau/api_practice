@@ -1,6 +1,6 @@
 require 'async'
 
-class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
+class MailChimpAccount < ApplicationRecord
   COUNT_PER_PAGE = 100
 
   belongs_to :account_list

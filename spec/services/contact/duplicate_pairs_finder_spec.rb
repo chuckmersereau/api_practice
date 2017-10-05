@@ -24,7 +24,8 @@ describe Contact::DuplicatePairsFinder do
       account_list: account_list,
       reason: 'Test',
       record_one: create(:contact, name: 'Doe, John', account_list: account_list),
-      record_two: create(:contact, name: 'Doe, John', account_list: account_list))
+      record_two: create(:contact, name: 'Doe, John', account_list: account_list)
+    )
     contact = create(:contact, name: 'Doe, John', account_list: account_list)
 
     pair_missing_record_one = DuplicateRecordPair.new(
@@ -33,7 +34,8 @@ describe Contact::DuplicatePairsFinder do
       record_one_id: contact.id + 1,
       record_one_type: 'Contact',
       record_two_id: contact.id,
-      record_two_type: 'Contact')
+      record_two_type: 'Contact'
+    )
     pair_missing_record_one.save(validate: false)
 
     pair_missing_record_two = DuplicateRecordPair.new(
@@ -42,7 +44,8 @@ describe Contact::DuplicatePairsFinder do
       record_one_id: contact.id,
       record_one_type: 'Contact',
       record_two_id: contact.id + 2,
-      record_two_type: 'Contact')
+      record_two_type: 'Contact'
+    )
     pair_missing_record_two.save(validate: false)
 
     expect { build_finder.find_and_save }.to change { DuplicateRecordPair.count }.by(-2)

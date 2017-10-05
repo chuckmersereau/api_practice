@@ -16,10 +16,6 @@ class ContactExhibit < DisplayCase::Exhibit
     object.class.name == 'Contact'
   end
 
-  def referrer_links
-    contacts_that_referred_me.map { |r| @context.link_to(exhibit(r, @context), r) }.join(', ').html_safe
-  end
-
   def location
     [address.city, address.state, address.country].select(&:present?).join(', ') if address
   end
@@ -31,14 +27,6 @@ class ContactExhibit < DisplayCase::Exhibit
     else
       ''
     end
-  end
-
-  def contact_info
-    people.order('contact_people.primary::int desc').references(:contact_people).map do |p|
-      person_exhibit = exhibit(p, @context)
-      phone_and_email_exhibits = [person_exhibit.phone_number, person_exhibit.email].compact.map { |e| exhibit(e, @context) }.join('<br />')
-      [@context.link_to(person_exhibit, @context.contact_person_path(to_model, p)), phone_and_email_exhibits].select(&:present?).join(':<br />')
-    end.join('<br />').html_safe
   end
 
   def pledge_frequency
@@ -72,12 +60,6 @@ class ContactExhibit < DisplayCase::Exhibit
   def notes_saved_at
     return '' unless to_model.notes_saved_at
     l(to_model.notes_saved_at.to_datetime, format: :medium)
-  end
-
-  def tag_links
-    tags.map do |tag|
-      @context.link_to(tag, @context.params.except(:action, :controller, :id).merge(action: :index, filters: { tags: tag.name }), class: 'tag')
-    end.join(' ').html_safe
   end
 
   def donor_ids

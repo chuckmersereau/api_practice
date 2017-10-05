@@ -25,53 +25,6 @@ describe AddressExhibit do
     end
   end
 
-  context '#to_html' do
-    it 'renders US address as two lines without country specified' do
-      exhibit = AddressExhibit.new(build_stubbed(:address), double)
-      expect(exhibit.to_html)
-        .to eq '123 Somewhere St<br />Fremont, CA 94539'
-    end
-
-    it 'renders non-US addresses as a single line' do
-      exhibit = AddressExhibit.new(build_stubbed(:address, country: 'Canada'), double)
-      expect(exhibit.to_html)
-        .to eq '123 Somewhere St, Fremont, CA, 94539, Canada'
-    end
-  end
-
-  context '#to_i18n_html' do
-    it 'renders US address without country' do
-      exhibit = AddressExhibit.new(build_stubbed(:address), double)
-      expect(exhibit.to_i18n_html).to_not include 'United States'
-    end
-
-    it 'renders non-US address with country' do
-      exhibit = AddressExhibit.new(build_stubbed(:address, country: 'Canada'), double)
-      expect(exhibit.to_i18n_html).to include 'Canada'
-    end
-
-    it 'renders non-US home address without country' do
-      user = create(:user_with_account)
-      user.account_lists.first.update(home_country: 'Canada')
-      contact = build_stubbed(:contact, account_list: user.account_lists.first)
-      address = build_stubbed(:address, country: 'Canada', addressable: contact)
-      exhibit = AddressExhibit.new(address, double)
-      expect(exhibit.to_i18n_html).to_not include 'Canada'
-    end
-
-    it 'renders country specific order' do
-      address = build_stubbed(:address, country: 'Germany')
-      exhibit = AddressExhibit.new(address, double)
-      expect(exhibit.to_i18n_html).to_not include address.state
-    end
-
-    it "doesn't error when nil country" do
-      address = build_stubbed(:address, country: nil)
-      exhibit = AddressExhibit.new(address, double)
-      expect(exhibit.to_i18n_html).to include address.state
-    end
-  end
-
   context '#address_change_email_body' do
     it 'gives a form email to donor services to request address change' do
       exhibit = AddressExhibit.new(build_stubbed(:address), double)

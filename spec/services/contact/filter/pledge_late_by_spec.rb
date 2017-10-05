@@ -18,7 +18,8 @@ RSpec.describe Contact::Filter::PledgeLateBy do
                                                                   { name: _('Less than 30 days late'), id: '0_30' },
                                                                   { name: _('More than 30 days late'), id: '30_60' },
                                                                   { name: _('More than 60 days late'), id: '60_90' },
-                                                                  { name: _('More than 90 days late'), id: '90' }],
+                                                                  { name: _('More than 90 days late'), id: '90' }
+                                                                ],
                                                                 parent: 'Commitment Details',
                                                                 title: 'Late By',
                                                                 type: 'radio',

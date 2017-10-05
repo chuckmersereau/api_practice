@@ -297,10 +297,9 @@ class Contact < ApplicationRecord
 
     return self.late_at = nil unless late_at_should_be_set?(initial_date)
 
-    self.late_at = case
-                   when pledge_frequency >= 1.0
+    self.late_at = if pledge_frequency >= 1.0
                      initial_date + pledge_frequency.to_i.months
-                   when pledge_frequency >= 0.4
+                   elsif pledge_frequency >= 0.4
                      initial_date + 2.weeks
                    else
                      initial_date + 1.week
@@ -466,11 +465,12 @@ class Contact < ApplicationRecord
     attribute_collection = Hash[(0...attribute_collection.size).zip attribute_collection] if attribute_collection.is_a?(Array)
     attribute_collection = attribute_collection.with_indifferent_access.values
     attribute_collection.each do |attrs|
+      donor_account = DonorAccount.find_by(account_number: attrs[:account_number], organization_id: attrs[:organization_id])
       if attrs[:id].present? && (attrs[:account_number].blank? || attrs[:_destroy] == '1')
         ContactDonorAccount.where(donor_account_id: attrs[:id], contact_id: id).destroy_all
       elsif attrs[:account_number].blank?
         next
-      elsif donor_account = DonorAccount.find_by(account_number: attrs[:account_number], organization_id: attrs[:organization_id])
+      elsif donor_account
         contact_donor_accounts.new(donor_account: donor_account) unless donor_account.contacts.include?(self)
       else
         assign_nested_attributes_for_collection_association(:donor_accounts, [attrs])
@@ -536,7 +536,7 @@ class Contact < ApplicationRecord
       next unless other
       account.merge(other)
       merge_donor_accounts
-      return
+      break
     end
   end
 

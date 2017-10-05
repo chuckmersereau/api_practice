@@ -104,11 +104,9 @@ class Person::FacebookAccount < ApplicationRecord
   end
 
   def self.search(user, params)
-    if account = user.facebook_accounts.first
-      FbGraph::User.search(params.slice(:first_name, :last_name).values.join(' '), access_token: account.token)
-    else
-      []
-    end
+    account = user.facebook_accounts.first
+    return [] unless account
+    FbGraph::User.search(params.slice(:first_name, :last_name).values.join(' '), access_token: account.token)
   end
 
   private

@@ -10,16 +10,6 @@ class PersonExhibit < DisplayCase::Exhibit
     now.year - birthday_year - (now.month > birthday_month || (now.month == birthday_month && now.day >= birthday_day) ? 0 : 1)
   end
 
-  def company_position_description
-    description = @context.link_to(company_position.company, company_position.company)
-    description = company_position.position + ', ' + description if company_position.position.present?
-    description.html_safe
-  end
-
-  def contact_info
-    [phone_number, email].compact.map { |e| exhibit(e, @context) }.join('<br />').html_safe
-  end
-
   def avatar(size = :square)
     if primary_picture
       size_to_load = size
@@ -48,14 +38,8 @@ class PersonExhibit < DisplayCase::Exhibit
     url
   end
 
-  def twitter_handles
-    twitter_accounts.map { |t| @context.link_to("@#{t.screen_name}", "http://twitter.com/#{t.screen_name}", target: '_blank') }.join(', ').html_safe
-  end
-
   def to_s
-    name = [first_name, last_name].compact.join(' ')
-    name = "<del>#{name}</del>".html_safe if deceased?
-    name
+    [first_name, last_name].compact.join(' ')
   end
 
   def social?

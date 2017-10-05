@@ -92,8 +92,7 @@ RSpec.shared_examples 'update_examples' do |options = {}|
                                },
                                attributes: {
                                  overwrite: true
-                               }
-                             }
+                               } }
         end.not_to change { resource.reload.account_list_id }
         expect(response.status).to eq(200)
       end

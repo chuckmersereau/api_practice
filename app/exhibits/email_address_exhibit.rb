@@ -4,6 +4,6 @@ class EmailAddressExhibit < DisplayCase::Exhibit
   end
 
   def to_s
-    @context.mail_to(email).html_safe
+    @context.mail_to(email)
   end
 end

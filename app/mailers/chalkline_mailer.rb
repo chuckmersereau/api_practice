@@ -10,7 +10,8 @@ class ChalklineMailer < ApplicationMailer
     attachments[filename] =
       { mime_type: 'text/csv',
         content: CsvExport.mailing_addresses(
-          ContactFilter.new(newsletter: 'address').filter(account_list.contacts, account_list)) }
+          ContactFilter.new(newsletter: 'address').filter(account_list.contacts, account_list)
+        ) }
     mail subject: _('MPDX List: %{name}').localize % { name: @name }, cc: user_emails, reply_to: user_emails
   end
 end

@@ -41,8 +41,9 @@ class EmailAddress < ApplicationRecord
                                 then: then_cb do
       if attributes['id']
         existing_email = person.email_addresses.find(attributes['id'])
+        email = person.email_addresses.find { |e| e.email == attributes['email'] && e.id != attributes['id'].to_i }
         # make sure we're not updating this record to another email that already exists
-        if email = person.email_addresses.find { |e| e.email == attributes['email'] && e.id != attributes['id'].to_i }
+        if email
           email.attributes = attributes
           existing_email.destroy
           email
@@ -51,7 +52,8 @@ class EmailAddress < ApplicationRecord
           existing_email
         end
       else
-        if email = person.email_addresses.find { |e| e.email == attributes['email'] }
+        email = person.email_addresses.find { |e| e.email == attributes['email'] }
+        if email
           email.attributes = attributes
         else
           attributes['primary'] ||= !person.email_addresses.present?

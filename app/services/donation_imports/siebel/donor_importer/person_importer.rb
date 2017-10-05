@@ -61,7 +61,8 @@ class DonationImports::Siebel
 
         remote_id = @siebel_person.primary ? "#{@donor_account.account_number}-1" : "#{@donor_account.account_number}-2"
 
-        if @master_person_from_source = organization.master_people.find_by('master_person_sources.remote_id' => remote_id)
+        @master_person_from_source = organization.master_people.find_by('master_person_sources.remote_id' => remote_id)
+        if @master_person_from_source
           MasterPersonSource.where(organization_id: organization.id, remote_id: remote_id).update_all(remote_id: siebel_person.id)
         end
       end

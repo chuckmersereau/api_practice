@@ -8,16 +8,7 @@ class OrganizationFetcherWorker
     CSV.new(organizations, headers: :first_row).each do |line|
       next unless line[1].present?
 
-      if org = Organization.find_by(name: line[0])
-        org.update(query_ini_url: line[1])
-      elsif org = Organization.find_by(query_ini_url: line[1])
-        org.update(name: line[0])
-      else
-        country = guess_country(line[0])
-        locale = guess_locale(country)
-        org = Organization.create(name: line[0], query_ini_url: line[1], iso3166: line[2],
-                                  api_class: 'DataServer', country: country, locale: locale)
-      end
+      org = find_org_by_line(line)
 
       # Grab latest query.ini file for this org
       begin
@@ -69,6 +60,25 @@ class OrganizationFetcherWorker
         Rails.logger.debug e.message
       end
     end
+  end
+
+  def find_org_by_line(line)
+    org = Organization.find_by(name: line[0])
+    if org
+      org.update(query_ini_url: line[1])
+      return org
+    end
+
+    org = Organization.find_by(query_ini_url: line[1])
+    if org
+      org.update(name: line[0])
+      return org
+    end
+
+    country = guess_country(line[0])
+    locale = guess_locale(country)
+    Organization.create(name: line[0], query_ini_url: line[1], iso3166: line[2],
+                        api_class: 'DataServer', country: country, locale: locale)
   end
 
   def guess_country(org_name)
