@@ -19,4 +19,10 @@ class Pledge < ApplicationRecord
                           :updated_at,
                           :updated_in_db_at,
                           :uuid].freeze
+
+  enum status: {
+    not_received: 'not_received',
+    received_not_processed: 'received_not_processed',
+    processed: 'processed'
+  }
 end

@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.2
--- Dumped by pg_dump version 9.6.2
+-- Dumped from database version 9.6.3
+-- Dumped by pg_dump version 9.6.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2980,10 +2980,9 @@ CREATE TABLE pledges (
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    received_not_processed boolean,
     amount_currency character varying,
     appeal_id integer,
-    processed boolean DEFAULT false
+    status character varying DEFAULT 'not_received'::character varying
 );
 
 
@@ -7066,10 +7065,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170907182701');
 
 INSERT INTO schema_migrations (version) VALUES ('20170911035021');
 
-INSERT INTO schema_migrations (version) VALUES ('20170921212918');
-
-INSERT INTO schema_migrations (version) VALUES ('20170921213101');
-
 INSERT INTO schema_migrations (version) VALUES ('20170912232954');
 
 INSERT INTO schema_migrations (version) VALUES ('20170913013837');
@@ -7078,6 +7073,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170918022812');
 
 INSERT INTO schema_migrations (version) VALUES ('20170918022824');
 
+INSERT INTO schema_migrations (version) VALUES ('20170921212918');
+
+INSERT INTO schema_migrations (version) VALUES ('20170921213101');
+
 INSERT INTO schema_migrations (version) VALUES ('20170922152101');
 
 INSERT INTO schema_migrations (version) VALUES ('20170925223827');
@@ -7085,4 +7084,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170925223827');
 INSERT INTO schema_migrations (version) VALUES ('20170926155821');
 
 INSERT INTO schema_migrations (version) VALUES ('20170926162140');
+
+INSERT INTO schema_migrations (version) VALUES ('20171002211135');
 

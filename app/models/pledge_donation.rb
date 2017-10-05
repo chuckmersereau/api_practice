@@ -11,7 +11,11 @@ class PledgeDonation < ApplicationRecord
   private
 
   def set_processed
-    pledge.update(processed: all_donations_have_been_received?)
+    pledge.update(status: pledge_status)
+  end
+
+  def pledge_status
+    all_donations_have_been_received? ? :processed : :received_not_processed
   end
 
   def all_donations_have_been_received?
