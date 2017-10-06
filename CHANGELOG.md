@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 4 October 2017
+- Added assignable_location_hashes to list of constants returned by the '/api/v2/constants' endpoint.
+
 ## 29 September 2017
 - Added ?pledged_to_appeal filter to appeal/:id/appeal_contacts endpoint.
 

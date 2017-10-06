@@ -78,6 +78,8 @@ class AccountList < ApplicationRecord
 
   scope :has_users, -> (users) { joins(:account_list_users).where(account_list_users: { user: users }) }
 
+  scope :readable_by, -> (user) { AccountList::ReadableFinder.new(user).relation }
+
   PERMITTED_ATTRIBUTES = [
     :created_at,
     :currency,
