@@ -4,9 +4,10 @@ This changelog covers what's changed in the MPDX APIs.
 
 ## 4 October 2017
 - Contact Status filter now returns contacts with no status when 'active' is in the list of parameter.
+- Added assignable_location_hashes to list of constants returned by the '/api/v2/constants' endpoint.
 
 ## 29 September 2017
-- Added :pledged_to_appeal filter to appeal/:id/appeal_contacts endpoint.
+- Added pledged_to_appeal filter to appeal/:id/appeal_contacts endpoint.
 
 ## 28 September 2017
 - Add all person fields to the /user endpoint.

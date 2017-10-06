@@ -86,6 +86,10 @@ class ConstantListSerializer < ActiveModel::Serializer
     constants_exhibit.pledge_frequency_translated_hashes
   end
 
+  def assignable_location_hashes
+    constants_exhibit.assignable_location_translated_hashes
+  end
+
   def dates
     constants_exhibit.date_formats_map
   end

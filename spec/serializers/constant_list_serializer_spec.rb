@@ -80,6 +80,10 @@ describe ConstantListSerializer do
     it { expect(subject.activity_hashes.first).to be_a_hash_with_types Symbol, String }
   end
 
+  context '#assignable_location_hashes' do
+    it { expect(subject.assignable_location_hashes.first).to be_a_hash_with_types Symbol, String }
+  end
+
   context '#assignable_likely_to_give_hashes' do
     it { expect(subject.assignable_likely_to_give_hashes.first).to be_a_hash_with_types Symbol, String }
   end

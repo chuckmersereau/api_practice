@@ -87,6 +87,10 @@ class ConstantListExhibit < DisplayCase::Exhibit
     translate_hash(send_appeals)
   end
 
+  def assignable_location_translated_hashes
+    translate_array(assignable_locations)
+  end
+
   private
 
   def currency_information(code)

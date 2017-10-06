@@ -1,14 +1,17 @@
 # Activity types
-_('Call')
 _('Appointment')
+_('Call')
 _('Email')
-_('Text Message')
 _('Facebook Message')
 _('Letter')
-_('Newsletter')
+_('Newsletter - Email')
+_('Newsletter - Physical')
+_('Prayer Request')
 _('Pre Call Letter')
 _('Reminder Letter')
 _('Support Letter')
+_('Talk to In Person')
+_('Text Message')
 _('Thank')
 _('To Do')
 
@@ -81,3 +84,11 @@ _('New Donation')
 
 # Tool Tips
 _('May take a few days to update')
+
+# Assignable Locations
+_('Business')
+_('Home')
+_('Mailing')
+_('Other')
+_('Seasonal')
+_('Temporary')

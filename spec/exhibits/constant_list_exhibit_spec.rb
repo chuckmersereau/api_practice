@@ -131,6 +131,16 @@ describe ConstantListExhibit do
     include_examples 'expect method to translate values', method: :pledge_frequency_translated_hashes
   end
 
+  context '#assignable_location_translated_hashes' do
+    it do
+      subject.assignable_location_translated_hashes.each do |assignable_location|
+        expect(assignable_location).to be_a Hash
+      end
+    end
+
+    include_examples 'expect method to translate values', method: :assignable_location_translated_hashes
+  end
+
   context '#notification_translated_hashes' do
     before do
       NotificationTypesSeeder.new(true).seed
