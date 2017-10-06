@@ -47,6 +47,36 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
     end
   end
 
+  describe 'sorting' do
+    before { api_login(user) }
+
+    context 'contact.name sort' do
+      let!(:sorting_appeal) { create(:appeal, account_list: account_list) }
+      let!(:contact1) { create(:contact, account_list: account_list, name: 'Currie, Marie') }
+      let!(:contact2) { create(:contact, account_list: account_list, name: 'Einstein, Albert') }
+      let!(:appeal_contact1) { create(:appeal_contact, contact: contact1, appeal: sorting_appeal) }
+      let!(:appeal_contact2) { create(:appeal_contact, contact: contact2, appeal: sorting_appeal) }
+
+      it 'sorts results desc' do
+        get :index, appeal_id: sorting_appeal.uuid, sort: 'contact.name'
+        expect(response.status).to eq(200)
+        data = JSON.parse(response.body)['data']
+        expect(data.length).to eq(2)
+        expect(data[0]['id']).to eq(appeal_contact1.uuid)
+        expect(data[1]['id']).to eq(appeal_contact2.uuid)
+      end
+
+      it 'sorts results asc' do
+        get :index, appeal_id: sorting_appeal.uuid, sort: '-contact.name'
+        expect(response.status).to eq(200)
+        data = JSON.parse(response.body)['data']
+        expect(data.length).to eq(2)
+        expect(data[0]['id']).to eq(appeal_contact2.uuid)
+        expect(data[1]['id']).to eq(appeal_contact1.uuid)
+      end
+    end
+  end
+
   describe '#create' do
     let!(:contact) { create(:contact, account_list: account_list) }
     include_context 'common_variables'

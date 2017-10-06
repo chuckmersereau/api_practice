@@ -36,9 +36,22 @@ module Sorting
     convert_sorting_params_to_sql
   end
 
+  def sorting_join
+    sorting_params_split.collect do |param|
+      next unless param.include? '.'
+      resource_name = param.tr('-', '').split('.').first
+      next if db_resource_name == resource_name
+      resource_name.to_sym
+    end
+  end
+
   def unpermitted_sorting_params
-    sorting_params = sorting_params_split.collect { |param| db_column_for_sorting_param(param) }
+    sorting_params = sorting_params_split.collect { |param| db_column_for_permitted_param(param) }
     sorting_params - permitted_sorting_params_with_defaults
+  end
+
+  def db_column_for_permitted_param(param)
+    param.split(' ').first.tr('-', '')
   end
 
   def sorting_params_split
@@ -51,19 +64,32 @@ module Sorting
 
   def convert_sorting_params_to_sql
     sorting_params_split.collect do |param|
-      ["#{db_resource_name}.#{db_column_for_sorting_param(param)}", sorting_direction_for_param(param), sorting_nulls_for_param(param)].select(&:present?).join(' ')
+      [
+        db_table_and_column_for_sorting_param(param),
+        direction_for_sorting_param(param),
+        null_order_for_sorting_param(param)
+      ].select(&:present?).join(' ')
     end.join(', ')
   end
 
-  def db_column_for_sorting_param(param)
-    param.split(' ').first.tr('-', '')
+  def db_table_and_column_for_sorting_param(param)
+    "\"#{db_table_for_sorting_param(param)}\".\"#{db_column_for_sorting_param(param)}\""
   end
 
-  def sorting_direction_for_param(param)
+  def db_table_for_sorting_param(param)
+    return db_resource_name unless param.include? '.'
+    param.split('.').first.tr('-', '').pluralize
+  end
+
+  def db_column_for_sorting_param(param)
+    param.split('.').last.split(' ').first.tr('-', '')
+  end
+
+  def direction_for_sorting_param(param)
     param.starts_with?('-') ? 'DESC' : 'ASC'
   end
 
-  def sorting_nulls_for_param(param)
+  def null_order_for_sorting_param(param)
     split_param = param.split(' ')
     return unless split_param.size > 1
     null_param = split_param.second

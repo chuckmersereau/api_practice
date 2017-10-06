@@ -32,6 +32,7 @@ class Api::V2::Appeals::AppealContactsController < Api::V2Controller
   def load_appeal_contacts
     @appeal_contacts = AppealContact::Filterer.new(filter_params.merge(appeal_id: @appeal.id))
                                               .filter(scope: appeal_contact_scope, account_lists: account_lists)
+                                              .joins(sorting_join)
                                               .reorder(sorting_param)
                                               .page(page_number_param)
                                               .per(per_page_param)
@@ -88,6 +89,10 @@ class Api::V2::Appeals::AppealContactsController < Api::V2Controller
 
   def pundit_user
     PunditContext.new(current_user)
+  end
+
+  def permitted_sorting_params
+    %w(contact.name)
   end
 
   def permitted_filters
