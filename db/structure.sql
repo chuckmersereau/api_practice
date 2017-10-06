@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.3
--- Dumped by pg_dump version 9.6.3
+-- Dumped from database version 9.6.5
+-- Dumped by pg_dump version 9.6.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,20 +26,6 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
--- Name: btree_gin; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS btree_gin WITH SCHEMA public;
-
-
---
--- Name: EXTENSION btree_gin; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION btree_gin IS 'support for indexing common datatypes in GIN';
 
 
 --
@@ -1218,10 +1204,8 @@ CREATE TABLE donation_amount_recommendations (
     gift_max numeric,
     income_min numeric,
     income_max numeric,
-    suggested_pledge_amount_min numeric,
-    suggested_pledge_amount_max numeric,
-    suggested_special_amount_min numeric,
-    suggested_special_amount_max numeric,
+    suggested_pledge_amount numeric,
+    suggested_special_amount numeric,
     ask_at timestamp without time zone,
     zip_code character varying,
     uuid uuid DEFAULT uuid_generate_v4(),
@@ -1424,7 +1408,7 @@ CREATE TABLE email_addresses (
     uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT true,
     source character varying DEFAULT 'MPDX'::character varying,
-    checked_for_google_plus_account boolean
+    checked_for_google_plus_account boolean DEFAULT false NOT NULL
 );
 
 
@@ -6083,13 +6067,6 @@ CREATE INDEX index_taggings_on_tag_id ON taggings USING btree (tag_id);
 
 
 --
--- Name: index_taggings_on_taggable_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_taggings_on_taggable_id ON taggings USING btree (taggable_id);
-
-
---
 -- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7086,4 +7063,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170926155821');
 INSERT INTO schema_migrations (version) VALUES ('20170926162140');
 
 INSERT INTO schema_migrations (version) VALUES ('20171002211135');
+
+INSERT INTO schema_migrations (version) VALUES ('20171002215149');
 
