@@ -25,7 +25,8 @@ class SinglePrimaryValidator < ActiveModel::EachValidator
   end
 
   def add_error
-    if message = options[:message]
+    message = options[:message]
+    if message
       record.errors[attribute] << message
     else
       record.errors.add(attribute, :invalid)

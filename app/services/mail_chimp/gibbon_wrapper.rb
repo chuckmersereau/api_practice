@@ -88,7 +88,7 @@ class MailChimp::GibbonWrapper
     more_pages = (total_items / COUNT_PER_PAGE) - 1
     more_pages.times do |i|
       page = list_members_page(list_id, COUNT_PER_PAGE * (i + 1))
-      members.push(*page['members'])
+      members.concat(page['members'])
     end
 
     members

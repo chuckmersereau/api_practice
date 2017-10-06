@@ -1,4 +1,3 @@
-# rubocop:disable BlockNesting
 class ContactFilter
   attr_accessor :contacts, :filters
 

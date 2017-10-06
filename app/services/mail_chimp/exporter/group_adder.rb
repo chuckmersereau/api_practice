@@ -36,7 +36,7 @@ class MailChimp::Exporter
       gibbon_list.interest_categories(grouping['id'])
                  .interests
                  .retrieve['interests']
-        .map { |interest| interest['name'] }
+                 .map { |interest| interest['name'] }
     end
 
     def create_grouping(group_type, _attribute)

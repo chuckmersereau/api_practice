@@ -38,7 +38,8 @@ RSpec.describe Contact::Filter::Donation do
                                                                   { name: 'No Gifts', id: 'none' },
                                                                   { name: 'One or More Gifts', id: 'one' },
                                                                   { name: 'First Gift', id: 'first' },
-                                                                  { name: 'Last Gift', id: 'last' }],
+                                                                  { name: 'Last Gift', id: 'last' }
+                                                                ],
                                                                 parent: 'Gift Details',
                                                                 title: 'Gift Options',
                                                                 type: 'multiselect')

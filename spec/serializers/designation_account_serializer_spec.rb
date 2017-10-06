@@ -36,7 +36,8 @@ describe DesignationAccountSerializer do
     it 'returns exchange rate for currency to total currency' do
       expect(CurrencyRate).to(
         receive(:latest_for_pair).with(from: serializer.currency, to: serializer.total_currency)
-          .and_return(0.5))
+          .and_return(0.5)
+      )
       expect(serializer.exchange_rate).to eq 0.5
     end
   end

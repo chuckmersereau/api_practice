@@ -177,6 +177,10 @@ describe CsvRowContactBuilder do
     end
 
     context 'referred_by cannot be found' do
+      before do
+        import.file_constants_mappings = file_constants_mappings_with_id_and_values_hashes
+      end
+
       it 'adds referred_by to contact notes and tag' do
         Contact.delete_all
         contact = subject.build
@@ -193,6 +197,7 @@ describe CsvRowContactBuilder do
         %w(full_name first_name last_name spouse_first_name spouse_last_name).each do |required_key|
           raise unless import.file_headers_mappings.keys.include?(required_key)
         end
+        import.file_constants_mappings = file_constants_mappings_with_id_and_values_hashes
       end
 
       it 'builds names' do
@@ -210,6 +215,7 @@ describe CsvRowContactBuilder do
     context 'full_name field is not specified, but other name fields are' do
       before do
         import.file_headers_mappings.delete('full_name')
+        import.file_constants_mappings = file_constants_mappings_with_id_and_values_hashes
       end
 
       it 'builds names' do
@@ -230,6 +236,7 @@ describe CsvRowContactBuilder do
         import.file_headers_mappings.delete('last_name')
         import.file_headers_mappings.delete('spouse_first_name')
         import.file_headers_mappings.delete('spouse_last_name')
+        import.file_constants_mappings = file_constants_mappings_with_id_and_values_hashes
       end
 
       it 'builds names' do

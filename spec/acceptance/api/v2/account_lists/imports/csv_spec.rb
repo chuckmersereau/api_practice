@@ -18,8 +18,7 @@ resource 'Account Lists > Imports > from CSV' do
     create_list(:csv_import, 2, account_list: account_list, user: user,
                                 in_preview: true,
                                 file_headers_mappings: file_headers_mappings,
-                                file_constants_mappings: file_constants_mappings
-               )
+                                file_constants_mappings: file_constants_mappings)
   end
   let!(:import) { imports.first }
 

@@ -43,8 +43,7 @@ resource 'Batch' do
                 overwrite: true
               }
             }
-          }
-          }
+          } }
         ]
         expect(response_status).to eq 200
         expect(first_response['status']).to eq(200)

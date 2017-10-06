@@ -20,7 +20,7 @@ def default_pledge!(contact)
   end
   frequencies = [1, 3, 12]
   frequencies.each do |frequency|
-    return if try_frequency!(contact, frequency)
+    return true if try_frequency!(contact, frequency)
   end
   puts "Pledge for #{contact} ##{contact.id} not changed"
 end

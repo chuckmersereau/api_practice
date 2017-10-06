@@ -104,15 +104,13 @@ RSpec.describe MailChimp::Exporter::Batcher do
       create(:mail_chimp_member,
              mail_chimp_account: mail_chimp_account,
              email: 'email@gmail.com',
-             list_id: 'list_one'
-            )
+             list_id: 'list_one')
     end
 
     let!(:second_mail_chimp_member) do
       create(:mail_chimp_member,
              mail_chimp_account: mail_chimp_account,
-             list_id: 'list_one'
-            )
+             list_id: 'list_one')
     end
 
     let(:operations_body) do

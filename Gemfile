@@ -45,7 +45,7 @@ gem 'kaminari', '~> 0.16.3'
 gem 'koala', '~> 1.9.0'
 gem 'linkedin', '~> 0.3.7'
 gem 'mail', '~> 2.6.6'
-gem 'newrelic_rpm', '~> 3.7.1'
+gem 'newrelic_rpm', '< 5'
 gem 'oauth', git: 'https://github.com/CruGlobal/oauth-ruby'
 gem 'oj', '~> 2.18.5'
 gem 'pg', '~> 0.21.0'
@@ -115,7 +115,7 @@ group :development, :test do
       git: 'https://github.com/CruGlobal/rspec_api_documentation',
       ref: '5e766726cfd9fe8e16bfcfc58e013b7b549d5945'
   gem 'ruby_parser', require: false, group: :development
-  gem 'simplecov', '~> 0.12.0', require: false
+  gem 'simplecov', '~> 0.14.1', require: false
   gem 'simplecov-lcov', '~> 0.5.0', require: false
   gem 'spring', '~> 1.7.1' # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
   gem 'spring-commands-rspec', '~> 1.0.4'
@@ -124,17 +124,17 @@ end
 
 group :test do
   gem 'ammeter', '~> 1.1.4' # for testing generators
-  gem 'coveralls', '~> 0.8.15', require: false
+  gem 'coveralls', '~> 0.8.21', require: false
   gem 'codecov', require: false
   gem 'faker', '~> 1.6.6'
   gem 'growl', '~> 1.0.3'
   gem 'mock_redis', '~> 0.17.0'
   gem 'rb-fsevent', require: false
   gem 'roo', '~> 1.13.2'
-  gem 'rubocop', '= 0.39', require: false
+  gem 'rubocop', '= 0.42', require: false
   gem 'shoulda-matchers', '~> 3.1.1'
   gem 'test_after_commit'
-  gem 'webmock', '~> 1.21.0'
+  gem 'webmock', '< 3'
 end
 
 group :doc do

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MailChimp::GibbonWrapper do
   let(:mail_chimp_account) { build(:mail_chimp_account) }
-  let(:api_prefix) { 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0' }
+  let(:api_prefix) { 'https://us4.api.mailchimp.com/3.0' }
 
   subject { described_class.new(mail_chimp_account) }
 

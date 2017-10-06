@@ -73,8 +73,8 @@ describe Appeal do
   context 'pledges related fields' do
     subject { create(:appeal) }
 
-    let!(:processed_pledge)                  { create(:pledge, processed: true, amount: 200.00, appeal: subject) }
-    let!(:received_not_processed_pledge)     { create(:pledge, received_not_processed: true, amount: 300.00, appeal: subject) }
+    let!(:processed_pledge)                  { create(:pledge, status: :processed, amount: 200.00, appeal: subject) }
+    let!(:received_not_processed_pledge)     { create(:pledge, status: :received_not_processed, amount: 300.00, appeal: subject) }
     let!(:not_received_not_processed_pledge) { create(:pledge, amount: 400.00, appeal: subject) }
 
     describe '#pledges_amount_total' do

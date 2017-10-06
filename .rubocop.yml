@@ -15,7 +15,7 @@ AllCops:
 
   UseCache: true
   CacheRootDirectory: 'cache/'
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 
 Rails:
   Enabled: true
@@ -30,13 +30,6 @@ Metrics/MethodLength:
 
 GlobalVars:
   AllowedVariables: ['$rollout']
-  Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'spec/spec_helper.rb'
-
-Eval:
-  Exclude:
-    - 'app/models/sieble.rb'
 
 GuardClause:
   MinBodyLength: 3
@@ -45,9 +38,11 @@ RegexpLiteral:
   Exclude:
     - 'Guardfile'
 
-Void:
-  Exclude:
-    - 'spec/**/*'
-
 ClassLength:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
   Enabled: false

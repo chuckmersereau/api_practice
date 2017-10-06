@@ -17,27 +17,6 @@ module ApplicationHelper
     end
   end
 
-  def link_to_remove_fields(f, hidden = false, options = {})
-    mfd = f.hidden_field(:_destroy, value: f.object.marked_for_destruction? ? '1' : '')
-    options = {
-      class: 'remove_fields btn btn-secondary btn-xs',
-      style: hidden ? 'display:none' : '',
-      data: { behavior: 'remove_field' }
-    }.merge(options)
-    label = options.delete(:label) || ''
-    button = link_to("<i class='fa fa-trash-o'></i> #{label}".html_safe, 'javascript:void(0)', options)
-    mfd + button
-  end
-
-  def link_to_add_fields(name, f, association, options = {})
-    partial = options[:partial] || "#{association.to_s.singularize}_fields"
-    new_object = f.object.class.reflect_on_association(association).klass.new
-    fields = f.fields_for(association, new_object, child_index: "new_#{association}") do |builder|
-      render(partial, builder: builder, object: f.object)
-    end
-    link_to(name, 'javascript:void(0)', onclick: "addFields(this, \"#{association}\", \"#{escape_javascript(fields).html_safe}\")", class: 'add_field')
-  end
-
   def link_to_clear_contact_filters(f)
     link_to(f, contacts_path(clear_filter: true))
   end
@@ -74,34 +53,6 @@ module ApplicationHelper
         date.to_s(format: options[:format])
       end
     end
-  end
-
-  # Renders a message containing number of displayed vs. total entries.
-  #
-  #   <%= page_entries_info @posts %>
-  #   #-> Displaying posts 6 - 12 of 26 in total
-  #
-  # The default output contains HTML. Use ":html => false" for plain text.
-  def page_entries_info(collection, options = {})
-    if options.fetch(:html, true)
-      b = '<b>'
-      eb = '</b>'
-      sp = '&nbsp;'
-      # html_key = '_html'
-    else
-      b = eb = ''
-      # html_key = b
-      sp = ' '
-    end
-
-    case collection.total_entries
-    when 0, 1 then ''
-    else
-      _("Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}").localize % {
-        count: collection.total_entries,
-        from: collection.offset + 1, to: collection.offset + collection.length
-      }
-    end.html_safe
   end
 
   def calendar_date_select_tag(name, value = nil, options = {})
