@@ -36,7 +36,7 @@ class OrganizationFetcherWorker
         attributes[:staff_portal_url] = ini['ORGANIZATION']['StaffPortalUrl']
         attributes[:default_currency_code] = ini['ORGANIZATION']['DefaultCurrencyCode']
         attributes[:allow_passive_auth] = ini['ORGANIZATION']['AllowPassiveAuth'] == 'True'
-        %w(account_balance donations addresses addresses_by_personids profiles designations).each do |section|
+        %w(account_balance donations addresses addresses_by_personids profiles).each do |section|
           keys = ini.map do |k, _v|
             k.key =~ /^#{section.upcase}[\.\d]*$/ ? k.key : nil
           end.compact.sort.reverse
