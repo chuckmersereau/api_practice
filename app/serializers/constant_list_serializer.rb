@@ -34,6 +34,7 @@ class ConstantListSerializer < ActiveModel::Serializer
              :assignable_likely_to_give,
              :assignable_likely_to_give_hashes,
              :assignable_locations,
+             :assignable_location_hashes,
              :assignable_send_newsletter,
              :assignable_send_newsletter_hashes,
              :assignable_statuses,

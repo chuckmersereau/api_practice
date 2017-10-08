@@ -31,6 +31,7 @@ resource 'Constants' do
           alert_frequencies
           assignable_likely_to_give_hashes
           assignable_locations
+          assignable_location_hashes
           assignable_send_newsletter_hashes
           assignable_statuses
           bulk_update_options
