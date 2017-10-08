@@ -20,7 +20,7 @@ RSpec.describe Contact::Filter::Locale do
           { name: '-- Any --', id: '', placeholder: 'None' },
           { id: 'null', name: '-- Unspecified --' },
           { name: 'Something else', id: 'Something else' },
-          { name: 'U.S. English', id: 'en-US' },
+          { name: 'US English', id: 'en-US' },
           { name: 'Canadian French', id: 'fr-CA' },
           { name: 'fr-FR', id: 'fr-FR' }
         ],
