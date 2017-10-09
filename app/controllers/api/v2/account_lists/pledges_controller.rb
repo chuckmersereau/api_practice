@@ -83,7 +83,7 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
   end
 
   def permitted_filters
-    [:contact_id, :appeal_id]
+    [:contact_id, :appeal_id, :status]
   end
 
   def persist_pledge
