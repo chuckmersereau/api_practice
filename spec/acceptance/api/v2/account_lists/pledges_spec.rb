@@ -97,6 +97,7 @@ resource 'Pledges' do
         parameter 'amount',        'Sort by Amount',                                                                        type: 'Number'
         parameter 'expected_date', 'Sort by Expected Date',                                                                 type: 'String'
         parameter 'status',        'Sort by the status of the appeal (not_received, received_not_processed, or processed)', type: 'String'
+        parameter 'contact.name',  'Sort by Contact Name',                                                                  type: 'String'
       end
 
       example 'Pledge [LIST]', document: documentation_scope do

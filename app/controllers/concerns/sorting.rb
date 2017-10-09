@@ -42,7 +42,7 @@ module Sorting
       resource_name = param.tr('-', '').split('.').first
       next if db_resource_name == resource_name
       resource_name.to_sym
-    end
+    end.compact
   end
 
   def unpermitted_sorting_params

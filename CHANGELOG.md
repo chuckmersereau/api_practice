@@ -8,6 +8,7 @@ This changelog covers what's changed in the MPDX APIs.
 - pledges endpoint is now filterable by status
 
 ## 4 October 2017
+- Added ability to sort by contact name field in pledges endpoint.
 - Contact Status filter now returns contacts with no status when 'active' is in the list of parameter.
 - Added assignable_location_hashes to list of constants returned by the '/api/v2/constants' endpoint.
 

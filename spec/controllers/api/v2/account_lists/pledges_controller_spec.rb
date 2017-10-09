@@ -65,6 +65,29 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
   # spec/support/shared_controller_examples/*
   include_examples 'index_examples'
 
+  describe 'sort' do
+    before { api_login(user) }
+
+    let(:contact2) { create(:contact, account_list: account_list, name: 'zzzzz') }
+    let!(:pledge3) { create(:pledge, account_list: account_list, contact: contact2, amount: 10.00) }
+
+    it 'sorts results by contact.name desc' do
+      get :index, parent_param.merge(sort: 'contact.name')
+
+      json = JSON.parse(response.body)
+      ids = json['data'].collect { |pledge| pledge['id'] }
+      expect(ids.last).to eq pledge3.uuid
+    end
+
+    it 'sorts results by contact.name asc' do
+      get :index, parent_param.merge(sort: '-contact.name')
+
+      json = JSON.parse(response.body)
+      ids = json['data'].collect { |pledge| pledge['id'] }
+      expect(ids.first).to eq pledge3.uuid
+    end
+  end
+
   describe 'filtering' do
     before { api_login(user) }
 
