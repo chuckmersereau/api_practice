@@ -41,7 +41,7 @@ resource 'Appeals > AppealContacts' do
     get '/api/v2/appeals/:appeal_id/appeal_contacts' do
       with_options scope: :filter do
         parameter 'account_list_id', 'Account List ID', type: 'String'
-        parameter 'completed',
+        parameter 'pledged_to_appeal',
                   'has contact has pledged to appeal? Accepts value "true" or "false"',
                   required: false,
                   type: 'String'
