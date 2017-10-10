@@ -32,7 +32,7 @@ class Api::V2::Appeals::ExcludedAppealContactsController < Api::V2Controller
   end
 
   def excluded_appeal_contact_scope
-    @appeal.excluded_appeal_contacts
+    Appeal::ExcludedAppealContact.where(appeal: @appeal)
   end
 
   def render_excluded_appeal_contact

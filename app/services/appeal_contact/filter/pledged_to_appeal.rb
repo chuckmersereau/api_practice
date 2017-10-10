@@ -1,6 +1,8 @@
 class AppealContact::Filter::PledgedToAppeal < AppealContact::Filter::Base
   def execute_query(appeal_contacts, filters)
-    appeal_contacts_with_pledges = appeal_contacts.joins(contact: :pledges).where(pledges: { appeal_id: filters[:appeal_id] })
+    appeal_contacts_with_pledges = appeal_contacts.joins(contact: :pledges)
+                                                  .where(pledges: { appeal_id: filters[:appeal_id] })
+                                                  .pluck(:id)
 
     if cast_bool_value(filters[:pledged_to_appeal])
       appeal_contacts.where(id: appeal_contacts_with_pledges)
