@@ -7,10 +7,6 @@ class Api::V2::Reports::ExpectedMonthlyTotalsController < Api::V2Controller
 
   private
 
-  def report_scope
-    current_user.account_lists
-  end
-
   def load_report
     @report ||= ::Reports::ExpectedMonthlyTotals.new(report_params)
   end

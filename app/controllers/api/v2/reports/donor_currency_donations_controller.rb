@@ -12,7 +12,7 @@ class Api::V2::Reports::DonorCurrencyDonationsController < Api::V2Controller
   end
 
   def report_params
-    { account_list: load_account_list }
+    load_account_list ? { account_list: load_account_list } : {}
   end
 
   def load_account_list

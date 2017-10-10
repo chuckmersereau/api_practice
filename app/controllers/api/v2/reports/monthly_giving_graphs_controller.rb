@@ -7,22 +7,31 @@ class Api::V2::Reports::MonthlyGivingGraphsController < Api::V2Controller
 
   protected
 
-  def account_lists
-    @account_lists ||= current_user.readable_account_lists
+  def permit_coach?
+    true
   end
 
   private
 
-  def authorize_report
-    authorize load_account_list, :show?
+  def load_report
+    @report ||= ::Reports::MonthlyGivingGraph.new(report_params)
+  end
+
+  def report_params
+    {
+      account_list: load_account_list,
+      filter_params: filter_params.except(:display_currency),
+      display_currency: filter_params[:display_currency],
+      locale: locale
+    }
   end
 
   def load_account_list
     @account_list ||= account_lists.first
   end
 
-  def load_report
-    @report ||= ::Reports::MonthlyGivingGraph.new(report_attributes)
+  def render_report
+    render json: @report, fields: field_params, include: include_params
   end
 
   def permitted_filters
@@ -34,18 +43,7 @@ class Api::V2::Reports::MonthlyGivingGraphsController < Api::V2Controller
     ]
   end
 
-  def report_attributes
-    {
-      account_list: load_account_list,
-      filter_params: filter_params.except(:display_currency),
-      display_currency: filter_params[:display_currency],
-      locale: locale
-    }
-  end
-
-  def render_report
-    render json: @report,
-           fields: field_params,
-           include: include_params
+  def authorize_report
+    authorize(load_account_list, :show?)
   end
 end

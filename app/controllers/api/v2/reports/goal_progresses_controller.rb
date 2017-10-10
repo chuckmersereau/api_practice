@@ -7,10 +7,6 @@ class Api::V2::Reports::GoalProgressesController < Api::V2Controller
 
   private
 
-  def report_scope
-    current_user.account_lists
-  end
-
   def load_report
     @report ||= ::Reports::GoalProgress.new(report_params)
   end
@@ -23,15 +19,15 @@ class Api::V2::Reports::GoalProgressesController < Api::V2Controller
     @account_list ||= account_lists.first
   end
 
-  def authorize_report
-    authorize load_account_list, :show?
-  end
-
   def render_report
     render json: @report, fields: field_params, include: include_params
   end
 
   def permitted_filters
     [:account_list_id]
+  end
+
+  def authorize_report
+    authorize(load_account_list, :show?)
   end
 end

@@ -24,7 +24,7 @@ class Api::V2::Reports::DonationMonthlyTotalsController < Api::V2Controller
   end
 
   def render_report
-    render json: @report
+    render json: @report, fields: field_params, include: include_params
   end
 
   def permitted_filters

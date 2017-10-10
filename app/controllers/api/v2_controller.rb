@@ -39,6 +39,10 @@ class Api::V2Controller < ApiController
     @account_lists ||= fetch_account_lists
   end
 
+  def permit_coach?
+    false
+  end
+
   private
 
   def fetch_current_user
@@ -82,7 +86,10 @@ class Api::V2Controller < ApiController
   end
 
   def fetch_account_lists
-    return current_user.account_lists unless account_list_filter
+    unless account_list_filter
+      return current_user.account_lists unless permit_coach?
+      return current_user.readable_account_lists
+    end
     @account_lists = fetch_account_list_with_filter
     return @account_lists if @account_lists.present?
     raise ActiveRecord::RecordNotFound,
@@ -94,7 +101,8 @@ class Api::V2Controller < ApiController
   end
 
   def fetch_account_list_with_filter
-    current_user.account_lists.where(id: account_list_filter)
+    return current_user.account_lists.where(id: account_list_filter) unless permit_coach?
+    current_user.readable_account_lists.where(id: account_list_filter)
   end
 
   def verify_primary_id_placement
