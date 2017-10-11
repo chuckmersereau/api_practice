@@ -36,13 +36,61 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
     context 'pledged_to_appeal filter' do
       let!(:user) { create(:user_with_account) }
 
-      before { create(:pledge, contact: contact, appeal: appeal, account_list: account_list) }
-
       it 'filters results' do
+        create(:pledge, contact: contact, appeal: appeal, account_list: account_list)
+
         get :index, appeal_id: appeal_id, filter: { pledged_to_appeal: 'true' }
 
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)['data'].length).to eq(1)
+      end
+
+      it "doesn't break if filtering everything" do
+        appeal.pledges.destroy_all
+
+        get :index, appeal_id: appeal_id, filter: { pledged_to_appeal: 'false' }, sort: 'contact.name'
+
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)['data'].length).to eq(appeal.appeal_contacts.count)
+      end
+    end
+  end
+
+  describe 'sorting' do
+    before { api_login(user) }
+
+    context 'contact.name sort' do
+      let!(:sorting_appeal) { create(:appeal, account_list: account_list) }
+      let!(:contact1) { create(:contact, account_list: account_list, name: 'Currie, Marie') }
+      let!(:contact2) { create(:contact, account_list: account_list, name: 'Einstein, Albert') }
+      let!(:appeal_contact1) { create(:appeal_contact, contact: contact1, appeal: sorting_appeal) }
+      let!(:appeal_contact2) { create(:appeal_contact, contact: contact2, appeal: sorting_appeal) }
+
+      it 'sorts results desc' do
+        get :index,
+            appeal_id: sorting_appeal.uuid,
+            sort: 'contact.name',
+            fields: {
+              contact: 'name,pledge_amount,pledge_currency,pledge_frequency'
+            },
+            filter: {
+              pledged_to_appeal: false
+            },
+            include: 'contact'
+        expect(response.status).to eq(200)
+        data = JSON.parse(response.body)['data']
+        expect(data.length).to eq(2)
+        expect(data[0]['id']).to eq(appeal_contact1.uuid)
+        expect(data[1]['id']).to eq(appeal_contact2.uuid)
+      end
+
+      it 'sorts results asc' do
+        get :index, appeal_id: sorting_appeal.uuid, sort: '-contact.name'
+        expect(response.status).to eq(200)
+        data = JSON.parse(response.body)['data']
+        expect(data.length).to eq(2)
+        expect(data[0]['id']).to eq(appeal_contact2.uuid)
+        expect(data[1]['id']).to eq(appeal_contact1.uuid)
       end
     end
   end

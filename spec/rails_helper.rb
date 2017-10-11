@@ -94,3 +94,7 @@ RSpec.configure do |config|
   config.include AuthHelper, :auth
   config.include ActiveSupport::Testing::TimeHelpers
 end
+
+def response_json
+  JSON.parse(response.body)
+end

@@ -12,8 +12,7 @@ class Encryptor
   end
 
   def dump(s)
-    if val = (s || @default)
-      cipher.enc(val)
-    end
+    val = (s || @default)
+    cipher.enc(val) if val
   end
 end

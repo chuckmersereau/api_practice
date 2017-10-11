@@ -41,8 +41,7 @@ resource 'Pledges' do
       amount
       created_at
       expected_date
-      processed
-      received_not_processed
+      status
       updated_at
       updated_in_db_at
     )
@@ -95,9 +94,10 @@ resource 'Pledges' do
       end
 
       with_options scope: :sort do
-        parameter 'amount',                 'Sort by Amount',                                                       type: 'Number'
-        parameter 'expected_date',          'Sort by Expected Date',                                                type: 'String'
-        parameter 'received_not_processed', 'Value is set to true if the donation was received, but not processed', type: 'Boolean'
+        parameter 'amount',        'Sort by Amount',                                                                        type: 'Number'
+        parameter 'expected_date', 'Sort by Expected Date',                                                                 type: 'String'
+        parameter 'status',        'Sort by the status of the appeal (not_received, received_not_processed, or processed)', type: 'String'
+        parameter 'contact.name',  'Sort by Contact Name',                                                                  type: 'String'
       end
 
       example 'Pledge [LIST]', document: documentation_scope do
@@ -117,10 +117,9 @@ resource 'Pledges' do
       with_options scope: :data do
         with_options scope: :attributes do
           # list out the attributes here
-          response_field 'amount',                 'Amount of Pledge',                                                        type: 'Number'
-          response_field 'expected_date',          'Expected Date of Donation',                                               type: 'String'
-          response_field 'processed',              'Value is set to true if the donation(s) was processed',                   type: 'Boolean'
-          response_field 'received_not_processed', 'Value is set to true if the donation(s) was received, but not processed', type: 'Boolean'
+          response_field 'amount',        'Amount of Pledge',                                       type: 'Number'
+          response_field 'expected_date', 'Expected Date of Donation',                              type: 'String'
+          response_field 'status',        'State of the processing of the donations on the pledge', type: 'String'
         end
 
         with_options scope: :relationships do

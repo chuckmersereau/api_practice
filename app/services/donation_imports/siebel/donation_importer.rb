@@ -61,7 +61,7 @@ class DonationImports::Siebel
       donations_destroyed = 0
 
       relevant_mpdx_donations.each do |mpdx_donation|
-        return if donations_destroyed == MAX_DONATIONS_TO_DELETE_AT_ONCE
+        break if donations_destroyed == MAX_DONATIONS_TO_DELETE_AT_ONCE
 
         next if mpdx_donation.appeal.present?
         next if find_siebel_donation_by_mpdx_donation(designation_profile, mpdx_donation)

@@ -82,7 +82,7 @@ describe ConstantListExhibit do
   end
 
   context '#activity_translated_hashes' do
-    it do
+    it 'should return array of hashes' do
       subject.activity_translated_hashes.each do |activity|
         expect(activity).to be_a Hash
       end
@@ -92,7 +92,7 @@ describe ConstantListExhibit do
   end
 
   context '#assignable_likely_to_give_translated_hashes' do
-    it do
+    it 'should return array of hashes' do
       subject.assignable_likely_to_give_translated_hashes.each do |likelihood|
         expect(likelihood).to be_a Hash
       end
@@ -102,7 +102,7 @@ describe ConstantListExhibit do
   end
 
   context '#assignable_send_newsletter_translated_hashes' do
-    it do
+    it 'should return array of hashes' do
       subject.assignable_send_newsletter_translated_hashes.each do |newsletter|
         expect(newsletter).to be_a Hash
       end
@@ -112,7 +112,7 @@ describe ConstantListExhibit do
   end
 
   context '#status_translated_hashes' do
-    it do
+    it 'should return array of hashes' do
       subject.status_translated_hashes.each do |status|
         expect(status).to be_a Hash
       end
@@ -122,7 +122,7 @@ describe ConstantListExhibit do
   end
 
   context '#pledge_frequency_translated_hashes' do
-    it do
+    it 'should return array of hashes' do
       subject.pledge_frequency_translated_hashes.each do |pledge_frequency|
         expect(pledge_frequency).to be_a Hash
       end
@@ -132,7 +132,7 @@ describe ConstantListExhibit do
   end
 
   context '#assignable_location_translated_hashes' do
-    it do
+    it 'should return array of hashes' do
       subject.assignable_location_translated_hashes.each do |assignable_location|
         expect(assignable_location).to be_a Hash
       end
@@ -146,20 +146,20 @@ describe ConstantListExhibit do
       NotificationTypesSeeder.new(true).seed
     end
 
-    it do
+    it 'should return array of hashes' do
       subject.notification_translated_hashes.each do |notification|
         expect(notification).to be_a Hash
       end
     end
 
-    it 'translates' do
+    it 'should translate' do
       expect(FastGettext).to receive('cached_find').at_least(:once)
       subject.notification_translated_hashes
     end
   end
 
   context '#pledge_frequencies_translated_hashes' do
-    it do
+    it 'should return array of hashes' do
       subject.pledge_frequencies_translated_hashes.each do |frequency|
         expect(frequency).to be_a Hash
         expect(frequency.keys).to eq([:id, :value])
@@ -170,7 +170,7 @@ describe ConstantListExhibit do
   end
 
   context '#send_appeals_translated_hashes' do
-    it do
+    it 'should return array of hashes' do
       subject.send_appeals_translated_hashes.each do |send_appeal|
         expect(send_appeal).to be_a Hash
         expect(send_appeal.keys).to eq([:id, :value])

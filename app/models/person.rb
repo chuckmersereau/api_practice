@@ -344,7 +344,7 @@ class Person < ApplicationRecord
       next unless other_phone
       phone_number.merge(other_phone)
       merge_phone_numbers
-      return
+      break
     end
   end
 

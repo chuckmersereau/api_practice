@@ -269,7 +269,7 @@ class DocumentationHelper
 
   def response_fields_data(action)
     (data.dig(:response_fields, action) || {}).tap do |fields_data|
-      return unless fields_data.present?
+      break unless fields_data.present?
 
       additional_response_field_data.each do |key, value|
         fields_data[key] = value unless fields_data.key?(key)

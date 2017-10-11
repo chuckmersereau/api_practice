@@ -4,7 +4,6 @@ JsonApiService.configure do |config|
   config.custom_references = {
     background_batch_requests: 'BackgroundBatch::Request',
     comments: 'ActivityComment',
-    background_batch_requests: 'BackgroundBatch::Request',
     facebook_accounts: 'Person::FacebookAccount',
     google_accounts: 'Person::GoogleAccount',
     key_accounts: 'Person::KeyAccount',

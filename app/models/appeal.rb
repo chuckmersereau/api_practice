@@ -52,15 +52,15 @@ class Appeal < ApplicationRecord
   end
 
   def pledges_amount_not_received_not_processed
-    pledges.where(received_not_processed: [nil, false], processed: [nil, false]).sum(:amount)
+    pledges.where(status: :not_received).sum(:amount)
   end
 
   def pledges_amount_received_not_processed
-    pledges.where(received_not_processed: true).sum(:amount)
+    pledges.where(status: :received_not_processed).sum(:amount)
   end
 
   def pledges_amount_processed
-    pledges.where(processed: true).sum(:amount)
+    pledges.where(status: :processed).sum(:amount)
   end
 
   protected

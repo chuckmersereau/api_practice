@@ -137,7 +137,7 @@ class Siebel < DataServer
       donation.destroy
 
       donations_destroyed += 1
-      return if donations_destroyed == MAX_DONATIONS_TO_DELETE_AT_ONCE
+      break if donations_destroyed == MAX_DONATIONS_TO_DELETE_AT_ONCE
     end
   end
 
@@ -287,7 +287,8 @@ class Siebel < DataServer
     # If we didn't find someone using the real remote_id, try the "old style"
     unless master_person_from_source
       remote_id = siebel_person.primary ? "#{donor_account.account_number}-1" : "#{donor_account.account_number}-2"
-      if master_person_from_source = @org.master_people.find_by('master_person_sources.remote_id' => remote_id)
+      master_person_from_source = @org.master_people.find_by('master_person_sources.remote_id' => remote_id)
+      if master_person_from_source
         MasterPersonSource.where(organization_id: @org.id, remote_id: remote_id).update_all(remote_id: siebel_person.id)
       end
     end
@@ -406,7 +407,8 @@ class Siebel < DataServer
       primary: phone_number.primary,
       remote_id: phone_number.id
     }
-    if existing_phone = person.phone_numbers.find { |pn| pn.remote_id == phone_number.id }
+    existing_phone = person.phone_numbers.find { |pn| pn.remote_id == phone_number.id }
+    if existing_phone
       existing_phone.update_attributes(attributes)
     else
       PhoneNumber.add_for_person(person, attributes)
@@ -421,7 +423,8 @@ class Siebel < DataServer
       remote_id: email.id
     }
     Retryable.retryable do
-      if existing_email = person.email_addresses.find { |e| e.remote_id == email.id }
+      existing_email = person.email_addresses.find { |e| e.remote_id == email.id }
+      if existing_email
         begin
           existing_email.update_attributes(attributes)
         rescue ActiveRecord::RecordNotUnique

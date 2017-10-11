@@ -1,14 +1,3 @@
-class DummyContext
-  def number_to_current_currency(x)
-    "$#{x}"
-  end
-end
-
-def balance(a, u)
-  e = AccountListExhibit.new(a, DummyContext.new)
-  e.balances(u)
-end
-
 def fix_dup_balances(u)
   u.account_lists.each(&method(:fix_dup_balance))
 end

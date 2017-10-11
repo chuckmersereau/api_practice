@@ -32,7 +32,8 @@ resource 'People > Duplicates' do
       ignore
       reason
       updated_at
-      updated_in_db_at)
+      updated_in_db_at
+    )
   end
 
   # List out any additional attribute keys that will be alongside

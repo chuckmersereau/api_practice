@@ -33,8 +33,7 @@ resource 'Account List ChalkLine Mail' do
                                           'updated_at' => nil,
                                           'updated_in_db_at' => nil
                                         }
-                                      }
-                                     )
+                                      })
         end
       end
     end

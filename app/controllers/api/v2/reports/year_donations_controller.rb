@@ -7,10 +7,6 @@ class Api::V2::Reports::YearDonationsController < Api::V2Controller
 
   private
 
-  def report_scope
-    current_user.account_lists
-  end
-
   def load_report
     @report ||= ::Reports::YearDonations.new(report_params)
   end

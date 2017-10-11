@@ -77,13 +77,14 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
 
   def load_pledges
     @pledges = pledge_scope.where(filter_params)
+                           .joins(sorting_join)
                            .reorder(sorting_param)
                            .page(page_number_param)
                            .per(per_page_param)
   end
 
   def permitted_filters
-    [:contact_id, :appeal_id]
+    [:contact_id, :appeal_id, :status]
   end
 
   def persist_pledge
@@ -98,7 +99,7 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
   end
 
   def permitted_sorting_params
-    %w(amount expected_date)
+    %w(amount expected_date contact.name)
   end
 
   def render_pledge

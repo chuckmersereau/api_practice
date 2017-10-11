@@ -2,11 +2,21 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 6 October 2017
+- appeals/appeal_contacts endpoint is now sortable by contact.name
+- appeals/excluded_appeal_contacts endpoint is now sortable by contact.name
+- pledges endpoint is now filterable by status
+
 ## 4 October 2017
+- Added ability to sort by contact name field in pledges endpoint.
+- Contact Status filter now returns contacts with no status when 'active' is in the list of parameter.
 - Added assignable_location_hashes to list of constants returned by the '/api/v2/constants' endpoint.
 
+## 3 October 2017
+- convert pledge status booleans to enum
+
 ## 29 September 2017
-- Added ?pledged_to_appeal filter to appeal/:id/appeal_contacts endpoint.
+- Added pledged_to_appeal filter to appeal/:id/appeal_contacts endpoint.
 
 ## 28 September 2017
 - Add all person fields to the /user endpoint.

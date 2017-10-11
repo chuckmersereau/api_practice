@@ -9,7 +9,7 @@ RSpec.shared_examples 'sorting examples' do |options|
 
   before do
     resource.update_column(sorting_param, 1.day.ago) if sorting_param.ends_with?('_at')
-    unless resource.class.where.not(sorting_param => resource.send(sorting_param)).exists?
+    unless sorting_param.include?('.') || resource.class.where.not(sorting_param => resource.send(sorting_param)).exists?
       raise "To test sorting, there should be a resource with attribute #{sorting_param} NOT equal to #{resource.send(sorting_param)}"
     end
   end
@@ -34,7 +34,7 @@ RSpec.shared_examples 'sorting examples' do |options|
 
   context 'sorting nulls' do
     before do
-      next unless sorting_param_nullable?
+      next if sorting_param.include?('.') || !sorting_param_nullable?
 
       resource.update_column(sorting_param, nil)
       raise "To test sorting by null values, there should be a resource with attribute #{sorting_param} as null" unless resource.class.where(sorting_param => nil).exists?
@@ -42,7 +42,7 @@ RSpec.shared_examples 'sorting examples' do |options|
     end
 
     it 'sorts resources based on null values first or last' do
-      next unless sorting_param_nullable?
+      next if sorting_param.include?('.') || !sorting_param_nullable?
 
       api_login(user)
       get options[:action], parent_param_if_needed.merge(sort: "#{sorting_param} nulls")
@@ -56,7 +56,7 @@ RSpec.shared_examples 'sorting examples' do |options|
     end
 
     it 'raises an error if the nulls argument is not formatted as expected' do
-      next unless sorting_param_nullable?
+      next if sorting_param.include?('.') || !sorting_param_nullable?
 
       api_login(user)
       get options[:action], parent_param_if_needed.merge(sort: "#{sorting_param} nil")

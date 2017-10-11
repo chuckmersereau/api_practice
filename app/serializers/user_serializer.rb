@@ -11,7 +11,8 @@ class UserSerializer < PersonSerializer
   def preferences
     object.preferences.merge(
       default_account_list: default_account_list_uuid,
-      setup: object.setup)
+      setup: object.setup
+    )
   end
 
   private

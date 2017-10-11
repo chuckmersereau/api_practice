@@ -41,6 +41,9 @@ resource 'Appeals > ExcludedAppealContacts' do
     end
 
     get '/api/v2/appeals/:appeal_id/excluded_appeal_contacts' do
+      with_options scope: :sort do
+        parameter 'contact.name', 'Sort by Contact Name', type: 'String'
+      end
       response_field 'data', 'Data', type: 'Array[Object]'
 
       example 'ExcludedAppealContact [LIST]', document: documentation_scope do

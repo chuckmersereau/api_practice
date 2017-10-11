@@ -22,11 +22,11 @@ class TntImport::PledgesImport
   private
 
   def import_pledge(row)
-    @account_list.pledges.create(amount: row['Amount'],
-                                 amount_currency: find_tnt_currency_code_for_row(row),
-                                 appeal: find_mpdx_appeal_for_row(row),
-                                 contact: find_mpdx_contact_for_row(row),
-                                 expected_date: parse_date(row['DateDue'], @import.user))
+    @account_list.pledges.find_or_create_by(amount: row['Amount'],
+                                            amount_currency: find_tnt_currency_code_for_row(row),
+                                            appeal: find_mpdx_appeal_for_row(row),
+                                            contact: find_mpdx_contact_for_row(row),
+                                            expected_date: parse_date(row['DateDue'], @import.user))
   end
 
   def find_mpdx_contact_for_row(row)

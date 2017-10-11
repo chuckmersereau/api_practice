@@ -23,5 +23,10 @@ describe TntImport::PledgesImport do
       expect(pledge.account_list_id).to eq(account_list.id)
       expect(pledge.contact_id).to be_present
     end
+
+    it 'does not import the same pledges a second time' do
+      expect { pledges_import.import }.to change { Pledge.count }.from(0).to(13)
+      expect { pledges_import.import }.to_not change { Pledge.count }.from(13)
+    end
   end
 end

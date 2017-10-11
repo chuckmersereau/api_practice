@@ -14,11 +14,11 @@ class FamilyRelationship < ApplicationRecord
                           :uuid].freeze
 
   def self.add_for_person(person, attributes)
+    fr = person.family_relationships.find_by(related_person_id: attributes[:related_person_id])
+    return fr if fr
+
+    new_or_create = person.new_record? ? :new : :create
     attributes = attributes.except(:_destroy)
-    unless fr = person.family_relationships.find_by(related_person_id: attributes[:related_person_id])
-      new_or_create = person.new_record? ? :new : :create
-      fr = person.family_relationships.send(new_or_create, attributes)
-    end
-    fr
+    person.family_relationships.send(new_or_create, attributes)
   end
 end

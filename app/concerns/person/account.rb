@@ -65,12 +65,13 @@ module Person::Account
     def find_or_create_person_account(person:, attributes:, relation_scope:)
       attributes[:authenticated] = true
 
-      remote_id = attributes[:remote_id]
-      account   = find_related_account(relation_scope, attributes)
+      remote_id     = attributes[:remote_id]
+      account       = find_related_account(relation_scope, attributes)
+      other_account = find_by(remote_id: remote_id, authenticated: true)
 
       if account
         account.update_attributes(attributes)
-      elsif other_account = find_by(remote_id: remote_id, authenticated: true)
+      elsif other_account
         # if creating this authentication record is a duplicate, we have a duplicate person to merge
         other_account.update_attributes(person_id: person.id)
         account = other_account

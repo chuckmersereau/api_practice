@@ -57,7 +57,7 @@ describe CsvFileReader do
                                         'Mailing State', 'Mailing Postal Code', 'Mailing Country', 'Status', 'Commitment Amount',
                                         'Commitment Frequency', 'Newsletter', 'Commitment Received', 'Commitment Currency', 'Tags',
                                         'Primary Email', 'Spouse Email', 'Primary Phone', 'Spouse Phone', 'Notes'])
-      expect(rows.first.fields).to eq(["Lané, John", 'John', "Lané", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
+      expect(rows.first.fields).to eq(['Lané, John', 'John', 'Lané', nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
                                        nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil])
     end
   end

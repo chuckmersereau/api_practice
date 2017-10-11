@@ -26,7 +26,7 @@ class OrgDonorAccountsAddressCleaner
 
   def update_addresses_source(organization_id)
     org = Organization.find(organization_id)
-    return unless org.api_class = 'DataServer'
+    return unless org.api_class == 'DataServer'
 
     Address.where(addressable_type: 'DonorAccount')
            .joins('INNER JOIN donor_accounts ON donor_accounts.id = addresses.addressable_id')

@@ -59,8 +59,8 @@ class Contact::DuplicatePairsFinder < ApplicationDuplicatePairsFinder
   # e.g. "Doe, John and Jane" and "Doe, John" should be considered duplicates.
   def find_duplicates_by_primary_name
     find_duplicate_hashes_by_value(contact_names_hashes, :primary_name).each do |duplicate_hashes|
-      return unless (duplicate_hashes.first[:rebuilt_name] == duplicate_hashes.first[:primary_name]) ||
-                    (duplicate_hashes.second[:rebuilt_name] == duplicate_hashes.second[:primary_name])
+      break unless (duplicate_hashes.first[:rebuilt_name] == duplicate_hashes.first[:primary_name]) ||
+                   (duplicate_hashes.second[:rebuilt_name] == duplicate_hashes.second[:primary_name])
       add_duplicate_pair_from_hashes(duplicate_hashes, 'Similar names')
     end
   end
@@ -69,8 +69,8 @@ class Contact::DuplicatePairsFinder < ApplicationDuplicatePairsFinder
   # e.g. "Doe, John and Jane" and "Doe, Jane" should be considered duplicates.
   def find_duplicates_by_spouse_or_primary_name
     find_duplicate_hashes_by_value(contact_names_hashes, :spouse_or_primary_name).each do |duplicate_hashes|
-      return unless (duplicate_hashes.first[:rebuilt_name] == duplicate_hashes.first[:spouse_or_primary_name]) ||
-                    (duplicate_hashes.second[:rebuilt_name] == duplicate_hashes.second[:spouse_or_primary_name])
+      break unless (duplicate_hashes.first[:rebuilt_name] == duplicate_hashes.first[:spouse_or_primary_name]) ||
+                   (duplicate_hashes.second[:rebuilt_name] == duplicate_hashes.second[:spouse_or_primary_name])
       add_duplicate_pair_from_hashes(duplicate_hashes, 'Similar names')
     end
   end

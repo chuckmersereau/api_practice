@@ -4,28 +4,9 @@ describe ContactExhibit do
   let(:contact) { build(:contact) }
   let(:context) { double }
 
-  it 'returns referrers as a list of links' do
-    allow(context).to receive(:link_to).and_return('foo')
-    allow(exhib).to receive(:contacts_that_referred_me).and_return(%w(foo foo))
-    expect(exhib.referrer_links).to eq('foo, foo')
-  end
-
   it 'should figure out location based on address' do
     allow(exhib).to receive(:address).and_return(OpenStruct.new(city: 'Rome', state: 'Empire', country: 'Gross'))
     expect(exhib.location).to eq('Rome, Empire, Gross')
-  end
-
-  it 'should show contact_info' do
-    allow(context).to receive(:contact_person_path)
-    contact = create(:contact)
-    person = create(:person)
-    contact.people << person
-
-    exhib = ContactExhibit.new(contact, context)
-    email = build(:email_address, person: person)
-    phone_number = build(:phone_number, person: person)
-    allow(context).to receive(:link_to).and_return("#{phone_number.number}<br />#{email.email}")
-    expect(exhib.contact_info).to eq("#{phone_number.number}<br />#{email.email}")
   end
 
   it 'should not have a newsletter error' do

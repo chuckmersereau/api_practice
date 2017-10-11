@@ -23,8 +23,7 @@ describe MailChimp::Exporter do
     create_list(:contact, 3,
                 account_list: account_list,
                 tag_list: 'tag',
-                people: [build(:person, primary_email_address: build(:email_address))]
-               )
+                people: [build(:person, primary_email_address: build(:email_address))])
   end
 
   let(:appeal) { create(:appeal, account_list: account_list) }

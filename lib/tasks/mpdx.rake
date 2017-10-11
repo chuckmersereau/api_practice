@@ -27,7 +27,7 @@ namespace :mpdx do
         al.merge(other_list)
         al.async_merge_contacts(1.year.ago)
         merge_account_lists
-        return
+        break
       end
     end
 
@@ -44,7 +44,7 @@ namespace :mpdx do
         puts other_account.account_number
         al.merge(other_account)
         merge_donor_accounts
-        return
+        break
       end
     end
 

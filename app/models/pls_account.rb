@@ -37,8 +37,9 @@ class PlsAccount < ApplicationRecord
     contacts = JSON.parse(get_response(:get, '/api/v1/contacts'))['contacts']
 
     contacts.each do |pl_contact|
-      next unless pl_contact['external_id'] &&
-                  contact = account_list.contacts.find_by(id: pl_contact['external_id'])
+      next unless pl_contact['external_id']
+      contact = account_list.contacts.find_by(id: pl_contact['external_id'])
+      next unless contact
 
       contact.update_columns(pls_id: pl_contact['contact_id'],
                              pls_params: contact_params_map ? contact_params_map[contact.id] : nil)
