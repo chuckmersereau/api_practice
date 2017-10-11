@@ -69,7 +69,6 @@ class MailChimp::Importer
 
   def import_members(member_infos)
     matching_people_hash = Matcher.new(mail_chimp_account).find_matching_people(member_infos)
-
     import_matched(matching_people_hash)
     import_unmatched(member_infos, matching_people_hash)
   end
@@ -100,7 +99,7 @@ class MailChimp::Importer
     person.email = member_info[:email]
     person.save(validate: false)
 
-    person.primary_email_address.update(historic: true) if primary_email_address_should_be_made_historic?(member_info)
+    person.primary_email_address&.update(historic: true) if primary_email_address_should_be_made_historic?(member_info)
 
     add_or_remove_contact_from_newsletter(person.contact, member_info)
   end
@@ -110,7 +109,7 @@ class MailChimp::Importer
   end
 
   def person_should_be_opted_out?(person, member_info)
-    %w(cleaned unsubscribed).include?(member_info[:status].downcase) || person.contact.send_newsletter == 'None'
+    %w(cleaned unsubscribed).include?(member_info[:status].downcase) || person.contact&.send_newsletter == 'None'
   end
 
   def add_or_remove_contact_from_newsletter(contact, member_info)
@@ -151,7 +150,7 @@ class MailChimp::Importer
     if first_name.present? && last_name.present?
       "#{last_name}, #{first_name}"
     else
-      first_name.presence || last_name.presence || self.class.email_to_name(email)
+      email_to_name(email)
     end
   end
 
