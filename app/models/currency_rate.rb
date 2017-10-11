@@ -11,9 +11,16 @@ class CurrencyRate < ApplicationRecord
       to_rate / from_rate
     end
 
-    def convert_with_latest(amount:, from:, to:)
+    def convert_with_latest!(amount:, from:, to:)
       rate = latest_for_pair(from: from, to: to)
       amount.to_f * rate
+    end
+
+    def convert_with_latest(amount:, from:, to:)
+      convert_with_latest!(amount: amount, from: from, to: to)
+    rescue CurrencyRate::RateNotFoundError => e
+      Rollbar.error(e)
+      0
     end
 
     def convert_on_date(amount:, from:, to:, date:)

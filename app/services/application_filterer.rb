@@ -30,7 +30,8 @@ class ApplicationFilterer
 
   def self.filter_classes
     @filter_classes ||= (self::FILTERS_TO_DISPLAY + self::FILTERS_TO_HIDE).sort.map do |class_name|
-      "#{to_s.split('::').first}::Filter::#{class_name}".constantize
+      prefix = to_s.split('::')[0...-1].join('::')
+      "#{prefix}::Filter::#{class_name}".constantize
     end
   end
 

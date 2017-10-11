@@ -62,7 +62,12 @@ Rails.application.routes.draw do
         end
 
         resources :background_batches, except: [:update]
-        resources :coaching_account_lists, only: [:index, :show]
+
+        namespace :coaching do
+          resources :account_lists, only: [:index, :show]
+          resources :contacts, only: [:index, :show]
+        end
+
         resources :constants, only: [:index]
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do

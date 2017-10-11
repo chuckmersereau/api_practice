@@ -1,4 +1,4 @@
-class CoachingAccountListSerializer < AccountListSerializer
+class Coaching::AccountListSerializer < AccountListSerializer
   include DisplayCase::ExhibitsHelper
   include LocalizationHelper
 
@@ -15,7 +15,7 @@ class CoachingAccountListSerializer < AccountListSerializer
              :staff_account_ids,
              :weeks_on_mpd
 
-  has_many :users, serializer: CoachedPersonSerializer
+  has_many :users, serializer: Coaching::PersonSerializer
 
   def account_list_exhibit
     @exhibit ||= exhibit(object)

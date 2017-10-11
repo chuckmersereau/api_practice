@@ -56,7 +56,7 @@ class ApplicationFilter
   end
 
   def filterer
-    "#{class_name.split('::').first}::Filterer".constantize
+    "#{class_name.split('::')[0...-2].join('::')}::Filterer".constantize
   end
 
   def custom_options?

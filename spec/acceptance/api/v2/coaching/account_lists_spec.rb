@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Coaching Account Lists' do
   include_context :json_headers
-  doc_helper = DocumentationHelper.new(resource: :coaching_account_lists)
+  doc_helper = DocumentationHelper.new(resource: %i(coaching account_lists))
 
   let(:resource_type) { 'account_lists' }
   let!(:user)         { create(:user) }
@@ -63,7 +63,7 @@ resource 'Coaching Account Lists' do
   context 'authorized user' do
     before { api_login(user) }
 
-    get '/api/v2/coaching_account_lists' do
+    get '/api/v2/coaching/account_lists' do
       doc_helper.insert_documentation_for(action: :index, context: self)
 
       before { account_list }
@@ -77,7 +77,7 @@ resource 'Coaching Account Lists' do
       end
     end
 
-    get '/api/v2/coaching_account_lists/:id' do
+    get '/api/v2/coaching/account_lists/:id' do
       doc_helper.insert_documentation_for(action: :show, context: self)
 
       example doc_helper.title_for(:show), document: doc_helper.document_scope do

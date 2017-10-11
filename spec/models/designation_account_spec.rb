@@ -37,13 +37,13 @@ describe DesignationAccount do
     let(:designation_account) { build(:designation_account, organization: organization, balance: 100.0) }
 
     it 'converts balance to specified currency' do
-      allow(CurrencyRate).to receive(:convert_with_latest).with(amount: 100.0, from: 'GBP', to: 'EUR') { 124.8 }
+      allow(CurrencyRate).to receive(:convert_with_latest!).with(amount: 100.0, from: 'GBP', to: 'EUR') { 124.8 }
       expect(designation_account.converted_balance('EUR')).to eq 124.8
     end
 
     it 'returns zero but logs error to rollbar if currency rate missing' do
       allow(Rollbar).to receive(:error)
-      allow(CurrencyRate).to receive(:convert_with_latest).and_raise(CurrencyRate::RateNotFoundError)
+      allow(CurrencyRate).to receive(:convert_with_latest!).and_raise(CurrencyRate::RateNotFoundError)
       expect(designation_account.converted_balance('EUR')).to eq 0.0
       expect(Rollbar).to have_received(:error)
     end

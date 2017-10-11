@@ -7,6 +7,10 @@ This changelog covers what's changed in the MPDX APIs.
 - appeals/excluded_appeal_contacts endpoint is now sortable by contact.name
 - pledges endpoint is now filterable by status
 
+## 05 October 2017
+- Added /api/v2/coaching/account_lists endpoint.
+- Added /api/v2/coaching/contacts endpoint.
+
 ## 4 October 2017
 - Added ability to sort by contact name field in pledges endpoint.
 - Contact Status filter now returns contacts with no status when 'active' is in the list of parameter.

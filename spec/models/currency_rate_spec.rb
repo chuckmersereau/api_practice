@@ -41,13 +41,21 @@ describe CurrencyRate do
     end
   end
 
-  context '.convert_with_latest' do
+  context '.convert_with_latest!' do
     it 'converts from one currency to other using latest rates' do
       create(:currency_rate, code: 'EUR', exchanged_on: Date.new(2016, 4, 1), rate: 0.88)
       create(:currency_rate, code: 'GBP', exchanged_on: Date.new(2016, 4, 1), rate: 0.69)
 
-      expect(CurrencyRate.convert_with_latest(amount: 10.0, from: 'EUR', to: 'GBP'))
+      expect(CurrencyRate.convert_with_latest!(amount: 10.0, from: 'EUR', to: 'GBP'))
         .to be_within(0.1).of(7.8)
+    end
+  end
+
+  context '.convert_with_latest' do
+    it 'returns 0 in the event of an error' do
+      allow(CurrencyRate).to receive(:convert_with_latest!).and_raise(CurrencyRate::RateNotFoundError)
+      expect(CurrencyRate.convert_with_latest(amount: 10.0, from: 'EUR', to: 'GBP'))
+        .to eq 0
     end
   end
 

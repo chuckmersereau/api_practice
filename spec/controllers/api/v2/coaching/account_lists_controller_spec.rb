@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V2::CoachingAccountListsController, type: :controller do
+describe Api::V2::Coaching::AccountListsController, type: :controller do
   let(:resource_type) { 'account_lists' }
   let(:factory_type) { :account_list }
   let!(:user) { create(:user, locale: :en) }
