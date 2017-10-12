@@ -132,4 +132,44 @@ describe EmailAddress do
       create(:email_address)
     end
   end
+
+  describe '#sync_with_mail_chimp_account' do
+    let!(:mail_chimp_account) { build(:mail_chimp_account, primary_list_id: 'primary_list_id') }
+    let!(:account_list) { create(:account_list, mail_chimp_account: mail_chimp_account) }
+    let!(:contact) { create(:contact, primary_person: first_person, people: [second_person], account_list: account_list) }
+    let!(:first_person) { create(:person, primary_email_address: build(:email_address)) }
+    let!(:second_person) { create(:person, email_addresses: [build(:email_address)]) }
+
+    it 'syncs the contact when a primary email_address is added to a primary_person' do
+      expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+        mail_chimp_account.id, 'primary_list_id', [contact.id]
+      )
+
+      create(:email_address, person: first_person, primary: true)
+    end
+
+    it 'syncs the contact when a primary email_address is added to a secondary person' do
+      expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+        mail_chimp_account.id, 'primary_list_id', [contact.id]
+      )
+
+      create(:email_address, person: second_person, primary: true)
+    end
+
+    it 'does not sync the contact when a none primary email_address is added' do
+      expect(MailChimp::ExportContactsWorker).not_to receive(:perform_async).with(
+        mail_chimp_account.id, 'primary_list_id', [contact.id]
+      )
+
+      create(:email_address, person: first_person)
+    end
+
+    it 'syncs the contact when a primary_email_address is updated with a new email' do
+      expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+        mail_chimp_account.id, 'primary_list_id', [contact.id]
+      )
+
+      first_person.primary_email_address.reload.update(email: 'new@email.com')
+    end
+  end
 end

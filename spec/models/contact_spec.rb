@@ -708,8 +708,7 @@ describe Contact do
           mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.locale = 'en-US'
-        contact.send(:check_state_for_mail_chimp_sync)
-        contact.send(:sync_with_mail_chimp)
+        contact.save!
       end
 
       it 'notifies the mail chimp account of changes on certain nested fields' do
@@ -717,8 +716,7 @@ describe Contact do
           mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.people.first.primary_email_address.email = 'new@email.com'
-        contact.send(:check_state_for_mail_chimp_sync)
-        contact.send(:sync_with_mail_chimp)
+        contact.save!
       end
 
       it 'notifies the mail chimp account of changes when tags are added' do
@@ -726,8 +724,7 @@ describe Contact do
           mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.tag_list.add('second_example_tag')
-        contact.send(:check_state_for_mail_chimp_sync)
-        contact.send(:sync_with_mail_chimp)
+        contact.save!
       end
 
       it 'notifies the mail chimp account of changes when tags are removed' do
@@ -735,8 +732,7 @@ describe Contact do
           mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.tag_list.remove('example_tag')
-        contact.send(:check_state_for_mail_chimp_sync)
-        contact.send(:sync_with_mail_chimp)
+        contact.save!
       end
 
       it 'notifies the mail chimp account when a person is opted out' do
@@ -744,15 +740,13 @@ describe Contact do
           mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.people.first.optout_enewsletter = true
-        contact.send(:check_state_for_mail_chimp_sync)
-        contact.send(:sync_with_mail_chimp)
+        contact.save!
       end
 
       it 'does not notify the mail chimp account of changes on certain fields' do
         expect(MailChimp::ExportContactsWorker).not_to receive(:perform_async)
         contact.timezone = 'PST'
-        contact.send(:check_state_for_mail_chimp_sync)
-        contact.send(:sync_with_mail_chimp)
+        contact.save!
       end
     end
 

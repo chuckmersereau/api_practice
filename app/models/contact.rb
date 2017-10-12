@@ -171,7 +171,8 @@ class Contact < ApplicationRecord
   accepts_nested_attributes_for :contacts_referred_by_me, reject_if: :all_blank, allow_destroy: false
 
   before_save :set_notes_saved_at, :update_late_at, :check_state_for_mail_chimp_sync, :set_status_confirmed_at
-  after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
+  after_commit :sync_with_mail_chimp, if: :sync_with_mail_chimp_required?
+  after_commit :sync_with_letter_services, :sync_with_google_contacts
   after_create :create_people_from_contact, if: :prefill_attributes_on_create
   before_destroy :delete_from_letter_services, :delete_people
   LETTER_SERVICES = [:pls, :prayer_letters].freeze
@@ -661,7 +662,19 @@ class Contact < ApplicationRecord
     save
   end
 
+  def sync_with_mail_chimp
+    return unless account_list.mail_chimp_account
+
+    MailChimp::ExportContactsWorker.perform_async(
+      account_list.mail_chimp_account.id, account_list.mail_chimp_account.primary_list_id, [id]
+    )
+  end
+
   private
+
+  def sync_with_mail_chimp_required?
+    @sync_mail_chimp
+  end
 
   def mail_chimp_member_request
     return unless mail_chimp_account&.primary_list_id
@@ -772,14 +785,6 @@ class Contact < ApplicationRecord
 
   def any_tags_change?
     taggings.count != tag_list.count
-  end
-
-  def sync_with_mail_chimp
-    return unless @sync_mail_chimp && account_list.mail_chimp_account
-
-    MailChimp::ExportContactsWorker.perform_async(
-      account_list.mail_chimp_account.id, account_list.mail_chimp_account.primary_list_id, [id]
-    )
   end
 
   def sync_with_google_contacts
