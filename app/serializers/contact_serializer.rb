@@ -71,7 +71,7 @@ class ContactSerializer < ApplicationSerializer
   end
 
   def contact_exhibit
-    exhibit(object)
+    ContactExhibit.new(object, self)
   end
 
   def account_list_id

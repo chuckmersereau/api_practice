@@ -2,7 +2,7 @@ attributes: &attrs
   active_mpd_finish_at:
     description:
       The date the active MPD finishes
-    type: date
+    type: string
   active_mpd_monthly_goal:
     description:
       The financial goal of the Account List for the active MPD
@@ -10,7 +10,7 @@ attributes: &attrs
   active_mpd_start_at:
     description:
       The date the active MPD begins
-    type: date
+    type: string
   currency:
     description:
       The currency code for the Account List, such as 'USD', 'CAD'

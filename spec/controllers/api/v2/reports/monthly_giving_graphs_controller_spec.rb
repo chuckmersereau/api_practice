@@ -26,10 +26,10 @@ RSpec.describe Api::V2::Reports::MonthlyGivingGraphsController, type: :controlle
     include_context 'common_variables'
 
     let(:coach) { create(:user).becomes(User::Coach) }
-    let(:account_list2) { create(:account_list) }
+    let(:account_list_2) { create(:account_list) }
 
     before do
-      account_list2.users << coach
+      account_list_2.users << coach
       account_list.coaches << coach
     end
 
@@ -38,7 +38,7 @@ RSpec.describe Api::V2::Reports::MonthlyGivingGraphsController, type: :controlle
       get :show, full_params
       expect(response.status).to eq(200), invalid_status_detail
       expect(response_json[:data][:relationships][:account_list][:data][:id])
-        .to eq account_list.uuid
+        .to eq account_list_2.uuid
       expect(response.body)
         .to include(resource.send(reference_key).to_json) if reference_key
     end

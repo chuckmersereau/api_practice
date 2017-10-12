@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 09 October 2017
+- Added /api/v2/coaching/pledges endpoint.
+
 ## 6 October 2017
 - appeals/appeal_contacts endpoint is now sortable by contact.name
 - appeals/excluded_appeal_contacts endpoint is now sortable by contact.name

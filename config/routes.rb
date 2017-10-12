@@ -66,6 +66,7 @@ Rails.application.routes.draw do
         namespace :coaching do
           resources :account_lists, only: [:index, :show]
           resources :contacts, only: [:index, :show]
+          resources :pledges, only: [:index, :show]
         end
 
         resources :constants, only: [:index]
