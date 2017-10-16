@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-03-30 14:20+0000\n"
-"PO-Revision-Date: 2017-03-30 14:20+0000\n"
+"POT-Creation-Date: 2017-09-28 17:22+0000\n"
+"PO-Revision-Date: 2017-09-28 17:22+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -152,6 +152,7 @@ msgstr "평균"
 msgid "Arabic"
 msgstr "아랍어"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "평균"
 
@@ -311,6 +312,7 @@ msgstr "이메일 3"
 msgid "Email 4"
 msgstr "이메일 4"
 
+#. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "약혼"
 
@@ -326,6 +328,7 @@ msgstr "%{org_name} 서버 접속 중 오류"
 msgid "Error connecting: you are already connected as %{org_account}"
 msgstr "접속 오류: 이미 %{org_account} 접속함"
 
+#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "안부 봉투"
 
@@ -452,6 +455,7 @@ msgstr "집 전화"
 msgid "Home"
 msgstr "집"
 
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "명예"
 
@@ -1101,4 +1105,118 @@ msgstr "총"
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "prayerletters.com 계정이 새로고침되어야 합니다."
+
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr " \"%{appeal_name}\" 호소로 지정되었습니다."
+
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr "%(이 과제는 다음 유형이 주어졌습니다 \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr "%{number_of_failed_contacts} 개의 연락처를 가져오는 데 실패했습니다."
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr "%{number_of_successful_contacts} 개의 연락처를 성공적으로 가져왔습니다."
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr "%{org_name}에 의하면 귀하의 계정 암호가 잘못되었습니다."
+
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "연락처가 이메일 뉴스레터에 존재하지만 유효한 이메일 주소를 가진 사람이 없습니다."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "연락처가 실제 뉴스레터에 존재하지만 이메일 주소가 없습니다."
+
+msgid "Google Integration Settings"
+msgstr "Google 통합 설정"
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr "MPDX에서 %{source} 연락처를 가져오는 도중 오류가 발생했습니다."
+
+msgid "MailChimp Integration Settings"
+msgstr "MailChimp 통합 설정"
+
+msgid "No Incomplete Tasks"
+msgstr "미완료된 작업 없음"
+
+msgid "Nothing Selected"
+msgstr "선택된 항목 없음"
+
+msgid "Other Email"
+msgstr "기타 이메일"
+
+msgid "Other Phone"
+msgstr "기타 휴대폰"
+
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "파트너 (반기별, 연례 등)에게 1개월 후 예상 기부가 있습니다. 알림을 보내 주십시오."
+
+msgid "Partner gave a Special Gift"
+msgstr "파트너로부터 특별 선물이 왔습니다"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "파트너가 지불액보다 큰 선물을 보냈습니다"
+
+msgid "Partner gave less than commitment"
+msgstr "파트너가 지불액보다 적게 보냈습니다"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "파트너가 반기별 이상 지불액을 보냈습니다"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "파트너가 지난 1년간 감사장을 받은 로그가 없습니다"
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "파트너가 지난 1년간 연락 시도를 받은 로그가 없습니다"
+
+msgid "Partner missed a gift"
+msgstr "파트너가 선물을 받지 못했습니다"
+
+msgid "Partner recontinued giving"
+msgstr "파트너가 기부를 재시작했습니다"
+
+msgid "Partner started giving"
+msgstr "파트너가 기부를 시작했습니다"
+
+msgid "Please try updating it here: %{link}"
+msgstr "이 주소에서 업데이트를 시도하세요: %{link}"
+
+msgid "Primary Phone"
+msgstr "기본 휴대폰"
+
+msgid "Spouse Other Email"
+msgstr "배우자 기타 이메일"
+
+msgid "Spouse Other Phone"
+msgstr "배우자 기타 휴대폰"
+
+msgid "Spouse Phone"
+msgstr "배우자 휴대폰"
+
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 실패는 대개 일시적 인터넷 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 실패는 대개 귀하께서 제어할 수 없는 일시적인 Facebook 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 가장 많은 경우는 일시적인 서버 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 Tnt 내보내기를 첨부해서 이메일을 보내주십시오. 저희가 가져오기 실패를 파악하는 데 있어 귀하께서 가져오려는 파일이 있으면 큰 도움이 됩니다."
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. CSV 가져오기 실패의 이유 중 가장 많은 경우는 이름 (first name) 때문입니다. CSV 가져오기에서 이름은 필수 입력 사항입니다. 가져오기에 실패한 행을 포함한 CSV 파일을 본 이메일에 첨부해서 드립니다. CSV의 첫 번째 열에 해당 행의 오류 메시지가 포함돼 있습니다. 이 CSV를 다운로드하여 표시된 문제를 해결한 수에 다시 가져오기를 시도하십시오. 이미 가져오는 데 성공한 연락처를 다시 가져올 필요는 없습니다. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
+
+msgid "This donation was imported from Tnt."
+msgstr "이 기부는 Tnt에서 가져왔습니다."
+
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr "MPDX에서 이 알림을 보내드린 이유는, 귀하의 환경 설정에 이런 유형의 알림을 받는 것으로 이메일 설정이 되어 있기 때문입니다. 설정을 변경하려면 <a href=\"%{preferences_url}\">여기</a>에서 변경하십시오."
+
+msgid "You must log in to MPDX again"
+msgstr "MPDX에 다시 로그인하셔야 합니다"
+
+msgid "You've been invited to access an account on MPDX"
+msgstr "MPDX 계정 액세스에 초대를 받았습니다"
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr "MPDX 계정의 코치로 초대를 받았습니다"
 

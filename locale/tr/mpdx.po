@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-04-18 13:06+0000\n"
-"PO-Revision-Date: 2017-04-18 13:06+0000\n"
+"POT-Creation-Date: 2017-09-28 19:47+0000\n"
+"PO-Revision-Date: 2017-09-28 19:47+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: tr\n"
@@ -152,6 +152,7 @@ msgstr "Ortalama"
 msgid "Arabic"
 msgstr "Arapça"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "Ort."
 
@@ -327,6 +328,7 @@ msgstr "%{org_name} sunucusuna bağlanırken hata"
 msgid "Error connecting: you are already connected as %{org_account}"
 msgstr "Bağlanırken hata oluştu: %{org_account} olarak zaten bağlısınız"
 
+#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "Zarf Selamlaması"
 
@@ -453,6 +455,7 @@ msgstr "Ev Telefonu"
 msgid "Home"
 msgstr "Ev"
 
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "Saygıdeğer"
 
@@ -1102,4 +1105,118 @@ msgstr "/ toplam"
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "prayerletters.com hesabının yenilenmesi gerek"
+
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr " \"%{appeal_name}\" isteğine tayin edildi."
+
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr "%(Bu göreve TntConnect'te \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" türü verildi.)"
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr "%{number_of_failed_contacts} kişinin içe aktarılması başarısız oldu."
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr "%{number_of_successful_contacts} kişi başarıyla içe aktarıldı."
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr "%{org_name}, hesabınız için yanlış şifreye sahip olduğumuzu söyledi."
+
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "Kişi, fiziksel haber bülteninde ama geçerli e-posta adresine sahip kimsesi yok."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "Kişi, fiziksel haber bülteninde ama posta adresi yok."
+
+msgid "Google Integration Settings"
+msgstr "Google Entegrasyonu Ayarları"
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr "MPDX, %{source} kişilerinizi içe aktarmaya çalışırken hatalarla karşılaştı."
+
+msgid "MailChimp Integration Settings"
+msgstr "MailChimp Entegrasyonu Ayarları"
+
+msgid "No Incomplete Tasks"
+msgstr "Tamamlanmayan Görev Yok"
+
+msgid "Nothing Selected"
+msgstr "Hiçbir Şey Seçilmedi"
+
+msgid "Other Email"
+msgstr "Diğer E-posta"
+
+msgid "Other Phone"
+msgstr "Diğer Telefon"
+
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "Ortağın (altı aylık, yıllık, vs.) şu andan bir ay sonra beklenen bir bağışı var. Ona bir hatırlatıcı gönderin."
+
+msgid "Partner gave a Special Gift"
+msgstr "Ortak, Özel Bir Hediye verdi"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "Ortak, taahhütten daha büyük bir hediye verdi"
+
+msgid "Partner gave less than commitment"
+msgstr "Ortak, taahhütten az verdi"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "Ortak altı aylık veya daha fazla bir taahhütle verdi"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "Ortağın geçtiğimiz yılda günlüğe kaydedilen teşekkür notu yok."
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "Ortağın geçtiğimiz yılda günlüğe kaydedilen denenmiş bir araması yok."
+
+msgid "Partner missed a gift"
+msgstr "Ortak bir hediyeyi kaçırdı"
+
+msgid "Partner recontinued giving"
+msgstr "Ortak hibeye tekrar devam etti"
+
+msgid "Partner started giving"
+msgstr "Ortak hibeye başladı"
+
+msgid "Please try updating it here: %{link}"
+msgstr "Onu buradan güncellemeyi deneyin: %{link}"
+
+msgid "Primary Phone"
+msgstr "Birincil Telefon"
+
+msgid "Spouse Other Email"
+msgstr "Eşin Diğer E-postası"
+
+msgid "Spouse Other Phone"
+msgstr "Eşin Diğer Telefonu"
+
+msgid "Spouse Phone"
+msgstr "Eşin Telefonu"
+
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Bir içe aktarmanın başarısız olmasının birtakım nedenleri vardır. Sıklıkla başarısızlık geçici bir ağ sorunu olabilmektedir. Lütfen içe aktarmanızı tekrar deneyin. Gene başarısız olursa, support@mpdx.org adresinden bize bir e-posta gönderin, neyin yanlış gittiğini inceleyelim."
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Bir içe aktarmanın başarısız olmasının birtakım nedenleri vardır. Sıklıkla başarısızlık, bizim kontrolümüzün dışında olan Facebook'la ilgili geçici bir sorundan kaynaklanır. Lütfen içe aktarmanızı tekrar deneyin. Gene başarısız olursa, support@mpdx.org adresinden bize bir e-posta gönderin, neyin yanlış gittiğini inceleyelim."
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr "Bir içe aktarmanın başarısız olmasının birtakım nedenleri vardır. En yaygını, geçici bir sunucu sorunudur. Lütfen içe aktarmanızı tekrar deneyin. Gene başarısız olursa, support@mpdx.org adresine Tnt dışa aktarmanız ekli hâlde bir e-posta gönderin. İçe aktarmaya çalıştığınız dosyaya sahip olmak, içe aktarmanın neden başarısız olduğunu belirlemeye çalışmamızda bize büyük oranda yardımcı olacaktır."
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Bir içe aktarmanın başarısız olmasının birtakım nedenleri vardır. Bir CSV içe aktarımının başarısız olmasının en olası nedeni, Ad yüzündendir. CSV içe aktarımında Ad, gerekli bir alandır. Bu e-postaya içe aktarılması başarısız olan satırları içeren bir CSV dosyası ekledik. Bu CSV'deki ilk satır, o satır hakkında bir hata mesajı içerir. Lütfen bu CSV'yi indirin, içindeki sorunları düzeltin ve sonra tekrar içe aktarmayı deneyin. Önceden başarıyla içe aktarılmış kişileri tekrar içe aktarmanıza gerek yoktur. İçe aktarma tekrar başarısız olursa, bize support@mpdx.org adresinden bir e-posta gönderin, neyin yanlış gittiğini inceleyelim."
+
+msgid "This donation was imported from Tnt."
+msgstr "Bu bağış, Tnt'den iça ektarıldı."
+
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr "Bu bildirimi MPDX'ten alıyorsunuz, çünkü tercihlerinizdeki e-posta ayarını bu türden bildirim için işaretlediniz. Bunu <a href=\"%{preferences_url}\">buradan</a> değiştirebilirsiniz."
+
+msgid "You must log in to MPDX again"
+msgstr "MPDX'te yeniden oturum açmalısınız"
+
+msgid "You've been invited to access an account on MPDX"
+msgstr "MPDX'teki bir hesaba erişmek için davet edildiniz."
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr "MPDX'teki bir hesaba koç olmak için davet edildiniz."
 

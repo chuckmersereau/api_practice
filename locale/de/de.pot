@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-04-04 14:26+0000\n"
-"PO-Revision-Date: 2017-04-04 14:26+0000\n"
+"POT-Creation-Date: 2017-09-28 17:21+0000\n"
+"PO-Revision-Date: 2017-09-28 17:21+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -152,6 +152,7 @@ msgstr "Durchschnitt"
 msgid "Arabic"
 msgstr "Arabisch"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "⌀"
 
@@ -311,6 +312,7 @@ msgstr "E-Mail-Adresse 3"
 msgid "Email 4"
 msgstr "E-Mail-Adresse 4"
 
+#. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "Verlobt"
 
@@ -326,6 +328,7 @@ msgstr "Fehler bei Verbindung zu %{org_name}-Server"
 msgid "Error connecting: you are already connected as %{org_account}"
 msgstr "Verbindungsfehler: Sie sind bereits als %{org_account} verbunden."
 
+#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "Umschlaggruß"
 
@@ -452,6 +455,7 @@ msgstr "Privatanschluss"
 msgid "Home"
 msgstr "Startseite"
 
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "Ehrenwerte(r)"
 
@@ -1101,4 +1105,118 @@ msgstr "von insgesamt"
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "Konto bei payerletters.com muss aktualisiert werden"
+
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr " ist dem Aufruf „%{appeal_name}“ zugeordnet."
+
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr "%(Dieser Aufgabe wurde in TntConnect der Typ \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" gegeben.)"
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr "%{number_of_failed_contacts} Kontakte konnten nicht importiert werden."
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr "%{number_of_successful_contacts} Kontakte wurden erfolgreich importiert."
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr "%{org_name} sagte, dass wir das falsche Passwort für Ihr Konto haben."
+
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "Der Kontakt ist im E-Mail-Newsletter, hat aber keine Personen mit einer gültigen E-Mail-Adresse."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "Der Kontakt ist auf der Rundschreibenliste, hat aber keine Postadresse."
+
+msgid "Google Integration Settings"
+msgstr "Einstellungen für Google-Integration"
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr "Beim Versuch Ihre %{source}-Kontakte zu importieren ist MPDX auf ein Problem gestoßen."
+
+msgid "MailChimp Integration Settings"
+msgstr "Einstellungen für MailChimp-Integration"
+
+msgid "No Incomplete Tasks"
+msgstr "Keine nicht abgeschlossenen Aufgaben"
+
+msgid "Nothing Selected"
+msgstr "Nichts ausgewählt"
+
+msgid "Other Email"
+msgstr "Sonstige E-Mail"
+
+msgid "Other Phone"
+msgstr "Sonstiges Telefon"
+
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "Partner (halbjährlich, jährlich, usw.) hat im kommenden Monat eine erwartete Spende. Senden Sie ihm eine Erinnerung."
+
+msgid "Partner gave a Special Gift"
+msgstr "Partner spendete ein besonderes Geschenk"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "Partner spendete ein größeres Geschenk als zugesagt"
+
+msgid "Partner gave less than commitment"
+msgstr "Partner spendete weniger als zugesagt"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "Partner spendete die halbjährliche Zusage oder mehr"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "Für den Partner wurde im vergangenen Jahr keine Danksagung protokolliert."
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "Für den Partner wurde im vergangenen Jahr kein Anrufversuch protokolliert."
+
+msgid "Partner missed a gift"
+msgstr "Partner verpasste ein Geschenk"
+
+msgid "Partner recontinued giving"
+msgstr "Partner setzte Spende wieder fort"
+
+msgid "Partner started giving"
+msgstr "Partner begann mit der Spende"
+
+msgid "Please try updating it here: %{link}"
+msgstr "Bitte versuchen Sie hier die Aktualisierung: %{link}"
+
+msgid "Primary Phone"
+msgstr "Primäre Telefonnummer"
+
+msgid "Spouse Other Email"
+msgstr "Andere E-Mail-Adresse des Ehepartners"
+
+msgid "Spouse Other Phone"
+msgstr "Andere Telefonnummer des Ehepartners"
+
+msgid "Spouse Phone"
+msgstr "Telefonnummer des Ehepartners"
+
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der Fehlschlag kann oft an einem vorübergehenden Netzwerkproblem liegen. Bitte probieren Sie den Import erneut. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org und wir werden untersuchen, was schiefgelaufen ist."
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der Fehlschlag liegt oft an einem vorübergehenden Problem bei Facebook, was außerhalb unserer Kontrolle ist. Bitte probieren Sie den Import erneut. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org und wir werden untersuchen, was schiefgelaufen ist."
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der häufigste Grund ist ein vorübergehenden Problem. Bitte probieren Sie den Import erneut. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org mit Ihrem Tnt-Export als Anhang. Wenn uns die Datei vorliegt, die Sie zu importieren versuchen, hilft uns das festzustellen, warum der Import fehlschlug."
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der häufigste Grund für einen fehlgeschlagenen CSV-Import ist der Vorname. Der Vorname ist beim CSV-Import ein erforderliches Feld. Wir haben eine CSV-Datei an diese E-Mail angehängt, die die Zeilen enthält, bei denen der Import fehlschlug.Die erste Spalte in dieser CSV-Datei enthält eine Fehlermeldung über die Zeile. Bitte laden Sie diese CSV-Datei herunter, beheben Sie die Probleme darin und versuchen Sie dann den Import erneut. Sie müssen die Kontakte nicht erneut importieren, die zuvor erfolgreich importiert wurden. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org und wir werden untersuchen, was schiefgegangen ist."
+
+msgid "This donation was imported from Tnt."
+msgstr "Diese Spende wurde von Tnt importiert."
+
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr "Sie erhalten diese Benachrichtigung von MPDX, weil Sie in Ihren Voreinstellungen für diese Art von Benachrichtigung die E-Mail-Einstellung aktiviert haben. Sie können sie <a href=\"%{preferences_url}\">hier</a> ändern."
+
+msgid "You must log in to MPDX again"
+msgstr "Sie müssen sich erneut bei MPDX anmelden."
+
+msgid "You've been invited to access an account on MPDX"
+msgstr "Sie wurden zum Zugriff auf ein Konto auf MPDX eingeladen."
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr "Sie wurden als Betreuer für ein Konto auf MPDX eingeladen."
 
