@@ -410,4 +410,20 @@ describe Person do
       expect(person.birthday_year).to eq(nil)
     end
   end
+
+  describe '#sync_with_mail_chimp_account' do
+    let!(:person) { create(:person, primary_email_address: build(:email_address), optout_enewsletter: false) }
+
+    it 'syncs the contact when a person optout_enewsletter changes' do
+      expect(person).to receive(:trigger_mail_chimp_syncs_to_relevant_contacts)
+
+      person.update(optout_enewsletter: true)
+    end
+
+    it 'does not sync the contact another field is changed' do
+      expect(person).not_to receive(:trigger_mail_chimp_syncs_to_relevant_contacts)
+
+      person.update(last_name: 'Boykin')
+    end
+  end
 end

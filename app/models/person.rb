@@ -170,7 +170,8 @@ class Person < ApplicationRecord
   before_create :find_master_person
   after_destroy :clean_up_master_person
 
-  before_save :deceased_check
+  before_save :deceased_check, :check_state_for_mail_chimp_sync
+  after_save :trigger_mail_chimp_syncs_to_relevant_contacts, if: :sync_with_mail_chimp_required?
 
   validates :first_name, presence: true
 
@@ -463,6 +464,22 @@ class Person < ApplicationRecord
   end
 
   private
+
+  def trigger_mail_chimp_syncs_to_relevant_contacts
+    contacts.each(&:sync_with_mail_chimp)
+  end
+
+  def sync_with_mail_chimp_required?
+    @mail_chimp_sync
+  end
+
+  def check_state_for_mail_chimp_sync
+    @mail_chimp_sync = true if should_trigger_mail_chimp_sync?
+  end
+
+  def should_trigger_mail_chimp_sync?
+    optout_enewsletter_changed?
+  end
 
   def find_master_person
     unless master_person_id
