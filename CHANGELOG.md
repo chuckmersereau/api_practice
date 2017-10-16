@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 12 October 2017
+- Added api/v2/reports/monthly_losses_graphs endpoint.
+
 ## 09 October 2017
 - Added /api/v2/coaching/pledges endpoint.
 

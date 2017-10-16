@@ -12,6 +12,7 @@ CONTROLLER_TO_SERIALIZER_LOOKUP = {
   'Api::V2::Reports::ExpectedMonthlyTotalsController' => 'Reports::ExpectedMonthlyTotalsSerializer',
   'Api::V2::Reports::GoalProgressesController' => 'Reports::GoalProgressSerializer',
   'Api::V2::Reports::MonthlyGivingGraphsController' => 'Reports::MonthlyGivingGraphSerializer',
+  'Api::V2::Reports::MonthlyLossesGraphsController' => 'Reports::MonthlyLossesGraphSerializer',
   'Api::V2::Reports::SalaryCurrencyDonationsController' => 'Reports::SalaryCurrencyDonationsSerializer',
   'Api::V2::Reports::YearDonationsController' => 'Reports::YearDonationsSerializer',
   'Api::V2::Tasks::AnalyticsController' => 'Task::AnalyticsSerializer'
