@@ -13,7 +13,7 @@ class MailChimp::Exporter
     end
 
     def subscribe_contacts(contacts)
-      members_params = fetch_member_params_from_contacts(contacts)
+      members_params = fetch_member_params_from_contacts(contacts).uniq
 
       batch_create_members(members_params)
       create_member_records(members_params)
@@ -84,7 +84,7 @@ class MailChimp::Exporter
       return unless person.primary_email_address
 
       {
-        status_if_new: 'subscribed',
+        status: 'subscribed',
         email_address: person.primary_email_address.email,
         merge_fields: {
           EMAIL: person.primary_email_address.email, FNAME: person.first_name,
