@@ -57,7 +57,7 @@ Rails.application.routes.draw do
         resources :appeals, only: [:index, :show, :create, :update, :destroy] do
           scope module: :appeals do
             resources :appeal_contacts, only: [:index, :show, :create, :destroy]
-            resources :excluded_appeal_contacts, only: [:index, :show]
+            resources :excluded_appeal_contacts, only: [:index, :show, :destroy]
           end
         end
 
