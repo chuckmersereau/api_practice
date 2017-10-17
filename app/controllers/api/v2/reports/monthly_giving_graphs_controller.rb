@@ -7,10 +7,6 @@ class Api::V2::Reports::MonthlyGivingGraphsController < Api::V2Controller
 
   protected
 
-  def account_lists
-    @account_lists ||= current_user.readable_account_lists
-  end
-
   def permit_coach?
     true
   end
