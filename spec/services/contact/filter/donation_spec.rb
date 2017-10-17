@@ -7,13 +7,19 @@ RSpec.describe Contact::Filter::Donation do
   let!(:contact_one) { create(:contact, account_list_id: account_list.id) }
   let!(:donor_account_one) { create(:donor_account) }
   let!(:designation_account_one) { create(:designation_account) }
-  let!(:donation_one) { create(:donation, donor_account: donor_account_one, designation_account: designation_account_one) }
+  let!(:donation_one) do
+    create(:donation, donor_account: donor_account_one, designation_account: designation_account_one)
+  end
 
   let!(:contact_two) { create(:contact, account_list_id: account_list.id) }
   let!(:donor_account_two) { create(:donor_account) }
   let!(:designation_account_two) { create(:designation_account) }
-  let!(:donation_two) { create(:donation, donor_account: donor_account_two, designation_account: designation_account_two) }
-  let!(:donation_three) { create(:donation, donor_account: donor_account_two, designation_account: designation_account_two) }
+  let!(:donation_two) do
+    create(:donation, donor_account: donor_account_two, designation_account: designation_account_two)
+  end
+  let!(:donation_three) do
+    create(:donation, donor_account: donor_account_two, designation_account: designation_account_two)
+  end
 
   let!(:contact_three) { create(:contact, account_list_id: account_list.id) }
   let!(:contact_four) { create(:contact, account_list_id: account_list.id) }
@@ -60,77 +66,136 @@ RSpec.describe Contact::Filter::Donation do
 
     context 'filter by no gifts' do
       it 'returns only contacts that have never given a donation' do
-        expect(described_class.query(contacts, { donation: 'none' }, [account_list]).to_a).to match_array [contact_three, contact_four]
+        expect(
+          described_class.query(contacts, { donation: 'none' }, [account_list]).to_a
+        ).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by one or more gifts' do
       it 'returns only contacts that have given at least one gift' do
-        expect(described_class.query(contacts, { donation: 'one' }, [account_list]).to_a).to match_array [contact_one, contact_two]
+        expect(
+          described_class.query(contacts, { donation: 'one' }, [account_list]).to_a
+        ).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by first gift' do
       it 'returns only contacts that have given a first gift' do
-        expect(described_class.query(contacts, { donation: 'first' }, [account_list]).to_a).to match_array [contact_one, contact_two]
+        expect(
+          described_class.query(contacts, { donation: 'first' }, [account_list]).to_a
+        ).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by last gift' do
       it 'returns only contacts that have given a last gift' do
-        expect(described_class.query(contacts, { donation: 'last' }, [account_list]).to_a).to match_array [contact_one, contact_two]
+        expect(
+          described_class.query(contacts, { donation: 'last' }, [account_list]).to_a
+        ).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by no gift and gift date' do
       it 'currently is expected to return no contacts' do
-        expect(Contact::Filterer.new(
-          donation: 'none',
-          donation_date: Range.new(2.years.ago, 6.months.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq []
-        expect(Contact::Filterer.new(
-          donation: 'none',
-          donation_date: Range.new(2.weeks.ago, 1.day.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq []
+        expect(
+          Contact::Filterer.new(
+            donation: 'none',
+            donation_date: Range.new(2.years.ago, 6.months.ago)
+          ).filter(scope: contacts, account_lists: [account_list]).to_a
+        ).to eq []
+        expect(
+          Contact::Filterer.new(
+            donation: 'none',
+            donation_date: Range.new(2.weeks.ago, 1.day.ago)
+          ).filter(scope: contacts, account_lists: [account_list]).to_a
+        ).to eq []
       end
     end
 
     context 'filter by one gift and gift date' do
       it 'returns only contacts that have given at least one gift within the dates specified' do
-        expect(Contact::Filterer.new(
-          donation: 'one',
-          donation_date: Range.new(2.years.ago, 6.months.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_one]
-        expect(Contact::Filterer.new(
-          donation: ['one'],
-          donation_date: Range.new(2.weeks.ago, 1.day.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_two]
+        expect(
+          Contact::Filterer.new(
+            donation: 'one',
+            donation_date: Range.new(2.years.ago, 6.months.ago)
+          ).filter(scope: contacts, account_lists: [account_list]).to_a
+        ).to eq [contact_one]
+        expect(
+          Contact::Filterer.new(
+            donation: ['one'],
+            donation_date: Range.new(2.weeks.ago, 1.day.ago)
+          ).filter(scope: contacts, account_lists: [account_list]).to_a
+        ).to eq [contact_two]
       end
     end
 
     context 'filter by first gift and gift date' do
       it 'returns only contacts that have given a first gift within the dates specified' do
-        expect(Contact::Filterer.new(
-          donation: 'first',
-          donation_date: Range.new(2.years.ago, 6.months.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_one]
-        expect(Contact::Filterer.new(
-          donation: 'first',
-          donation_date: Range.new(2.weeks.ago, 1.day.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq []
+        expect(
+          Contact::Filterer.new(
+            donation: 'first',
+            donation_date: Range.new(2.years.ago, 6.months.ago)
+          ).filter(scope: contacts, account_lists: [account_list]).to_a
+        ).to eq [contact_one]
+        expect(
+          Contact::Filterer.new(
+            donation: 'first',
+            donation_date: Range.new(2.weeks.ago, 1.day.ago)
+          ).filter(scope: contacts, account_lists: [account_list]).to_a
+        ).to eq []
       end
     end
 
     context 'filter by last gift and gift date' do
       it 'returns only contacts that have given a last gift within the dates specified' do
-        expect(Contact::Filterer.new(
-          donation: 'last',
-          donation_date: Range.new(2.years.ago, 6.months.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_one]
-        expect(Contact::Filterer.new(
-          donation: 'last',
-          donation_date: Range.new(2.weeks.ago, 1.day.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_two]
+        expect(
+          Contact::Filterer.new(
+            donation: 'last',
+            donation_date: Range.new(2.years.ago, 6.months.ago)
+          ).filter(scope: contacts, account_lists: [account_list]).to_a
+        ).to eq [contact_one]
+        expect(
+          Contact::Filterer.new(
+            donation: 'last',
+            donation_date: Range.new(2.weeks.ago, 1.day.ago)
+          ).filter(scope: contacts, account_lists: [account_list]).to_a
+        ).to eq [contact_two]
+      end
+    end
+    context 'donations to designations outside of the specified account_list' do
+      let!(:account_list_two) { create(:account_list) }
+      let!(:donor_account_three) { create(:donor_account) }
+      let!(:designation_account_three) { create(:designation_account) }
+      let!(:donation_three) do
+        create(:donation, donor_account: donor_account_three, designation_account: designation_account_three)
+      end
+
+      before do
+        account_list_two.designation_accounts << designation_account_three
+        contact_three.donor_accounts << donor_account_three
+      end
+
+      context 'filter by no gifts' do
+        it 'returns only contacts that have never given a donation' do
+          expect(
+            described_class.query(contacts, { donation: 'none' }, [account_list]).to_a
+          ).to match_array [contact_three, contact_four]
+        end
+      end
+    end
+    context 'contact has donor_account with donations and donor_account with no donations' do
+      before do
+        contact_three.donor_accounts << donor_account_one
+        contact_three.donor_accounts << create(:donor_account)
+      end
+
+      context 'filter by no gifts' do
+        it 'returns only contacts that have never given a donation' do
+          expect(
+            described_class.query(contacts, { donation: 'none' }, [account_list]).to_a
+          ).to match_array [contact_four]
+        end
       end
     end
   end
