@@ -2,12 +2,12 @@ class DesignationAccount < ApplicationRecord
   belongs_to :organization
   has_many :designation_profile_accounts, dependent: :delete_all
   has_many :designation_profiles, through: :designation_profile_accounts
-
   has_many :account_list_entries, dependent: :delete_all
   has_many :account_lists, through: :account_list_entries
   has_many :contacts, through: :account_lists
   has_many :donations, dependent: :delete_all
   has_many :balances, dependent: :delete_all, as: :resource
+  has_many :donation_amount_recommendations, dependent: :destroy, inverse_of: :designation_account
 
   after_save :create_balance, if: :balance_changed?
 

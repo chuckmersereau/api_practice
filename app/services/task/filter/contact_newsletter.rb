@@ -5,7 +5,7 @@ class Task::Filter::ContactNewsletter < Task::Filter::Base
   end
 
   def title
-    'Contact Newsletter'
+    _('Contact Newsletter')
   end
 
   delegate :custom_options,

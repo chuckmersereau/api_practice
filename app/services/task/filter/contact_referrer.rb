@@ -11,7 +11,7 @@ class Task::Filter::ContactReferrer < Task::Filter::Base
   end
 
   def title
-    'Contact Referrer'
+    _('Contact Referrer')
   end
 
   delegate :custom_options,

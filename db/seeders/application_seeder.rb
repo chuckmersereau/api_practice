@@ -149,6 +149,7 @@ class ApplicationSeeder
     create :pls_account, account_list: account_list
     create :prayer_letters_account, account_list: account_list
     create :donation_amount_recommendation
+    create :donation_amount_recommendation_remote
     create :task, account_list: account_list
 
     create :tag

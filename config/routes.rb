@@ -100,6 +100,7 @@ Rails.application.routes.draw do
             end
 
             resources :addresses, only: [:index, :show, :create, :update, :destroy]
+            resources :donation_amount_recommendations, only: [:index, :show, :create, :update, :destroy]
 
             resources :people, only: [:show, :index, :create, :update, :destroy] do
               scope module: :people do

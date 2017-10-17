@@ -56,7 +56,6 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
 
   def contact_scope
     return Contact.where(account_list: account_lists) if params[:contact_id].blank?
-
     Contact.find_by_uuid_or_raise!(params[:contact_id])
     Contact.where(uuid: params[:contact_id])
   end
@@ -66,6 +65,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def authorize_index
+    return account_lists.each { |account_list| authorize(account_list, :show?) } if params[:contact_id].blank?
     authorize(contact_scope, :show?)
   end
 

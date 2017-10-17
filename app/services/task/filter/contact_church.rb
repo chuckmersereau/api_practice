@@ -5,7 +5,7 @@ class Task::Filter::ContactChurch < Task::Filter::Base
   end
 
   def title
-    'Contact Church'
+    _('Contact Church')
   end
 
   delegate :custom_options,

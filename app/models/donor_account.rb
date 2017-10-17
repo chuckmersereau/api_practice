@@ -11,7 +11,7 @@ class DonorAccount < ApplicationRecord
   has_many :donations, dependent: :destroy
   has_many :contact_donor_accounts, dependent: :destroy
   has_many :contacts, through: :contact_donor_accounts, inverse_of: :donor_accounts
-
+  has_many :donation_amount_recommendations, dependent: :destroy, inverse_of: :donor_account
   validates :account_number, uniqueness: { scope: :organization_id }
   validates :account_number, presence: true
 

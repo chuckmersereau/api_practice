@@ -108,6 +108,7 @@ resource 'Contacts' do
       contact_referrals_to_me
       contacts_referred_by_me
       contacts_that_referred_me
+      donation_amount_recommendations
       donor_accounts
       last_six_donations
       people

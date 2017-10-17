@@ -13,6 +13,7 @@ class Contact < ApplicationRecord
 
   has_many :contact_donor_accounts, dependent: :delete_all, inverse_of: :contact
   has_many :donor_accounts, through: :contact_donor_accounts, inverse_of: :contacts
+  has_many :donation_amount_recommendations, through: :donor_accounts
   belongs_to :account_list
   has_many :contact_people, dependent: :destroy
   has_many :people, through: :contact_people

@@ -14,6 +14,8 @@ This changelog covers what's changed in the MPDX APIs.
 ## 6 October 2017
 - appeals/appeal_contacts endpoint is now sortable by contact.name
 - appeals/excluded_appeal_contacts endpoint is now sortable by contact.name
+- Added relationship to donation_amount_recommendations to contacts endpoint.
+- Added contact/donation_amount_recommendations endpoint.
 - pledges endpoint is now filterable by status
 
 ## 05 October 2017
