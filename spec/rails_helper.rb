@@ -25,6 +25,7 @@ abort('The Rails environment is not running in test mode!') unless Rails.env.tes
 require 'spec_helper'
 require 'rspec/rails'
 require 'rspec/matchers'
+require 'rspec/retry'
 require 'equivalent-xml'
 require 'ammeter/init'
 require 'shoulda/matchers'
