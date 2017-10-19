@@ -1,0 +1,45 @@
+attributes: &attrs
+  started_at:
+    description:
+      The time the contact started giving regularly
+    type: timestamp
+  suggested_pledge_amount:
+    description:
+      The amount the contact should be asked give as a recurring donation
+    type: string
+  suggested_special_amount:
+    description:
+      The amount the contact should be asked give as a one-off donation
+    type: string
+  ask_at:
+    description:
+      The time the user should ask the contact to increase giving
+    type: timestamp
+
+relationships: &rels
+  designation_account:
+    data:
+      description:
+        The Designation Account the Donation Amount Recommendation belongs to
+      type: 'Designation Account'
+  donor_account:
+    data:
+      description:
+        The Donor Account the Donation Amount Recommendation belongs to
+      type: 'Donor Account'
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Donation Amount Recommendation Objects
+      type: '[Donation Amount Recommendation]'
+
+  show:
+    <<: *obj

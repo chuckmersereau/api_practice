@@ -9,7 +9,7 @@ class Task::Filter::ContactType < Task::Filter::Base
   end
 
   def title
-    'Contact Type'
+    _('Contact Type')
   end
 
   delegate :custom_options,

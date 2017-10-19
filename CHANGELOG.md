@@ -2,10 +2,25 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 12 October 2017
+- Added api/v2/reports/monthly_losses_graphs endpoint.
+
+## 11 October 2017
+- added a DELETE action to appeals/excluded_appeal_contacts endpoint
+
+## 09 October 2017
+- Added /api/v2/coaching/pledges endpoint.
+
 ## 6 October 2017
 - appeals/appeal_contacts endpoint is now sortable by contact.name
 - appeals/excluded_appeal_contacts endpoint is now sortable by contact.name
+- Added relationship to donation_amount_recommendations to contacts endpoint.
+- Added contact/donation_amount_recommendations endpoint.
 - pledges endpoint is now filterable by status
+
+## 05 October 2017
+- Added /api/v2/coaching/account_lists endpoint.
+- Added /api/v2/coaching/contacts endpoint.
 
 ## 4 October 2017
 - Added ability to sort by contact name field in pledges endpoint.

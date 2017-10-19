@@ -5,7 +5,7 @@ class Task::Filter::ContactTimezone < Task::Filter::Base
   end
 
   def title
-    'Contact Timezone'
+    _('Contact Timezone')
   end
 
   delegate :custom_options,

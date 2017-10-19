@@ -57,12 +57,18 @@ Rails.application.routes.draw do
         resources :appeals, only: [:index, :show, :create, :update, :destroy] do
           scope module: :appeals do
             resources :appeal_contacts, only: [:index, :show, :create, :destroy]
-            resources :excluded_appeal_contacts, only: [:index, :show]
+            resources :excluded_appeal_contacts, only: [:index, :show, :destroy]
           end
         end
 
         resources :background_batches, except: [:update]
-        resources :coaching_account_lists, only: [:index, :show]
+
+        namespace :coaching do
+          resources :account_lists, only: [:index, :show]
+          resources :contacts, only: [:index, :show]
+          resources :pledges, only: [:index, :show]
+        end
+
         resources :constants, only: [:index]
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do
@@ -94,6 +100,7 @@ Rails.application.routes.draw do
             end
 
             resources :addresses, only: [:index, :show, :create, :update, :destroy]
+            resources :donation_amount_recommendations, only: [:index, :show, :create, :update, :destroy]
 
             resources :people, only: [:show, :index, :create, :update, :destroy] do
               scope module: :people do
@@ -174,6 +181,8 @@ Rails.application.routes.draw do
           resource :monthly_giving_graph, only: :show
           resource :salary_currency_donations, only: :show
           resource :year_donations, only: :show
+
+          resources :monthly_losses_graphs, only: :show
         end
 
         namespace :tools do

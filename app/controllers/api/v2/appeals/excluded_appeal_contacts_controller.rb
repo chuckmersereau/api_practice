@@ -17,6 +17,13 @@ class Api::V2::Appeals::ExcludedAppealContactsController < Api::V2Controller
     render_excluded_appeal_contact
   end
 
+  def destroy
+    load_excluded_appeal_contact
+    authorize_excluded_appeal_contact
+    @excluded_appeal_contact.destroy
+    head :no_content
+  end
+
   private
 
   def load_excluded_appeal_contacts

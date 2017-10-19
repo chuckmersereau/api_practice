@@ -5,7 +5,7 @@ class Task::Filter::ContactLikely < Task::Filter::Base
   end
 
   def title
-    'Contact Likely To Give'
+    _('Contact Likely To Give')
   end
 
   delegate :custom_options,

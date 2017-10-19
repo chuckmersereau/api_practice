@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-04-04 21:52+0000\n"
-"PO-Revision-Date: 2017-04-04 21:52+0000\n"
+"POT-Creation-Date: 2017-09-28 19:47+0000\n"
+"PO-Revision-Date: 2017-09-28 19:47+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: tr\n"
@@ -42,16 +42,16 @@ msgid "-- All Active --"
 msgstr "-- Tümü Aktif --"
 
 msgid "-- Any --"
-msgstr "-- Tümü --"
+msgstr "-- Herhangi --"
 
 msgid "-- Do not ask --"
-msgstr "-- Sormayın --"
+msgstr "-- İstemeyin --"
 
 msgid "-- Unspecified --"
 msgstr "-- Belirtilmemiş --"
 
 msgid "-- Has referrer --"
-msgstr "-- Yönlendireni var --"
+msgstr "-- Referansı var --"
 
 msgid "-- None --"
 msgstr "-- Hiçbiri --"
@@ -102,10 +102,10 @@ msgid "Account List ID:"
 msgstr "Hesap Listesi Kimliği:"
 
 msgid "Add an Account"
-msgstr "Bir Hesap Ekle"
+msgstr "Bir Hesap Ekleyin"
 
 msgid "Add another Account"
-msgstr "Başka bir Hesap Ekle"
+msgstr "Başka bir Hesap Ekleyin"
 
 msgid "Address"
 msgstr "Adres"
@@ -120,28 +120,28 @@ msgid "Annual"
 msgstr "Yıllık"
 
 msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
-msgstr "Bu kişiye atamaya çalıştığınız bağışçı hesap numarası, hesabınızdaki başka bir kişiye ait."
+msgstr "Bu kontağa atamaya çalıştığınız bağışçı hesap numarası, halihazırda hesabınızdaki başka bir kontağa ait."
 
 msgid "All"
 msgstr "Tümü"
 
 msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
-msgstr "Bu kişiye atamaya çalıştığınız bağışçı hesap numarası, kurumunuzdaki başka bir kişiye ait. Lütfen daha eşsiz hale getirin."
+msgstr "Bu kontağa atamaya çalıştığınız bağışçı hesap numarası, organizasyonunuzdaki başka bir kontağa ait. Lütfen daha özgün hale getirin."
 
 msgid "Appeal"
-msgstr "Çağrı"
+msgstr "İstek"
 
 msgid "Appointment"
 msgstr "Randevu"
 
 msgid "Are marked as do not ask for appeals"
-msgstr "Çağrıda bulunma olarak işaretlendi"
+msgstr "İstekte bulunma olarak işaretlendi"
 
 msgid "Aunt"
 msgstr "Hala/Teyze"
 
 msgid "Ask in Future"
-msgstr "Gelecekte Sor"
+msgstr "Gelecekte İsteyin"
 
 msgid "Appointment Scheduled"
 msgstr "Randevu Programlandı"
@@ -152,6 +152,7 @@ msgstr "Ortalama"
 msgid "Arabic"
 msgstr "Arapça"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "Ort."
 
@@ -177,13 +178,13 @@ msgid "Bulgarian"
 msgstr "Bulgarca"
 
 msgid "Call for Decision"
-msgstr "Karar Çağrısı"
+msgstr "Karar Araması"
 
 msgid "Catalan"
 msgstr "Katalanca"
 
 msgid "Call"
-msgstr "Çağrı"
+msgstr "Ara"
 
 msgid "Chinese (Simplified)"
 msgstr "Çince (Basitleştirilmiş)"
@@ -198,7 +199,7 @@ msgid "City"
 msgstr "Şehir"
 
 msgid "Click here to download the file"
-msgstr "Dosyayı indirmek için buraya tıklayın"
+msgstr "Dosyayı indirmek için burayı tıklayın"
 
 msgid "Click to see all balances"
 msgstr "Tüm bakiyeleri görmek için tıklayın"
@@ -207,7 +208,7 @@ msgid "Commitment"
 msgstr "Taahhüt"
 
 msgid "Commitment Currency"
-msgstr "Taahhüt Para Birimi"
+msgstr "Taahhüdün Para Birimi"
 
 msgid "Commitment Details"
 msgstr "Taahhüt Detayları"
@@ -234,16 +235,16 @@ msgid "Contact Details"
 msgstr "İletişim Bilgileri"
 
 msgid "Contact Location"
-msgstr "Kişi Konumu"
+msgstr "Kontağın Yeri"
 
 msgid "Contact Name"
-msgstr "Kişi Adı"
+msgstr "Kontak Adı"
 
 msgid "Contact for Appointment"
-msgstr "Randevu için İletişime Geç"
+msgstr "Randevu için İletişime Geçin"
 
 msgid "Contacts"
-msgstr "Kişiler"
+msgstr "Kontaklar"
 
 msgid "Country"
 msgstr "Ülke"
@@ -270,13 +271,13 @@ msgid "Date Range"
 msgstr "Tarih Aralığı"
 
 msgid "Daughter"
-msgstr "Kız"
+msgstr "Kız çocuk"
 
 msgid "Dear Donation Services"
 msgstr "Sevgili Bağış Hizmetleri"
 
 msgid "Details"
-msgstr "Detaylar"
+msgstr "Ayrıntılar"
 
 msgid "Divorced"
 msgstr "Boşanmış"
@@ -288,7 +289,7 @@ msgid "Donor system"
 msgstr "Bağışçı sistemi"
 
 msgid "Dutch"
-msgstr "Felemenkçe"
+msgstr "Flemenkçe"
 
 msgid "Email"
 msgstr "E-posta"
@@ -300,7 +301,7 @@ msgid "Email 1"
 msgstr "E-posta 1"
 
 msgid "Due Date"
-msgstr "Son Tarih"
+msgstr "Vade Tarihi"
 
 msgid "Email 2"
 msgstr "E-posta 2"
@@ -325,13 +326,14 @@ msgid "Error connecting to %{org_name} server"
 msgstr "%{org_name} sunucusuna bağlanırken hata"
 
 msgid "Error connecting: you are already connected as %{org_account}"
-msgstr "Bağlanırken hata oluştu: zaten %{org_account} olarak bağlısınız"
+msgstr "Bağlanırken hata oluştu: %{org_account} olarak zaten bağlısınız"
 
+#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "Zarf Selamlaması"
 
 msgid "Estonian"
-msgstr "Estonca"
+msgstr "Estonyaca"
 
 msgid "Every 2 Weeks"
 msgstr "2 Haftada Bir"
@@ -352,7 +354,7 @@ msgid "Exact Gift Amount"
 msgstr "Tam Hediye Miktarı"
 
 msgid "Expired Referral"
-msgstr "Süresi Dolmuş Yönlendirme"
+msgstr "Süresi Dolan Referans"
 
 msgid "Facebook Message"
 msgstr "Facebook Mesajı"
@@ -376,7 +378,7 @@ msgid "First Name"
 msgstr "Ad"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
-msgstr "MailChimp entegrasyonu için, kullanmak üzere MailChimp'te yeni bir liste kurmanızı (yeni bir hesap değil, sadece yeni bir liste) ve o liste için tüm MailChimp varsayılanlarını yerinde bırakmanızı öneririz. Bunu yeni bir listeyle kurduysanız, haber bülteninizi almaya ayarlanmış herkes otomatik olarak kopyalanacaktır ve buradan itibaren MPDX'ten tüm güncellemeleri yönetebilirsiniz (diğer bir deyişle, bir e-posta adresini MPDX'te değiştirdiğinizde, bu mailchimp'te güncellenecektir)."
+msgstr "MailChimp entegrasyonu için, kullanmak üzere MailChimp'te yeni bir liste kurmanızı (yeni bir hesap değil, sadece yeni bir liste) ve o liste için tüm MailChimp varsayılanlarını yerinde bırakmanızı öneririz. Bunu yeni bir listeyle kurduysanız, dua mektubunuzu almaya ayarlanmış herkes otomatik olarak kopyalanacaktır ve bundan sonra MPDX'ten tüm güncellemeleri yönetebilirsiniz (diğer bir deyişle, bir e-posta adresini MPDX'te değiştirdiğinizde, bu mailchimp'te güncellenecektir)."
 
 msgid "French (Canada)"
 msgstr "Fransızca (Kanada)"
@@ -391,13 +393,13 @@ msgid "German"
 msgstr "Almanca"
 
 msgid "Gave a special gift in the last 3 months"
-msgstr "Son 3 ayda özel bir hediye vermiş"
+msgstr "Son 3 ay içinde özel bir hediye verdi"
 
 msgid "Gift Amount Higher Than or Equal To"
-msgstr "Hediye Miktarı Şu Miktardan Büyük veya Ona Eşit:"
+msgstr "Hediye Miktarı Şu Miktardan Büyük veya Eşit:"
 
 msgid "Gift Amount Less Than or Equal To"
-msgstr "Hediye Miktarı Küçük Eşittir"
+msgstr "Hediye Miktarı Şu Miktardan Küçük veya Eşit:"
 
 msgid "Gift Date"
 msgstr "Hediye Tarihi"
@@ -415,7 +417,7 @@ msgid "Gift Options"
 msgstr "Hediye Seçenekleri"
 
 msgid "Google import"
-msgstr "Google içe aktarma"
+msgstr "Google aktarma"
 
 msgid "Google account needs to be refreshed"
 msgstr "Google hesabının yenilenmesi gerekiyor"
@@ -451,8 +453,9 @@ msgid "Home Phone"
 msgstr "Ev Telefonu"
 
 msgid "Home"
-msgstr "Ana Sayfa"
+msgstr "Ev"
 
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "Saygıdeğer"
 
@@ -472,13 +475,13 @@ msgid "If you do want to stick with your existing list, you will need to make th
 msgstr "Var olan listenize bağlı kalmak istiyorsanız, ekstra birleşim alanını zorunlu olmayan alan haline getirmeniz gerekecek."
 
 msgid "Increased their giving in the last 3 months"
-msgstr "Son 3 ayda bağışlarını arttırmış"
+msgstr "Son 3 ay içinde bağışlarını artırdılar"
 
 msgid "Import File:"
-msgstr "Dosyayı İçe Aktar:"
+msgstr "Dosyayı Aktar:"
 
 msgid "Insights for "
-msgstr "Şunun için kavrayış: "
+msgstr "Görüşler: "
 
 msgid "Indonesian"
 msgstr "Endonezce"
@@ -493,7 +496,7 @@ msgid "Japanese"
 msgstr "Japonca"
 
 msgid "Joined my team in the last 3 months"
-msgstr "Ekibime son 3 ayda katılmış"
+msgstr "Son 3 ay içinde takımıma katıldı"
 
 msgid "Jr."
 msgstr "Jr."
@@ -502,7 +505,7 @@ msgid "Korean"
 msgstr "Korece"
 
 msgid "Khmer"
-msgstr "Khmerce"
+msgstr "Kimmerce"
 
 msgid "Language"
 msgstr "Dil"
@@ -544,7 +547,7 @@ msgid "Late By"
 msgstr "Gecikme Süresi:"
 
 msgid "Least Likely"
-msgstr "En Az İhtimalle"
+msgstr "En Düşük İhtimal"
 
 msgid "Letter"
 msgstr "Mektup"
@@ -556,13 +559,13 @@ msgid "Likely"
 msgstr "Olası"
 
 msgid "Lithuanian"
-msgstr "Litvanca"
+msgstr "Litvanyaca"
 
 msgid "Likely To Give"
 msgstr "Vermesi Olası"
 
 msgid "MPDX Support Team"
-msgstr "MPDX Destek Ekibi"
+msgstr "MPDX Destek Takımı"
 
 msgid "MPDX List: %{name}"
 msgstr "MPDX Listesi: %{name}"
@@ -571,10 +574,10 @@ msgid "Macedonian"
 msgstr "Makedonca"
 
 msgid "MPDX has finished importing your %{source} contacts."
-msgstr "MPDX, %{source} kişilerinizi içe aktarmayı tamamladı."
+msgstr "MPDX, %{source} kontaklarınızı aktarmayı tamamladı."
 
 msgid "MPDX encountered errors while trying to import your %{source} contacts.\n\n%{explanation}\n\nThanks!\nMPDX Support Team"
-msgstr "MPDX, %{source} kişilerinizi içe aktarmaya çalışırken hatalarla karşılaştı.\n\n%{explanation}\n\nTeşekkürler!\nMPDX Destek Ekibi"
+msgstr "MPDX, %{source} kontaklarınızı aktarmaya çalışırken hatalarla karşılaştı.\n\n%{explanation}\n\nTeşekkürler!\nMPDX Destek Takımı"
 
 msgid "MailChimp subscriber email bounced"
 msgstr "MailChimp abone e-postası geri döndü"
@@ -610,7 +613,7 @@ msgid "Maltese"
 msgstr "Maltaca"
 
 msgid "Manual entry"
-msgstr "Manuel giriş"
+msgstr "Elle giriş"
 
 msgid "Married"
 msgstr "Evli"
@@ -628,7 +631,7 @@ msgid "Minimum"
 msgstr "Minimum"
 
 msgid "Mobile"
-msgstr "Cep Telefonu"
+msgstr "Mobil"
 
 msgid "Miss"
 msgstr "Bayan"
@@ -670,7 +673,7 @@ msgid "Name:"
 msgstr "Ad:"
 
 msgid "Never Ask"
-msgstr "Asla Sorma"
+msgstr "Asla İsteme"
 
 msgid "New Donation"
 msgstr "Yeni Bağış"
@@ -682,10 +685,10 @@ msgid "Never Contacted"
 msgstr "Hiç İletişim Kurulmamış"
 
 msgid "Newsletter"
-msgstr "Haber Bülteni"
+msgstr "Dua Mektubu"
 
 msgid "Newsletter Recipients"
-msgstr "Haber Bülteni Alıcıları"
+msgstr "Dua Mektubu Alıcıları"
 
 msgid "Next Month"
 msgstr "Gelecek Ay"
@@ -784,16 +787,16 @@ msgid "Phone 4"
 msgstr "Telefon 4"
 
 msgid "Physical"
-msgstr "Fiziksel"
+msgstr "Fiziki"
 
 msgid "Please update their address to"
-msgstr "Lütfen adreslerini şu biçimde güncelleyin:"
+msgstr "Lütfen adreslerini şuna güncelleyin:"
 
 msgid "Polish"
 msgstr "Lehçe"
 
 msgid "Pledge"
-msgstr "Bağış Sözü"
+msgstr "Vaat"
 
 msgid "Portuguese (Brazil)"
 msgstr "Portekizce (Brezilya)"
@@ -802,10 +805,10 @@ msgid "Portuguese (Portugal)"
 msgstr "Portekizce (Portekiz)"
 
 msgid "Primary Balance: %{balance}"
-msgstr "Faiz Dışı Denge: %{balance}"
+msgstr "Asıl Bakiye: %{balance}"
 
 msgid "Pre Call Letter"
-msgstr "Ön Çağrılı Mektup"
+msgstr "Ön Aramalı Mektup"
 
 msgid "Primary Email"
 msgstr "Birincil E-posta"
@@ -817,16 +820,16 @@ msgid "REPLACE WITH NEW CITY, STATE, ZIP"
 msgstr "YENİ ŞEHİR, EYALET, ALAN KODUYLA DEĞİŞTİRİN"
 
 msgid "REPLACE WITH NEW STREET"
-msgstr "YENİ ADRES İLE DEĞİŞTİR"
+msgstr "YENİ SOKAK İLE DEĞİŞTİRİN"
 
 msgid "Received"
 msgstr "Alındı"
 
 msgid "Referrals"
-msgstr "Yönlendirmeler"
+msgstr "Referanslar"
 
 msgid "Referrer"
-msgstr "Yönlendiren"
+msgstr "Referans"
 
 msgid "Region"
 msgstr "Bölge"
@@ -835,11 +838,11 @@ msgid "Reminder Letter"
 msgstr "Hatırlatma Mektubu"
 
 msgid "Research Abandoned"
-msgstr "Araştırma Kesildi"
+msgstr "Araştırma bırakıldı"
 
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
-msgstr "Muhterem"
+msgstr "Peder"
 
 msgid "Romanian"
 msgstr "Romence"
@@ -879,7 +882,7 @@ msgid "Spanish (Spain)"
 msgstr "İspanyolca (İspanya)"
 
 msgid "Spouse Email"
-msgstr "Eş E-postası"
+msgstr "Eşin E-postası"
 
 msgid "Spouse First Name"
 msgstr "Eşin Adı"
@@ -900,7 +903,7 @@ msgid "Support Letter"
 msgstr "Destek Mektubu"
 
 msgid "Stopped giving for the last 2 months"
-msgstr "Son 2 ayda bağış yapmayı bırakmış"
+msgstr "Son 2 ayda bağış yapmadı"
 
 msgid "Swahili"
 msgstr "Svahili"
@@ -924,22 +927,22 @@ msgid "Temporary"
 msgstr "Geçici"
 
 msgid "Text Message"
-msgstr "Metin Mesajı"
+msgstr "Kısa mesaj"
 
 msgid "Thai"
 msgstr "Tayca"
 
 msgid "Thank"
-msgstr "Teşekkür"
+msgstr "Teşekkür edin"
 
 msgid "Thanks!"
 msgstr "Teşekkürler!"
 
 msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
-msgstr "O e-posta \"artık geçerli değil\" olarak işaretlenmiştir. Lütfen yukarıda adına tıklayarak kişi detaylarını düzenleyin ve bilgilerinin doğru olduğunu onaylayın. Eğer o kişinin başka bir geçerli e-posta adresi varsa, o birincil olacak ve e-posta haber bülteninizde mevcutsa MailChimp'e eşitlenecektir. O e-postanın MailChimp'te olmasını istemiyorsanız, lütfen kaldırın, \"E-posta haber bülteninin dışında bırak\"ı seçin veya farklı bir e-postayı birincil yapın."
+msgstr "O e-posta \"artık geçerli değil\" olarak işaretlenmiştir. Lütfen yukarıda adına tıklayarak kişi detaylarını düzenleyin ve bilgilerinin doğru olduğunu onaylayın. Eğer o kişinin başka bir geçerli e-posta adresi varsa, o birincil olacak ve e-posta dua mektubunuzda mevcutsa MailChimp'e eşitlenecektir. O e-postanın MailChimp'te olmasını istemiyorsanız, lütfen kaldırın, \"E-posta dua mektubunun dışında bırak\"ı seçin veya farklı bir e-postayı birincil yapın."
 
 msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
-msgstr "MPDX hesabınıza bağlamış olduğunuz MailChimp e-posta listesi, sizin oluşturmuş olduğunuz ve gerekli olarak işaretlediğiniz ekstra bir birleştirme alanına sahip. MPDX, müşteri birleştirme alanınızı nasıl dolduracağını bilmiyor ve bu yüzden kişilerinizi MailChimp'e eşitleyemiyor."
+msgstr "MPDX hesabınıza bağlamış olduğunuz MailChimp e-posta listesi oluşturduğunuz ve gerekli olarak işaretlediğiniz fazladan bir birleştirme alanına sahip. MPDX, müşteri birleştirme alanınızı nasıl dolduracağını bilmiyor ve bu yüzden kişilerinizi MailChimp'e eşitleyemiyor."
 
 msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
 msgstr "MPDX ve prayerletters.com hesabınız arasındaki bağlantı çalışmayı durdurdu. MPDX'in değişiklikleri prayerletters.com'a otomatik olarak göndermeye devam etmesini istiyorsanız, lütfen 'Etkinleştir' tuşuna gidip tıklayın."
@@ -948,10 +951,10 @@ msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "Linkedin hesabınıza bağlantınızın yenilenmesi gerekiyor."
 
 msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
-msgstr "Facebook hesabınıza giden bağlantının yenilenmesi gerekiyor. <a href=\"/auth/facebook\">Facebook'a yeniden bağlanmak için buraya tıklayın</a>, sonra yeniden içe aktarmayı deneyin."
+msgstr "Facebook hesabınızın bağlantısının yenilenmesi gerekiyor. <a href=\"/auth/facebook\">Facebook'a yeniden bağlanmak için buraya tıklayın</a>, sonra yeniden içe aktarmayı deneyin."
 
 msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
-msgstr "MPDX ve Google hesabınız arasındaki bağlantı çalışmayı durdurdu. MPDX'in Google hesabınızla otomatik olarak eşleşmeye devam etmesini istiyorsanız, lütfen %{link} adresine gidin ve 'Google Hesabını Yenile' tuşuna tıklayın. Daha sonra, daha önce ayarlamış olduğunuz tüm entegrasyonları yeniden manuel olarak etkinleştirmeniz gerekecek."
+msgstr "MPDX ve Google hesabınız arasındaki bağlantı çalışmayı durdurdu. MPDX'in Google hesabınızla otomatik olarak eşleşmeye devam etmesini istiyorsanız, lütfen %{link} adresine gidin ve 'Google Hesabını Yenile' tuşuna tıklayın. Bundan sonra, daha önce ayarlamış olduğunuz tüm entegrasyonları yeniden manuel olarak etkinleştirmeniz gerekecek."
 
 msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
 msgstr "MPDX hesabınızla ilişkilendirilmiş mailchimp API anahtarı artık geçerli değil.\nMailchimp eşitlemesinin çalışmaya devam etmesini istiyorsanız, lütfen %{link} adresine gidin ve API anahtarınızı güncelleyin."
@@ -969,7 +972,7 @@ msgid "Timezone"
 msgstr "Zaman dilimi"
 
 msgid "Tnt import"
-msgstr "Tnt içe aktarma"
+msgstr "Tnt aktarma"
 
 msgid "To Do"
 msgstr "Yapılacak"
@@ -987,7 +990,7 @@ msgid "Total"
 msgstr "Toplam"
 
 msgid "Total (last month excluded from total)"
-msgstr "Toplam (geçen ay toplamın dışında tutulmuş)"
+msgstr "Toplam (geçen ay toplamın dışında tutulmuştur)"
 
 msgid "Totals"
 msgstr "Toplamlar"
@@ -1029,13 +1032,13 @@ msgid "Vietnamese"
 msgstr "Vietnamca"
 
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
-msgstr "Daha fazla hataya engel olmak için MailChimp listenizin MPDX ile olan bağlantısını geçici olarak kopardık. Yukarıdaki seöeneklerden birini seçtiğinizde, lütfen %{link} adresine geri gidin ve MailChimp ayarlarınızı güncelleyin."
+msgstr "Daha fazla hataya engel olmak için MailChimp listenizin MPDX ile olan bağlantısını geçici olarak kopardık. Yukarıdaki seçeneklerden birini seçtiğinizde, lütfen %{link} adresine geri gidin ve MailChimp ayarlarınızı güncelleyin."
 
 msgid "Weekly"
 msgstr "Haftalık"
 
 msgid "Wife"
-msgstr "Karı"
+msgstr "Eş"
 
 msgid "Widowed"
 msgstr "Dul"
@@ -1053,25 +1056,25 @@ msgid "Yesterday"
 msgstr "Dün"
 
 msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"preferences_url\">here</a>."
-msgstr "Bu bildirimi alıyorsunuz, çünkü tercihlerinizdeki e-posta ayarını bu türdeki bildirim için işaretlemişsiniz. Onu <a href=\"preferences_url\">buradan</a> değiştirebilirsiniz."
+msgstr "Bu bildirimi almanızın nedeni tercihlerinizdeki e-posta ayarını bu türdeki bildirim için işaretlemenizdir. Ayarı <a href=\"preferences_url\">buradan</a> değiştirebilirsiniz."
 
 msgid "You have been invited by %{inviter} to access the MPDX account \"%{account}\"."
 msgstr "\"%{account}\" MPDX hesabına erişmek üzere %{inviter} tarafından davet edildiniz."
 
 msgid "You are getting this notification from MPDX because you selected the notification option on your task details."
-msgstr "MPDX'ten bu bildirimi alıyorsunuz, çünkü görev ayrıntılarınızda bildirim seçeneğini seçmişsiniz."
+msgstr "Görev ayrıntılarınızda bildirim seçeneğini seçtiğiniz için MPDX'ten bu bildirimi alıyorsunuz. "
 
 msgid "You have no monthly recurring gift recommendations."
-msgstr "Hiç aylık olarak tekrar eden hediye öneriniz yok."
+msgstr "Aylık olarak tekrar eden hediye tavsiyeleriniz yok."
 
 msgid "You need to go to https://mpdx.org and set up your account before using the mobile app."
 msgstr "Mobil uygulamayı kullanmadan önce https://mpdx.org adresine gidip hesabınızı kurmanız gereklidir."
 
 msgid "You must select at least 2 contacts to merge."
-msgstr "Birleştirmek için en az 2 kişi seçmelisiniz."
+msgstr "Birleştirmek için en az 2 kontak seçmelisiniz."
 
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
-msgstr "MPDX kişiniz \"%{contact}\", MailChimp'e bir kişi <a href=\"%{edit_person_url}\">%{person_name}</a> eşitledi veya aktardı, ama şimdi teslim edilemez bir e-postaya sahip: %{email}"
+msgstr "MPDX kontağınız \"%{contact}\", MailChimp'e bir kişi <a href=\"%{edit_person_url}\">%{person_name}</a> eşitledi veya aktardı, ama şimdi teslim edilemez bir e-postaya sahip: %{email}"
 
 msgid "Your username and password are missing for this account."
 msgstr "Bu hesap için kullanıcı adınız ve şifreniz eksik."
@@ -1080,13 +1083,13 @@ msgid "Your username and password for %{org} are invalid."
 msgstr "%{org} için kullanıcı adınız ve şifreniz geçersiz."
 
 msgid "[MPDX] Importing your %{source} contacts completed"
-msgstr "[MPDX] %{source} kişilerinizin içe aktarılması tamamlandı."
+msgstr "[MPDX] %{source} kontaklarınızın aktarılması tamamlandı."
 
 msgid "[MPDX] Importing your %{source} contacts failed"
-msgstr "[MPDX] %{source} kişilerinizin içe aktarılması başarısız oldu"
+msgstr "[MPDX] %{source} kontaklarınızın aktarılması başarısız"
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
-msgstr "[MPDX] %{source} kullanıcı adı ve şifreniz geçersiz"
+msgstr "[MPDX] %{source} için kullanıcı adı ve şifreniz geçersiz"
 
 msgid "can not be blank"
 msgstr "boş olamaz"
@@ -1101,5 +1104,119 @@ msgid "of total"
 msgstr "/ toplam"
 
 msgid "prayerletters.com account needs to be refreshed"
-msgstr "prayerletters.com hesabının yenilenmesi gerekiyor"
+msgstr "prayerletters.com hesabının yenilenmesi gerek"
+
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr " \"%{appeal_name}\" isteğine tayin edildi."
+
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr "%(Bu göreve TntConnect'te \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" türü verildi.)"
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr "%{number_of_failed_contacts} kişinin içe aktarılması başarısız oldu."
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr "%{number_of_successful_contacts} kişi başarıyla içe aktarıldı."
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr "%{org_name}, hesabınız için yanlış şifreye sahip olduğumuzu söyledi."
+
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "Kişi, fiziksel haber bülteninde ama geçerli e-posta adresine sahip kimsesi yok."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "Kişi, fiziksel haber bülteninde ama posta adresi yok."
+
+msgid "Google Integration Settings"
+msgstr "Google Entegrasyonu Ayarları"
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr "MPDX, %{source} kişilerinizi içe aktarmaya çalışırken hatalarla karşılaştı."
+
+msgid "MailChimp Integration Settings"
+msgstr "MailChimp Entegrasyonu Ayarları"
+
+msgid "No Incomplete Tasks"
+msgstr "Tamamlanmayan Görev Yok"
+
+msgid "Nothing Selected"
+msgstr "Hiçbir Şey Seçilmedi"
+
+msgid "Other Email"
+msgstr "Diğer E-posta"
+
+msgid "Other Phone"
+msgstr "Diğer Telefon"
+
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "Ortağın (altı aylık, yıllık, vs.) şu andan bir ay sonra beklenen bir bağışı var. Ona bir hatırlatıcı gönderin."
+
+msgid "Partner gave a Special Gift"
+msgstr "Ortak, Özel Bir Hediye verdi"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "Ortak, taahhütten daha büyük bir hediye verdi"
+
+msgid "Partner gave less than commitment"
+msgstr "Ortak, taahhütten az verdi"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "Ortak altı aylık veya daha fazla bir taahhütle verdi"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "Ortağın geçtiğimiz yılda günlüğe kaydedilen teşekkür notu yok."
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "Ortağın geçtiğimiz yılda günlüğe kaydedilen denenmiş bir araması yok."
+
+msgid "Partner missed a gift"
+msgstr "Ortak bir hediyeyi kaçırdı"
+
+msgid "Partner recontinued giving"
+msgstr "Ortak hibeye tekrar devam etti"
+
+msgid "Partner started giving"
+msgstr "Ortak hibeye başladı"
+
+msgid "Please try updating it here: %{link}"
+msgstr "Onu buradan güncellemeyi deneyin: %{link}"
+
+msgid "Primary Phone"
+msgstr "Birincil Telefon"
+
+msgid "Spouse Other Email"
+msgstr "Eşin Diğer E-postası"
+
+msgid "Spouse Other Phone"
+msgstr "Eşin Diğer Telefonu"
+
+msgid "Spouse Phone"
+msgstr "Eşin Telefonu"
+
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Bir içe aktarmanın başarısız olmasının birtakım nedenleri vardır. Sıklıkla başarısızlık geçici bir ağ sorunu olabilmektedir. Lütfen içe aktarmanızı tekrar deneyin. Gene başarısız olursa, support@mpdx.org adresinden bize bir e-posta gönderin, neyin yanlış gittiğini inceleyelim."
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Bir içe aktarmanın başarısız olmasının birtakım nedenleri vardır. Sıklıkla başarısızlık, bizim kontrolümüzün dışında olan Facebook'la ilgili geçici bir sorundan kaynaklanır. Lütfen içe aktarmanızı tekrar deneyin. Gene başarısız olursa, support@mpdx.org adresinden bize bir e-posta gönderin, neyin yanlış gittiğini inceleyelim."
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr "Bir içe aktarmanın başarısız olmasının birtakım nedenleri vardır. En yaygını, geçici bir sunucu sorunudur. Lütfen içe aktarmanızı tekrar deneyin. Gene başarısız olursa, support@mpdx.org adresine Tnt dışa aktarmanız ekli hâlde bir e-posta gönderin. İçe aktarmaya çalıştığınız dosyaya sahip olmak, içe aktarmanın neden başarısız olduğunu belirlemeye çalışmamızda bize büyük oranda yardımcı olacaktır."
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Bir içe aktarmanın başarısız olmasının birtakım nedenleri vardır. Bir CSV içe aktarımının başarısız olmasının en olası nedeni, Ad yüzündendir. CSV içe aktarımında Ad, gerekli bir alandır. Bu e-postaya içe aktarılması başarısız olan satırları içeren bir CSV dosyası ekledik. Bu CSV'deki ilk satır, o satır hakkında bir hata mesajı içerir. Lütfen bu CSV'yi indirin, içindeki sorunları düzeltin ve sonra tekrar içe aktarmayı deneyin. Önceden başarıyla içe aktarılmış kişileri tekrar içe aktarmanıza gerek yoktur. İçe aktarma tekrar başarısız olursa, bize support@mpdx.org adresinden bir e-posta gönderin, neyin yanlış gittiğini inceleyelim."
+
+msgid "This donation was imported from Tnt."
+msgstr "Bu bağış, Tnt'den iça ektarıldı."
+
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr "Bu bildirimi MPDX'ten alıyorsunuz, çünkü tercihlerinizdeki e-posta ayarını bu türden bildirim için işaretlediniz. Bunu <a href=\"%{preferences_url}\">buradan</a> değiştirebilirsiniz."
+
+msgid "You must log in to MPDX again"
+msgstr "MPDX'te yeniden oturum açmalısınız"
+
+msgid "You've been invited to access an account on MPDX"
+msgstr "MPDX'teki bir hesaba erişmek için davet edildiniz."
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr "MPDX'teki bir hesaba koç olmak için davet edildiniz."
 

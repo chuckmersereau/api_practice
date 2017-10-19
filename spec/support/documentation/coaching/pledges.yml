@@ -1,0 +1,31 @@
+attributes: &attrs
+  amount:
+    description:
+      Amount of Pledge
+    type: number
+  expected_date:
+    description:
+      Expected Date of Donation
+    type: string
+  processed:
+    description:
+      Value is set to true if the donation(s) was processed
+    type: boolean
+  received_not_processed:
+    description:
+      Value is set to true if the donation(s) was received, but not processed
+    type: boolean
+
+object: &obj
+  attributes:
+    <<: *attrs
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Pledges from Coached Contacts
+      type: '[Pledge]'
+
+  show:
+    <<: *obj

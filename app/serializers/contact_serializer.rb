@@ -49,6 +49,7 @@ class ContactSerializer < ApplicationSerializer
   has_many :contact_referrals_to_me
   has_many :contacts_referred_by_me
   has_many :contacts_that_referred_me
+  has_many :donation_amount_recommendations
   has_many :donor_accounts
   has_many :last_six_donations
   has_many :people
@@ -71,7 +72,7 @@ class ContactSerializer < ApplicationSerializer
   end
 
   def contact_exhibit
-    exhibit(object)
+    ContactExhibit.new(object, self)
   end
 
   def account_list_id

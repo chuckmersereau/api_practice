@@ -520,7 +520,7 @@ describe AccountList do
     describe 'start_at date is set but finish_at date is set' do
       describe 'start_at date is before finish_at date' do
         before do
-          subject.active_mpd_finish_at = Date.tomorrow
+          subject.active_mpd_finish_at = Date.today + 1.month
         end
 
         it 'validates' do
@@ -530,7 +530,7 @@ describe AccountList do
 
       describe 'start_at date is finish_at date' do
         before do
-          subject.active_mpd_finish_at = Date.today
+          subject.active_mpd_finish_at = subject.active_mpd_start_at
         end
 
         it 'validates' do
@@ -541,7 +541,7 @@ describe AccountList do
 
       describe 'start_at date is after finish_at date' do
         before do
-          subject.active_mpd_finish_at = Date.yesterday
+          subject.active_mpd_finish_at = Date.today - 1.month
         end
 
         it 'does not validates' do

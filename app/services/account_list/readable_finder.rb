@@ -41,14 +41,14 @@ class AccountList::ReadableFinder
   end
 
   def arel_account_lists
-    @account_list ||= AccountList.arel_table
+    @arel_account_lists ||= AccountList.arel_table
   end
 
   def arel_coaches
-    @account_list_coach ||= AccountListCoach.arel_table
+    @arel_coaches ||= AccountListCoach.arel_table
   end
 
   def arel_users
-    @account_list_user ||= AccountListUser.arel_table
+    @arel_users ||= AccountListUser.arel_table
   end
 end

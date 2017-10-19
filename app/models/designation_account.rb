@@ -2,12 +2,12 @@ class DesignationAccount < ApplicationRecord
   belongs_to :organization
   has_many :designation_profile_accounts, dependent: :delete_all
   has_many :designation_profiles, through: :designation_profile_accounts
-
   has_many :account_list_entries, dependent: :delete_all
   has_many :account_lists, through: :account_list_entries
   has_many :contacts, through: :account_lists
   has_many :donations, dependent: :delete_all
   has_many :balances, dependent: :delete_all, as: :resource
+  has_many :donation_amount_recommendations, dependent: :destroy, inverse_of: :designation_account
 
   after_save :create_balance, if: :balance_changed?
 
@@ -33,13 +33,10 @@ class DesignationAccount < ApplicationRecord
   end
 
   def converted_balance(convert_to_currency)
-    CurrencyRate.convert_with_latest(amount: balance, from: currency,
-                                     to: convert_to_currency)
-  rescue CurrencyRate::RateNotFoundError => e
     # Log the error in rollbar, but then return a zero balance to prevent future
     # errors and prevent this balance form adding to the total.
-    Rollbar.error(e)
-    0.0
+    CurrencyRate.convert_with_latest(amount: balance, from: currency,
+                                     to: convert_to_currency)
   end
 
   def self.filter(filter_params)

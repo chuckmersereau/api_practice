@@ -26,10 +26,8 @@ RSpec.describe Api::V2::Reports::MonthlyGivingGraphsController, type: :controlle
     include_context 'common_variables'
 
     let(:coach) { create(:user).becomes(User::Coach) }
-    let(:account_list2) { create(:account_list) }
 
     before do
-      account_list2.users << coach
       account_list.coaches << coach
     end
 

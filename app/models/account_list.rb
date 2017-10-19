@@ -40,6 +40,7 @@ class AccountList < ApplicationRecord
   has_many :addresses, through: :contacts
   has_many :appeals
   belongs_to :primary_appeal, class_name: 'Appeal'
+  has_many :balances, through: :designation_accounts, source: :balances
   has_many :companies, through: :company_partnerships
   has_many :company_partnerships, dependent: :destroy
   has_many :contact_tags, through: :contacts, source: :base_tags

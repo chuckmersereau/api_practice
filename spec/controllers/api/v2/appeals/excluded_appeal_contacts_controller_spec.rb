@@ -21,6 +21,7 @@ describe Api::V2::Appeals::ExcludedAppealContactsController, type: :controller d
 
   include_examples 'index_examples'
   include_examples 'show_examples'
+  include_examples 'destroy_examples'
 
   describe 'sorting' do
     before { api_login(user) }

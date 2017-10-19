@@ -18,8 +18,9 @@ class EmailAddress < ApplicationRecord
   belongs_to :person, touch: true
   has_one :google_plus_account
 
-  before_save :strip_email_attribute
+  before_save :strip_email_attribute, :check_state_for_mail_chimp_sync
   before_create :set_valid_values
+  after_save :trigger_mail_chimp_syncs_to_relevant_contacts, if: :sync_with_mail_chimp_required?
   after_create :start_google_plus_account_fetcher_job, unless: :checked_for_google_plus_account
 
   validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
@@ -80,6 +81,7 @@ class EmailAddress < ApplicationRecord
 
   def self.clean_and_split_emails(emails_str)
     return [] if emails_str.blank?
+
     emails_str.scan(/([^<>,;\s]+@[^<>,;\s]+)/).map(&:first)
   end
 
@@ -90,6 +92,22 @@ class EmailAddress < ApplicationRecord
   end
 
   private
+
+  def trigger_mail_chimp_syncs_to_relevant_contacts
+    person.contacts.each(&:sync_with_mail_chimp)
+  end
+
+  def sync_with_mail_chimp_required?
+    @mail_chimp_sync
+  end
+
+  def check_state_for_mail_chimp_sync
+    @mail_chimp_sync = true if should_trigger_mail_chimp_sync?
+  end
+
+  def should_trigger_mail_chimp_sync?
+    primary? && (email_changed? || !persisted?)
+  end
 
   def start_google_plus_account_fetcher_job
     GooglePlusAccountFetcherWorker.perform_async(id)

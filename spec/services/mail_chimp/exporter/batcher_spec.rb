@@ -53,7 +53,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
           method: 'PUT',
           path: '/lists/list_one/members/1919bfc4fa95c7f6b231e583da677a17',
           body: {
-            status_if_new: 'subscribed',
+            status: 'subscribed',
             email_address: 'email@gmail.com',
             merge_fields: {
               EMAIL: 'email@gmail.com',

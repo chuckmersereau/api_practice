@@ -14,16 +14,6 @@ describe MailChimp::Importer do
 
   let(:email) { 'random@email.com' }
 
-  let(:contacts) do
-    create_list(
-      :contact,
-      3,
-      account_list: account_list,
-      tag_list: 'tag',
-      people: [build(:person, primary_email_address: build(:email_address))]
-    )
-  end
-
   context '#import_all_members' do
     it 'uses the connection handler and import_all_members! is called' do
       expect(MailChimp::ConnectionHandler).to receive(:new).and_return(mock_connection_handler)
@@ -69,13 +59,11 @@ describe MailChimp::Importer do
         },
         {
           'merge_fields' => {
-            'FNAME' => 'Third First Name',
-            'LNAME' => 'Third Last Name',
             'GREETING' => 'Third Greeting',
             'GROUPINGS' => 'Third Random Grouping'
           },
           'email_address' => 'third_email@gmail.com',
-          'status' => 'cleaned'
+          'status' => 'subscribed'
         },
         {
           'merge_fields' => {
@@ -85,6 +73,16 @@ describe MailChimp::Importer do
             'GROUPINGS' => 'Fourth Random Grouping'
           },
           'email_address' => 'fourth_email@gmail.com',
+          'status' => 'cleaned'
+        },
+        {
+          'merge_fields' => {
+            'FNAME' => 'Fifth First Name',
+            'LNAME' => 'Fifth Last Name',
+            'GREETING' => 'Fifth Greeting',
+            'GROUPINGS' => 'Fifth Random Grouping'
+          },
+          'email_address' => 'fifth_email@gmail.com',
           'status' => 'unsubscribed'
         }
       ]
@@ -110,11 +108,11 @@ describe MailChimp::Importer do
         },
         {
           email: 'third_email@gmail.com',
-          first_name: 'Third First Name',
-          last_name: 'Third Last Name',
+          first_name: nil,
+          last_name: nil,
           greeting: 'Third Greeting',
           groupings: 'Third Random Grouping',
-          status: 'cleaned'
+          status: 'subscribed'
         },
         {
           email: 'fourth_email@gmail.com',
@@ -122,6 +120,14 @@ describe MailChimp::Importer do
           last_name: 'Fourth Last Name',
           greeting: 'Fourth Greeting',
           groupings: 'Fourth Random Grouping',
+          status: 'cleaned'
+        },
+        {
+          email: 'fifth_email@gmail.com',
+          first_name: 'Fifth First Name',
+          last_name: 'Fifth Last Name',
+          greeting: 'Fifth Greeting',
+          groupings: 'Fifth Random Grouping',
           status: 'unsubscribed'
         }
       ]
@@ -136,13 +142,24 @@ describe MailChimp::Importer do
           greeting: 'Greeting',
           groupings: 'Random Grouping',
           status: 'subscribed'
+        },
+        second_person.id => {
+          email: 'random@gmail.com',
+          first_name: 'Second First Name',
+          last_name: 'Second Last Name',
+          greeting: 'Greeting',
+          groupings: 'Random Grouping',
+          status: 'subscribed'
         }
       }.with_indifferent_access
     end
 
     let!(:person) { create(:person, primary_email_address: build(:email_address, email: 'email@gmail.com')) }
     let!(:contact) { create(:contact, primary_person: person, send_newsletter: 'None') }
-    let(:new_contacts) { Contact.last(3) }
+    let!(:second_person) { create(:person, primary_email_address: nil, first_name: 'Second First Name', last_name: 'Second Last Name') }
+    let!(:second_contact) { create(:contact, primary_person: second_person, send_newsletter: 'None') }
+    let(:new_contacts) { Contact.last(4) }
+
     before do
       allow(MailChimp::GibbonWrapper).to receive(:new).and_return(mock_gibbon_wrapper)
       allow(mock_gibbon_wrapper).to receive(:list_emails).and_return(['email@gmail.com', 'second_email@gmail.com'])
@@ -158,15 +175,20 @@ describe MailChimp::Importer do
 
         expect do
           subject.import_all_members!
-        end.to change { Person.count }.by(3)
+        end.to change { Person.count }.by(4)
+
+        expect(second_person.primary_email_address).to be_nil
 
         expect(new_contacts.first.send_newsletter).to eq('Email')
         expect(new_contacts.first.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
 
-        expect(new_contacts.second.primary_person.email_addresses.first.historic).to be_truthy
+        expect(new_contacts.second.name).to eq('Third Email')
+        expect(new_contacts.second.primary_person.first_name).to eq('Third Email')
 
-        expect(new_contacts.third.send_newsletter).to be_nil
-        expect(new_contacts.third.primary_person.optout_enewsletter).to be_truthy
+        expect(new_contacts.third.primary_person.email_addresses.first.historic).to be_truthy
+
+        expect(new_contacts.fourth.send_newsletter).to be_nil
+        expect(new_contacts.fourth.primary_person.optout_enewsletter).to be_truthy
 
         expect(contact.reload.send_newsletter).to eq('None')
       end
@@ -178,15 +200,18 @@ describe MailChimp::Importer do
 
         expect do
           subject.import_members_by_email!(formatted_member_infos.map { |member| member[:email] })
-        end.to change { Person.count }.by(3)
+        end.to change { Person.count }.by(4)
 
         expect(new_contacts.first.send_newsletter).to eq('Email')
         expect(new_contacts.first.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
 
-        expect(new_contacts.second.primary_person.email_addresses.first.historic).to be_truthy
+        expect(new_contacts.second.name).to eq('Third Email')
+        expect(new_contacts.second.primary_person.first_name).to eq('Third Email')
 
-        expect(new_contacts.third.send_newsletter).to be_nil
-        expect(new_contacts.third.primary_person.optout_enewsletter).to be_truthy
+        expect(new_contacts.third.primary_person.email_addresses.first.historic).to be_truthy
+
+        expect(new_contacts.fourth.send_newsletter).to be_nil
+        expect(new_contacts.fourth.primary_person.optout_enewsletter).to be_truthy
 
         expect(contact.reload.send_newsletter).to eq('None')
       end

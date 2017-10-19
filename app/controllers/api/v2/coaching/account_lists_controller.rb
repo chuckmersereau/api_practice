@@ -1,4 +1,4 @@
-class Api::V2::CoachingAccountListsController < Api::V2Controller
+class Api::V2::Coaching::AccountListsController < Api::V2Controller
   resource_type :account_lists
 
   def index
@@ -7,7 +7,7 @@ class Api::V2::CoachingAccountListsController < Api::V2Controller
            meta: meta_hash(@account_lists),
            include: include_params,
            fields: field_params,
-           each_serializer: CoachingAccountListSerializer
+           each_serializer: Coaching::AccountListSerializer
   end
 
   def show
@@ -42,7 +42,7 @@ class Api::V2::CoachingAccountListsController < Api::V2Controller
            status: success_status,
            include: include_params,
            fields: field_params,
-           serializer: CoachingAccountListSerializer
+           serializer: Coaching::AccountListSerializer
   end
 
   def permitted_sorting_params

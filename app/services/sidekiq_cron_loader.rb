@@ -46,6 +46,12 @@ class SidekiqCronLoader
       'class' => 'GoogleContactsSyncEnqueuerWorker',
       'cron'  => '7 7 * * *',
       'args'  => []
+    },
+
+    'DonationAmountRecommendation::RemoteWorker' => {
+      'class' => 'DonationAmountRecommendation::RemoteWorker',
+      'cron'  => '0 0 * * *',
+      'args'  => []
     }
   }.freeze
 

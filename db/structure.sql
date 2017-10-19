@@ -1194,23 +1194,15 @@ ALTER SEQUENCE designation_profiles_id_seq OWNED BY designation_profiles.id;
 
 CREATE TABLE donation_amount_recommendations (
     id integer NOT NULL,
-    organization_id integer,
-    donor_number character varying,
-    designation_number character varying,
-    previous_amount numeric,
-    amount numeric,
     started_at timestamp without time zone,
-    gift_min numeric,
-    gift_max numeric,
-    income_min numeric,
-    income_max numeric,
     suggested_pledge_amount numeric,
     suggested_special_amount numeric,
     ask_at timestamp without time zone,
-    zip_code character varying,
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    designation_account_id integer,
+    donor_account_id integer
 );
 
 
@@ -3172,6 +3164,49 @@ ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 
 
 --
+-- Name: wv_donation_amt_recommendation; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE wv_donation_amt_recommendation (
+    id integer NOT NULL,
+    organization_id integer,
+    donor_number character varying,
+    designation_number character varying,
+    previous_amount numeric,
+    amount numeric,
+    started_at timestamp without time zone,
+    gift_min numeric,
+    gift_max numeric,
+    income_min numeric,
+    income_max numeric,
+    suggested_pledge_amount numeric,
+    ask_at timestamp without time zone,
+    zip_code character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: wv_donation_amt_recommendation_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE wv_donation_amt_recommendation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: wv_donation_amt_recommendation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE wv_donation_amt_recommendation_id_seq OWNED BY wv_donation_amt_recommendation.id;
+
+
+--
 -- Name: account_list_coaches id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3736,6 +3771,13 @@ ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclas
 --
 
 ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
+
+
+--
+-- Name: wv_donation_amt_recommendation id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY wv_donation_amt_recommendation ALTER COLUMN id SET DEFAULT nextval('wv_donation_amt_recommendation_id_seq'::regclass);
 
 
 --
@@ -4387,6 +4429,14 @@ ALTER TABLE ONLY versions
 
 
 --
+-- Name: wv_donation_amt_recommendation wv_donation_amt_recommendation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY wv_donation_amt_recommendation
+    ADD CONSTRAINT wv_donation_amt_recommendation_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: INDEX_TAGGINGS_ON_TAGGABLE_ID; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4986,13 +5036,6 @@ CREATE INDEX index_designation_profiles_on_organization_id ON designation_profil
 --
 
 CREATE UNIQUE INDEX index_designation_profiles_on_uuid ON designation_profiles USING btree (uuid);
-
-
---
--- Name: index_donation_amount_recommendations; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_donation_amount_recommendations ON donation_amount_recommendations USING btree (organization_id, designation_number, donor_number);
 
 
 --
@@ -6179,6 +6222,20 @@ CREATE INDEX picture_of ON pictures USING btree (picture_of_id, picture_of_type)
 
 
 --
+-- Name: recommendations_designation_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX recommendations_designation_account_id ON donation_amount_recommendations USING btree (designation_account_id);
+
+
+--
+-- Name: recommendations_donor_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX recommendations_donor_account_id ON donation_amount_recommendations USING btree (donor_account_id);
+
+
+--
 -- Name: referrals; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6292,6 +6349,22 @@ ALTER TABLE ONLY background_batch_requests
 
 ALTER TABLE ONLY background_batches
     ADD CONSTRAINT background_batches_user_id_fk FOREIGN KEY (user_id) REFERENCES people(id);
+
+
+--
+-- Name: donation_amount_recommendations donation_amount_recommendations_designation_account_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY donation_amount_recommendations
+    ADD CONSTRAINT donation_amount_recommendations_designation_account_id_fk FOREIGN KEY (designation_account_id) REFERENCES designation_accounts(id) ON DELETE SET NULL;
+
+
+--
+-- Name: donation_amount_recommendations donation_amount_recommendations_donor_account_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY donation_amount_recommendations
+    ADD CONSTRAINT donation_amount_recommendations_donor_account_id_fk FOREIGN KEY (donor_account_id) REFERENCES donor_accounts(id) ON DELETE SET NULL;
 
 
 --
@@ -7065,4 +7138,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170926162140');
 INSERT INTO schema_migrations (version) VALUES ('20171002211135');
 
 INSERT INTO schema_migrations (version) VALUES ('20171002215149');
+
+INSERT INTO schema_migrations (version) VALUES ('20171004041321');
+
+INSERT INTO schema_migrations (version) VALUES ('20171006024505');
+
+INSERT INTO schema_migrations (version) VALUES ('20171006035430');
 

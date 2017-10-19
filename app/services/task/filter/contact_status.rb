@@ -5,7 +5,7 @@ class Task::Filter::ContactStatus < Task::Filter::Base
   end
 
   def title
-    'Contact Status'
+    _('Contact Status')
   end
 
   delegate :custom_options,

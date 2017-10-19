@@ -4,12 +4,12 @@ class Task::Filter::ContactPledgeFrequency < Task::Filter::Base
     tasks.joins(:contacts).merge(Contact::Filter::PledgeFrequency.query(Contact, filters, account_lists))
   end
 
-  def title
-    'Contact Commitment Frequency'
+  def parent
+    _('Contact Commitment Details')
   end
 
   delegate :custom_options,
-           :parent,
+           :title,
            :type,
            to: 'Contact::Filter::PledgeFrequency.new(account_lists)'
 end

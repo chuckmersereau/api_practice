@@ -65,5 +65,15 @@ resource 'Appeals > ExcludedAppealContacts' do
         expect(response_status).to eq 200
       end
     end
+
+    delete '/api/v2/appeals/:appeal_id/excluded_appeal_contacts/:id' do
+      parameter 'id', 'ID', required: true
+
+      example 'ExcludedAppealContact [DELETE]', document: documentation_scope do
+        explanation 'Remove the Excluded Appeal Contact with the given ID from the Appeal'
+        do_request
+        expect(response_status).to eq 204
+      end
+    end
   end
 end

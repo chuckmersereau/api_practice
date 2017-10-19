@@ -70,7 +70,7 @@ gem 'ruby-rtf', '~> 0.0.1'
 gem 'rubyzip', '= 1.0.0'
 gem 'sidekiq-cron', '~> 0.4.4'
 gem 'sidekiq-unique-jobs', '~> 5.0.8'
-gem 'siebel_donations', git: 'https://github.com/sheldond/siebel_donations.git', ref: '49aac4cc7ac962e278a66672a4d9e302de44f561'
+gem 'siebel_donations', '1.0.7'
 gem 'sinatra', '~> 1.4.7', require: nil
 gem 'slim', '~> 3.0.7' # used for sidekiq web
 gem 'snail', '~> 2.2.1'
@@ -131,6 +131,7 @@ group :test do
   gem 'mock_redis', '~> 0.17.0'
   gem 'rb-fsevent', require: false
   gem 'roo', '~> 1.13.2'
+  gem 'rspec-retry', '~> 0.5.5'
   gem 'rubocop', '= 0.42', require: false
   gem 'shoulda-matchers', '~> 3.1.1'
   gem 'test_after_commit'

@@ -60,15 +60,44 @@ RSpec.describe MailChimp::GibbonWrapper do
     end
   end
 
-  it 'finds a list by list_id' do
-    allow_gibbon_wrapper_to_receive_lists
-    expect(subject.list('1').name).to eq('foo')
+  context 'finding a list name' do
+    it 'finds a list by list_id' do
+      allow_gibbon_wrapper_to_receive_lists
+      expect(subject.list('1').name).to eq('foo')
+    end
+
+    it 'finds the primary list' do
+      allow_gibbon_wrapper_to_receive_lists
+      mail_chimp_account.primary_list_id = '1'
+      expect(subject.primary_list.name).to eq('foo')
+    end
   end
 
-  it 'finds the primary list' do
-    allow_gibbon_wrapper_to_receive_lists
-    mail_chimp_account.primary_list_id = '1'
-    expect(subject.primary_list.name).to eq('foo')
+  context 'fetching member data from MailChimp' do
+    before do
+      lists_response = {
+        members: [
+          { 'email_address' => 'email@gmail.com' },
+          { 'email_address' => 'email_two@gmail.com' }
+        ]
+      }
+      stub_request(:get, "#{api_prefix}/lists/list_id_one/members?count=100&offset=0").to_return(body: lists_response.to_json)
+    end
+
+    context '#list_members' do
+      it 'returns an array of lists associated to the mail_chimp_account' do
+        expect(subject.list_members('list_id_one')).to match_array [
+          { 'email_address' => 'email@gmail.com' },
+          { 'email_address' => 'email_two@gmail.com' }
+        ]
+      end
+    end
+
+    context '#list_emails' do
+      it 'returns an array of lists associated to the mail_chimp_account' do
+        expect(subject.list_emails('list_id_one')).to match_array ['email@gmail.com', 'email_two@gmail.com']
+      end
+    end
   end
 
   def allow_gibbon_wrapper_to_receive_lists

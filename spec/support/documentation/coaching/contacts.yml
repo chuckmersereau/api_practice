@@ -1,0 +1,39 @@
+attributes: &attrs
+  late_at:
+    description:
+      The date at which the contact started being late on payments
+    type: string
+  pledge_amount:
+    description:
+      The amount that the Contact has pledged
+    type: float
+  pledge_currency:
+    description:
+      The currency format for the Contact's pledge
+    type: string
+  pledge_currency_symbol:
+    description:
+      The symbol that represents the currency format for the Contact's pledge
+    type: string
+  pledge_frequency:
+    description:
+      The requency in which the Contact pledges
+    type: float
+  pledge_start_date:
+    description:
+      Date in which the Contact's pledge starts
+    type: string
+
+object: &obj
+  attributes:
+    <<: *attrs
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Coached Account List Contacts
+      type: '[Contact]'
+
+  show:
+    <<: *obj

@@ -20,6 +20,7 @@ class Task::Filterer < ApplicationFilterer
     ContactStatus
     ContactTimezone
     ContactType
+    ContactDonationAmountRecommendation
   ).freeze
 
   FILTERS_TO_HIDE = %w(

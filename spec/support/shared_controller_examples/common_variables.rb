@@ -72,7 +72,8 @@ RSpec.shared_examples 'common_variables' do
   let(:count_proc)      { defined?(count) ? count : -> { resources_count } }
 
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
-  let(:serializer) { ActiveModel::Serializer.serializer_for(resource).new(resource) }
+  let(:serializer_class) { defined?(given_serializer_class) ? given_serializer_class : ActiveModel::Serializer.serializer_for(resource) }
+  let(:serializer) { serializer_class.new(resource) }
   let(:defined_resource_type) { defined?(given_resource_type) ? given_resource_type : nil }
   let(:resource_type) { defined_resource_type || serializer._type || resource.class.to_s.underscore.tr('/', '_').pluralize }
 

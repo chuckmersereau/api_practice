@@ -52,8 +52,6 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
   end
 
   def referral_scope
-    # This is just a placeholder to remind you to properly scope the model
-    # ie: It's meant to blow up :)
     current_contact.contact_referrals_by_me
   end
 
