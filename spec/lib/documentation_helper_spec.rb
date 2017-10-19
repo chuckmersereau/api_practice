@@ -145,35 +145,35 @@ RSpec.describe DocumentationHelper, type: :service do
     let(:helper) { build_helper(resource: :email_addresses) }
 
     it 'returns the title for index' do
-      expect(helper.title_for(:index)).to eq 'List Email Addresses'
+      expect(helper.title_for(:index)).to eq 'Email Address [LIST]'
     end
 
     it 'returns the title for show' do
-      expect(helper.title_for(:show)).to eq 'Retrieve an Email Address'
+      expect(helper.title_for(:show)).to eq 'Email Address [GET]'
     end
 
     it 'returns the title for create' do
-      expect(helper.title_for(:create)).to eq 'Create an Email Address'
+      expect(helper.title_for(:create)).to eq 'Email Address [POST]'
     end
 
     it 'returns the title for update' do
-      expect(helper.title_for(:update)).to eq 'Update an Email Address'
+      expect(helper.title_for(:update)).to eq 'Email Address [PUT]'
     end
 
     it 'returns the title for delete' do
-      expect(helper.title_for(:delete)).to eq 'Delete an Email Address'
+      expect(helper.title_for(:delete)).to eq 'Email Address [DELETE]'
     end
 
     it 'returns the title for bulk create' do
-      expect(helper.title_for(:bulk_create)).to eq 'Bulk create Email Addresses'
+      expect(helper.title_for(:bulk_create)).to eq 'Email Addresses [BULK POST]'
     end
 
     it 'returns the title for bulk update' do
-      expect(helper.title_for(:bulk_update)).to eq 'Bulk update Email Addresses'
+      expect(helper.title_for(:bulk_update)).to eq 'Email Addresses [BULK PUT]'
     end
 
     it 'returns the title for bulk delete' do
-      expect(helper.title_for(:bulk_delete)).to eq 'Bulk delete Email Addresses'
+      expect(helper.title_for(:bulk_delete)).to eq 'Email Addresses [BULK DELETE]'
     end
 
     it 'will return a custom title defined in the yml' do
