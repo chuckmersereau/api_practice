@@ -208,7 +208,7 @@ class ExpectedTotalsReport::LikelyDonation
   end
 
   def given_pledge_in_past?(periods_back:)
-    periods_below_pledge(periods_back: periods_back) == 0
+    periods_below_pledge(periods_back: periods_back).zero?
   end
 
   def averaging_to_pledge?(periods_back:)

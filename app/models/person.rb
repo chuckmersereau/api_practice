@@ -222,7 +222,7 @@ class Person < ApplicationRecord
 
     contacts.each do |c|
       # Only update the greeting, etc. if this contact has a non-deceased other person (e.g. a spouse)
-      next unless c.people.where(deceased: false).where('people.id <> ?', id).count > 0
+      next unless c.people.where(deceased: false).where('people.id <> ?', id).exists?
 
       contact_updates = {}
 

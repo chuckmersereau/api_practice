@@ -138,7 +138,7 @@ class AccountList < ApplicationRecord
   end
 
   def monthly_goal
-    settings[:monthly_goal].present? && settings[:monthly_goal].to_i > 0 ? settings[:monthly_goal].to_i : nil
+    settings[:monthly_goal].present? && settings[:monthly_goal].to_i.positive? ? settings[:monthly_goal].to_i : nil
   end
 
   def salary_currency_or_default

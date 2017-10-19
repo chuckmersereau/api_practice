@@ -33,7 +33,7 @@ end
 # which organization was incorrectly set onto their account lists.
 def empty_donor_accounts(account_list)
   account_list.donor_accounts.select do |da|
-    da.donations.count == 0
+    da.donations.count.zero?
   end
 end
 
@@ -51,7 +51,7 @@ end
 
 def fix_donor_accounts(contact, _wrong_org, right_org)
   contact.donor_accounts.each do |da|
-    next if da.organization == right_org || da.donations.count > 0
+    next if da.organization == right_org || da.donations.any?
     remove_donor_account(contact, da)
     add_right_donor_account(contact, da.account_number, right_org)
   end

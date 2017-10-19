@@ -720,7 +720,7 @@ class Contact < ApplicationRecord
 
   def last_donation_month_end
     @last_donation_month_end ||=
-      if last_donation_date && month_diff(last_donation_date, Date.today) > 0
+      if last_donation_date && month_diff(last_donation_date, Date.today).positive?
         Date.today.prev_month.end_of_month
       else
         Date.today.end_of_month
@@ -735,7 +735,7 @@ class Contact < ApplicationRecord
 
   def start_of_pledge_interval(date)
     months_in_range_mod_freq = months_in_range(date, last_donation_month_end) % pledge_frequency
-    months_to_subtract = months_in_range_mod_freq == 0 ? 0 : pledge_frequency - months_in_range_mod_freq
+    months_to_subtract = months_in_range_mod_freq.zero? ? 0 : pledge_frequency - months_in_range_mod_freq
     (date << months_to_subtract).beginning_of_month
   end
 

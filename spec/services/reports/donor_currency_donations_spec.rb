@@ -65,7 +65,7 @@ RSpec.describe Reports::DonorCurrencyDonations, type: :model do
     it { expect(totals[:year]).to eq 3 }
 
     it 'should sum donations by months' do
-      expect(totals[:months].select { |m| m == 0 }.size).to eq 12
+      expect(totals[:months].select(&:zero?).size).to eq 12
       expect(totals[:months].select { |m| m == 3 }.size).to eq 1
     end
 

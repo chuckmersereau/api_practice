@@ -32,7 +32,7 @@ class AddAccountsToDonations
     end
 
     log_action_for_donor(nil, 5)
-    FixDonationsWorker.perform_async(last_id) if last_id > 0
+    FixDonationsWorker.perform_async(last_id) if last_id.positive?
   end
 
   private
@@ -64,7 +64,7 @@ class AddAccountsToDonations
   end
 
   def log_action(donation, status)
-    logger.info("Start script at #{Time.now}") if status == 0
+    logger.info("Start script at #{Time.now}") if status.zero?
     logger.info("Don. ##{donation.id}: DonorAcc has more than 1 Contact.") if status == 1
     logger.info("Don. ##{donation.id}: AccountList has more than 1 OrgAcc.") if status == 2
     logger.info("Don. ##{donation.id}: DesignationAcc was not found for OrgAcc.") if status == 3
@@ -73,7 +73,7 @@ class AddAccountsToDonations
   end
 
   def log_action_for_donor(donor_account, status)
-    logger.info("Start script at #{Time.now}") if status == 0
+    logger.info("Start script at #{Time.now}") if status.zero?
     logger.info("DA. ##{donor_account.id}: DonorAcc has more than 1 Contact.") if status == 1
     logger.info("DA. ##{donor_account.id}: AccountList has more than 1 OrgAcc.") if status == 2
     logger.info("DA. ##{donor_account.id}: DesignationAcc was not found for OrgAcc.") if status == 3

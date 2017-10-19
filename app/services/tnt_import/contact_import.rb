@@ -85,10 +85,10 @@ class TntImport::ContactImport
   def update_contact_pledge_fields(contact, row)
     contact.pledge_amount = row['PledgeAmount'] if @override || contact.pledge_amount.blank?
     # PledgeFrequencyID: Since TNT 3.2, a negative number indicates a fequency in days. For example: -11 would be a frequency of 11 days. For now we are ignoring negatives.
-    contact.pledge_frequency = row['PledgeFrequencyID'] if (@override || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i > 0
+    contact.pledge_frequency = row['PledgeFrequencyID'] if (@override || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i.positive?
     contact.pledge_received = true?(row['PledgeReceived']) if @override || contact.pledge_received.blank?
     contact.status = TntImport::TntCodes.mpd_phase(row['MPDPhaseID']) if (@override || contact.status.blank?) && TntImport::TntCodes.mpd_phase(row['MPDPhaseID']).present?
-    contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1] if (@override || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i != 0
+    contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1] if (@override || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i.nonzero?
     contact.no_appeals = true?(row['NeverAsk']) if @override || contact.no_appeals.nil?
     contact.estimated_annual_pledge_amount = row['EstimatedAnnualCapacity'] if @override || contact.estimated_annual_pledge_amount.nil?
     contact.next_ask_amount = row['NextAskAmount'] if @override || contact.next_ask_amount.nil?

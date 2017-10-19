@@ -20,7 +20,7 @@ class Contact::PartnerStatusGuesser
     if latest_donation.donation_date.to_time > 2.months.ago && latest_donation.channel == 'Recurring'
       status = 'Partner - Financial'
       pledge_frequency = 1 unless contact.pledge_frequency
-      pledge_amount = latest_donation.amount unless contact.pledge_amount.to_i > 0
+      pledge_amount = latest_donation.amount unless contact.pledge_amount.to_i.positive?
     else
       status = 'Partner - Special'
     end

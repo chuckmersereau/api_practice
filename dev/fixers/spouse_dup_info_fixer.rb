@@ -93,7 +93,7 @@ def primary_person_by_first_name(dup_info_contact, tnt_fields)
   if primary_people.count > 1
     puts "Tnt primary person not found for #{dup_info_contact}"
     nil
-  elsif primary_people.count == 0
+  elsif primary_people.count.zero?
     puts "Tnt primary person not found for #{dup_info_contact}"
     nil
   else
