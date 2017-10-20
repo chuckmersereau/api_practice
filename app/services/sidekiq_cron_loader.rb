@@ -24,10 +24,10 @@ class SidekiqCronLoader
       'args'  => ['MasterAddress.populate_lat_long']
     },
 
-    'OrganizationFetcherWorker' => {
-      'class' => 'OrganizationFetcherWorker',
+    'OrganizationsFromCsvUrlWorker' => {
+      'class' => 'OrganizationsFromCsvUrlWorker',
       'cron'  => '4 7 * * *',
-      'args'  => []
+      'args'  => ['https://download.tntware.com/tntconnect/TntConnect_Organizations.csv']
     },
 
     'Clear Stalled Downloads' => {
