@@ -72,7 +72,7 @@ class EmailAddress < ApplicationRecord
     cleaned_attrs = []
     clean_and_split_emails(email_attrs[:email]).each_with_index do |cleaned_email, index|
       cleaned = email_attrs.dup
-      cleaned[:primary] = false if index > 0 && email_attrs[:primary]
+      cleaned[:primary] = false if index.positive? && email_attrs[:primary]
       cleaned[:email] = cleaned_email
       cleaned_attrs << cleaned
     end

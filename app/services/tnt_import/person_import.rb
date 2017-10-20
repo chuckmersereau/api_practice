@@ -63,7 +63,7 @@ class TntImport::PersonImport
       number = row[tnt_phone[:field]]
       next unless number.present? && (tnt_phone[:person] == :both || tnt_phone[:person] == person_sym)
 
-      phone_attrs = { number: number, location: tnt_phone[:location], historic: is_valid_mask[i] == 0 }
+      phone_attrs = { number: number, location: tnt_phone[:location], historic: (is_valid_mask[i]).zero? }
       if (@override || had_no_primary) && row['PreferredPhoneType'].to_i == i
         phone_attrs[:primary] = true
         person.phone_numbers.each { |phone| phone.update(primary: false) }

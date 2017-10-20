@@ -56,7 +56,7 @@ class Person::FacebookAccount < ApplicationRecord
 
   def url
     prefix = 'https://www.facebook.com/'
-    return prefix + "profile.php?id=#{remote_id}" if remote_id.to_i > 0
+    return prefix + "profile.php?id=#{remote_id}" if remote_id.to_i.positive?
     prefix + username if username
   end
 
@@ -82,7 +82,7 @@ class Person::FacebookAccount < ApplicationRecord
 
   def token_missing_or_expired?(tries = 0)
     # If we have an expired token, try once to refresh it
-    if tries == 0 && token && (!token_expires_at || token_expires_at < Time.now)
+    if tries.zero? && token && (!token_expires_at || token_expires_at < Time.now)
       begin
         refresh_token
       rescue; end

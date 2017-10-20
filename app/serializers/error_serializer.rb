@@ -66,7 +66,7 @@ class ErrorSerializer
   end
 
   def formatted_hash_errors
-    return unless hash.present? && hash.keys.count.positive?
+    return unless hash.present? && hash.keys.any?
 
     mock_resource = OpenStruct.new(errors: ActiveModel::Errors.new(self))
 

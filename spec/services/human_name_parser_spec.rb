@@ -60,6 +60,26 @@ describe HumanNameParser do
                                                                      spouse_last_name: 'Jones')
     end
 
+    it 'parses names like "Jones, Bob and ."' do
+      expect(Rollbar).to_not receive(:info)
+      expect(HumanNameParser.new('Jones, Bob and .').parse).to eq(first_name: 'Bob',
+                                                                  middle_name: nil,
+                                                                  last_name: 'Jones',
+                                                                  spouse_first_name: '.',
+                                                                  spouse_middle_name: nil,
+                                                                  spouse_last_name: 'Jones')
+    end
+
+    it 'parses names like "Jones, Bob and ???"' do
+      expect(Rollbar).to_not receive(:info)
+      expect(HumanNameParser.new('Jones, Bob and ???').parse).to eq(first_name: 'Bob',
+                                                                    middle_name: nil,
+                                                                    last_name: 'Jones',
+                                                                    spouse_first_name: '???',
+                                                                    spouse_middle_name: nil,
+                                                                    spouse_last_name: 'Jones')
+    end
+
     it 'parses names like "Bob and Sara Jones"' do
       expect(HumanNameParser.new('Bob and Sara Jones').parse).to eq(first_name: 'Bob',
                                                                     middle_name: nil,
@@ -224,6 +244,13 @@ describe HumanNameParser do
                                                                  spouse_first_name: nil,
                                                                  spouse_middle_name: nil,
                                                                  spouse_last_name: nil)
+    end
+
+    it 'notifies Rollbar if unparsable' do
+      expect(Nameable).to receive(:parse).and_raise(Nameable::InvalidNameError)
+      expect(Rollbar).to receive(:info)
+
+      HumanNameParser.new('🎂').parse
     end
   end
 end

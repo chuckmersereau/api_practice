@@ -1,12 +1,16 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Background Bulk' do
+resource 'Background Batches' do
   include_context :json_headers
   doc_helper = DocumentationHelper.new(resource: :background_batches)
 
   before do
     stub_request(:get, 'https://api.mpdx.org/api/v2/user')
+      .to_return(status: 200,
+                 body: '{"id": 1234}',
+                 headers: { accept: 'application/json' })
+    stub_request(:get, 'http://api.lvh.me:3000/api/v2/user')
       .to_return(status: 200,
                  body: '{"id": 1234}',
                  headers: { accept: 'application/json' })

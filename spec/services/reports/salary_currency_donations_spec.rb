@@ -65,8 +65,8 @@ RSpec.describe Reports::SalaryCurrencyDonations, type: :model do
     it { expect(totals[:year]).to eq 5 }
 
     it 'should sum donations by months' do
-      expect(totals[:months].select { |m| m == 0 }.size).to eq 11
-      expect(totals[:months].select { |m| m != 0 }.size).to eq 2
+      expect(totals[:months].select(&:zero?).size).to eq 11
+      expect(totals[:months].select(&:nonzero?).size).to eq 2
     end
 
     it 'should include each donation record' do

@@ -176,21 +176,21 @@ class DocumentationHelper
 
     case action
     when :index
-      "List #{plural_name}"
+      "#{singular_name} [LIST]"
     when :show
-      "Retrieve #{singular_name}"
+      "#{singular_name} [GET]"
     when :create
-      "Create #{singular_name}"
+      "#{singular_name} [POST]"
     when :update
-      "Update #{singular_name}"
+      "#{singular_name} [PUT]"
     when :delete
-      "Delete #{singular_name}"
+      "#{singular_name} [DELETE]"
     when :bulk_create
-      "Bulk create #{plural_name}"
+      "#{plural_name} [BULK POST]"
     when :bulk_update
-      "Bulk update #{plural_name}"
+      "#{plural_name} [BULK PUT]"
     when :bulk_delete
-      "Bulk delete #{plural_name}"
+      "#{plural_name} [BULK DELETE]"
     end
   end
 
@@ -278,6 +278,6 @@ class DocumentationHelper
   end
 
   def singular_name_from_plural(plural_name)
-    plural_name.singularize.with_indefinite_article
+    plural_name.singularize
   end
 end

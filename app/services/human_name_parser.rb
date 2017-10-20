@@ -40,10 +40,26 @@ class HumanNameParser
       begin
         Nameable.parse(name)
       rescue Nameable::InvalidNameError
-        Rollbar.info(UnparsableNameError.new('A parseable name was not found.'), name: name, input_name: input_name)
-        Nameable::Latin.new
+        if known_unparsable(name)
+          Nameable::Latin.new(first: name)
+        else
+          notify_rollbar(name)
+          Nameable::Latin.new
+        end
       end
     end
+  end
+
+  def notify_rollbar(name)
+    Rollbar.info(UnparsableNameError.new('A parseable name was not found.'),
+                 name: name,
+                 input_name: input_name)
+  end
+
+  # a list (mostly from Rollbar) of the strings that people enter as first names.
+  # This will return true if there are an number of these single characters in a row.
+  def known_unparsable(name)
+    [['.'], ['?'], [':'], ['!'], [',']].include? name.chars.to_a.uniq
   end
 
   def names

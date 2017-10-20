@@ -220,7 +220,7 @@ class GoogleImport
     num_emails_before_import = person.email_addresses.count
     g_contact.emails_full.each do |import_email|
       email = { email: import_email[:address], location: import_email[:rel] }
-      if import_email[:primary] && (@import.override? || num_emails_before_import == 0)
+      if import_email[:primary] && (@import.override? || num_emails_before_import.zero?)
         person.email_addresses.update_all primary: false
         email[:primary] = true
       end
@@ -232,7 +232,7 @@ class GoogleImport
     num_phones_before_import = person.phone_numbers.count
     g_contact.phone_numbers_full.each do |import_phone|
       phone = { number: import_phone[:number], location: import_phone[:rel] }
-      if import_phone[:primary] && (@import.override? || num_phones_before_import == 0)
+      if import_phone[:primary] && (@import.override? || num_phones_before_import.zero?)
         person.phone_numbers.update_all primary: false
         phone[:primary] = true
       end
@@ -242,11 +242,11 @@ class GoogleImport
 
   def update_person_websites(person, g_contact)
     num_websites_before_import = person.websites.count
-    at_least_one_primary = num_websites_before_import > 0
+    at_least_one_primary = num_websites_before_import.positive?
     g_contact.websites.each_with_index do |import_website, index|
       next if import_website[:href].in? person.websites.pluck(:url)
 
-      if import_website[:primary] && (@import.override? || num_websites_before_import == 0)
+      if import_website[:primary] && (@import.override? || num_websites_before_import.zero?)
         person.websites.update_all primary: false
         import_website[:primary] = true
         at_least_one_primary = true
@@ -267,7 +267,7 @@ class GoogleImport
     photo = g_contact_to_import.photo_with_metadata
     return if photo.nil? || google_contact.picture_etag == photo[:etag]
 
-    primary = person.pictures.count == 0 || @import.override?
+    primary = person.pictures.count.zero? || @import.override?
     person.pictures.update_all(primary: false) if primary
 
     image_io = StringIOWithPath.new(photo[:etag] + image_mime_to_extension(photo[:content_type]), photo[:data])

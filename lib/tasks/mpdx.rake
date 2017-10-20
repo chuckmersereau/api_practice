@@ -62,7 +62,7 @@ namespace :mpdx do
       contact.addresses_including_deleted.where(deleted: true).update_all(primary_mailing_address: false)
       contact.addresses.where(historic: true).update_all(primary_mailing_address: false)
       next unless contact.addresses.where(historic: false).count == 1
-      next unless contact.addresses.where(primary_mailing_address: true).count == 0
+      next unless contact.addresses.where(primary_mailing_address: true).count.zero?
       contact.addresses.first.update_column(:primary_mailing_address, true)
     end
   end
