@@ -38,6 +38,11 @@ FactoryGirl.define do
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_0_export_gifts.xml')) }
   end
 
+  factory :tnt_import_broad, parent: :tnt_import do
+    association :account_list
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
+  end
+
   factory :tnt_import_no_gifts, parent: :tnt_import do
     association :account_list
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_no_gifts.xml')) }

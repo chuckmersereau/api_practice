@@ -62,11 +62,11 @@ class TntImport::GiftsImport
 
     donation.update(
       amount: row['Amount'],
-      currency: currency,
       designation_account: designation_account_for_donation(donation),
       donation_date: donation_date,
       donor_account_id: donor_account.id,
       tendered_amount: row['Amount'],
+      currency: currency_code_for_id(row['BaseCurrencyID']),
       tendered_currency: currency,
       tnt_id: row['OrgGiftCode']
     )

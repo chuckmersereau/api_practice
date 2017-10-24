@@ -130,6 +130,17 @@ describe TntImport::GiftsImport do
     end
 
     it 'assigns the gift currency code' do
+      @import = create(:tnt_import_broad, account_list: @account_list)
+      @tnt_import = TntImport.new(@import)
+
+      @user.organization_accounts.destroy_all
+      online_org = create(:organization)
+      @user.organization_accounts << create(:organization_account, organization: online_org)
+      @tnt_import.import
+      expect(Donation.exists?(amount: 50, currency: 'CAD')).to eq true
+    end
+
+    it 'assigns the gift tendered currency code' do
       @user.organization_accounts.destroy_all
       online_org = create(:organization)
       @user.organization_accounts << create(:organization_account, organization: online_org)
