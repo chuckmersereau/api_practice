@@ -1,30 +1,68 @@
 require 'rails_helper'
 
 describe AccountList::PledgeMatcher do
-  let(:donor_account)   { build(:donor_account) }
-  let(:contact)         { create(:contact, donor_accounts: [donor_account]) }
+  subject { described_class.new(donation) }
 
-  let(:today)           { Date.current }
-  let(:tomorrow)        { today + 1.day }
+  let(:donation) do
+    build(:donation, donor_account: donor_account, appeal: appeal, amount: 200.00)
+  end
 
-  let!(:pledge_one)     { create(:pledge, contact: contact, amount: 200.00, expected_date: tomorrow) }
-  let!(:pledge_two)     { create(:pledge, contact: contact, amount: 200.00, expected_date: today) }
-  let!(:pledge_three)   { create(:pledge, contact: contact, amount: 250.00, expected_date: today) }
-  let!(:pledge_four)    { create(:pledge, amount: 250.00, expected_date: today) }
+  let(:donor_account) { build(:donor_account) }
+  let(:appeal)        { create(:appeal, account_list: account_list) }
+  let(:account_list)  { create(:account_list) }
+  let!(:contact) do
+    create(:contact, donor_accounts: [donor_account],
+                     account_list: account_list, appeals: [appeal])
+  end
 
-  let(:donation) { build(:donation, donor_account: donor_account, amount: 200.00, donation_date: tomorrow) }
+  context 'a pledge already exists' do
+    let!(:pledge) do
+      create(:pledge, appeal: appeal, contact: contact, amount: 200.00)
+    end
 
-  context '#match' do
-    let(:pledge_matcher) { described_class.new(donation: donation, pledge_scope: Pledge) }
+    describe '#needs_pledge?' do
+      it 'cannot assign a Pledge if there already is one' do
+        donation.update! pledges: [pledge]
+        expect(subject.needs_pledge?).to be false
+      end
 
-    it 'returns an array of pledges that are related to the donation' do
-      expect(pledge_matcher.match).to eq([pledge_one])
+      it 'should be true if there is an Appeal and no existing PledgeDonation' do
+        expect(subject.needs_pledge?).to be true
+      end
+    end
 
-      donation.donation_date = today
-      expect(pledge_matcher.match).to eq([pledge_two])
+    describe '#pledge' do
+      it 'should return the pre-existing pledge' do
+        expect(subject.pledge).to eq pledge
+      end
+    end
+  end
 
-      donation.amount = 250.00
-      expect(pledge_matcher.match).to eq([pledge_three])
+  context 'a pledge does not already exist' do
+    describe '#needs_pledge?' do
+      it 'cannot assign a Pledge if there is no associated Appeal' do
+        donation.update! appeal: nil
+        expect(subject.needs_pledge?).to be false
+      end
+
+      it 'should be true if there is an Appeal and no existing Pledge' do
+        expect(subject.needs_pledge?).to be true
+      end
+    end
+
+    describe '#pledge' do
+      it 'should return a new Pledge' do
+        expect(subject.pledge).to be_a Pledge
+      end
+
+      it 'should return a Pledge with the Donation attributes' do
+        expect(subject.pledge.amount).to eq donation.amount
+        expect(subject.pledge.expected_date).to eq donation.donation_date
+        expect(subject.pledge.account_list).to eq account_list
+        expect(subject.pledge.contact).to eq contact
+        expect(subject.pledge.amount_currency).to eq donation.currency
+        expect(subject.pledge.appeal).to eq donation.appeal
+      end
     end
   end
 end

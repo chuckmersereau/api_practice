@@ -1,26 +1,49 @@
 class AccountList::PledgeMatcher
-  attr_accessor :pledge_scope, :donation
+  attr_accessor :donation
 
-  def initialize(pledge_scope:, donation:)
-    @pledge_scope = pledge_scope
+  delegate :appeal, to: :donation
+
+  def initialize(donation)
     @donation = donation
   end
 
-  def match
-    pledges_on_donation_day.where(contact_id: contact_scope)
-                           .where(amount: donation.amount)
+  def needs_pledge?
+    appeal.present? && contact.present? && donation.pledges.empty?
+  end
+
+  def pledge
+    @pledge ||= existing_pledge || create_pledge if needs_pledge?
   end
 
   private
 
-  def contact_scope
-    Contact.joins(:contact_donor_accounts)
-           .where(contact_donor_accounts: { donor_account_id: donation.donor_account })
+  def existing_pledge
+    pledge_scope.find_by(contact_id: contact)
   end
 
-  def pledges_on_donation_day
-    pledge_scope.where('expected_date BETWEEN ? AND ?',
-                       donation.donation_date.beginning_of_day,
-                       donation.donation_date.end_of_day)
+  def pledge_scope
+    appeal.pledges
+  end
+
+  def contact
+    @contact ||=
+      contact_scope.find_by(
+        contact_donor_accounts: { donor_account: donation.donor_account }
+      )
+  end
+
+  def contact_scope
+    appeal.contacts.joins(:contact_donor_accounts)
+  end
+
+  def create_pledge
+    Pledge.create(
+      amount: donation.amount,
+      expected_date: donation.donation_date,
+      account_list: appeal.account_list,
+      contact: contact,
+      amount_currency: donation.currency,
+      appeal: appeal
+    )
   end
 end

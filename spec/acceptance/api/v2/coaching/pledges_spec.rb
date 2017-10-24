@@ -20,17 +20,11 @@ resource 'Coaching Pledges' do
 
   let(:appeal) { create :appeal, account_list: account_list }
 
-  let(:pledge_1_1) do
-    create :pledge, appeal: appeal, account_list: account_list, contact: contact_1
-  end
-  let(:pledge_1_2) do
-    create :pledge, appeal: appeal, account_list: account_list, contact: contact_1
-  end
-  let(:pledge_2_1) do
-    create :pledge, appeal: appeal, account_list: account_list, contact: contact_2
-  end
+  let!(:pledge_1) { create :pledge, appeal: appeal, account_list: account_list }
+  let!(:pledge_2) { create :pledge, appeal: appeal, account_list: account_list }
+  let!(:pledge_3) { create :pledge, appeal: appeal, account_list: account_list }
 
-  let(:id) { pledge_1_1.uuid }
+  let(:id) { pledge_1.uuid }
 
   let(:resource_attributes) do
     %w(
@@ -46,9 +40,6 @@ resource 'Coaching Pledges' do
   context 'authorized user' do
     before do
       api_login(coach)
-      pledge_1_1
-      pledge_1_2
-      pledge_2_1
     end
 
     get '/api/v2/coaching/pledges' do
@@ -71,7 +62,7 @@ resource 'Coaching Pledges' do
         do_request
 
         check_resource %w(relationships)
-        expect(resource_object['amount']).to eq pledge_1_1.amount.to_s
+        expect(resource_object['amount']).to eq pledge_1.amount.to_s
         expect(response_status).to eq 200
       end
     end

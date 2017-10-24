@@ -46,9 +46,9 @@ class Donation < ApplicationRecord
   scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
 
   after_create :update_totals
-  after_destroy :reset_totals
+  after_save :update_related_pledge
   after_save :add_appeal_contacts
-  after_create :update_related_pledge
+  after_destroy :reset_totals
 
   before_validation :set_amount_from_tendered_amount
 
@@ -83,12 +83,8 @@ class Donation < ApplicationRecord
   private
 
   def update_related_pledge
-    pledge_match = AccountList::PledgeMatcher.new(donation: self, pledge_scope: pledge_scope).match
-    pledge_match.first.donations << self if pledge_match.any?
-  end
-
-  def pledge_scope
-    Pledge.all
+    pledge_match = AccountList::PledgeMatcher.new(self)
+    pledge_match.pledge.donations << self if pledge_match.needs_pledge?
   end
 
   def update_totals(reset: false)

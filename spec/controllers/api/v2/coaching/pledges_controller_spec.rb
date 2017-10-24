@@ -51,7 +51,6 @@ describe Api::V2::Coaching::PledgesController, type: :controller do
   private
 
   def create_pledge(args = {})
-    create :pledge, args.merge(appeal: appeal, contact: contact,
-                               account_list: account_list)
+    create :pledge, args.merge(appeal: appeal, account_list: account_list)
   end
 end

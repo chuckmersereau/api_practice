@@ -2954,7 +2954,7 @@ ALTER SEQUENCE pledge_donations_id_seq OWNED BY pledge_donations.id;
 CREATE TABLE pledges (
     id integer NOT NULL,
     amount numeric,
-    expected_date timestamp without time zone,
+    expected_date date,
     account_list_id integer,
     contact_id integer,
     uuid uuid DEFAULT uuid_generate_v4(),
@@ -7150,3 +7150,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171006024505');
 INSERT INTO schema_migrations (version) VALUES ('20171006035430');
 
 INSERT INTO schema_migrations (version) VALUES ('20171011173827');
+
+INSERT INTO schema_migrations (version) VALUES ('20171023022515');
+
