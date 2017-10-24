@@ -212,5 +212,34 @@ describe TntImport::GiftsImport do
       expect { tnt_import.import }.to change { Donation.count }.from(0).to(3)
       expect { tnt_import.import }.to_not change { Donation.count }.from(3)
     end
+
+    describe 'creating pledges' do
+      it 'creates a pledge if the donation belongs to an appeal' do
+        setup_online_org
+        expect { @tnt_import_with_personal_gift.import }.to change { Pledge.count }.from(0).to(1)
+          .and change { Donation.count }.from(0).to(2)
+        pledge = Pledge.first
+        donation = pledge.donations.first
+        expect(pledge.amount).to eq(25)
+        expect(pledge.amount_currency).to eq('USD')
+        expect(pledge.expected_date.to_date).to eq(donation.donation_date.to_date)
+        expect(pledge.contact).to eq(donation.donor_account.contacts.first)
+        expect(donation.appeal).to eq(@second_appeal)
+      end
+
+      it 'does not create a pledge if the donation does not belong to an appeal' do
+        @import = create(:tnt_import_gifts_without_appeal, account_list: @account_list)
+        @tnt_import = TntImport.new(@import)
+        setup_online_org
+        expect { @tnt_import.import }.to change { Donation.count }.from(0).to(2)
+        expect(Pledge.count).to eq(0)
+      end
+
+      it 'does not create a new pledge if one already exists' do
+        setup_online_org
+        expect { @tnt_import_with_personal_gift.import }.to change { Pledge.count }.from(0).to(1)
+        expect { @tnt_import_with_personal_gift.import }.to_not change { Pledge.count }.from(1)
+      end
+    end
   end
 end

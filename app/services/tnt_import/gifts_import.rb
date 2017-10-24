@@ -2,7 +2,7 @@ class TntImport::GiftsImport
   include Concerns::TntImport::DateHelpers
   include Concerns::TntImport::AppealHelpers
   include LocalizationHelper
-  attr_reader :contact_ids_by_tnt_contact_id, :xml_tables, :account_list, :organization, :user
+  attr_reader :contact_ids_by_tnt_contact_id, :xml_tables, :account_list, :organization, :user, :contact
 
   def initialize(account_list, contact_ids_by_tnt_contact_id, xml, import)
     @account_list                  = account_list
@@ -19,11 +19,11 @@ class TntImport::GiftsImport
 
     xml_tables['Gift'].each do |row|
       tnt_contact_id = row['ContactID']
-      contact        = account_list.contacts.find_by(id: contact_ids_by_tnt_contact_id[tnt_contact_id])
+      @contact = account_list.contacts.find_by(id: contact_ids_by_tnt_contact_id[tnt_contact_id])
 
       next unless contact
 
-      donor_account = donor_account_for_contact(contact)
+      donor_account = donor_account_for_contact
 
       add_or_update_donation_and_link_to_appeal(row, donor_account)
     end
@@ -39,6 +39,7 @@ class TntImport::GiftsImport
 
   def add_or_update_donation_and_link_to_appeal(row, donor_account)
     donation_date = parse_date(row['GiftDate'], @import.user).to_date
+    currency = currency_code_for_id(row['CurrencyID'])
 
     donation = donor_account.donations.find_by(tnt_id: row['OrgGiftCode']) if row['OrgGiftCode']
     donation ||= donor_account.donations.find_by(remote_id: row['OrgGiftCode']) if row['OrgGiftCode']
@@ -46,15 +47,18 @@ class TntImport::GiftsImport
 
     donation.update(
       amount: row['Amount'],
+      currency: currency,
       designation_account: designation_account,
       donation_date: donation_date,
       donor_account_id: donor_account.id,
       tendered_amount: row['Amount'],
-      tendered_currency: currency_code_for_id(row['CurrencyID']),
+      tendered_currency: currency,
       tnt_id: row['OrgGiftCode']
     )
 
     add_donation_to_first_appeal_and_add_other_appeals_to_memo(donation, row, donor_account)
+
+    create_pledge_for_donation(donation)
 
     donation
   end
@@ -100,6 +104,20 @@ class TntImport::GiftsImport
     mpdx_donation.update(appeal: appeal, memo: new_memo, appeal_amount: appeal_amount)
   end
 
+  # If the Donation has an Appeal then we need to make sure there is also a matching Pledge. Otherwise MPDX won't assign the Donation to the Appeal.
+  def create_pledge_for_donation(mpdx_donation)
+    return unless mpdx_donation&.appeal
+
+    pledge = account_list.pledges.find_or_create_by(amount: mpdx_donation.amount,
+                                                    appeal: mpdx_donation.appeal,
+                                                    contact: contact)
+
+    pledge.amount_currency ||= mpdx_donation.currency
+    pledge.expected_date ||= mpdx_donation.donation_date
+    pledge.donations << mpdx_donation unless pledge.donations.include?(mpdx_donation)
+    pledge.save
+  end
+
   def generate_new_donation_memo(donation, gift_splits = [])
     new_memo_items = [_('This donation was imported from Tnt.')]
     new_memo_items += generate_gift_splits_memos(gift_splits)
@@ -139,7 +157,7 @@ class TntImport::GiftsImport
     account_list_appeals.find { |appeal| appeal.tnt_id == tnt_id.to_i }
   end
 
-  def donor_account_for_contact(contact)
+  def donor_account_for_contact
     donor_account = contact.donor_accounts.first
     return donor_account if donor_account
 
