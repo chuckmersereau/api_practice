@@ -1,7 +1,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-06-05 18:43+0000\n"
 "PO-Revision-Date: 2017-06-05 18:43+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
@@ -11,30 +10,140 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Aunt"
-msgstr "Cô hoặc Dì"
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr ""
 
-msgid "Ask in Future"
-msgstr "Sẽ hỏi trong tương lai"
+msgid "\"%{name}\" (donor #%{account_number})"
+msgstr ""
+
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr ""
+
+msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
+msgstr ""
+
+msgid "%{contact_name} just gave their first gift. Send them a Thank You."
+msgstr ""
+
+msgid "%{contact_name} seems to have missed a gift. Call to follow up."
+msgstr ""
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr ""
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr ""
+
+msgid "%{number} ext %{extension}"
+msgstr ""
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr ""
+
+msgid "-- All --"
+msgstr ""
+
+msgid "-- All Active --"
+msgstr ""
+
+msgid "-- All Hidden --"
+msgstr ""
+
+msgid "-- Any --"
+msgstr ""
+
+msgid "-- Do not ask --"
+msgstr ""
+
+msgid "-- Has referrer --"
+msgstr ""
+
+msgid "-- None --"
+msgstr ""
+
+msgid "-- Unspecified --"
+msgstr ""
+
+msgid "1 day before"
+msgstr ""
+
+msgid "1 hour before"
+msgstr ""
+
+msgid "1 week before"
+msgstr ""
+
+msgid "15 minutes before"
+msgstr ""
+
+msgid "2 days before"
+msgstr ""
+
+msgid "2 hours before"
+msgstr ""
+
+msgid "30 minutes before"
+msgstr ""
+
+msgid "5 minutes before"
+msgstr ""
+
+msgid "Account List"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Add an Account"
+msgstr ""
+
+msgid "Add another Account"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Address No Longer Valid"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Annual"
+msgstr ""
+
+msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
+msgstr ""
+
+msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
+msgstr ""
+
+msgid "Appeal"
+msgstr ""
+
+msgid "Appointment"
+msgstr ""
 
 msgid "Appointment Scheduled"
 msgstr "Lịch hẹn"
 
+msgid "Are marked as do not ask for appeals"
+msgstr ""
+
+msgid "Ask in Future"
+msgstr "Sẽ hỏi trong tương lai"
+
+msgid "Aunt"
+msgstr "Cô hoặc Dì"
+
 msgid "Average"
 msgstr "Trung bình"
 
-msgid "Arabic"
-msgstr "Tiếng Ả Rập"
-
-#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "Trung bình"
 
 msgid "Balance: %{balance}"
 msgstr "Cân bằng: %{balance}"
-
-msgid "Belarusian"
-msgstr "Tiếng Belarus"
 
 msgid "Both"
 msgstr "Cả hai"
@@ -42,29 +151,14 @@ msgstr "Cả hai"
 msgid "Brother"
 msgstr "Anh em trai"
 
-msgid "Browser:"
-msgstr "Trình duyệt:"
-
 msgid "Business"
 msgstr "Công việc"
-
-msgid "Bulgarian"
-msgstr "Tiếng Bulgari"
-
-msgid "Call for Decision"
-msgstr "Gọi điện hỏi về sự quyết định"
-
-msgid "Catalan"
-msgstr "Tiếng Catalan"
 
 msgid "Call"
 msgstr "Gọi điện"
 
-msgid "Chinese (Simplified)"
-msgstr "Tiếng Trung (đơn giản)"
-
-msgid "Chinese (Traditional)"
-msgstr "Tiếng Trung (Truyền Thống)"
+msgid "Call for Decision"
+msgstr "Gọi điện hỏi về sự quyết định"
 
 msgid "Church"
 msgstr "Hội Thánh"
@@ -72,14 +166,11 @@ msgstr "Hội Thánh"
 msgid "City"
 msgstr "Thành Phố"
 
-msgid "Click here to download the file"
-msgstr "Nhấn vào đây để download tập tin"
-
-msgid "Click to see all balances"
-msgstr "Nhấn vào đây để xem tất cả cân bằng"
-
 msgid "Commitment"
 msgstr "Cam kết"
+
+msgid "Commitment Amount"
+msgstr "Số tiền cam kết"
 
 msgid "Commitment Currency"
 msgstr "Loại tiền cam kết"
@@ -90,9 +181,6 @@ msgstr "Chi tiết cam kết"
 msgid "Commitment Frequency"
 msgstr "Lặp Lại Sự Cam Kết"
 
-msgid "Commitment Amount"
-msgstr "Số tiền cam kết"
-
 msgid "Commitment Received"
 msgstr "Đã nhận được từ cam kết"
 
@@ -102,16 +190,47 @@ msgstr "Công ty"
 msgid "Completed"
 msgstr "Hoàn tất"
 
-msgid "Contact Information"
-msgstr "Thông tin liên lạc"
+msgid "Contact Church"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Commitment Details"
+msgstr "Chi tiết cam kết"
 
 msgid "Contact Details"
 msgstr "Chi tiết liên hệ"
+
+#, fuzzy
+msgid "Contact Gift Details"
+msgstr "Chi tiết liên hệ"
+
+msgid "Contact Information"
+msgstr "Thông tin liên lạc"
+
+msgid "Contact Likely To Give"
+msgstr ""
 
 msgid "Contact Location"
 msgstr "Khu vực liên hệ"
 
 msgid "Contact Name"
+msgstr "Tên liên lạc"
+
+msgid "Contact Newsletter"
+msgstr ""
+
+msgid "Contact Referrer"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Status"
+msgstr "Chi tiết liên hệ"
+
+msgid "Contact Timezone"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Type"
 msgstr "Tên liên lạc"
 
 msgid "Contact for Appointment"
@@ -123,102 +242,179 @@ msgstr "Liên lạc"
 msgid "Country"
 msgstr "Quốc gia"
 
+msgid "Cousin (Female)"
+msgstr ""
+
+msgid "Cousin (Male)"
+msgstr ""
+
+msgid "Currency"
+msgstr ""
+
+msgid "Date Range"
+msgstr ""
+
+msgid "Daughter"
+msgstr ""
+
+msgid "Dear Donation Services"
+msgstr ""
+
+#, fuzzy
+msgid "Details"
+msgstr "Tổng Cộng"
+
+msgid "Divorced"
+msgstr ""
+
+#, fuzzy
+msgid "Done"
+msgstr "Không"
+
+msgid "Donor system"
+msgstr ""
+
+#, fuzzy
+msgid "Dr."
+msgstr "Jr."
+
+#, fuzzy
+msgid "Due Date"
+msgstr "Không có ngày tháng"
+
+msgid "Email"
+msgstr ""
+
+msgid "Engaged"
+msgstr ""
+
+msgid "Envelope Greeting"
+msgstr ""
+
+msgid "Every 2 Months"
+msgstr ""
+
+msgid "Every 2 Weeks"
+msgstr ""
+
+msgid "Every 2 Years"
+msgstr ""
+
+msgid "Every 4 Months"
+msgstr ""
+
+msgid "Every 6 Months"
+msgstr ""
+
+msgid "Exact Gift Amount"
+msgstr ""
+
+msgid "Expired Referral"
+msgstr ""
+
+msgid "Facebook Message"
+msgstr ""
+
+msgid "Facebook Profile"
+msgstr ""
+
+#, fuzzy
+msgid "Father"
+msgstr "Mẹ"
+
+msgid "First Gift"
+msgstr ""
+
+msgid "First Name"
+msgstr ""
+
+msgid ""
+"For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n"
+"  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n"
+"  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n"
+"  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n"
+"  address on MPDX it will update on mailchimp)."
+msgstr ""
+
+msgid "Future"
+msgstr ""
+
+msgid "Gave a special gift in the last 3 months"
+msgstr ""
+
 msgid "Gift Amount Higher Than or Equal To"
 msgstr "Số tiền quà tặng cao hơn hoặc bằng"
 
 msgid "Gift Amount Less Than or Equal To"
 msgstr "Số tiền quà tặng thấp hơn hoặc bằng"
 
-msgid "Gift Date"
-msgstr "Ngày gởi quà"
-
 msgid "Gift Amount Range"
 msgstr "Loại quà tặng"
+
+msgid "Gift Date"
+msgstr "Ngày gởi quà"
 
 msgid "Gift Details"
 msgstr "Chi tiết quà tặng"
 
-msgid "Granddaughter"
-msgstr "Cháu gái"
-
 msgid "Gift Options"
 msgstr "Những lựa chọn quà"
 
-msgid "Google import"
-msgstr "Nhập từ Google"
+msgid "Google Integration Settings"
+msgstr ""
 
 msgid "Google account needs to be refreshed"
 msgstr "Tài khoản Google cần được làm mới"
 
+msgid "Google import"
+msgstr "Nhập từ Google"
+
 msgid "Google sync"
 msgstr "Đồng bộ Google"
+
+msgid "Granddaughter"
+msgstr "Cháu gái"
 
 msgid "Grandfather"
 msgstr "Ông"
 
-msgid "Grandson"
-msgstr "Cháu trai"
-
 msgid "Grandmother"
 msgstr "Bà ngoại"
 
-msgid "Greek"
-msgstr "Tiếng Hy lạp"
+msgid "Grandson"
+msgstr "Cháu trai"
 
-msgid "Hebrew"
-msgstr "Tiếng Hebrew"
-
-msgid "Hindi"
-msgstr "Tiếng Hindi"
+msgid "Greeting"
+msgstr ""
 
 msgid "History"
 msgstr "Lịch sử"
 
-msgid "Home Phone"
-msgstr "Số điện thoại nhà"
-
 msgid "Home"
 msgstr "Nhà"
 
-#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
+msgid "Home Phone"
+msgstr "Số điện thoại nhà"
+
 msgid "Hon."
 msgstr "Hon."
-
-msgid "Hungarian"
-msgstr "Tiếng Hungrari "
 
 msgid "Husband"
 msgstr "Chồng"
 
-msgid "Icelandic"
-msgstr "Tiếng Iceland "
-
-msgid "If we let you delete that account you won't be able to log in anymore."
-msgstr "Nếu chúng tôi để bạn xóa tài khoản của bạn thì bạn sẽ không thể đăng nhập vào nữa."
-
-msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
+msgid ""
+"If you do want to stick with your existing list, you will need to make that extra merge field not a\n"
+"  required field."
 msgstr "Nếu bạn muốn gắn kết với danh sách hiện tại của bạn, bạn sẽ cần tạo thêm những mục đó, đây không phải mục bắt buộc."
+
+msgid "Increase Gift Recommendation"
+msgstr ""
 
 msgid "Increased their giving in the last 3 months"
 msgstr "Gia tăng phần dâng hiến trong 3 tháng qua"
 
-msgid "Import File:"
-msgstr "Nhập File:"
-
 msgid "Insights for "
 msgstr "Thông tin chi tiết"
-
-msgid "Indonesian"
-msgstr "Người Indonesia"
-
-msgid "Irish"
-msgstr "Người Irish "
-
-msgid "Italian"
-msgstr "Người Ý"
-
-msgid "Japanese"
-msgstr "Người Nhật "
 
 msgid "Joined my team in the last 3 months"
 msgstr "Đã gia nhập đội của tôi trong 3 tháng qua"
@@ -226,17 +422,142 @@ msgstr "Đã gia nhập đội của tôi trong 3 tháng qua"
 msgid "Jr."
 msgstr "Jr."
 
-msgid "Korean"
-msgstr "Người Hàn Quốc"
-
-msgid "Khmer"
-msgstr "Người Khmer"
-
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-msgid "More than one user found for that lookup"
-msgstr "Nhiều hơn một người sử dụng tìm thấy tra cứu"
+msgid "Last 30 Days"
+msgstr ""
+
+msgid "Last Gift"
+msgstr ""
+
+#, fuzzy
+msgid "Last Month"
+msgstr "Tháng tiếp"
+
+msgid "Last Name"
+msgstr ""
+
+msgid "Last Three Months"
+msgstr ""
+
+msgid "Last Two Months"
+msgstr ""
+
+msgid "Last Two Years"
+msgstr ""
+
+#, fuzzy
+msgid "Last Week"
+msgstr "Tuần đến"
+
+msgid "Last Year"
+msgstr ""
+
+msgid "Last month"
+msgstr ""
+
+msgid "Late By"
+msgstr ""
+
+#, fuzzy
+msgid "Least Likely"
+msgstr "Gần giống nhất"
+
+msgid "Less than 30 days late"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "Likely"
+msgstr ""
+
+msgid "Likely To Give"
+msgstr ""
+
+msgid "MPDX List: %{name}"
+msgstr ""
+
+msgid "MPDX Support Team"
+msgstr ""
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr ""
+
+msgid "MPDX has finished importing your %{source} contacts."
+msgstr ""
+
+msgid "MailChimp Integration Settings"
+msgstr ""
+
+msgid "MailChimp subscriber email bounced"
+msgstr ""
+
+msgid "Mailchimp API Key no longer valid"
+msgstr ""
+
+msgid "Mailchimp List is requiring an additional merge field"
+msgstr ""
+
+msgid "Mailing"
+msgstr ""
+
+msgid "Mailing City"
+msgstr ""
+
+msgid "Mailing Country"
+msgstr ""
+
+msgid "Mailing Postal Code"
+msgstr ""
+
+msgid "Mailing State"
+msgstr ""
+
+msgid "Mailing Street Address"
+msgstr ""
+
+msgid "Manual entry"
+msgstr ""
+
+msgid "Married"
+msgstr ""
+
+msgid "May take a few days to update"
+msgstr ""
+
+msgid "Metro Area"
+msgstr ""
+
+msgid "Min."
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Miss"
+msgstr ""
+
+msgid "Mobile"
+msgstr ""
+
+#, fuzzy
+msgid "Mobile Phone"
+msgstr "Số điện thoại nhà"
+
+#, fuzzy
+msgid "Monthly"
+msgstr "Mẹ"
+
+msgid "More than 30 days late"
+msgstr ""
+
+msgid "More than 60 days late"
+msgstr ""
+
+msgid "More than 90 days late"
+msgstr ""
 
 msgid "Most Likely"
 msgstr "Gần giống nhất"
@@ -244,32 +565,35 @@ msgstr "Gần giống nhất"
 msgid "Mother"
 msgstr "Mẹ"
 
-msgid "Mrs."
-msgstr "Bà"
-
 msgid "Mr."
 msgstr "Ông"
+
+msgid "Mrs."
+msgstr "Bà"
 
 msgid "Ms."
 msgstr "Cô"
 
-msgid "Name:"
-msgstr "Tên:"
+msgid "Nephew"
+msgstr "Cháu trai"
 
 msgid "Never Ask"
 msgstr "Không bao giờ hỏi"
 
-msgid "New Donation"
-msgstr "Mới dâng hiến"
-
-msgid "Nephew"
-msgstr "Cháu trai"
-
 msgid "Never Contacted"
 msgstr "Đã chưa bao giờ liên lạc"
 
+msgid "New Donation"
+msgstr "Mới dâng hiến"
+
 msgid "Newsletter"
 msgstr "Bản tin"
+
+msgid "Newsletter - Email"
+msgstr ""
+
+msgid "Newsletter - Physical"
+msgstr ""
 
 msgid "Newsletter Recipients"
 msgstr "Những người nhận bản tin"
@@ -283,14 +607,17 @@ msgstr "Tuần đến"
 msgid "Niece"
 msgstr "Tiếng Niece"
 
-msgid "No Gifts"
-msgstr "Không có quà "
+msgid "No"
+msgstr "Không"
 
 msgid "No Date"
 msgstr "Không có ngày tháng"
 
-msgid "No"
-msgstr "Không"
+msgid "No Gifts"
+msgstr "Không có quà "
+
+msgid "No Incomplete Tasks"
+msgstr ""
 
 msgid "No Subject"
 msgstr "Không chủ đề"
@@ -304,38 +631,43 @@ msgstr "Không có địa chỉ mail trong tập tin"
 msgid "No mailing address or email addess on file"
 msgstr "Không có địa chỉ thư hoặc địa chỉ email trong tập tin"
 
-msgid "No users found for that lookup"
-msgstr "Không tìm thấy người nào trong mục tìm kiếm"
-
 msgid "None"
 msgstr "Không"
-
-msgid "None Selected"
-msgstr "Không được chọn"
-
-msgid "Norwegian"
-msgstr "Tiếng Na Uy"
 
 msgid "Not Interested"
 msgstr "Không thích thú"
 
-msgid "Notes"
-msgstr "Ghi chú"
-
 msgid "Not Received"
 msgstr "Chưa nhận được"
 
-msgid "One of my donors, %{donor} has a new current address."
-msgstr "Một trong những người dâng hiến, %{donor} có địa chỉ mới"
+msgid "Notes"
+msgstr "Ghi chú"
+
+#, fuzzy
+msgid "Nothing Selected"
+msgstr "Không được chọn"
 
 msgid "Notifications from MPDX"
 msgstr "Thông báo từ MPDX"
+
+msgid "One of my donors, %{donor} has a new current address."
+msgstr "Một trong những người dâng hiến, %{donor} có địa chỉ mới"
 
 msgid "One or More Gifts"
 msgstr "Một hoặc nhiều quà"
 
 msgid "Other"
 msgstr "Khác"
+
+msgid "Other Email"
+msgstr ""
+
+#, fuzzy
+msgid "Other Phone"
+msgstr "Số điện thoại nhà"
+
+msgid "Outstanding"
+msgstr ""
 
 msgid "Overdue"
 msgstr "Quá hạn"
@@ -346,14 +678,136 @@ msgstr "Cộng tác"
 msgid "Partner - Financial"
 msgstr "Cộng tác _ tài Chính"
 
+#, fuzzy
+msgid "Partner - Pray"
+msgstr "Người cộng tác - Đặc biệt"
+
 msgid "Partner - Special"
 msgstr "Người cộng tác - Đặc biệt"
 
-msgid "Tamil"
-msgstr "Tamil"
+msgid "Pending"
+msgstr ""
+
+msgid "Person"
+msgstr ""
+
+msgid "Physical"
+msgstr ""
+
+msgid "Please try updating it here: %{link}"
+msgstr ""
+
+msgid "Please update their address to"
+msgstr ""
+
+msgid "Pledge"
+msgstr ""
+
+msgid "Pledge Status"
+msgstr ""
+
+msgid "Prayer Request"
+msgstr ""
+
+msgid "Pre Call Letter"
+msgstr ""
+
+msgid "Primary Email"
+msgstr ""
+
+msgid "Primary Phone"
+msgstr ""
+
+msgid "Quarterly"
+msgstr ""
+
+msgid "REPLACE WITH NEW CITY, STATE, ZIP"
+msgstr ""
+
+msgid "REPLACE WITH NEW STREET"
+msgstr ""
+
+#, fuzzy
+msgid "Received"
+msgstr "Chưa nhận được"
+
+msgid "Received, but not Processed"
+msgstr ""
+
+msgid "Referrals"
+msgstr ""
+
+msgid "Referrer"
+msgstr ""
+
+msgid "Region"
+msgstr ""
+
+msgid "Reminder Letter"
+msgstr ""
+
+msgid "Research Abandoned"
+msgstr ""
+
+msgid "Rev."
+msgstr ""
+
+msgid "Seasonal"
+msgstr ""
+
+msgid "Separated"
+msgstr ""
+
+msgid "Single"
+msgstr ""
+
+#, fuzzy
+msgid "Sister"
+msgstr "Lịch sử"
+
+msgid "Son"
+msgstr ""
+
+msgid "Spouse Email"
+msgstr ""
+
+msgid "Spouse First Name"
+msgstr ""
+
+msgid "Spouse Other Email"
+msgstr ""
+
+msgid "Spouse Other Phone"
+msgstr ""
+
+#, fuzzy
+msgid "Spouse Phone"
+msgstr "Số điện thoại nhà"
+
+#, fuzzy
+msgid "Sr."
+msgstr "Jr."
+
+msgid "Starred"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Stopped giving for the last 2 months"
+msgstr ""
+
+msgid "Support Letter"
+msgstr ""
 
 msgid "Tags"
 msgstr "Tags vào"
+
+msgid "Talk to In Person"
+msgstr ""
 
 msgid "Task on MPDX"
 msgstr "Nhiệm vụ trên MPDX"
@@ -367,9 +821,6 @@ msgstr "Tạm thời"
 msgid "Text Message"
 msgstr "Tin nhắn"
 
-msgid "Thai"
-msgstr "Tiếng Thái"
-
 msgid "Thank"
 msgstr "Cảm ơn"
 
@@ -379,23 +830,48 @@ msgstr "Cảm ơn nhiều!"
 msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
 msgstr "Email này đã được đánh dấu không còn hiệu lực nữa. Xin vui lòng nhập lại chi tiết cá nhân bằng cách nhấn vào tên của họ ở trên và xác minh những thông tin của họ là chính xác. Nếu người này có email khác thì nó sẽ thành email chính và sẽ đồng bộ vào MailChimp, nếu họ thuộc trong danh sách bảng tin email của bạn. Nếu họ không muốn nhận email bằng MailChimp, thì vui lòng xóa khỏi danh sách, chọn \"Opt Out of email newsletter\" hoặc tạo một email chính khác. "
 
-msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
+msgid ""
+"The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n"
+"  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n"
+"  unable to sync your contacts to MailChimp."
 msgstr "Danh sách mail trong MailChimp mà bạn đã liên kết đến tài khoản MPDX của bạn đã được trộn/thêm vào những mục mà bạn đã tạo và đánh dấu theo yêu cầu. MPDX không biết làm thế nào để trộn những mục thông tin khách hàng của bạn và vì vậy không thể đồng bộ hóa danh bạ của bạn với MailChimp."
-
-msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
-msgstr "Liên kết giữa MPDX và tài khoản prayerletter.com của bạn đã ngưng hoạt động. Nếu bạn muốn tiếp tục để MPDX tự động thay đổi đến prayerletter.com, xin vui lòng nhấn vào nút 'Enable'."
 
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "Sự kết nối đến tài khoản Linkedln cần được làm mới lại."
 
+msgid ""
+"The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n"
+"  automatically sync with your Google account, please go to %{link}\n"
+"  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n"
+"  that you had set already."
+msgstr "Liên kết giữa MPDX và tài khoản Google của bạn ngừng hoạt động. Nếu bạn muốn tiếp tục để MPDX tự động đồng bộ với tài khoản Google của bạn thì vui lòng vào %{link} và nhấn vào nút 'Refresh Google Account'. Sau đó, bạn sẽ cần làm thủ công để cho phép lại bất kỳ liên hợp nào mà bạn đã thiết lập."
+
+msgid ""
+"The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n"
+"  automatically push changes over to prayerletters.com, please go to\n"
+"  and click the 'Enable' button"
+msgstr "Liên kết giữa MPDX và tài khoản prayerletter.com của bạn đã ngưng hoạt động. Nếu bạn muốn tiếp tục để MPDX tự động thay đổi đến prayerletter.com, xin vui lòng nhấn vào nút 'Enable'."
+
 msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
 msgstr "Liên kết đến tài khoản Facebook cần được làm mới lại. <a href=\"/auth/facebook\"> Nhấn vào đây để kết nối lại đến Facebook</a> thử nhập lại lần nữa."
 
-msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
-msgstr "Liên kết giữa MPDX và tài khoản Google của bạn ngừng hoạt động. Nếu bạn muốn tiếp tục để MPDX tự động đồng bộ với tài khoản Google của bạn thì vui lòng vào %{link} và nhấn vào nút 'Refresh Google Account'. Sau đó, bạn sẽ cần làm thủ công để cho phép lại bất kỳ liên hợp nào mà bạn đã thiết lập."
-
-msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
+msgid ""
+"The mailchimp API key associated with your MPDX account is no longer valid.\n"
+"If you would like Mailchimp syncronization to continue to work, please go to\n"
+" %{link} and update your API key."
 msgstr "Khóa API của mailchimp được liên kết với tài khoản MPDX của bạn không còn hiệu lực. Nếu bạn muốn MailChimp đồng bộ hóa để tiếp tục hoạt động, thì vui lòng vào %{link} và cập nhật khóa API của bạn."
+
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr ""
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr ""
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr ""
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr ""
 
 msgid "This Month"
 msgstr "Tháng này"
@@ -406,6 +882,9 @@ msgstr "Tuần này"
 msgid "This Year"
 msgstr "Năm này"
 
+msgid "This donation was imported from Tnt."
+msgstr ""
+
 msgid "Timezone"
 msgstr "Vùng thời gian"
 
@@ -414,9 +893,6 @@ msgstr "Nhập Tnt"
 
 msgid "To Do"
 msgstr "Để làm"
-
-msgid "To activate your invitation, click \"Accept\" below and log into MPDX."
-msgstr "Để kích hoạt thư mời, nhấn vào \"Accept\" bên dưới và đăng nhập vào MPDX."
 
 msgid "Today"
 msgstr "Hôm nay"
@@ -433,14 +909,8 @@ msgstr "Tổng cộng (không bao gồm tháng trước)"
 msgid "Totals"
 msgstr "Tổng Cộng"
 
-msgid "Turkish"
-msgstr "Người Thổ Nhĩ Kỳ"
-
 msgid "Type"
 msgstr "Kiểu"
-
-msgid "Ukrainian"
-msgstr "Người Ucraina"
 
 msgid "Uncle"
 msgstr "Chú"
@@ -451,12 +921,85 @@ msgstr "Không biết"
 msgid "Unresponsive"
 msgstr "Không hồi đáp"
 
-msgid "User Agent:"
-msgstr "Đại lý người dùng:"
+msgid "Upcoming"
+msgstr ""
 
-msgid "User ID:"
-msgstr "ID người dùng"
+msgid ""
+"We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n"
+"  chosen one of the options above, please go back to %{link}\n"
+"  and update your MailChimp settings."
+msgstr ""
 
-msgid "User Info"
-msgstr "Thông tin người dùng"
+msgid "Weekly"
+msgstr ""
 
+msgid "Widowed"
+msgstr ""
+
+msgid "Wife"
+msgstr ""
+
+msgid "Work"
+msgstr ""
+
+#, fuzzy
+msgid "Work Phone"
+msgstr "Số điện thoại nhà"
+
+msgid "Yes"
+msgstr ""
+
+msgid "Yesterday"
+msgstr ""
+
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr ""
+
+msgid "You have no monthly recurring gift recommendations."
+msgstr ""
+
+msgid "You must log in to MPDX again"
+msgstr ""
+
+msgid "You must select at least 2 contacts to merge."
+msgstr ""
+
+msgid "You've been invited to access an account on MPDX"
+msgstr ""
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr ""
+
+msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
+msgstr ""
+
+msgid "Your username and password are missing for this account."
+msgstr ""
+
+msgid "Your username and password for %{org} are invalid."
+msgstr ""
+
+msgid "[MPDX] Importing your %{source} contacts completed"
+msgstr ""
+
+msgid "[MPDX] Importing your %{source} contacts failed"
+msgstr ""
+
+msgid "[MPDX] Your username and password for %{source} are invalid"
+msgstr ""
+
+msgid "at the time of event"
+msgstr ""
+
+msgid "can not be blank"
+msgstr ""
+
+msgid "converted as"
+msgstr ""
+
+msgid "of total"
+msgstr ""
+
+#, fuzzy
+msgid "prayerletters.com account needs to be refreshed"
+msgstr "Tài khoản Google cần được làm mới"
