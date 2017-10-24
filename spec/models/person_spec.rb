@@ -345,6 +345,13 @@ describe Person do
       dup_pair_id = DuplicateRecordPair.create!(account_list: winner.account_lists.first, record_one: winner, record_two: loser, reason: 'Testing').id
       expect { winner.merge(loser) }.to change { DuplicateRecordPair.exists?(dup_pair_id) }.from(true).to(false)
     end
+
+    it 'does not override primary email_address' do
+      loser = create(:person_with_email)
+      primary_email = winner.create_primary_email_address(email: 'best@email.com')
+
+      expect { winner.merge(loser) }.to_not change { winner.primary_email_address(true) }.from(primary_email)
+    end
   end
 
   context '#anniversary_year' do
