@@ -222,6 +222,7 @@ describe Siebel do
 
     before do
       designation_account_one.save
+      designation_profile.designation_accounts << designation_account_one
     end
 
     it 'creates a new donation' do
@@ -276,6 +277,17 @@ describe Siebel do
       expect do
         siebel.send(:add_or_update_donation, siebel_donation, designation_account_one, designation_profile)
       end.to change { DonorAccount.count }.by(1)
+    end
+
+    it 'uses the find donation service' do
+      donation = create(:donation, remote_id: nil, tnt_id: nil, donor_account: donor_account,
+                                   amount: 100.00, donation_date: Date.parse('2012-12-18'),
+                                   designation_account: designation_account_one)
+
+      expect_any_instance_of(DonationImports::Base::FindDonation).to receive(:find_and_merge).and_return(donation)
+      expect do
+        siebel.send(:add_or_update_donation, siebel_donation, designation_account_one, designation_profile)
+      end.to_not change { Donation.count }
     end
   end
 

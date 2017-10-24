@@ -438,13 +438,10 @@ class DataServer
     Retryable.retryable do
       date = line['DISPLAY_DATE'] ? Date.strptime(line['DISPLAY_DATE'], '%m/%d/%Y') : nil
 
-      donation = designation_account.donations.find_by(remote_id: line['DONATION_ID'])
-      donation ||= designation_account.donations.find_by(tnt_id: line['DONATION_ID'])
-      donation ||= designation_account.donations.find_or_initialize_by(remote_id: nil, donor_account_id: donor_account.id, amount: line['AMOUNT'], donation_date: date)
-
-      donation.update!(
+      attributes = {
         amount: line['AMOUNT'],
         currency: default_currency,
+        designation_account_id: designation_account.id,
         donation_date: date,
         donor_account_id: donor_account.id,
         memo: line['MEMO'],
@@ -453,7 +450,11 @@ class DataServer
         remote_id: line['DONATION_ID'],
         tendered_amount: line['TENDERED_AMOUNT'] || line['AMOUNT'],
         tendered_currency: line['TENDERED_CURRENCY'] || default_currency
-      )
+      }
+
+      donation = DonationImports::Base::FindDonation.new(designation_profile: profile, attributes: attributes).find_and_merge
+      donation ||= Donation.new
+      donation.update!(attributes)
       donation
     end
   end

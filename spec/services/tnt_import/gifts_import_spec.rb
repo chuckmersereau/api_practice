@@ -158,14 +158,6 @@ describe TntImport::GiftsImport do
       expect(designation_account.organization).to eq(@offline_org)
     end
 
-    it 'reimports the designation account' do
-      expect { @tnt_import.import }.to change { @account_list.designation_accounts.reload.count }.from(0).to(1)
-      first_designation_account_id = @account_list.designation_accounts.first.id
-      donation = @account_list.donations.first
-      DesignationAccount.delete_all
-      expect { @tnt_import.import }.to change { donation.reload.designation_account_id }.from(first_designation_account_id)
-    end
-
     it 'does not assign a remote_id when creating a donation' do
       expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
       expect(Donation.where(remote_id: nil).count).to eq(2)
@@ -211,6 +203,15 @@ describe TntImport::GiftsImport do
       tnt_import = TntImport.new(import)
       expect { tnt_import.import }.to change { Donation.count }.from(0).to(3)
       expect { tnt_import.import }.to_not change { Donation.count }.from(3)
+    end
+
+    it 'uses an existing designation_account if it exists' do
+      expect { @tnt_import.import }.to change { Donation.count }.from(0).to(2)
+      donation = Donation.first
+      designation_account = create(:designation_account)
+      @account_list.designation_accounts << designation_account
+      donation.update!(designation_account: designation_account)
+      expect { @tnt_import.import }.to_not change { donation.reload.designation_account }.from(designation_account)
     end
 
     describe 'creating pledges' do

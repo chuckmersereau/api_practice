@@ -46,6 +46,7 @@ class Donation < ApplicationRecord
   scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
 
   after_create :update_totals
+  after_destroy :reset_totals
   after_save :add_appeal_contacts
   after_create :update_related_pledge
 
@@ -90,9 +91,13 @@ class Donation < ApplicationRecord
     Pledge.all
   end
 
-  def update_totals
-    donor_account.update_donation_totals(self)
-    designation_account&.update_donation_totals(self)
+  def update_totals(reset: false)
+    donor_account.update_donation_totals(self, reset: reset)
+    designation_account&.update_donation_totals(self, reset: reset)
+  end
+
+  def reset_totals
+    update_totals(reset: true)
   end
 
   def set_amount_from_tendered_amount

@@ -97,4 +97,42 @@ describe Donation do
       expect(Donation.all_from_offline_orgs?(Donation.all)).to be false
     end
   end
+
+  describe 'after_destroy #reset_totals' do
+    let!(:account_list) { create(:account_list) }
+    let!(:donor_account) { create(:donor_account, total_donations: 0) }
+    let!(:designation_account) { create(:designation_account).tap { |da| da.account_lists << account_list } }
+    let!(:contact) do
+      create(:contact, account_list: account_list, total_donations: 0).tap { |c| c.donor_accounts << donor_account }
+    end
+    let!(:donation_one) do
+      create(:donation, amount: 1, donor_account: donor_account, designation_account: designation_account)
+    end
+    let!(:donation_two) do
+      create(:donation, amount: 2, donor_account: donor_account, designation_account: designation_account)
+    end
+    let!(:donation_three) do
+      create(:donation, amount: 3, donor_account: donor_account, designation_account: designation_account)
+    end
+
+    it 'resets the donor account total_donations' do
+      expect(donor_account.total_donations).to eq(6)
+      donation_one.destroy
+      expect(donor_account.reload.total_donations).to eq(5)
+      donation_two.destroy
+      expect(donor_account.reload.total_donations).to eq(3)
+      donation_three.destroy
+      expect(donor_account.reload.total_donations).to eq(0)
+    end
+
+    it 'resets the designation account total_donations' do
+      expect(contact.reload.total_donations).to eq(6)
+      donation_one.destroy
+      expect(contact.reload.total_donations).to eq(5)
+      donation_two.destroy
+      expect(contact.reload.total_donations).to eq(3)
+      donation_three.destroy
+      expect(contact.reload.total_donations).to eq(0)
+    end
+  end
 end

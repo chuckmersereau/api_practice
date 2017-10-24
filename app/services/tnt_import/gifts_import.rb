@@ -2,6 +2,7 @@ class TntImport::GiftsImport
   include Concerns::TntImport::DateHelpers
   include Concerns::TntImport::AppealHelpers
   include LocalizationHelper
+
   attr_reader :contact_ids_by_tnt_contact_id, :xml_tables, :account_list, :organization, :user, :contact
 
   def initialize(account_list, contact_ids_by_tnt_contact_id, xml, import)
@@ -31,24 +32,38 @@ class TntImport::GiftsImport
 
   private
 
-  def designation_account
-    return @designation_account if @designation_account
-    name = user.to_s.strip
-    @designation_account = account_list.designation_accounts.where(organization: organization, name: "#{name} (Imported from TntConnect)").first_or_create!
+  delegate :designation_accounts, to: :account_list
+
+  def tnt_designation_account
+    account_name = "#{user.to_s.strip} (Imported from TntConnect)"
+    @tnt_designation_account ||= designation_accounts.where(organization: organization, name: account_name)
+                                                     .first_or_create!
+  end
+
+  def designation_account_for_donation(donation)
+    if donation.designation_account && designation_accounts.include?(donation.designation_account)
+      # If the donation already has a designation account then assume it is the correct one.
+      donation.designation_account
+    else
+      tnt_designation_account
+    end
   end
 
   def add_or_update_donation_and_link_to_appeal(row, donor_account)
     donation_date = parse_date(row['GiftDate'], @import.user).to_date
     currency = currency_code_for_id(row['CurrencyID'])
 
-    donation = donor_account.donations.find_by(tnt_id: row['OrgGiftCode']) if row['OrgGiftCode']
+    donation   = donor_account.donations.find_by(tnt_id: row['OrgGiftCode']) if row['OrgGiftCode']
     donation ||= donor_account.donations.find_by(remote_id: row['OrgGiftCode']) if row['OrgGiftCode']
-    donation ||= donor_account.donations.find_or_initialize_by(tnt_id: nil, donor_account_id: donor_account.id, amount: row['Amount'], donation_date: donation_date)
+    donation ||= donor_account.donations.find_or_initialize_by(tnt_id: nil,
+                                                               donor_account_id: donor_account.id,
+                                                               amount: row['Amount'],
+                                                               donation_date: donation_date)
 
     donation.update(
       amount: row['Amount'],
       currency: currency,
-      designation_account: designation_account,
+      designation_account: designation_account_for_donation(donation),
       donation_date: donation_date,
       donor_account_id: donor_account.id,
       tendered_amount: row['Amount'],
