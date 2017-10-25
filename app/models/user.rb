@@ -69,7 +69,7 @@ class User < Person
   end
 
   def default_account_list_record
-    AccountList.find_by(id: default_account_list)
+    account_lists.find_by(id: default_account_list)
   end
 
   def designation_numbers(organization_id)
