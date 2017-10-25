@@ -80,6 +80,11 @@ class Donation < ApplicationRecord
     designation_account.currency
   end
 
+  def safe_appeal_amount
+    return appeal_amount if appeal_amount.to_f > 0
+    amount
+  end
+
   private
 
   def update_related_pledge

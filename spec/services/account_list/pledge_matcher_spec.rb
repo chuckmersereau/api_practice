@@ -63,6 +63,13 @@ describe AccountList::PledgeMatcher do
         expect(subject.pledge.amount_currency).to eq donation.currency
         expect(subject.pledge.appeal).to eq donation.appeal
       end
+
+      it 'should only fill pledge with appeal amount' do
+        donation.update(appeal_amount: 100.00)
+        Pledge.delete_all
+
+        expect(subject.pledge.amount).to eq 100.00
+      end
     end
   end
 end

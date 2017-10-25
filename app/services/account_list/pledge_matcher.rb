@@ -38,7 +38,7 @@ class AccountList::PledgeMatcher
 
   def create_pledge
     Pledge.create(
-      amount: donation.amount,
+      amount: donation.safe_appeal_amount,
       expected_date: donation.donation_date,
       account_list: appeal.account_list,
       contact: contact,
