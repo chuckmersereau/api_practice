@@ -60,10 +60,3 @@ Style/MethodMissing:
   Exclude:
     - 'app/services/preference_set.rb'
     - 'spec/support/fake_api.rb'
-
-# Offense count: 38
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Enabled: false

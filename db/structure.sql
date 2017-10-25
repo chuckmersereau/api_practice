@@ -1400,7 +1400,8 @@ CREATE TABLE email_addresses (
     uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT true,
     source character varying DEFAULT 'MPDX'::character varying,
-    checked_for_google_plus_account boolean DEFAULT false NOT NULL
+    checked_for_google_plus_account boolean DEFAULT false NOT NULL,
+    global_registry_id uuid
 );
 
 
@@ -2446,7 +2447,9 @@ CREATE TABLE people (
     occupation character varying,
     employer character varying,
     deprecated_not_duplicated_with character varying(2000),
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    global_registry_id uuid,
+    global_registry_mdm_id uuid
 );
 
 
@@ -2852,7 +2855,8 @@ CREATE TABLE phone_numbers (
     historic boolean DEFAULT false,
     uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT true,
-    source character varying DEFAULT 'MPDX'::character varying
+    source character varying DEFAULT 'MPDX'::character varying,
+    global_registry_id uuid
 );
 
 
@@ -7145,3 +7149,4 @@ INSERT INTO schema_migrations (version) VALUES ('20171006024505');
 
 INSERT INTO schema_migrations (version) VALUES ('20171006035430');
 
+INSERT INTO schema_migrations (version) VALUES ('20171011173827');

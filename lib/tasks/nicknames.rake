@@ -10,7 +10,7 @@ namespace :nicknames do
     CSV.new(nicknames_csv).each do |line|
       primary_name = ''
       line.each_with_index do |name, index|
-        if index == 0
+        if index.zero?
           primary_name = name
         else
           nicknames << [primary_name, name]

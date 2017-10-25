@@ -12,9 +12,9 @@ class Person < ApplicationRecord
   MARITAL_STATUSES = [_('Single'), _('Engaged'), _('Married'), _('Separated'), _('Divorced'), _('Widowed')].freeze
 
   belongs_to :master_person
-  has_many :email_addresses, -> { order('email_addresses.primary::int desc') }, dependent: :delete_all, autosave: true
+  has_many :email_addresses, -> { order('email_addresses.primary::int desc') }, dependent: :destroy, autosave: true
   has_one :primary_email_address, -> { where('email_addresses.primary' => true) }, class_name: 'EmailAddress', foreign_key: :person_id
-  has_many :phone_numbers, -> { order('phone_numbers.primary::int desc') }, dependent: :delete_all
+  has_many :phone_numbers, -> { order('phone_numbers.primary::int desc') }, dependent: :destroy
   has_one :primary_phone_number, -> { where('phone_numbers.primary' => true) }, class_name: 'PhoneNumber', foreign_key: :person_id
   has_many :family_relationships, dependent: :delete_all
   has_many :related_people, through: :family_relationships
@@ -175,6 +175,32 @@ class Person < ApplicationRecord
 
   validates :first_name, presence: true
 
+  alias_attribute :birth_year, :birthday_year
+  alias_attribute :birth_month, :birthday_month
+  alias_attribute :birth_day, :birthday_day
+  alias_attribute :marriage_year, :anniversary_year
+  alias_attribute :marriage_month, :anniversary_month
+  alias_attribute :marriage_day, :anniversary_day
+  alias_attribute :deceased_flag, :deceased
+
+  global_registry_bindings mdm_id_column: :global_registry_mdm_id,
+                           fields: { birth_year: :integer,
+                                     birth_month: :integer,
+                                     birth_day: :integer,
+                                     marriage_year: :integer,
+                                     marriage_month: :integer,
+                                     marriage_day: :integer,
+                                     first_name: :string,
+                                     last_name: :string,
+                                     title: :string,
+                                     suffix: :string,
+                                     gender: :string,
+                                     marital_status: :string,
+                                     middle_name: :string,
+                                     deceased_flag: :boolean,
+                                     occupation: :string,
+                                     employer: :string }
+
   def to_s
     [first_name, last_name].join(' ')
   end
@@ -222,7 +248,7 @@ class Person < ApplicationRecord
 
     contacts.each do |c|
       # Only update the greeting, etc. if this contact has a non-deceased other person (e.g. a spouse)
-      next unless c.people.where(deceased: false).where('people.id <> ?', id).count > 0
+      next unless c.people.where(deceased: false).where('people.id <> ?', id).exists?
 
       contact_updates = {}
 
@@ -463,7 +489,45 @@ class Person < ApplicationRecord
     get_four_digit_year_from_value(attributes['anniversary_year']) || placeholder_for_missing_year(:anniversary)
   end
 
+  def entity_attributes_to_push
+    entity_attributes = super
+    entity_attributes[:gender] = gender_entity_attribute
+    entity_attributes.merge! authentication_attributes
+    entity_attributes.merge! linked_identities_entity_attributes
+  end
+
   private
+
+  def gender_entity_attribute
+    case gender
+    when 'female', 'Female'
+      'Female'
+    when 'male', 'Male'
+      'Male'
+    else
+      'Male'
+    end
+  end
+
+  def authentication_attributes
+    # Global Registry only allows one of each authentication type
+    authentication = {}
+    # If more than 1 key account, last wins
+    key_accounts.each { |a| authentication[:key_guid] = a.remote_id }
+    authentication[:facebook_uid] = facebook_account&.remote_id if facebook_account
+    authentication.present? ? { authentication: authentication } : {}
+  end
+
+  def linked_identities_entity_attributes
+    # Link account_number to siebel or peoplesoft if present
+    account_number = donor_accounts.first&.account_number
+    return {} unless account_number.present? && account_number.length > 5
+    { account_number: account_number,
+      linked_identities: {
+        pshr: { account_number: account_number },
+        siebel: { account_number: account_number }
+      } }
+  end
 
   def trigger_mail_chimp_syncs_to_relevant_contacts
     contacts.each(&:sync_with_mail_chimp)

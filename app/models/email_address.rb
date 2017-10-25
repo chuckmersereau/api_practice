@@ -26,6 +26,9 @@ class EmailAddress < ApplicationRecord
   validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
   validates :email, :remote_id, :location, updatable_only_when_source_is_mpdx: true
 
+  global_registry_bindings parent: :person,
+                           fields: { email: :email, primary: :boolean }
+
   def to_s
     email
   end
@@ -72,7 +75,7 @@ class EmailAddress < ApplicationRecord
     cleaned_attrs = []
     clean_and_split_emails(email_attrs[:email]).each_with_index do |cleaned_email, index|
       cleaned = email_attrs.dup
-      cleaned[:primary] = false if index > 0 && email_attrs[:primary]
+      cleaned[:primary] = false if index.positive? && email_attrs[:primary]
       cleaned[:email] = cleaned_email
       cleaned_attrs << cleaned
     end

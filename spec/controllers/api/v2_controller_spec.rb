@@ -82,7 +82,7 @@ describe Api::V2Controller do
 
       it 'does not update tracked fields if user is not authenticated' do
         user
-        expect(User.count).to be > 0
+        expect(User.count).to be_positive
         expect_any_instance_of(User).to_not receive(:update_tracked_fields!)
         expect_any_instance_of(User).to_not receive(:update_tracked_fields)
         get :index

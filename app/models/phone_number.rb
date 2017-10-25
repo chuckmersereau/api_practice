@@ -26,6 +26,9 @@ class PhoneNumber < ApplicationRecord
   validates :number, presence: true
   validates :number, :country_code, :location, :remote_id, updatable_only_when_source_is_mpdx: true
 
+  global_registry_bindings parent: :person,
+                           fields: { number: :string, primary: :boolean, location: :string }
+
   def self.add_for_person(person, attributes)
     attributes = attributes.with_indifferent_access.except(:_destroy)
     normalized_number = PhoneNumber.new(attributes.merge(person: person))

@@ -11,7 +11,7 @@ class ImportGiftsAndAppealsFromTntWorker
 
   def perform(import_id)
     @import = Import.joins(:account_list).where(id: import_id, source: 'tnt').first
-    return unless import && account_list && account_list.appeals.count > 0
+    return unless import && account_list && account_list.appeals.any?
     perform_import
   end
 

@@ -2,6 +2,7 @@ API_DOC_LEGEND = {
   entities: %i(
     account_lists
     appeals
+    background_batches
     contacts
     constants
     people

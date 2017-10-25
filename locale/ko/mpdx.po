@@ -1,7 +1,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-09-28 17:22+0000\n"
 "PO-Revision-Date: 2017-09-28 17:22+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
@@ -11,35 +10,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "%{contact_name} just gave their first gift. Send them a Thank You."
-msgstr "%{contact_name}님이 첫 선물을 보냈습니다. 감사의 마음을 전하세요."
-
-msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
-msgstr "%{contact_name}님이 한 달 안에 선물을 보낼 것입니다. 더 알아보려면 연락하세요."
-
-msgid "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
-msgstr "\"#{b}%{count}#{eb}의 #{b}%{from}#{sp}-#{sp}%{to}#{eb} 디스플레이\""
-
-msgid "%{contact_name} seems to have missed a gift. Call to follow up."
-msgstr "%{contact_name}님이 선물을 보내지 않았습니다. 더 알아보려면 연락하세요."
-
-msgid "\"Task scheduled for #{ l(@task.start_at) }:\""
-msgstr "\"#{ l(@task.start_at) }:에 업무 예정\""
-
-msgid "%{number} ext %{extension}"
-msgstr "%{number} ext %{extension}"
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr " \"%{appeal_name}\" 호소로 지정되었습니다."
 
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "%{name} (donor #%{account_number})"
 
-msgid "%{org_name} said we have the wrong password for your account.\n\nPlease try updating it here: %{link}"
-msgstr "%{org_name}의 말에 따르면 계정 비밀번호가 틀렸습니다.\n\n여기서 업데이트를 시도하세요. %{link}"
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr "%(이 과제는 다음 유형이 주어졌습니다 \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 
-msgid "-- All Hidden --"
-msgstr "-- 모두 숨김 --"
+msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
+msgstr "%{contact_name}님이 한 달 안에 선물을 보낼 것입니다. 더 알아보려면 연락하세요."
+
+msgid "%{contact_name} just gave their first gift. Send them a Thank You."
+msgstr "%{contact_name}님이 첫 선물을 보냈습니다. 감사의 마음을 전하세요."
+
+msgid "%{contact_name} seems to have missed a gift. Call to follow up."
+msgstr "%{contact_name}님이 선물을 보내지 않았습니다. 더 알아보려면 연락하세요."
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr "%{number_of_failed_contacts} 개의 연락처를 가져오는 데 실패했습니다."
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr "%{number_of_successful_contacts} 개의 연락처를 성공적으로 가져왔습니다."
+
+msgid "%{number} ext %{extension}"
+msgstr "%{number} ext %{extension}"
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr "%{org_name}에 의하면 귀하의 계정 암호가 잘못되었습니다."
+
+#, fuzzy
+msgid "-- All --"
+msgstr "-- 모두 --"
 
 msgid "-- All Active --"
 msgstr "-- 모두 활성화 --"
+
+msgid "-- All Hidden --"
+msgstr "-- 모두 숨김 --"
 
 msgid "-- Any --"
 msgstr "-- 모두 --"
@@ -47,23 +56,20 @@ msgstr "-- 모두 --"
 msgid "-- Do not ask --"
 msgstr "-- 묻지 않음 --"
 
-msgid "-- Unspecified --"
-msgstr "-- 명시되지 않음 --"
-
 msgid "-- Has referrer --"
 msgstr "-- 참조자 있음 --"
 
 msgid "-- None --"
 msgstr "-- 없음 --"
 
-msgid "... Show More"
-msgstr "…더 보기"
-
-msgid "1 hour before"
-msgstr "1시간 전"
+msgid "-- Unspecified --"
+msgstr "-- 명시되지 않음 --"
 
 msgid "1 day before"
 msgstr "1일 전"
+
+msgid "1 hour before"
+msgstr "1시간 전"
 
 msgid "1 week before"
 msgstr "일주일 전"
@@ -74,32 +80,20 @@ msgstr "15분 전"
 msgid "2 days before"
 msgstr "2분 전"
 
-msgid "30 minutes before"
-msgstr "30분 전"
-
 msgid "2 hours before"
 msgstr "2시간 전"
+
+msgid "30 minutes before"
+msgstr "30분 전"
 
 msgid "5 minutes before"
 msgstr "5분 전"
 
-msgid "Accept MPDX Account Invite"
-msgstr "MPDX 계정 초대 수락"
-
 msgid "Account List"
 msgstr "계정 목록"
 
-msgid "Account List Settings:"
-msgstr "계정 목록 설정:"
-
-msgid "Account access invite"
-msgstr "계정 접근 초대"
-
 msgid "Action"
 msgstr "행동"
-
-msgid "Account List ID:"
-msgstr "계정 목록 ID:"
 
 msgid "Add an Account"
 msgstr "계정 추가"
@@ -110,23 +104,20 @@ msgstr "다른 계정 추가"
 msgid "Address"
 msgstr "주소"
 
-msgid "Afrikaans"
-msgstr "아프리칸스어"
-
 msgid "Address No Longer Valid"
 msgstr "더 이상 유효하지 않은 계정"
-
-msgid "Annual"
-msgstr "연간"
-
-msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
-msgstr "계정 내 다른 연락처가 이미 이 연락처에 지정을 시도한 적 있는 기부자 계정 번호를 가지고 있습니다."
 
 msgid "All"
 msgstr "모두"
 
+msgid "Annual"
+msgstr "연간"
+
 msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
 msgstr "단체 내 다른 연락처가 이미 이 연락처에 지정을 시도한 적 있는 기부자 계정 번호를 가지고 있습니다. 더 독특하게 만드세요."
+
+msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
+msgstr "계정 내 다른 연락처가 이미 이 연락처에 지정을 시도한 적 있는 기부자 계정 번호를 가지고 있습니다."
 
 msgid "Appeal"
 msgstr "호소"
@@ -134,33 +125,26 @@ msgstr "호소"
 msgid "Appointment"
 msgstr "약속"
 
+msgid "Appointment Scheduled"
+msgstr "연락 예정"
+
 msgid "Are marked as do not ask for appeals"
 msgstr "호소하지 않음 표시됨"
-
-msgid "Aunt"
-msgstr "이모"
 
 msgid "Ask in Future"
 msgstr "나중에 물음"
 
-msgid "Appointment Scheduled"
-msgstr "연락 예정"
+msgid "Aunt"
+msgstr "이모"
 
 msgid "Average"
 msgstr "평균"
 
-msgid "Arabic"
-msgstr "아랍어"
-
-#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "평균"
 
 msgid "Balance: %{balance}"
 msgstr "잔액: %{balance}"
-
-msgid "Belarusian"
-msgstr "벨로루시어"
 
 msgid "Both"
 msgstr "둘 다"
@@ -168,29 +152,14 @@ msgstr "둘 다"
 msgid "Brother"
 msgstr "형제"
 
-msgid "Browser:"
-msgstr "브라우저:"
-
 msgid "Business"
 msgstr "비즈니스"
-
-msgid "Bulgarian"
-msgstr "불가리아어"
-
-msgid "Call for Decision"
-msgstr "결정 연락"
-
-msgid "Catalan"
-msgstr "카탈로니아어"
 
 msgid "Call"
 msgstr "연락"
 
-msgid "Chinese (Simplified)"
-msgstr "중국어 (간체)"
-
-msgid "Chinese (Traditional)"
-msgstr "중국어 (번체)"
+msgid "Call for Decision"
+msgstr "결정 연락"
 
 msgid "Church"
 msgstr "교회"
@@ -198,14 +167,11 @@ msgstr "교회"
 msgid "City"
 msgstr "도시"
 
-msgid "Click here to download the file"
-msgstr "파일을 다운로드하려면 클릭"
-
-msgid "Click to see all balances"
-msgstr "잔액을 모두 보려면 클릭"
-
 msgid "Commitment"
 msgstr "투입액"
+
+msgid "Commitment Amount"
+msgstr "투입액 총액"
 
 msgid "Commitment Currency"
 msgstr "투입액 통화"
@@ -216,9 +182,6 @@ msgstr "투입액 내용"
 msgid "Commitment Frequency"
 msgstr "투입액 빈도"
 
-msgid "Commitment Amount"
-msgstr "투입액 총액"
-
 msgid "Commitment Received"
 msgstr "받은 투입액"
 
@@ -228,16 +191,47 @@ msgstr "회사"
 msgid "Completed"
 msgstr "완료됨"
 
-msgid "Contact Information"
-msgstr "연락처 정보"
+msgid "Contact Church"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Commitment Details"
+msgstr "투입액 내용"
 
 msgid "Contact Details"
 msgstr "연락처 내용"
+
+#, fuzzy
+msgid "Contact Gift Details"
+msgstr "연락처 내용"
+
+msgid "Contact Information"
+msgstr "연락처 정보"
+
+msgid "Contact Likely To Give"
+msgstr ""
 
 msgid "Contact Location"
 msgstr "연락처 위치"
 
 msgid "Contact Name"
+msgstr "연락처 이름"
+
+msgid "Contact Newsletter"
+msgstr ""
+
+msgid "Contact Referrer"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Status"
+msgstr "연락처 내용"
+
+msgid "Contact Timezone"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Type"
 msgstr "연락처 이름"
 
 msgid "Contact for Appointment"
@@ -255,17 +249,8 @@ msgstr "사촌 (여성)"
 msgid "Cousin (Male)"
 msgstr "사촌 (남성)"
 
-msgid "Croatian"
-msgstr "크로아티아어"
-
 msgid "Currency"
 msgstr "통화"
-
-msgid "Danish"
-msgstr "덴마크어"
-
-msgid "Czech"
-msgstr "체코어"
 
 msgid "Date Range"
 msgstr "날짜 범위"
@@ -288,58 +273,26 @@ msgstr "완료"
 msgid "Donor system"
 msgstr "기부 시스템"
 
-msgid "Dutch"
-msgstr "네덜란드어"
-
-msgid "Email"
-msgstr "이메일"
-
 msgid "Dr."
 msgstr "박사"
-
-msgid "Email 1"
-msgstr "이메일 1"
 
 msgid "Due Date"
 msgstr "만기일"
 
-msgid "Email 2"
-msgstr "이메일 2"
+msgid "Email"
+msgstr "이메일"
 
-msgid "Email 3"
-msgstr "이메일 3"
-
-msgid "Email 4"
-msgstr "이메일 4"
-
-#. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "약혼"
 
-msgid "Email:"
-msgstr "이메일:"
-
-msgid "English"
-msgstr "영어"
-
-msgid "Error connecting to %{org_name} server"
-msgstr "%{org_name} 서버 접속 중 오류"
-
-msgid "Error connecting: you are already connected as %{org_account}"
-msgstr "접속 오류: 이미 %{org_account} 접속함"
-
-#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "안부 봉투"
 
-msgid "Estonian"
-msgstr "에스토니아어"
+msgid "Every 2 Months"
+msgstr "2달마다"
 
 msgid "Every 2 Weeks"
 msgstr "2주마다"
-
-msgid "Every 2 Months"
-msgstr "2달마다"
 
 msgid "Every 2 Years"
 msgstr "2년마다"
@@ -362,14 +315,8 @@ msgstr "Facebook 메시지"
 msgid "Facebook Profile"
 msgstr "Facebook 프로필"
 
-msgid "Farsi"
-msgstr "페르시아어"
-
 msgid "Father"
 msgstr "아버지"
-
-msgid "Finnish"
-msgstr "핀란드어"
 
 msgid "First Gift"
 msgstr "첫 선물"
@@ -377,20 +324,21 @@ msgstr "첫 선물"
 msgid "First Name"
 msgstr "이름"
 
-msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
-msgstr "MailChimp 통합을 위해 MailChimp에 새 목록을 설치해두기를 추천합니다.\n (새 계정이 아닌 새 목록만) 그리고 모든 MailChimp 기본 사항을 그 목록에 놓으세요.\n 새 목록을 설정했다면, 모든 사람들이 자동으로 복사된 뉴스레터를\n 받을 것이며, 오직 본인만이 MPDX의 모든 업데이트를 관리할 수 있습니다. (예를 덜어 MPDX의 이메일 주소를\n 변경한다면, MailChimp에도 업데이트됩니다.)"
-
-msgid "French (Canada)"
-msgstr "프랑스어 (캐나다)"
-
-msgid "French (France)"
-msgstr "프랑스어 (프랑스)"
+msgid ""
+"For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n"
+"  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n"
+"  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n"
+"  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n"
+"  address on MPDX it will update on mailchimp)."
+msgstr ""
+"MailChimp 통합을 위해 MailChimp에 새 목록을 설치해두기를 추천합니다.\n"
+" (새 계정이 아닌 새 목록만) 그리고 모든 MailChimp 기본 사항을 그 목록에 놓으세요.\n"
+" 새 목록을 설정했다면, 모든 사람들이 자동으로 복사된 뉴스레터를\n"
+" 받을 것이며, 오직 본인만이 MPDX의 모든 업데이트를 관리할 수 있습니다. (예를 덜어 MPDX의 이메일 주소를\n"
+" 변경한다면, MailChimp에도 업데이트됩니다.)"
 
 msgid "Future"
 msgstr "미래"
-
-msgid "German"
-msgstr "독일어"
 
 msgid "Gave a special gift in the last 3 months"
 msgstr "지난 3개월 안에 특별한 선물을 줌"
@@ -401,111 +349,81 @@ msgstr "선물 금액이 높거나 같음"
 msgid "Gift Amount Less Than or Equal To"
 msgstr "선물 금액이 낮거나 같음"
 
-msgid "Gift Date"
-msgstr "선물 날짜"
-
 msgid "Gift Amount Range"
 msgstr "선물 총액 범위"
+
+msgid "Gift Date"
+msgstr "선물 날짜"
 
 msgid "Gift Details"
 msgstr "선물 내용"
 
-msgid "Granddaughter"
-msgstr "손녀"
-
 msgid "Gift Options"
 msgstr "선물 옵션"
 
-msgid "Google import"
-msgstr "Google 불러오기"
+msgid "Google Integration Settings"
+msgstr "Google 통합 설정"
 
 msgid "Google account needs to be refreshed"
 msgstr "Google 계정이 새로고침되어야 합니다."
 
+msgid "Google import"
+msgstr "Google 불러오기"
+
 msgid "Google sync"
 msgstr "Google 싱크"
+
+msgid "Granddaughter"
+msgstr "손녀"
 
 msgid "Grandfather"
 msgstr "할아버지"
 
-msgid "Grandson"
-msgstr "손자"
-
 msgid "Grandmother"
 msgstr "할머니"
 
-msgid "Greek"
-msgstr "그리스어"
+msgid "Grandson"
+msgstr "손자"
 
 msgid "Greeting"
 msgstr "안부"
 
-msgid "Hebrew"
-msgstr "히브리어"
-
-msgid "Hindi"
-msgstr "힌두어"
-
 msgid "History"
 msgstr "내역"
-
-msgid "Home Phone"
-msgstr "집 전화"
 
 msgid "Home"
 msgstr "집"
 
-#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
+msgid "Home Phone"
+msgstr "집 전화"
+
 msgid "Hon."
 msgstr "명예"
-
-msgid "Hungarian"
-msgstr "헝가리어"
 
 msgid "Husband"
 msgstr "남편"
 
-msgid "Icelandic"
-msgstr "아이슬란드어"
+msgid ""
+"If you do want to stick with your existing list, you will need to make that extra merge field not a\n"
+"  required field."
+msgstr ""
+"현재 목록을 유지하고 싶지 않다면, 필수 필드가 아닌 추가 통합 필드가\n"
+" 필요할 것입니다."
 
-msgid "If we let you delete that account you won't be able to log in anymore."
-msgstr "계정을 삭제하면 더 이상 로그인할 수 없습니다."
-
-msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
-msgstr "현재 목록을 유지하고 싶지 않다면, 필수 필드가 아닌 추가 통합 필드가\n 필요할 것입니다."
+msgid "Increase Gift Recommendation"
+msgstr ""
 
 msgid "Increased their giving in the last 3 months"
 msgstr "지난 3개월 안에 기부액 증가"
 
-msgid "Import File:"
-msgstr "파일 불러오기:"
-
 msgid "Insights for "
 msgstr "이해"
-
-msgid "Indonesian"
-msgstr "인도네시아어"
-
-msgid "Irish"
-msgstr "아일랜드어"
-
-msgid "Italian"
-msgstr "이탈리아어"
-
-msgid "Japanese"
-msgstr "일본어"
 
 msgid "Joined my team in the last 3 months"
 msgstr "지난 3개월 안에 팀 가입"
 
 msgid "Jr."
 msgstr "주니어"
-
-msgid "Korean"
-msgstr "한국어"
-
-msgid "Khmer"
-msgstr "크메르어"
 
 msgid "Language"
 msgstr "언어"
@@ -534,9 +452,6 @@ msgstr "지난 2년"
 msgid "Last Week"
 msgstr "지난주"
 
-msgid "Latvian"
-msgstr "라트비아어"
-
 msgid "Last Year"
 msgstr "지난해"
 
@@ -549,35 +464,32 @@ msgstr "늦음"
 msgid "Least Likely"
 msgstr "가능성 아주 적음"
 
-msgid "Letter"
-msgstr "편지"
-
 msgid "Less than 30 days late"
 msgstr "30일 이하 늦음"
+
+msgid "Letter"
+msgstr "편지"
 
 msgid "Likely"
 msgstr "가능성 있음"
 
-msgid "Lithuanian"
-msgstr "리투아니아어"
-
 msgid "Likely To Give"
 msgstr "기부 가능성 있음"
-
-msgid "MPDX Support Team"
-msgstr "MPDX 지원 팀"
 
 msgid "MPDX List: %{name}"
 msgstr "MPDX 목록: %{name}"
 
-msgid "Macedonian"
-msgstr "마케도니아어"
+msgid "MPDX Support Team"
+msgstr "MPDX 지원 팀"
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr "MPDX에서 %{source} 연락처를 가져오는 도중 오류가 발생했습니다."
 
 msgid "MPDX has finished importing your %{source} contacts."
 msgstr "MPDX가 %{source} 연락처 불러오기를 완료했습니다."
 
-msgid "MPDX encountered errors while trying to import your %{source} contacts.\n\n%{explanation}\n\nThanks!\nMPDX Support Team"
-msgstr "MPDX가 %{source} 연락처를 불러오는 중 오류가 발생했습니다.\n\n%{explanation}\n\n감사합니다!\nMPDX 지원 팀"
+msgid "MailChimp Integration Settings"
+msgstr "MailChimp 통합 설정"
 
 msgid "MailChimp subscriber email bounced"
 msgstr "MailChimp 구독자 이메일 반송"
@@ -585,32 +497,26 @@ msgstr "MailChimp 구독자 이메일 반송"
 msgid "Mailchimp API Key no longer valid"
 msgstr "MailChimp API 키 더 이상 유효하지 않음"
 
+msgid "Mailchimp List is requiring an additional merge field"
+msgstr "MailChimp 목록에 추가 통합 필드가 필요합니다."
+
 msgid "Mailing"
 msgstr "발송"
 
 msgid "Mailing City"
 msgstr "발송 도시"
 
-msgid "Mailchimp List is requiring an additional merge field"
-msgstr "MailChimp 목록에 추가 통합 필드가 필요합니다."
-
 msgid "Mailing Country"
 msgstr "발송 국가"
-
-msgid "Mailing State"
-msgstr "발송 주"
 
 msgid "Mailing Postal Code"
 msgstr "발송 우편번호"
 
+msgid "Mailing State"
+msgstr "발송 주"
+
 msgid "Mailing Street Address"
 msgstr "발송 도시 주소"
-
-msgid "Malay"
-msgstr "말레이시아어"
-
-msgid "Maltese"
-msgstr "몰타어"
 
 msgid "Manual entry"
 msgstr "수동 입력"
@@ -630,11 +536,11 @@ msgstr "분"
 msgid "Minimum"
 msgstr "최소"
 
-msgid "Mobile"
-msgstr "모바일"
-
 msgid "Miss"
 msgstr "미스"
+
+msgid "Mobile"
+msgstr "모바일"
 
 msgid "Mobile Phone"
 msgstr "핸드폰"
@@ -651,41 +557,41 @@ msgstr "60일 이상 늦음"
 msgid "More than 90 days late"
 msgstr "90일 이상 늦음"
 
-msgid "More than one user found for that lookup"
-msgstr "검색에서 사용자 한 명 이상 발견"
-
 msgid "Most Likely"
 msgstr "가능성 높음"
 
 msgid "Mother"
 msgstr "어머니"
 
-msgid "Mrs."
-msgstr "미세스"
-
 msgid "Mr."
 msgstr "미스터"
+
+msgid "Mrs."
+msgstr "미세스"
 
 msgid "Ms."
 msgstr "미스"
 
-msgid "Name:"
-msgstr "이름:"
+msgid "Nephew"
+msgstr "조카"
 
 msgid "Never Ask"
 msgstr "묻지 않음"
 
-msgid "New Donation"
-msgstr "새 기부"
-
-msgid "Nephew"
-msgstr "조카"
-
 msgid "Never Contacted"
 msgstr "연락한 적 없음"
 
+msgid "New Donation"
+msgstr "새 기부"
+
 msgid "Newsletter"
 msgstr "뉴스레터"
+
+msgid "Newsletter - Email"
+msgstr ""
+
+msgid "Newsletter - Physical"
+msgstr ""
 
 msgid "Newsletter Recipients"
 msgstr "뉴스레터 수령인"
@@ -699,14 +605,17 @@ msgstr "다음 주"
 msgid "Niece"
 msgstr "조카딸"
 
-msgid "No Gifts"
-msgstr "선물 없음"
+msgid "No"
+msgstr "없음"
 
 msgid "No Date"
 msgstr "날짜 없음"
 
-msgid "No"
-msgstr "없음"
+msgid "No Gifts"
+msgstr "선물 없음"
+
+msgid "No Incomplete Tasks"
+msgstr "미완료된 작업 없음"
 
 msgid "No Subject"
 msgstr "제목 없음"
@@ -720,38 +629,41 @@ msgstr "파일에 발송 주소 없음"
 msgid "No mailing address or email addess on file"
 msgstr "파일에 이메일 주소 혹은 발송 주소 없음"
 
-msgid "No users found for that lookup"
-msgstr "검색에서 사용자 발견되지 않음"
-
 msgid "None"
 msgstr "없음"
-
-msgid "None Selected"
-msgstr "선택 없음"
-
-msgid "Norwegian"
-msgstr "노르웨이어"
 
 msgid "Not Interested"
 msgstr "관심 없음"
 
-msgid "Notes"
-msgstr "메모"
-
 msgid "Not Received"
 msgstr "받은 적 없음"
 
-msgid "One of my donors, %{donor} has a new current address."
-msgstr "기부자 %{donor}님의 새 현재 주소입니다."
+msgid "Notes"
+msgstr "메모"
+
+msgid "Nothing Selected"
+msgstr "선택된 항목 없음"
 
 msgid "Notifications from MPDX"
 msgstr "MPDX 공지"
+
+msgid "One of my donors, %{donor} has a new current address."
+msgstr "기부자 %{donor}님의 새 현재 주소입니다."
 
 msgid "One or More Gifts"
 msgstr "한 개 이상의 선물"
 
 msgid "Other"
 msgstr "기타"
+
+msgid "Other Email"
+msgstr "기타 이메일"
+
+msgid "Other Phone"
+msgstr "기타 휴대폰"
+
+msgid "Outstanding"
+msgstr ""
 
 msgid "Overdue"
 msgstr "기한 지남"
@@ -762,56 +674,45 @@ msgstr "파트너"
 msgid "Partner - Financial"
 msgstr "파트너 - 금융"
 
+msgid "Partner - Pray"
+msgstr "파트너 - 기도"
+
 msgid "Partner - Special"
 msgstr "파트너 - 특별"
 
-msgid "Partner - Pray"
-msgstr "파트너 - 기도"
+msgid "Pending"
+msgstr ""
 
 msgid "Person"
 msgstr "사람"
 
-msgid "Partner Status"
-msgstr "파트너 상태"
-
-msgid "Phone 1"
-msgstr "전화 1"
-
-msgid "Phone 2"
-msgstr "전화 2"
-
-msgid "Phone 3"
-msgstr "전화 3"
-
-msgid "Phone 4"
-msgstr "전화 4"
-
 msgid "Physical"
 msgstr "실제"
+
+msgid "Please try updating it here: %{link}"
+msgstr "이 주소에서 업데이트를 시도하세요: %{link}"
 
 msgid "Please update their address to"
 msgstr "에 주소를 업데이트하세요."
 
-msgid "Polish"
-msgstr "폴란드어"
-
 msgid "Pledge"
 msgstr "담보금"
 
-msgid "Portuguese (Brazil)"
-msgstr "포르투갈어 (브라질)"
+#, fuzzy
+msgid "Pledge Status"
+msgstr "파트너 상태"
 
-msgid "Portuguese (Portugal)"
-msgstr "포르투갈어 (포르투갈)"
-
-msgid "Primary Balance: %{balance}"
-msgstr "예비 잔액: %{balance}"
+msgid "Prayer Request"
+msgstr ""
 
 msgid "Pre Call Letter"
 msgstr "전화 전 편지"
 
 msgid "Primary Email"
 msgstr "예비 이메일"
+
+msgid "Primary Phone"
+msgstr "기본 휴대폰"
 
 msgid "Quarterly"
 msgstr "분기별"
@@ -824,6 +725,9 @@ msgstr "새 거리로 교체"
 
 msgid "Received"
 msgstr "받음"
+
+msgid "Received, but not Processed"
+msgstr ""
 
 msgid "Referrals"
 msgstr "소개"
@@ -840,52 +744,38 @@ msgstr "알림 편지"
 msgid "Research Abandoned"
 msgstr "연구 취소됨"
 
-#. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "목사"
-
-msgid "Romanian"
-msgstr "루마니아어"
-
-msgid "Russian"
-msgstr "러시아어"
-
-msgid "Separated"
-msgstr "별거"
 
 msgid "Seasonal"
 msgstr "계절별"
 
-#. this is a relationship status
+msgid "Separated"
+msgstr "별거"
+
 msgid "Single"
 msgstr "싱글"
-
-msgid "Serbian"
-msgstr "세르비아어"
 
 msgid "Sister"
 msgstr "자매"
 
-msgid "Slovak"
-msgstr "슬로바키아어"
-
-msgid "Slovenian"
-msgstr "슬로베니아어"
-
 msgid "Son"
 msgstr "아들"
-
-msgid "Spanish (Mexico)"
-msgstr "스페인어 (멕시코)"
-
-msgid "Spanish (Spain)"
-msgstr "스페인어 (스페인)"
 
 msgid "Spouse Email"
 msgstr "배우자 이메일"
 
 msgid "Spouse First Name"
 msgstr "배우자 이름"
+
+msgid "Spouse Other Email"
+msgstr "배우자 기타 이메일"
+
+msgid "Spouse Other Phone"
+msgstr "배우자 기타 휴대폰"
+
+msgid "Spouse Phone"
+msgstr "배우자 휴대폰"
 
 msgid "Sr."
 msgstr "시니어"
@@ -899,23 +789,17 @@ msgstr "주"
 msgid "Status"
 msgstr "상태"
 
-msgid "Support Letter"
-msgstr "지원 편지"
-
 msgid "Stopped giving for the last 2 months"
 msgstr "지난 2개월 내에 기부 중지"
 
-msgid "Swahili"
-msgstr "스와힐리어"
-
-msgid "Swedish"
-msgstr "스웨덴어"
-
-msgid "Tamil"
-msgstr "타밀어"
+msgid "Support Letter"
+msgstr "지원 편지"
 
 msgid "Tags"
 msgstr "태그"
+
+msgid "Talk to In Person"
+msgstr ""
 
 msgid "Task on MPDX"
 msgstr "MPDX 업무"
@@ -929,9 +813,6 @@ msgstr "일시적"
 msgid "Text Message"
 msgstr "문자 메시지"
 
-msgid "Thai"
-msgstr "태국어"
-
 msgid "Thank"
 msgstr "감사"
 
@@ -941,23 +822,61 @@ msgstr "감사합니다!"
 msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
 msgstr "이 이메일은 \"더 이상 유효하지 않음\"으로 표시되어 있습니다. 위의 이름을 클릭해 개인 정보를 수정하고 정확한 정보를 확인하세요. 이 사람이 또 다른 유효 이메일가 있다면 주소가 주요하게 설정되고, 이메일 뉴스레터에 이름이 올라 있다면 MailChimp에 싱크됩니다. 이 이메일이 MailChimp에 오르길 원치 않는다면 \"이메일 뉴스레터 취소\"를 선택하거나 다른 주 이메일을 선택하세요."
 
-msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
-msgstr "MPDX 계정에 링크된 MailChimp 메일링 목록은 직접 생성하고, 필요하다고 표시한\n 추가 통합 필드가 있습니다. MPDX는 고객 통합 필드를 덧붙이는 법을 모르므로\n MailChimp에 연락처를 싱크할 수 없습니다."
-
-msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
-msgstr "MPDX와 prayerletters.com 계정간의 링크 작동이 중지되었습니다. MPDX가 자동으로\n 변경 사항을 prayerletters.com에 전송하게 만들고 싶다면\n '허용' 버튼을 클릭하세요."
+msgid ""
+"The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n"
+"  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n"
+"  unable to sync your contacts to MailChimp."
+msgstr ""
+"MPDX 계정에 링크된 MailChimp 메일링 목록은 직접 생성하고, 필요하다고 표시한\n"
+" 추가 통합 필드가 있습니다. MPDX는 고객 통합 필드를 덧붙이는 법을 모르므로\n"
+" MailChimp에 연락처를 싱크할 수 없습니다."
 
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "LinkedIn 계정과의 연결을 갱신해야 합니다."
 
+msgid ""
+"The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n"
+"  automatically sync with your Google account, please go to %{link}\n"
+"  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n"
+"  that you had set already."
+msgstr ""
+"MPDX와 Google 계정간의 링크 작동이 중지되었습니다. MPDX가 자동으로\n"
+" Google 계정에 싱크되게 만들고 싶다면, %{link}에 가서\n"
+" 'Google 계정 새로고침' 버튼을 클릭하세요. 그 후, 이미 설정해뒀던 통합 사항들을\n"
+" 수동으로 다시 허용하세요."
+
+msgid ""
+"The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n"
+"  automatically push changes over to prayerletters.com, please go to\n"
+"  and click the 'Enable' button"
+msgstr ""
+"MPDX와 prayerletters.com 계정간의 링크 작동이 중지되었습니다. MPDX가 자동으로\n"
+" 변경 사항을 prayerletters.com에 전송하게 만들고 싶다면\n"
+" '허용' 버튼을 클릭하세요."
+
 msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
 msgstr "Facebook 계정과의 연결을 갱신해야 합니다. <a href=\"/auth/facebook\">Facebook과 다시 연결하려면 이곳을 클릭</a>해 다시 불러오세요."
 
-msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
-msgstr "MPDX와 Google 계정간의 링크 작동이 중지되었습니다. MPDX가 자동으로\n Google 계정에 싱크되게 만들고 싶다면, %{link}에 가서\n 'Google 계정 새로고침' 버튼을 클릭하세요. 그 후, 이미 설정해뒀던 통합 사항들을\n 수동으로 다시 허용하세요."
+msgid ""
+"The mailchimp API key associated with your MPDX account is no longer valid.\n"
+"If you would like Mailchimp syncronization to continue to work, please go to\n"
+" %{link} and update your API key."
+msgstr ""
+"MPDX 계정과 연동된 mailchimp API 키가 더 이상 유효하지 않습니다.\n"
+"Mailchimp 싱크를 계속 이용하고 싶다면,\n"
+" %{link}에 가서 API 키를 업데이트하세요."
 
-msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
-msgstr "MPDX 계정과 연동된 mailchimp API 키가 더 이상 유효하지 않습니다.\nMailchimp 싱크를 계속 이용하고 싶다면,\n %{link}에 가서 API 키를 업데이트하세요."
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 실패는 대개 일시적 인터넷 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 실패는 대개 귀하께서 제어할 수 없는 일시적인 Facebook 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 가장 많은 경우는 일시적인 서버 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 Tnt 내보내기를 첨부해서 이메일을 보내주십시오. 저희가 가져오기 실패를 파악하는 데 있어 귀하께서 가져오려는 파일이 있으면 큰 도움이 됩니다."
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. CSV 가져오기 실패의 이유 중 가장 많은 경우는 이름 (first name) 때문입니다. CSV 가져오기에서 이름은 필수 입력 사항입니다. 가져오기에 실패한 행을 포함한 CSV 파일을 본 이메일에 첨부해서 드립니다. CSV의 첫 번째 열에 해당 행의 오류 메시지가 포함돼 있습니다. 이 CSV를 다운로드하여 표시된 문제를 해결한 수에 다시 가져오기를 시도하십시오. 이미 가져오는 데 성공한 연락처를 다시 가져올 필요는 없습니다. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
 
 msgid "This Month"
 msgstr "이번 달"
@@ -968,6 +887,9 @@ msgstr "이번 주"
 msgid "This Year"
 msgstr "이번 해"
 
+msgid "This donation was imported from Tnt."
+msgstr "이 기부는 Tnt에서 가져왔습니다."
+
 msgid "Timezone"
 msgstr "표준시간대"
 
@@ -976,9 +898,6 @@ msgstr "Tnt 불러오기"
 
 msgid "To Do"
 msgstr "할 일"
-
-msgid "To activate your invitation, click \"Accept\" below and log into MPDX."
-msgstr "초대를 활성화하려면 밑의 \"수락\"을 클릭하고 MPDX에 로그인하세요."
 
 msgid "Today"
 msgstr "오늘"
@@ -995,14 +914,8 @@ msgstr "총 (지난달은 제외됨)"
 msgid "Totals"
 msgstr "총"
 
-msgid "Turkish"
-msgstr "터키어"
-
 msgid "Type"
 msgstr "종류"
-
-msgid "Ukrainian"
-msgstr "우크라이나어"
 
 msgid "Uncle"
 msgstr "삼촌"
@@ -1013,35 +926,26 @@ msgstr "알 수 없음"
 msgid "Unresponsive"
 msgstr "응답 없음"
 
-msgid "User Agent:"
-msgstr "사용자 에이전트:"
-
-msgid "User ID:"
-msgstr "사용자 ID:"
-
-msgid "User Info"
-msgstr "사용자 정보"
-
 msgid "Upcoming"
 msgstr "차기"
 
-msgid "User Preferences:"
-msgstr "사용자 설정:"
-
-msgid "Vietnamese"
-msgstr "베트남어"
-
-msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
-msgstr "오류를 방지하기 위해 MailChimp 목록과 MPDX의 연동을 일시적으로 중지했습니다.\n 위의 옵션 중 하나를 선택한 후,  %{link}에 돌아가\n MailChimp 설정을 업데이트하세요."
+msgid ""
+"We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n"
+"  chosen one of the options above, please go back to %{link}\n"
+"  and update your MailChimp settings."
+msgstr ""
+"오류를 방지하기 위해 MailChimp 목록과 MPDX의 연동을 일시적으로 중지했습니다.\n"
+" 위의 옵션 중 하나를 선택한 후,  %{link}에 돌아가\n"
+" MailChimp 설정을 업데이트하세요."
 
 msgid "Weekly"
 msgstr "주간"
 
-msgid "Wife"
-msgstr "아내"
-
 msgid "Widowed"
 msgstr "미망인"
+
+msgid "Wife"
+msgstr "아내"
 
 msgid "Work"
 msgstr "직장"
@@ -1055,23 +959,23 @@ msgstr "네"
 msgid "Yesterday"
 msgstr "어제"
 
-msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"preferences_url\">here</a>."
-msgstr "MPDX로부터 이 알림을 받는 이유는 이메일 설정에서 알림을 체크했기 때문입니다. <a href=\"preferences_url\">이곳</a>에서 변경할 수 있습니다."
-
-msgid "You have been invited by %{inviter} to access the MPDX account \"%{account}\"."
-msgstr "%{inviter}의 초대를 받아 MPDX 계정 \"%{account}\"에 접근할 수 있습니다."
-
-msgid "You are getting this notification from MPDX because you selected the notification option on your task details."
-msgstr "MPDX로부터 이 알림을 받는 이유는 업무 내용에서 알림 옵션을 선택했기 때문입니다."
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr "MPDX에서 이 알림을 보내드린 이유는, 귀하의 환경 설정에 이런 유형의 알림을 받는 것으로 이메일 설정이 되어 있기 때문입니다. 설정을 변경하려면 <a href=\"%{preferences_url}\">여기</a>에서 변경하십시오."
 
 msgid "You have no monthly recurring gift recommendations."
 msgstr "월간 반복 선물 추천이 없습니다."
 
-msgid "You need to go to https://mpdx.org and set up your account before using the mobile app."
-msgstr "모바일 앱을 사용하기 전에 https://mpdx.org에 가서 계정을 설정하세요."
+msgid "You must log in to MPDX again"
+msgstr "MPDX에 다시 로그인하셔야 합니다"
 
 msgid "You must select at least 2 contacts to merge."
 msgstr "통합하려면 최소 2개의 연락처를 선택하세요."
+
+msgid "You've been invited to access an account on MPDX"
+msgstr "MPDX 계정 액세스에 초대를 받았습니다"
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr "MPDX 계정의 코치로 초대를 받았습니다"
 
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "MPDX 연락처 \"%{contact}\"에 싱크되거나 MailChimp에 보내졌지만 이제는 메일을 전달할 수 없는 사람<a href=\"%{edit_person_url}\">%{person_name}</a>이 있습니다. %{email}"
@@ -1091,11 +995,11 @@ msgstr "[MPDX]의 %{source} 연락처 불러오기 실패"
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] %{source}의 ID와 비밀번호가 유효하지 않습니다."
 
-msgid "can not be blank"
-msgstr "빈 칸일 수 없습니다."
-
 msgid "at the time of event"
 msgstr "사건 시기"
+
+msgid "can not be blank"
+msgstr "빈 칸일 수 없습니다."
 
 msgid "converted as"
 msgstr "변환됨"
@@ -1105,118 +1009,3 @@ msgstr "총"
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "prayerletters.com 계정이 새로고침되어야 합니다."
-
-msgid " is designated to the \"%{appeal_name}\" appeal."
-msgstr " \"%{appeal_name}\" 호소로 지정되었습니다."
-
-msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-msgstr "%(이 과제는 다음 유형이 주어졌습니다 \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-
-msgid "%{number_of_failed_contacts} contacts failed to import."
-msgstr "%{number_of_failed_contacts} 개의 연락처를 가져오는 데 실패했습니다."
-
-msgid "%{number_of_successful_contacts} contacts imported successfully."
-msgstr "%{number_of_successful_contacts} 개의 연락처를 성공적으로 가져왔습니다."
-
-msgid "%{org_name} said we have the wrong password for your account."
-msgstr "%{org_name}에 의하면 귀하의 계정 암호가 잘못되었습니다."
-
-msgid "Contact is on the email newsletter but has no people with a valid email address."
-msgstr "연락처가 이메일 뉴스레터에 존재하지만 유효한 이메일 주소를 가진 사람이 없습니다."
-
-msgid "Contact is on the physical newsletter but has no mailing address."
-msgstr "연락처가 실제 뉴스레터에 존재하지만 이메일 주소가 없습니다."
-
-msgid "Google Integration Settings"
-msgstr "Google 통합 설정"
-
-msgid "MPDX encountered errors while trying to import your %{source} contacts."
-msgstr "MPDX에서 %{source} 연락처를 가져오는 도중 오류가 발생했습니다."
-
-msgid "MailChimp Integration Settings"
-msgstr "MailChimp 통합 설정"
-
-msgid "No Incomplete Tasks"
-msgstr "미완료된 작업 없음"
-
-msgid "Nothing Selected"
-msgstr "선택된 항목 없음"
-
-msgid "Other Email"
-msgstr "기타 이메일"
-
-msgid "Other Phone"
-msgstr "기타 휴대폰"
-
-msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
-msgstr "파트너 (반기별, 연례 등)에게 1개월 후 예상 기부가 있습니다. 알림을 보내 주십시오."
-
-msgid "Partner gave a Special Gift"
-msgstr "파트너로부터 특별 선물이 왔습니다"
-
-msgid "Partner gave a larger gift than commitment"
-msgstr "파트너가 지불액보다 큰 선물을 보냈습니다"
-
-msgid "Partner gave less than commitment"
-msgstr "파트너가 지불액보다 적게 보냈습니다"
-
-msgid "Partner gave with commitment of semi-annual or more"
-msgstr "파트너가 반기별 이상 지불액을 보냈습니다"
-
-msgid "Partner have not had a thank you note logged in the past year"
-msgstr "파트너가 지난 1년간 감사장을 받은 로그가 없습니다"
-
-msgid "Partner have not had an attempted call logged in the past year"
-msgstr "파트너가 지난 1년간 연락 시도를 받은 로그가 없습니다"
-
-msgid "Partner missed a gift"
-msgstr "파트너가 선물을 받지 못했습니다"
-
-msgid "Partner recontinued giving"
-msgstr "파트너가 기부를 재시작했습니다"
-
-msgid "Partner started giving"
-msgstr "파트너가 기부를 시작했습니다"
-
-msgid "Please try updating it here: %{link}"
-msgstr "이 주소에서 업데이트를 시도하세요: %{link}"
-
-msgid "Primary Phone"
-msgstr "기본 휴대폰"
-
-msgid "Spouse Other Email"
-msgstr "배우자 기타 이메일"
-
-msgid "Spouse Other Phone"
-msgstr "배우자 기타 휴대폰"
-
-msgid "Spouse Phone"
-msgstr "배우자 휴대폰"
-
-msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 실패는 대개 일시적 인터넷 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
-
-msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 실패는 대개 귀하께서 제어할 수 없는 일시적인 Facebook 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
-
-msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
-msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. 가장 많은 경우는 일시적인 서버 문제입니다. 가져오기를 다시 시도하십시오. 그래도 다시 실패하는 경우, support@mpdx.org로 Tnt 내보내기를 첨부해서 이메일을 보내주십시오. 저희가 가져오기 실패를 파악하는 데 있어 귀하께서 가져오려는 파일이 있으면 큰 도움이 됩니다."
-
-msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr "가져오기 실패의 이유는 여러 가지일 수 있습니다. CSV 가져오기 실패의 이유 중 가장 많은 경우는 이름 (first name) 때문입니다. CSV 가져오기에서 이름은 필수 입력 사항입니다. 가져오기에 실패한 행을 포함한 CSV 파일을 본 이메일에 첨부해서 드립니다. CSV의 첫 번째 열에 해당 행의 오류 메시지가 포함돼 있습니다. 이 CSV를 다운로드하여 표시된 문제를 해결한 수에 다시 가져오기를 시도하십시오. 이미 가져오는 데 성공한 연락처를 다시 가져올 필요는 없습니다. 그래도 다시 실패하는 경우, support@mpdx.org로 이메일 문의를 주시면 저희가 문제에 대해 알아보겠습니다."
-
-msgid "This donation was imported from Tnt."
-msgstr "이 기부는 Tnt에서 가져왔습니다."
-
-msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
-msgstr "MPDX에서 이 알림을 보내드린 이유는, 귀하의 환경 설정에 이런 유형의 알림을 받는 것으로 이메일 설정이 되어 있기 때문입니다. 설정을 변경하려면 <a href=\"%{preferences_url}\">여기</a>에서 변경하십시오."
-
-msgid "You must log in to MPDX again"
-msgstr "MPDX에 다시 로그인하셔야 합니다"
-
-msgid "You've been invited to access an account on MPDX"
-msgstr "MPDX 계정 액세스에 초대를 받았습니다"
-
-msgid "You've been invited to be a coach for an account on MPDX"
-msgstr "MPDX 계정의 코치로 초대를 받았습니다"
-

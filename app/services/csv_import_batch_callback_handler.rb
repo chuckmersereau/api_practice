@@ -8,7 +8,7 @@ class CsvImportBatchCallbackHandler
       number_of_failures = @import.file_row_failures.size
       number_of_successes = status.total - number_of_failures
 
-      if number_of_failures > 0
+      if number_of_failures.positive?
         @import_callback_handler.handle_failure(failures: number_of_failures, successes: number_of_successes)
       else
         @import_callback_handler.handle_success(successes: number_of_successes)

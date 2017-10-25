@@ -33,7 +33,7 @@ RSpec.shared_examples 'including related resources examples' do |options|
       let(:includes) { described_class::UNPERMITTED_INCLUDE_PARAMS.join(',') }
 
       it 'does not permit unpermitted filter params' do
-        if serializer.associations.count > 0
+        if serializer.associations.any?
           expect(described_class::UNPERMITTED_INCLUDE_PARAMS).to be_present
           subject
           expect(response.status).to eq(expected_response_code), invalid_status_detail
@@ -43,7 +43,7 @@ RSpec.shared_examples 'including related resources examples' do |options|
     end
 
     it 'includes one level of related resources' do
-      if serializer.associations.count > 0
+      if serializer.associations.any?
         subject
         expect(response.status).to eq(expected_response_code), invalid_status_detail
         expect(JSON.parse(response.body).keys).to include('included')
