@@ -80,6 +80,10 @@ class Donation < ApplicationRecord
     designation_account.currency
   end
 
+  def pledge_amount
+    appeal_amount&.positive? ? appeal_amount : amount
+  end
+
   private
 
   def update_related_pledge
