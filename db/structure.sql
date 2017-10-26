@@ -559,7 +559,9 @@ CREATE TABLE appeals (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     tnt_id integer,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    active boolean DEFAULT true,
+    monthly_amount numeric
 );
 
 
@@ -7153,3 +7155,4 @@ INSERT INTO schema_migrations (version) VALUES ('20171011173827');
 
 INSERT INTO schema_migrations (version) VALUES ('20171023022515');
 
+INSERT INTO schema_migrations (version) VALUES ('20171024045755');

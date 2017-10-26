@@ -16,14 +16,26 @@ describe TntImport::AppealsImport do
 
     it 'imports Appeals' do
       expect { tnt_import.import }.to change { Appeal.count }.from(0).to(2)
-      expect(Appeal.first.attributes.except('id', 'created_at', 'updated_at', 'uuid')).to eq('name' => '2017 Increase Campaign',
-                                                                                             'account_list_id' => import.account_list_id, 'amount' => nil,
-                                                                                             'description' => nil, 'end_date' => nil,
-                                                                                             'tnt_id' => 1_510_627_109)
-      expect(Appeal.second.attributes.except('id', 'created_at', 'updated_at', 'uuid')).to eq('name' => '2017 Increase Strategy',
-                                                                                              'account_list_id' => import.account_list_id, 'amount' => nil,
-                                                                                              'description' => nil, 'end_date' => nil,
-                                                                                              'tnt_id' => 1_510_627_107)
+      expect(Appeal.first.attributes.except('id', 'created_at', 'updated_at', 'uuid')).to eq(
+        'name' => '2017 Increase Campaign',
+        'account_list_id' => import.account_list_id,
+        'amount' => 10_000,
+        'description' => nil,
+        'end_date' => nil,
+        'tnt_id' => 1_510_627_109,
+        'active' => true,
+        'monthly_amount' => 100
+      )
+      expect(Appeal.second.attributes.except('id', 'created_at', 'updated_at', 'uuid')).to eq(
+        'name' => '2017 Increase Strategy',
+        'account_list_id' => import.account_list_id,
+        'amount' => 0,
+        'description' => nil,
+        'end_date' => nil,
+        'tnt_id' => 1_510_627_107,
+        'active' => true,
+        'monthly_amount' => 0
+      )
     end
   end
 
@@ -36,9 +48,16 @@ describe TntImport::AppealsImport do
 
     it 'imports Appeals' do
       expect { tnt_import.import }.to change { Appeal.count }.from(0).to(1)
-      expect(Appeal.last.attributes.except('id', 'created_at', 'updated_at', 'uuid')).to eq('name' => 'CSU', 'account_list_id' => import.account_list_id,
-                                                                                            'amount' => nil, 'description' => nil,
-                                                                                            'end_date' => nil, 'tnt_id' => -2_079_150_908)
+      expect(Appeal.last.attributes.except('id', 'created_at', 'updated_at', 'uuid')).to eq(
+        'name' => 'CSU',
+        'account_list_id' => import.account_list_id,
+        'amount' => nil,
+        'description' => nil,
+        'end_date' => nil,
+        'tnt_id' => -2_079_150_908,
+        'active' => true,
+        'monthly_amount' => nil
+      )
     end
   end
 end
