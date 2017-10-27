@@ -165,16 +165,21 @@ describe Appeal do
 
       subject.exclusion_filter = {
         status: 'Partner - Financial',
-        pledge_currency: 'NZD'
+        pledge_currency: 'NZD',
+        no_appeals: true
       }
+
+      contact.update(no_appeals: nil)
 
       subject.save
 
       excluded_appeal_contact1 = subject.excluded_appeal_contacts.find_by(contact: contact1)
+      excluded_appeal_contact2 = subject.excluded_appeal_contacts.find_by(contact: contact2)
       excluded_appeal_contact3 = subject.excluded_appeal_contacts.find_by(contact: contact3)
       excluded_appeal_contact4 = subject.excluded_appeal_contacts.find_by(contact: contact4)
 
       expect(excluded_appeal_contact1.reasons).to eq(['status'])
+      expect(excluded_appeal_contact2).to be nil
       expect(excluded_appeal_contact3.reasons).to eq(['pledge_currency'])
       expect(excluded_appeal_contact4.reasons).to match_array(%w(status pledge_currency))
     end
