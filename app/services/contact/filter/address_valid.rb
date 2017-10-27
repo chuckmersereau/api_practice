@@ -27,7 +27,10 @@ class Contact::Filter::AddressValid < Contact::Filter::Base
 
   def contact_ids_with_duplicate_primary_addresses
     Address.select(:addressable_id)
-           .where(addressable_type: 'Contact', addressable_id: contacts.ids, primary_mailing_address: true)
+           .where(addressable_type: 'Contact',
+                  addressable_id: contacts.ids,
+                  primary_mailing_address: true,
+                  deleted: false)
            .group(:addressable_id)
            .having('count(*) > 1')
            .pluck(:addressable_id)
