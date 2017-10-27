@@ -46,6 +46,10 @@ class Contact::Filterer < ApplicationFilterer
     Tags
     UpdatedAt
     WildcardSearch
+    StartedGivingWithin
+    GaveMoreThanPledgedWithin
+    PledgeAmountIncreasedWithin
+    StoppedGivingWithin
     NoAppeals
   ).freeze
 end
