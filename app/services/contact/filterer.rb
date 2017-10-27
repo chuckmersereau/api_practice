@@ -46,5 +46,6 @@ class Contact::Filterer < ApplicationFilterer
     Tags
     UpdatedAt
     WildcardSearch
+    NoAppeals
   ).freeze
 end
