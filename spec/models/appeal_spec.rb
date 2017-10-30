@@ -159,14 +159,27 @@ describe Appeal do
     end
 
     it 'adds filter name as reason for exclusion' do
+      expect(Contact::Filterer).to receive(:new).with(
+        newsletter: 'Both'
+      ).at_least(:once).and_call_original
+      expect(Contact::Filterer).to receive(:new).with(
+        status: 'Partner - Financial'
+      ).once.and_call_original
+      expect(Contact::Filterer).to receive(:new).with(
+        pledge_currency: 'NZD'
+      ).once.and_call_original
+      expect(Contact::Filterer).to receive(:new).with(
+        no_appeals: true
+      ).once.and_call_original
+
       subject.inclusion_filter = {
-        send_newsletter: 'Both'
+        'newsletter' => 'Both'
       }
 
       subject.exclusion_filter = {
-        status: 'Partner - Financial',
-        pledge_currency: 'NZD',
-        no_appeals: true
+        'status' => 'Partner - Financial',
+        'pledge_currency' => 'NZD',
+        'no_appeals' => true
       }
 
       contact.update(no_appeals: nil)

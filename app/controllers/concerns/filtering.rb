@@ -5,11 +5,11 @@ module Filtering
   DATE_TIME_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)(\.\.\.?)(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)/
   DEFAULT_PERMITTED_FILTERS = %i(updated_at).freeze
 
-  def filter_params
-    return {} unless params[:filter]
+  def filter_params(filter_params = params[:filter])
+    return {} unless filter_params
 
-    params[:filter]
-      .each_with_object({}) { |(key, value), hash| hash[key.underscore.to_sym] = value }
+    filter_params
+      .each_with_object({}) { |(key, value), hash| hash[key.to_s.underscore.to_sym] = value }
       .keep_if { |key, _| permitted_filters_with_defaults.include?(key) }
       .map { |key, value| { key => cast_filter_value(value) } }
       .reduce({}, :merge)
