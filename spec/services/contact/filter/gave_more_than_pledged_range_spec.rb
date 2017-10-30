@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Contact::Filter::GaveMoreThanPledgedWithin do
+RSpec.describe Contact::Filter::GaveMoreThanPledgedRange do
   let(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
   let!(:designation_account) { create(:designation_account, account_lists: [account_list]) }
@@ -58,6 +58,7 @@ RSpec.describe Contact::Filter::GaveMoreThanPledgedWithin do
              donor_account: third_contact.donor_accounts.first,
              amount: 20.00)
     end
+
     let(:contacts) { Contact.all }
 
     context 'contacts that have started giving within date range' do
@@ -65,7 +66,7 @@ RSpec.describe Contact::Filter::GaveMoreThanPledgedWithin do
         expect(
           described_class.query(
             contacts,
-            { gave_more_than_pledged_within: Range.new(3.months.ago.to_date, 1.month.ago.to_date) },
+            { gave_more_than_pledged_range: Range.new(3.months.ago.to_date, 1.month.ago.to_date) },
             [account_list]
           )
         ).to match_array([second_contact])

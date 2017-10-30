@@ -1,9 +1,9 @@
 ## I kept things on a monthly basis here since the only way to make sure that we get all contacts that have
 # given more than pledged is to look at the entire month.
-class Contact::Filter::GaveMoreThanPledgedWithin < Contact::Filter::Base
+class Contact::Filter::GaveMoreThanPledgedRange < Contact::Filter::Base
   def execute_query(contacts, filters)
-    beginning_of_start_month = filters[:gave_more_than_pledged_within].first.beginning_of_month
-    beginning_of_end_month = fetch_beginning_of_end_month_from_date_range(filters[:gave_more_than_pledged_within])
+    beginning_of_start_month = filters[:gave_more_than_pledged_range].first.beginning_of_month
+    beginning_of_end_month = fetch_beginning_of_end_month_from_date_range(filters[:gave_more_than_pledged_range])
     number_of_months = (beginning_of_end_month.year * 12 + beginning_of_end_month.month) -
                        (beginning_of_start_month.year * 12 + beginning_of_start_month.month)
 

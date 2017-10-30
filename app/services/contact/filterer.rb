@@ -39,15 +39,15 @@ class Contact::Filterer < ApplicationFilterer
   FILTERS_TO_HIDE = %w(
     AddressValid
     ExcludeTags
-    GaveMoreThanPledgedWithin
+    GaveMoreThanPledgedRange
     Ids
     NameLike
     NoAppeals
     NotIds
-    PledgeAmountIncreasedWithin
-    StartedGivingWithin
+    PledgeAmountIncreasedRange
+    StartedGivingRange
     StatusValid
-    StoppedGivingWithin
+    StoppedGivingRange
     Tags
     UpdatedAt
     WildcardSearch

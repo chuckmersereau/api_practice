@@ -155,8 +155,8 @@ resource 'Contacts' do
       parameter 'filter[donation_amount]',                'Filter by Exact Gift Amount; Accepts multiple parameters, with values like "9.99"',                   required: false
       parameter 'filter[donation_amount_range][min]',     'Filter by Gift Amount Range, Minimum; Accepts values like "9.99"',                                    required: false
       parameter 'filter[donation_amount_range][max]',     'Filter by Gift Amount Range, Maximum; Accepts values like "9.99"',                                    required: false
-      parameter 'filter[donation_date]',                  'Filter by Gift Date; Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',              required: false
-      parameter 'filter[gave_more_than_pledged_within]',  'Will return contacts that have given more than pledged within a date range.
+      parameter 'filter[donation_date]',                  'Filter by Gift Date; Accepts date range with text value like "YYY-MM-DD..YYYY-MM-DD"',                required: false
+      parameter 'filter[gave_more_than_pledged_range]',   'Will return contacts that have given more than pledged within a date range.
                                                            Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',                                   required: false
       parameter 'filter[likely]',                         'Filter by Likely To Give; Accepts multiple parameters, with values "none", "Least Likely", "Likely", '\
                                                            'and "Most Likely"',                                                                                  required: false
@@ -165,8 +165,8 @@ resource 'Contacts' do
       parameter 'filter[newsletter]',                     'Filter by Newsletter Recipients; Accepts values "none", "all", "address", "email", and "both"',       required: false
       parameter 'filter[no_appeals]',                     'Filter by Due Date; Pass the value "true" if the contacts do not wish to be contacted for appeals.',  required: false
       parameter 'filter[pledge_amount]',                  'Filter by Commitment Amount; Accepts multiple parameters, with values like "100.0"',                  required: false
-      parameter 'filter[pledge_amount_increased_within]', 'Will return contacts that have increased their pledge within the time range.
-                                                           Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',                                   required: false
+      parameter 'filter[pledge_amount_increased_range]',  'Will return contacts that have increased their pledge within the time range.
+                                                           Accepts date range with text value like "YYY-MM-DD..YYYY-MM-DD"',                                     required: false
       parameter 'filter[pledge_currency]',                'Filter by Commitment Currency; Accepts multiple parameters, with values like "USD"',                  required: false
       parameter 'filter[pledge_frequencies]',             'Filter by Commitment Frequency; Accepts multiple parameters, with numeric values like "0.23076923076923" (Weekly), '\
                                                            '"0.46153846153846" (Every 2 Weeks), "1.0" (Monthly), "2.0" (Every 2 Months), "3.0", "4.0", "6.0", "12.0" (Yearly), '\
@@ -183,13 +183,13 @@ resource 'Contacts' do
                                                            '"Call for Decision", "Partner - Financial", "Partner - Special", "Partner - Pray", "Not Interested", '\
                                                            '"Unresponsive", "Never Ask", "Research Abandoned", and "Expired Referral"',                          required: false
       parameter 'filter[status_valid]',                   'Filter by Status Valid; Accepts values "true", or "false"',                                           required: false
-      parameter 'filter[started_giving_within]',          'Will return contacts that have started giving within the date range;
-                                                           Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',                                   required: false
-      parameter 'filter[stopped_giving_within]',          'Will return contacts that have stopped giving during the date range;
+      parameter 'filter[started_giving_range]',           'Will return contacts that have started giving within the date range;
+                                                           Accepts date range with text value like "YYY-MM-DD..YYYY-MM-DD"',                                     required: false
+      parameter 'filter[stopped_giving_range]',           'Will return contacts that have stopped giving during the date range;
                                                             Note that for this filter to work the end date must be more than 1 month ago.
-                                                            Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',                                  required: false
+                                                            Accepts date range with text value like "YYY-MM-DD..YYYY-MM-DD"',                                    required: false
       parameter 'filter[tasks_all_completed]',            'Return contacts that have no incomplete tasks if given the value "true"',                             required: false
-      parameter 'filter[task_due_date]',                  'Filter by Due Date; Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',               required: false
+      parameter 'filter[task_due_date]',                  'Filter by Due Date; Accepts date range with text value like "YYY-MM-DD..YYYY-MM-DD"',                 required: false
       parameter 'filter[timezone]',                       'Filter by Timezone; Accepts multiple parameters,',                                                    required: false
       parameter 'filter[wildcard_search]',                'Filter by keyword, searches through name, notes, donor account numbers, email_addresses,
                                                            phone_numbers and people names',                                                                      required: false
