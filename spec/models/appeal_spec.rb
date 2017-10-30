@@ -171,6 +171,9 @@ describe Appeal do
       expect(Contact::Filterer).to receive(:new).with(
         no_appeals: true
       ).once.and_call_original
+      expect(Contact::Filterer).to receive(:new).with(
+        gave_more_than_pledged_range: Range.new(6.months.ago, 1.month.ago)
+      ).once.and_call_original
 
       subject.inclusion_filter = {
         'newsletter' => 'Both'
@@ -179,7 +182,8 @@ describe Appeal do
       subject.exclusion_filter = {
         'status' => 'Partner - Financial',
         'pledge_currency' => 'NZD',
-        'no_appeals' => true
+        'no_appeals' => true,
+        'gave_more_than_pledged_range' => '2017-10-12..2017-10-15'
       }
 
       contact.update(no_appeals: nil)
