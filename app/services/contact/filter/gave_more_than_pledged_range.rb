@@ -14,6 +14,10 @@ class Contact::Filter::GaveMoreThanPledgedRange < Contact::Filter::Base
                    number_of_months: number_of_months)
   end
 
+  def valid_filters?(filters)
+    date_range?(filters[:gave_more_than_pledged_range])
+  end
+
   private
 
   def above_pledge_contacts_ids_sql
