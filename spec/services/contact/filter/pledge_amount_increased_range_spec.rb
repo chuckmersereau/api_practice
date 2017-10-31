@@ -5,10 +5,12 @@ RSpec.describe Contact::Filter::PledgeAmountIncreasedRange do
   let(:account_list) { user.account_lists.first }
 
   describe '#query' do
-    let!(:first_contact) do
+    let!(:increasing_contact) do
       create(
         :contact,
         account_list: account_list,
+        pledge_amount: 150,
+        pledge_frequency: 1,
         first_donation_date: 4.months.ago
       )
     end
@@ -32,7 +34,7 @@ RSpec.describe Contact::Filter::PledgeAmountIncreasedRange do
     let!(:first_partner_status_log) do
       create(
         :partner_status_log,
-        contact: first_contact,
+        contact: increasing_contact,
         pledge_amount: 50.00,
         pledge_frequency: 1,
         recorded_on: 2.months.ago
@@ -41,7 +43,7 @@ RSpec.describe Contact::Filter::PledgeAmountIncreasedRange do
     let!(:second_partner_status_log) do
       create(
         :partner_status_log,
-        contact: first_contact,
+        contact: increasing_contact,
         pledge_amount: 50.00,
         pledge_frequency: 0.5,
         recorded_on: 1.month.ago
@@ -91,10 +93,10 @@ RSpec.describe Contact::Filter::PledgeAmountIncreasedRange do
         expect(
           described_class.query(
             contacts,
-            { pledge_amount_increased_range: Range.new(3.months.ago, Time.now) },
+            { pledge_amount_increased_range: Range.new(3.months.ago.to_datetime, DateTime.now) },
             nil
           )
-        ).to eq([first_contact])
+        ).to eq([increasing_contact])
       end
     end
   end

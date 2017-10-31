@@ -25,7 +25,7 @@ RSpec.describe Contact::Filter::StartedGivingRange do
         expect(
           described_class.query(
             contacts,
-            { started_giving_range: Range.new(5.months.ago, 2.months.ago) },
+            { started_giving_range: Range.new(5.months.ago.to_datetime, 2.months.ago) },
             [account_list]
           )
         ).to eq([second_contact])
