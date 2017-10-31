@@ -6,18 +6,24 @@ class Contact::Filter::StoppedGivingRange < Contact::Filter::Base
   def execute_query(scope, filters)
     @contacts_that_have_stopped_giving = scope.where(last_donation_date: filters[:stopped_giving_range])
 
+    @last_ten_months = (filters[:stopped_giving_range].last - 10.months)..filters[:stopped_giving_range].last
     @contacts_that_have_stopped_giving.where(id: ids_of_contacts_that_stopped_giving_and_have_more_than_three_donations)
   end
 
   def valid_filters?(filters)
-    super && filters[:stopped_giving_range].last <= 1.month.ago
+    super && date_range?(filters[:stopped_giving_range]) && filters[:stopped_giving_range].last <= valid_end_date
   end
 
   private
 
+  def valid_end_date
+    1.month.ago + 1.day
+  end
+
   def ids_of_contacts_that_stopped_giving_and_have_more_than_three_donations
     DonorAccount.joins({ contact_donor_accounts: :contact }, :donations)
-                .where(contact_donor_accounts: { contact: @contacts_that_have_stopped_giving })
+                .where(contact_donor_accounts: { contact: @contacts_that_have_stopped_giving },
+                       donations: { donation_date: @last_ten_months })
                 .group('contacts.id')
                 .having('COUNT(*) >= ?', PRIOR_NUMBER_OF_GIFTS).pluck('contacts.id')
   end

@@ -42,7 +42,7 @@ RSpec.describe Contact::Filter::StoppedGivingRange do
     let!(:first_donation_from_second_contact) do
       create(
         :donation,
-        donation_date: 5.months.ago,
+        donation_date: 6.months.ago,
         designation_account: account_list.designation_accounts.first,
         donor_account: second_contact.donor_accounts.first,
         amount: 50.00
@@ -57,12 +57,21 @@ RSpec.describe Contact::Filter::StoppedGivingRange do
         amount: 50.00
       )
     end
-    let!(:first_donation_from_third_contact) do
+    let!(:third_donation_from_second_contact) do
       create(
         :donation,
         donation_date: 4.months.ago,
         designation_account: account_list.designation_accounts.first,
         donor_account: second_contact.donor_accounts.first,
+        amount: 50.00
+      )
+    end
+    let!(:first_donation_from_third_contact) do
+      create(
+        :donation,
+        donation_date: 4.months.ago,
+        designation_account: account_list.designation_accounts.first,
+        donor_account: third_contact.donor_accounts.first,
         amount: 20.00
       )
     end
@@ -83,7 +92,7 @@ RSpec.describe Contact::Filter::StoppedGivingRange do
         expect(
           described_class.query(
             contacts,
-            { stopped_giving_range: Range.new(6.months.ago, 1.month.ago) },
+            { stopped_giving_range: Range.new(6.months.ago.to_datetime, 1.month.ago.to_datetime) },
             [account_list]
           )
         ).to eq([second_contact])
