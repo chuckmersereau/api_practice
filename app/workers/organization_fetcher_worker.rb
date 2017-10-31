@@ -2,7 +2,7 @@ class OrganizationFetcherWorker
   include Sidekiq::Worker
   sidekiq_options queue: :api_organization_fetcher_worker, unique: :until_executed
 
-  TNT_ORGS_URL = 'https://download.tntware.com/tntconnect/TntConnect_Organizations.csv'.freeze
+  TNT_ORGS_URL = 'https://download.tntware.com/donorhub/donorhub_api_organizations.csv'.freeze
 
   def perform
     # Download the org csv from tnt and update orgs

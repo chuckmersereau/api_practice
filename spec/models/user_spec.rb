@@ -230,6 +230,14 @@ describe User do
       it 'returns account_list' do
         expect(user.default_account_list_record).to eq account_list
       end
+
+      it 'returns nil if AccountList is not associated with user' do
+        other_account_list = create(:account_list)
+        user.update(default_account_list: other_account_list.id)
+
+        expect(other_account_list.id).to_not be_nil
+        expect(user.default_account_list_record).to be_nil
+      end
     end
     describe 'default_account_list not set' do
       let(:account_list) { create(:account_list) }

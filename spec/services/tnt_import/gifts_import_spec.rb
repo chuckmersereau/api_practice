@@ -130,6 +130,17 @@ describe TntImport::GiftsImport do
     end
 
     it 'assigns the gift currency code' do
+      @import = create(:tnt_import_broad, account_list: @account_list)
+      @tnt_import = TntImport.new(@import)
+
+      @user.organization_accounts.destroy_all
+      online_org = create(:organization)
+      @user.organization_accounts << create(:organization_account, organization: online_org)
+      @tnt_import.import
+      expect(Donation.exists?(amount: 50, currency: 'CAD')).to eq true
+    end
+
+    it 'assigns the gift tendered currency code' do
       @user.organization_accounts.destroy_all
       online_org = create(:organization)
       @user.organization_accounts << create(:organization_account, organization: online_org)
@@ -156,14 +167,6 @@ describe TntImport::GiftsImport do
       designation_account = @account_list.designation_accounts.last
       expect(designation_account.name).to eq("#{@import.user.to_s.strip} (Imported from TntConnect)")
       expect(designation_account.organization).to eq(@offline_org)
-    end
-
-    it 'reimports the designation account' do
-      expect { @tnt_import.import }.to change { @account_list.designation_accounts.reload.count }.from(0).to(1)
-      first_designation_account_id = @account_list.designation_accounts.first.id
-      donation = @account_list.donations.first
-      DesignationAccount.delete_all
-      expect { @tnt_import.import }.to change { donation.reload.designation_account_id }.from(first_designation_account_id)
     end
 
     it 'does not assign a remote_id when creating a donation' do
@@ -211,6 +214,44 @@ describe TntImport::GiftsImport do
       tnt_import = TntImport.new(import)
       expect { tnt_import.import }.to change { Donation.count }.from(0).to(3)
       expect { tnt_import.import }.to_not change { Donation.count }.from(3)
+    end
+
+    it 'uses an existing designation_account if it exists' do
+      expect { @tnt_import.import }.to change { Donation.count }.from(0).to(2)
+      donation = Donation.first
+      designation_account = create(:designation_account)
+      @account_list.designation_accounts << designation_account
+      donation.update!(designation_account: designation_account)
+      expect { @tnt_import.import }.to_not change { donation.reload.designation_account }.from(designation_account)
+    end
+
+    describe 'creating pledges' do
+      it 'creates a pledge if the donation belongs to an appeal' do
+        setup_online_org
+        expect { @tnt_import_with_personal_gift.import }.to change { Pledge.count }.from(0).to(1)
+          .and change { Donation.count }.from(0).to(2)
+        pledge = Pledge.first
+        donation = pledge.donations.first
+        expect(pledge.amount).to eq(25)
+        expect(pledge.amount_currency).to eq('USD')
+        expect(pledge.expected_date.to_date).to eq(donation.donation_date.to_date)
+        expect(pledge.contact).to eq(donation.donor_account.contacts.first)
+        expect(donation.appeal).to eq(@second_appeal)
+      end
+
+      it 'does not create a pledge if the donation does not belong to an appeal' do
+        @import = create(:tnt_import_gifts_without_appeal, account_list: @account_list)
+        @tnt_import = TntImport.new(@import)
+        setup_online_org
+        expect { @tnt_import.import }.to change { Donation.count }.from(0).to(2)
+        expect(Pledge.count).to eq(0)
+      end
+
+      it 'does not create a new pledge if one already exists' do
+        setup_online_org
+        expect { @tnt_import_with_personal_gift.import }.to change { Pledge.count }.from(0).to(1)
+        expect { @tnt_import_with_personal_gift.import }.to_not change { Pledge.count }.from(1)
+      end
     end
   end
 end

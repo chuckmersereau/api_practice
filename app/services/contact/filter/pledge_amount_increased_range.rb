@@ -1,4 +1,4 @@
-class Contact::Filter::PledgeAmountIncreasedWithin < Contact::Filter::Base
+class Contact::Filter::PledgeAmountIncreasedRange < Contact::Filter::Base
   attr_accessor :scope, :filters
 
   def execute_query(scope, filters)
@@ -7,6 +7,10 @@ class Contact::Filter::PledgeAmountIncreasedWithin < Contact::Filter::Base
 
     ids_of_contacts_with_pledge_amount_increase.compact
     scope.where(id: ids_of_contacts_with_pledge_amount_increase)
+  end
+
+  def valid_filters?(filters)
+    date_range?(filters[:pledge_amount_increased_range])
   end
 
   private
@@ -28,10 +32,12 @@ class Contact::Filter::PledgeAmountIncreasedWithin < Contact::Filter::Base
 
   def contact_ids_where_pledge_amount_changed
     PartnerStatusLog.where(contact: scope)
-                    .where(recorded_on: filters[:pledge_amount_increased_within])
-                    .group(:contact_id)
-                    .having('MAX(coalesce(pledge_amount, 0.0) / coalesce(pledge_frequency, 1.0)) > '\
-                            'AVG(coalesce(pledge_amount, 0.0) / coalesce(pledge_frequency, 1.0))').pluck(:contact_id)
+                    .where(recorded_on: filters[:pledge_amount_increased_range])
+                    .joins(:contact)
+                    .group('contact_id, contacts.pledge_amount, contacts.pledge_frequency')
+                    .having('MAX(coalesce(partner_status_logs.pledge_amount, 0.0) / coalesce(partner_status_logs.pledge_frequency, 1.0)) < '\
+                            'coalesce(contacts.pledge_amount, 0.0) / coalesce(contacts.pledge_frequency, 1.0)')
+                    .pluck(:contact_id)
   end
 
   def amount_per_month_from_status_log(status_log)

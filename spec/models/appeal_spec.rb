@@ -134,7 +134,7 @@ describe Appeal do
     it 'adds appeal_contacts (with a uuid) for contacts within inclusion filter' do
       subject.inclusion_filter = {
         status: 'Partner - Financial',
-        send_newsletter: 'Both'
+        newsletter: 'Both'
       }
 
       subject.save
@@ -144,7 +144,7 @@ describe Appeal do
 
     it 'adds excluded_appeal_contacts (with a uuid) for all contacts in the exclusion filters' do
       subject.inclusion_filter = {
-        send_newsletter: 'Both'
+        newsletter: 'Both'
       }
 
       subject.exclusion_filter = {
@@ -159,22 +159,46 @@ describe Appeal do
     end
 
     it 'adds filter name as reason for exclusion' do
+      end_date = Date.today
+      start_date = end_date - 5.months
+      expect(Contact::Filterer).to receive(:new).with(
+        newsletter: 'Both'
+      ).at_least(:once).and_call_original
+      expect(Contact::Filterer).to receive(:new).with(
+        status: 'Partner - Financial'
+      ).once.and_call_original
+      expect(Contact::Filterer).to receive(:new).with(
+        pledge_currency: 'NZD'
+      ).once.and_call_original
+      expect(Contact::Filterer).to receive(:new).with(
+        no_appeals: true
+      ).once.and_call_original
+      expect(Contact::Filterer).to receive(:new).with(
+        gave_more_than_pledged_range: Range.new(start_date, end_date)
+      ).once.and_call_original
+
       subject.inclusion_filter = {
-        send_newsletter: 'Both'
+        'newsletter' => 'Both'
       }
 
       subject.exclusion_filter = {
-        status: 'Partner - Financial',
-        pledge_currency: 'NZD'
+        'status' => 'Partner - Financial',
+        'pledge_currency' => 'NZD',
+        'no_appeals' => true,
+        'gave_more_than_pledged_range' => "#{start_date.strftime('%Y-%m-%d')}...#{end_date.strftime('%Y-%m-%d')}"
       }
+
+      contact.update(no_appeals: nil)
 
       subject.save
 
       excluded_appeal_contact1 = subject.excluded_appeal_contacts.find_by(contact: contact1)
+      excluded_appeal_contact2 = subject.excluded_appeal_contacts.find_by(contact: contact2)
       excluded_appeal_contact3 = subject.excluded_appeal_contacts.find_by(contact: contact3)
       excluded_appeal_contact4 = subject.excluded_appeal_contacts.find_by(contact: contact4)
 
       expect(excluded_appeal_contact1.reasons).to eq(['status'])
+      expect(excluded_appeal_contact2).to be nil
       expect(excluded_appeal_contact3.reasons).to eq(['pledge_currency'])
       expect(excluded_appeal_contact4.reasons).to match_array(%w(status pledge_currency))
     end

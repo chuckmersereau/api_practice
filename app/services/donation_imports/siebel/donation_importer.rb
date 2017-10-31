@@ -96,22 +96,26 @@ class DonationImports::Siebel
     def add_or_update_mpdx_donation(siebel_donation, designation_profile)
       default_currency = organization.default_currency_code || 'USD'
       donor_account = organization.donor_accounts.find_by(account_number: siebel_donation.donor_id)
-
       designation_account = designation_profile.designation_accounts.find_by(designation_number: siebel_donation.designation)
-      mpdx_donation = designation_account.donations.where(remote_id: siebel_donation.id).first_or_initialize
 
-      mpdx_donation.update!(
+      attributes = {
+        amount: siebel_donation.amount,
+        channel: siebel_donation.channel,
+        currency: default_currency,
+        designation_account_id: designation_account.id,
+        donation_date: siebel_donation.donation_date.to_date,
         donor_account_id: donor_account.id,
         motivation: siebel_donation.campaign_code,
         payment_method: siebel_donation.payment_method,
-        tendered_currency: default_currency,
-        donation_date: siebel_donation.donation_date.to_date,
-        amount: siebel_donation.amount,
+        payment_type: siebel_donation.payment_type,
+        remote_id: siebel_donation.id,
         tendered_amount: siebel_donation.amount,
-        currency: default_currency,
-        channel: siebel_donation.channel,
-        payment_type: siebel_donation.payment_type
-      )
+        tendered_currency: default_currency
+      }
+
+      mpdx_donation = FindDonation.new(designation_profile: designation_profile, attributes: attributes).find_and_merge
+      mpdx_donation ||= Donation.new
+      mpdx_donation.update!(attributes)
     end
   end
 end

@@ -53,13 +53,15 @@ RSpec.describe DonationImports::Siebel::DonationImporter do
   end
 
   context '#import_donations' do
-    it 'imports donations and deletes up to 3 donations that were removed on siebel (in the date range provided)' do
+    before do
       expect(SiebelDonations::Donation).to receive(:find)
         .with(posted_date_start: 2.weeks.ago.strftime('%Y-%m-%d'),
               posted_date_end: Time.now.strftime('%Y-%m-%d'),
               designations: 'the_designation_number')
         .and_return(siebel_donations)
+    end
 
+    it 'imports donations and deletes up to 3 donations that were removed on siebel (in the date range provided)' do
       expect do
         expect(subject.import_donations(start_date: 2.weeks.ago)).to be_truthy
       end.to change { Donation.count }.by(-2)

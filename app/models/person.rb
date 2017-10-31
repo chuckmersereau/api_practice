@@ -405,7 +405,13 @@ class Person < ApplicationRecord
 
       other.email_addresses.each do |email_address|
         next if email_addresses.find_by(email: email_address.email)
-        email_address.update_attributes(person_id: id)
+        if primary_email_address.present?
+          # if there is already a primary email address on a person, we don't want to try to move the
+          # loser's primary, which will override the winner's primary setting.
+          email_address.update(person_id: id, primary: false)
+        else
+          email_address.update(person_id: id)
+        end
       end
 
       other.pictures.each do |picture|

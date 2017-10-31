@@ -18,4 +18,10 @@ class Contact::Filter::Base < ApplicationFilter
   def designation_account_ids
     account_lists.map(&:designation_account_ids).flatten
   end
+
+  def date_range?(param)
+    # we are expecting the param to be range of dates, if it is a range and in the correct direction,
+    # `min` will return the first value, otherwise `min` will be nil
+    param.is_a?(Range) && param.first.is_a?(Date) && param.min
+  end
 end

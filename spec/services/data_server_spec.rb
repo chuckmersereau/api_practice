@@ -569,6 +569,10 @@ describe DataServer do
     describe 'add or update donation' do
       let(:designation_account) { create(:designation_account) }
 
+      before do
+        profile.designation_accounts << designation_account
+      end
+
       it 'adds a new donation' do
         expect do
           @data_server.send(:add_or_update_donation, line, designation_account, profile)
@@ -607,6 +611,15 @@ describe DataServer do
 
         expect { @data_server.send(:add_or_update_donation, line_one, designation_account, profile) }.to change { Donation.count }.from(0).to(1)
         expect { @data_server.send(:add_or_update_donation, line_two, designation_account, profile) }.to change { Donation.count }.from(1).to(2)
+      end
+
+      it 'uses the find donation service' do
+        donation = create(:donation, remote_id: '1062', tnt_id: nil, amount: 1, designation_account: designation_account)
+        expect_any_instance_of(DonationImports::Base::FindDonation).to receive(:find_and_merge).and_return(donation)
+
+        expect do
+          @data_server.send(:add_or_update_donation, line, designation_account, profile)
+        end.to_not change { Donation.count }.from(1)
       end
     end
 

@@ -19,7 +19,7 @@ describe TntImport::PledgesImport do
       pledge = Pledge.last
       expect(pledge.amount).to eq(75)
       expect(pledge.amount_currency).to eq('USD')
-      expect(pledge.expected_date).to eq(Time.zone.parse('2017-06-10'))
+      expect(pledge.expected_date).to eq(Date.parse('2017-06-10'))
       expect(pledge.account_list_id).to eq(account_list.id)
       expect(pledge.contact_id).to be_present
     end

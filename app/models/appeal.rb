@@ -1,4 +1,7 @@
 class Appeal < ApplicationRecord
+  include Filtering
+  include Filtering::Contacts
+
   attr_accessor :inclusion_filter, :exclusion_filter
   belongs_to :account_list
   has_one :mail_chimp_account, through: :account_list
@@ -74,7 +77,7 @@ class Appeal < ApplicationRecord
     return unless exclusion_filter
     exclusions = {}
     exclusion_filter.each do |key, value|
-      excluded_contacts_from_filter(ActionController::Parameters.new(key => value)).pluck(:id).each do |id|
+      excluded_contacts_from_filter(key => value).pluck(:id).each do |id|
         exclusions[id] ||= []
         exclusions[id].append(key)
       end
@@ -97,15 +100,17 @@ class Appeal < ApplicationRecord
   end
 
   def contacts_from_filter(filter = inclusion_filter)
-    return Contact.none unless filter
-    Contact::Filterer.new(filter).filter(
-      scope: account_list.contacts, account_lists: [account_list]
+    params = filter_params(filter)
+    return Contact.none if params.empty?
+    Contact::Filterer.new(params).filter(
+      scope: Contact.where(account_list: account_list), account_lists: [account_list]
     )
   end
 
   def excluded_contacts_from_filter(filter = exclusion_filter)
-    return Contact.none unless filter
-    Contact::Filterer.new(filter).filter(
+    params = filter_params(filter)
+    return Contact.none if params.empty?
+    Contact::Filterer.new(params).filter(
       scope: contacts_from_filter, account_lists: [account_list]
     )
   end
