@@ -27,7 +27,7 @@ class SidekiqCronLoader
     'OrganizationsFromCsvUrlWorker' => {
       'class' => 'OrganizationsFromCsvUrlWorker',
       'cron'  => '4 7 * * *',
-      'args'  => ['https://download.tntware.com/tntconnect/TntConnect_Organizations.csv']
+      'args'  => ['https://download.tntware.com/donorhub/donorhub_api_organizations.csv']
     },
 
     'Clear Stalled Downloads' => {
