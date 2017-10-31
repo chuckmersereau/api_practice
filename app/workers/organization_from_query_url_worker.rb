@@ -36,8 +36,8 @@ class OrganizationFromQueryUrlWorker
   def organization_params
     return @organization_params if @organization_params
     @organization_params = {}
-    @organization_params.merge(organization_attributes)
-    @organization_params.merge(section_attributes)
+    @organization_params = @organization_params.merge(organization_attributes)
+    @organization_params = @organization_params.merge(section_attributes)
     @organization_params
   end
 
