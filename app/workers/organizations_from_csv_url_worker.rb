@@ -7,7 +7,7 @@ class OrganizationsFromCsvUrlWorker
     CSV.new(organizations_csv, headers: :first_row).each do |line|
       name, url = line[0..1]
       next unless url.present?
-      OrganizationFromQueryUrlWorker.perform(name, url)
+      OrganizationFromQueryUrlWorker.perform_async(name, url)
     end
   end
 end

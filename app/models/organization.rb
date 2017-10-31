@@ -40,12 +40,12 @@ class Organization < ApplicationRecord
   end
 
   def guess_country
-    self.country ||= country_from_name
+    self.country = country_from_name
   end
 
   def guess_locale
-    self.locale ||= 'en' unless country.present?
-    self.locale ||= ISO3166::Country.find_country_by_name(country)&.languages&.first || 'en'
+    return self.locale = 'en' unless country.present?
+    self.locale = ISO3166::Country.find_country_by_name(country)&.languages&.first || 'en'
   end
 
   # We had an organization, DiscipleMakers with a lot of duplicate addresses in its contacts and donor
@@ -71,7 +71,7 @@ class Organization < ApplicationRecord
     country_name = remove_prefixes_from_name
     return 'Canada' if country_name == 'CAN'
     ::CountrySelect::COUNTRIES_FOR_SELECT.find do |country|
-      country_name[:name] == country_name || country[:alternatives].split(' ').include?(name)
+      country[:name] == country_name || country[:alternatives].split(' ').include?(country_name)
     end.try(:[], :name)
   end
 
