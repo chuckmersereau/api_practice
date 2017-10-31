@@ -2,6 +2,13 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 30 October 2017
+- Updated 4 filters.
+  - gave_more_than_pledged_within is now gave_more_than_pledged_range
+  - pledge_amount_increase_within is now pledge_amount_increase_range
+  - started_giving_within is now started_giving_range
+  - stopped_giving_within is now stopped_giving_range
+
 ## 12 October 2017
 - Added api/v2/reports/monthly_losses_graphs endpoint.
 

@@ -56,7 +56,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
       expect(response_data['attributes']['json_web_token']).to eq(
         JsonWebToken.encode(
           user_uuid: user_to_impersonate.uuid,
-          exp: 20.minutes.from_now.utc.to_i
+          exp: 1.hour.from_now.utc.to_i
         )
       )
       travel_back

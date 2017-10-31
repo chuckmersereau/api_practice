@@ -6,8 +6,10 @@ class Pledge < ApplicationRecord
   has_many :donations, through: :pledge_donations
 
   validates :account_list, :amount, :contact, :expected_date, presence: true
+  validates :appeal_id, uniqueness: { scope: :contact_id }
 
   PERMITTED_ATTRIBUTES = [:amount,
+                          :amount_currency,
                           :appeal_id,
                           :created_at,
                           :contact_id,

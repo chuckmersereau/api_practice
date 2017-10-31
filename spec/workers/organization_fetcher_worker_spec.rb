@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe OrganizationFetcherWorker do
   it 'fetches organizations' do
-    tnt_stub = stub_request(:get, 'https://download.tntware.com/tntconnect/TntConnect_Organizations.csv')
+    tnt_stub = stub_request(:get, 'https://download.tntware.com/donorhub/donorhub_api_organizations.csv')
                .to_return(body: "Name,QueryIni\nAgape Iceland,http://example.com")
     org_stub = stub_request(:get, 'http://example.com')
 

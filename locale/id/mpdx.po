@@ -1,7 +1,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-09-28 19:48+0000\n"
 "PO-Revision-Date: 2017-09-28 19:48+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
@@ -11,35 +10,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "%{contact_name} just gave their first gift. Send them a Thank You."
-msgstr "%{contact_name} baru saja memberikan hadiah pertama. Kirim ucapan terima kasih."
-
-msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
-msgstr "%{contact_name} memiliki hadiah tak terduga dalam 1 bulan. Hubungi untuk mengetahui lebih lanjut."
-
-msgid "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
-msgstr "\"Tampilkan #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
-
-msgid "%{contact_name} seems to have missed a gift. Call to follow up."
-msgstr "%{contact_name} sepertinya kelewatan sebuah hadiah. Hubungi untuk mengetahui lebih lanjut."
-
-msgid "\"Task scheduled for #{ l(@task.start_at) }:\""
-msgstr "\" Tugas dijadwalkan untuk #{ l(@task.start_at) }:\""
-
-msgid "%{number} ext %{extension}"
-msgstr "%{number} ext %{extension}"
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr " ditunjuk untuk \"%{appeal_name}\" banding."
 
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "%{name} (donor #%{account_number})"
 
-msgid "%{org_name} said we have the wrong password for your account.\n\nPlease try updating it here: %{link}"
-msgstr "%{org_name} mengatakan kami memiliki sandi yang salah untuk akun Anda.\n\nSilahkan coba perbarui di sini: %{link}"
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr "%(Tugas ini diberikan tipe \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 
-msgid "-- All Hidden --"
-msgstr "Tersembunyi Semua"
+msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
+msgstr "%{contact_name} memiliki hadiah tak terduga dalam 1 bulan. Hubungi untuk mengetahui lebih lanjut."
+
+msgid "%{contact_name} just gave their first gift. Send them a Thank You."
+msgstr "%{contact_name} baru saja memberikan hadiah pertama. Kirim ucapan terima kasih."
+
+msgid "%{contact_name} seems to have missed a gift. Call to follow up."
+msgstr "%{contact_name} sepertinya kelewatan sebuah hadiah. Hubungi untuk mengetahui lebih lanjut."
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr "%{number_of_failed_contacts} kontak gagal diimpor."
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr "%{number_of_successful_contacts} kontak berhasil diimpor."
+
+msgid "%{number} ext %{extension}"
+msgstr "%{number} ext %{extension}"
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr "%{org_name} berkata bahwa kami memiliki kata sandi yang salah untuk akun Anda."
+
+#, fuzzy
+msgid "-- All --"
+msgstr "-- Salah satu --"
 
 msgid "-- All Active --"
 msgstr "Aktif Semua"
+
+msgid "-- All Hidden --"
+msgstr "Tersembunyi Semua"
 
 msgid "-- Any --"
 msgstr "-- Salah satu --"
@@ -47,23 +56,20 @@ msgstr "-- Salah satu --"
 msgid "-- Do not ask --"
 msgstr "-- Jangan tanya --"
 
-msgid "-- Unspecified --"
-msgstr "-- Tidak ditentukan --"
-
 msgid "-- Has referrer --"
 msgstr "-- Memiliki perujuk --"
 
 msgid "-- None --"
 msgstr "-- Tidak ada --"
 
-msgid "... Show More"
-msgstr "... Tampilkan lebih banyak"
-
-msgid "1 hour before"
-msgstr "1 jam sebelumnya"
+msgid "-- Unspecified --"
+msgstr "-- Tidak ditentukan --"
 
 msgid "1 day before"
 msgstr "1 hari sebelumnya"
+
+msgid "1 hour before"
+msgstr "1 jam sebelumnya"
 
 msgid "1 week before"
 msgstr "1 minggu sebelumnya"
@@ -74,32 +80,20 @@ msgstr "15 menit sebelumnya"
 msgid "2 days before"
 msgstr "2 hari sebelumnya"
 
-msgid "30 minutes before"
-msgstr "30 menit sebelumnya"
-
 msgid "2 hours before"
 msgstr "2 jam sebelumnya"
+
+msgid "30 minutes before"
+msgstr "30 menit sebelumnya"
 
 msgid "5 minutes before"
 msgstr "5 menit sebelumnya"
 
-msgid "Accept MPDX Account Invite"
-msgstr "Terima Undangan Akun MPDX"
-
 msgid "Account List"
 msgstr "Daftar Akun"
 
-msgid "Account List Settings:"
-msgstr "Pengaturan Daftar Akun"
-
-msgid "Account access invite"
-msgstr "Undangan akses akun"
-
 msgid "Action"
 msgstr "Aksi"
-
-msgid "Account List ID:"
-msgstr "ID Daftar Akun:"
 
 msgid "Add an Account"
 msgstr "Tambah Akun"
@@ -110,23 +104,22 @@ msgstr "Tambah Akun lain"
 msgid "Address"
 msgstr "Alamat"
 
-msgid "Afrikaans"
-msgstr "Afrika"
-
 msgid "Address No Longer Valid"
 msgstr "Alamat Sudah Tidak Valid"
-
-msgid "Annual"
-msgstr "Tahunan"
-
-msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
-msgstr "Kontak lain dalam akun Anda sudah memiliki nomor akun donor yang sudah Anda coba untuk ditetapkan ke kontak ini."
 
 msgid "All"
 msgstr "Semua"
 
+msgid "Annual"
+msgstr "Tahunan"
+
 msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
-msgstr "Kontak lain dalam organisasi Anda sudah memiliki nomor akun donor yang sudah Anda coba untuk ditetapkan ke kontak ini.\nCoba buat lebih unik lagi."
+msgstr ""
+"Kontak lain dalam organisasi Anda sudah memiliki nomor akun donor yang sudah Anda coba untuk ditetapkan ke kontak ini.\n"
+"Coba buat lebih unik lagi."
+
+msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
+msgstr "Kontak lain dalam akun Anda sudah memiliki nomor akun donor yang sudah Anda coba untuk ditetapkan ke kontak ini."
 
 msgid "Appeal"
 msgstr "Menarik"
@@ -134,33 +127,26 @@ msgstr "Menarik"
 msgid "Appointment"
 msgstr "Janji Temu"
 
+msgid "Appointment Scheduled"
+msgstr "Janji Dijadwalkan"
+
 msgid "Are marked as do not ask for appeals"
 msgstr "Ditandai sebagai jangan tanya untuk daya tarik"
-
-msgid "Aunt"
-msgstr "Tante"
 
 msgid "Ask in Future"
 msgstr "Tanya di Masa depan"
 
-msgid "Appointment Scheduled"
-msgstr "Janji Dijadwalkan"
+msgid "Aunt"
+msgstr "Tante"
 
 msgid "Average"
 msgstr "Rata-rata"
 
-msgid "Arabic"
-msgstr "Arab"
-
-#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "Rata2"
 
 msgid "Balance: %{balance}"
 msgstr "Saldo: %{saldo}"
-
-msgid "Belarusian"
-msgstr "Belarusia"
 
 msgid "Both"
 msgstr "Dua-duanya"
@@ -168,29 +154,14 @@ msgstr "Dua-duanya"
 msgid "Brother"
 msgstr "Saudara laki-laki"
 
-msgid "Browser:"
-msgstr "Peramban:"
-
 msgid "Business"
 msgstr "Bisnis"
-
-msgid "Bulgarian"
-msgstr "Bulgaria"
-
-msgid "Call for Decision"
-msgstr "Panggilan untuk Keputusan"
-
-msgid "Catalan"
-msgstr "Katalan"
 
 msgid "Call"
 msgstr "Panggil"
 
-msgid "Chinese (Simplified)"
-msgstr "Mandarin (Sederhana)"
-
-msgid "Chinese (Traditional)"
-msgstr "Mandarin (Tradisional)"
+msgid "Call for Decision"
+msgstr "Panggilan untuk Keputusan"
 
 msgid "Church"
 msgstr "Gereja"
@@ -198,14 +169,11 @@ msgstr "Gereja"
 msgid "City"
 msgstr "Kota"
 
-msgid "Click here to download the file"
-msgstr "Klik di sini utnuk mengunduh file"
-
-msgid "Click to see all balances"
-msgstr "Klik di sini utnuk melihat semua saldo"
-
 msgid "Commitment"
 msgstr "Komitmen"
+
+msgid "Commitment Amount"
+msgstr "Jumlah Komitmen"
 
 msgid "Commitment Currency"
 msgstr "Komitmen Mata uang"
@@ -216,9 +184,6 @@ msgstr "Rincian Komitmen"
 msgid "Commitment Frequency"
 msgstr "Frekuensi Komitmen"
 
-msgid "Commitment Amount"
-msgstr "Jumlah Komitmen"
-
 msgid "Commitment Received"
 msgstr "Komitmen Diterima"
 
@@ -228,16 +193,47 @@ msgstr "Perusahaan"
 msgid "Completed"
 msgstr "Selesai"
 
-msgid "Contact Information"
-msgstr "Informasi Kontak"
+msgid "Contact Church"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Commitment Details"
+msgstr "Rincian Komitmen"
 
 msgid "Contact Details"
 msgstr "Rincian Kontak"
+
+#, fuzzy
+msgid "Contact Gift Details"
+msgstr "Rincian Kontak"
+
+msgid "Contact Information"
+msgstr "Informasi Kontak"
+
+msgid "Contact Likely To Give"
+msgstr ""
 
 msgid "Contact Location"
 msgstr "Lokasi Kontak"
 
 msgid "Contact Name"
+msgstr "Nama Kontak"
+
+msgid "Contact Newsletter"
+msgstr ""
+
+msgid "Contact Referrer"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Status"
+msgstr "Rincian Kontak"
+
+msgid "Contact Timezone"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Type"
 msgstr "Nama Kontak"
 
 msgid "Contact for Appointment"
@@ -255,17 +251,8 @@ msgstr "Sepupu (Perempuan)"
 msgid "Cousin (Male)"
 msgstr "Sepupu (Laki-laki)"
 
-msgid "Croatian"
-msgstr "Kroasia"
-
 msgid "Currency"
 msgstr "Mata Uang"
-
-msgid "Danish"
-msgstr "Denmark"
-
-msgid "Czech"
-msgstr "Ceko"
 
 msgid "Date Range"
 msgstr "Rentang Tanggal"
@@ -288,58 +275,26 @@ msgstr "Selesai"
 msgid "Donor system"
 msgstr "Sistem Donor"
 
-msgid "Dutch"
-msgstr "Belanda"
-
-msgid "Email"
-msgstr "Email"
-
 msgid "Dr."
 msgstr "Dr."
-
-msgid "Email 1"
-msgstr "Email 1"
 
 msgid "Due Date"
 msgstr "Jatuh Tempo"
 
-msgid "Email 2"
-msgstr "Email 2"
+msgid "Email"
+msgstr "Email"
 
-msgid "Email 3"
-msgstr "Email 3"
-
-msgid "Email 4"
-msgstr "Email 4"
-
-#. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "Bertunangan"
 
-msgid "Email:"
-msgstr "Email:"
-
-msgid "English"
-msgstr "Inggris"
-
-msgid "Error connecting to %{org_name} server"
-msgstr "Menghubungkan ke server %{org_name} eror"
-
-msgid "Error connecting: you are already connected as %{org_account}"
-msgstr "Konkesi Eror: Anda sudah terhubung ke %{org_account}"
-
-#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "Amplom Pembuka"
 
-msgid "Estonian"
-msgstr "Estonia"
+msgid "Every 2 Months"
+msgstr "Setiap 2 Bulan"
 
 msgid "Every 2 Weeks"
 msgstr "Setiap 2 Minggu"
-
-msgid "Every 2 Months"
-msgstr "Setiap 2 Bulan"
 
 msgid "Every 2 Years"
 msgstr "Setiap 2 Tahun"
@@ -362,14 +317,8 @@ msgstr "Pesan Facebook"
 msgid "Facebook Profile"
 msgstr "Akun Facebook"
 
-msgid "Farsi"
-msgstr "Farsi"
-
 msgid "Father"
 msgstr "Ayah"
-
-msgid "Finnish"
-msgstr "Finlandia"
 
 msgid "First Gift"
 msgstr "Hadiah Pertama"
@@ -377,20 +326,18 @@ msgstr "Hadiah Pertama"
 msgid "First Name"
 msgstr "Nama Depan"
 
-msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
-msgstr "Untuk Integrasi MailChimp kami merekomendasikan Anda untuk menetapkan daftar baru pada MailChimp untuk digunakan (bukan akun baru, hanya daftar baru), dan tetapkan MailChimp secara default untuk daftar tersebut.\nJika Anda menetapkan dengan daftar baru, semua orang akan disalin secara otomatis utnuk menerima buletin Anda, dan Anda dapat mengatur semua pembaruan dari MPDX (Misalnya saat Anda ingin mengubah alamat email dalam MPDX, maka akan dieprbarui pada mailchimp)"
-
-msgid "French (Canada)"
-msgstr "Perancis (Kanada)"
-
-msgid "French (France)"
-msgstr "Perancis (Perancis)"
+msgid ""
+"For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n"
+"  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n"
+"  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n"
+"  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n"
+"  address on MPDX it will update on mailchimp)."
+msgstr ""
+"Untuk Integrasi MailChimp kami merekomendasikan Anda untuk menetapkan daftar baru pada MailChimp untuk digunakan (bukan akun baru, hanya daftar baru), dan tetapkan MailChimp secara default untuk daftar tersebut.\n"
+"Jika Anda menetapkan dengan daftar baru, semua orang akan disalin secara otomatis utnuk menerima buletin Anda, dan Anda dapat mengatur semua pembaruan dari MPDX (Misalnya saat Anda ingin mengubah alamat email dalam MPDX, maka akan dieprbarui pada mailchimp)"
 
 msgid "Future"
 msgstr "Masa Depan"
-
-msgid "German"
-msgstr "Jerman"
 
 msgid "Gave a special gift in the last 3 months"
 msgstr "Memberi hadiah spesial lebih dari 3 bulan terakhir"
@@ -401,111 +348,79 @@ msgstr "Jumlah Hadiah Lebih Tinggi atau Sama Dengan"
 msgid "Gift Amount Less Than or Equal To"
 msgstr "Jumlah Hadiah Kurang Dari atau Sama Dengan"
 
-msgid "Gift Date"
-msgstr "Tanggal Hadiah"
-
 msgid "Gift Amount Range"
 msgstr "Kisarana Jumlah Hadiah"
+
+msgid "Gift Date"
+msgstr "Tanggal Hadiah"
 
 msgid "Gift Details"
 msgstr "Rincian Hadiah"
 
-msgid "Granddaughter"
-msgstr "Cucup perempuan"
-
 msgid "Gift Options"
 msgstr "Pilihan Hadiah"
 
-msgid "Google import"
-msgstr "Impor dari Google"
+msgid "Google Integration Settings"
+msgstr "Pengaturan Integrasi Google"
 
 msgid "Google account needs to be refreshed"
 msgstr "Akun google harus disegarkan"
 
+msgid "Google import"
+msgstr "Impor dari Google"
+
 msgid "Google sync"
 msgstr "Sinkronisasi"
+
+msgid "Granddaughter"
+msgstr "Cucup perempuan"
 
 msgid "Grandfather"
 msgstr "Kakek"
 
-msgid "Grandson"
-msgstr "Cucu laki-laki"
-
 msgid "Grandmother"
 msgstr "Nenek"
 
-msgid "Greek"
-msgstr "Yunani"
+msgid "Grandson"
+msgstr "Cucu laki-laki"
 
 msgid "Greeting"
 msgstr "Salam"
 
-msgid "Hebrew"
-msgstr "Yahudi"
-
-msgid "Hindi"
-msgstr "Hindi"
-
 msgid "History"
 msgstr "Sejarah"
-
-msgid "Home Phone"
-msgstr "Telepon Rumah"
 
 msgid "Home"
 msgstr "Beranda"
 
-#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
+msgid "Home Phone"
+msgstr "Telepon Rumah"
+
 msgid "Hon."
 msgstr "Hon."
-
-msgid "Hungarian"
-msgstr "Hongaria"
 
 msgid "Husband"
 msgstr "Suami"
 
-msgid "Icelandic"
-msgstr "Islandia"
-
-msgid "If we let you delete that account you won't be able to log in anymore."
-msgstr "Jika akun tersebut dihapus, Anda tidak akan bisa login lagi."
-
-msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
+msgid ""
+"If you do want to stick with your existing list, you will need to make that extra merge field not a\n"
+"  required field."
 msgstr "Jika Anda ingin menggunakan daftar lama Anda, Anda harus menjadikan bidang gabungan tambahan sebagai bidang wajib."
+
+msgid "Increase Gift Recommendation"
+msgstr ""
 
 msgid "Increased their giving in the last 3 months"
 msgstr "Meningkatkan pemberian mereka dalam 3 bulan terakhir"
 
-msgid "Import File:"
-msgstr "Impor File:"
-
 msgid "Insights for "
 msgstr "Wawasan untuk "
-
-msgid "Indonesian"
-msgstr "Indonesia"
-
-msgid "Irish"
-msgstr "Irlandia"
-
-msgid "Italian"
-msgstr "Itali"
-
-msgid "Japanese"
-msgstr "Jepang"
 
 msgid "Joined my team in the last 3 months"
 msgstr "Bergabung dengan tim saya dalam 3 bulan terakhir"
 
 msgid "Jr."
 msgstr "Jr."
-
-msgid "Korean"
-msgstr "Korea"
-
-msgid "Khmer"
-msgstr "Khmer"
 
 msgid "Language"
 msgstr "Bahasa"
@@ -534,9 +449,6 @@ msgstr "2 Tahun Terakhir"
 msgid "Last Week"
 msgstr "Minggu Lalu"
 
-msgid "Latvian"
-msgstr "Latvia"
-
 msgid "Last Year"
 msgstr "Tahun Lalu"
 
@@ -549,35 +461,32 @@ msgstr "Terlambat"
 msgid "Least Likely"
 msgstr "Kemungkinan Kecil"
 
-msgid "Letter"
-msgstr "Surat"
-
 msgid "Less than 30 days late"
 msgstr "Terlambat lebih dari 30 hari"
+
+msgid "Letter"
+msgstr "Surat"
 
 msgid "Likely"
 msgstr "Mungkin"
 
-msgid "Lithuanian"
-msgstr "Lituania"
-
 msgid "Likely To Give"
 msgstr "Kemungkinan Memberi"
-
-msgid "MPDX Support Team"
-msgstr "Tim Pendukung MPDX"
 
 msgid "MPDX List: %{name}"
 msgstr "Daftar MPDX: %{name}"
 
-msgid "Macedonian"
-msgstr "Makedonia"
+msgid "MPDX Support Team"
+msgstr "Tim Pendukung MPDX"
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr "MPDX mengalami kesalahan saat mencoba mengimpor %{source} kontak Anda."
 
 msgid "MPDX has finished importing your %{source} contacts."
 msgstr "MPDX telah selesai mengimpor %{source} kontak Anda."
 
-msgid "MPDX encountered errors while trying to import your %{source} contacts.\n\n%{explanation}\n\nThanks!\nMPDX Support Team"
-msgstr "MPDX mengalami kesalahan saat mencoba mengimpor %{source} kontak Anda.\n\n%{explanation}\n\nTerima kasih!\nTim Pendukung MPDX"
+msgid "MailChimp Integration Settings"
+msgstr "Pengaturan Integrasi MailChimp"
 
 msgid "MailChimp subscriber email bounced"
 msgstr "Email pelanggan MailChimp memantul"
@@ -585,32 +494,26 @@ msgstr "Email pelanggan MailChimp memantul"
 msgid "Mailchimp API Key no longer valid"
 msgstr "Kunci API Mailchimp sudah tidak valid"
 
+msgid "Mailchimp List is requiring an additional merge field"
+msgstr "Daftar Mailchimp membutuhkan bidang gabungan tambahan"
+
 msgid "Mailing"
 msgstr "Milis"
 
 msgid "Mailing City"
 msgstr "Kota Alamat Surat"
 
-msgid "Mailchimp List is requiring an additional merge field"
-msgstr "Daftar Mailchimp membutuhkan bidang gabungan tambahan"
-
 msgid "Mailing Country"
 msgstr "Negara Alamat Surat"
-
-msgid "Mailing State"
-msgstr "Negara Bagian Alamat Surat"
 
 msgid "Mailing Postal Code"
 msgstr "Kode Pos Alamat Surat"
 
+msgid "Mailing State"
+msgstr "Negara Bagian Alamat Surat"
+
 msgid "Mailing Street Address"
 msgstr "Nama Jalan Alamat Surat"
-
-msgid "Malay"
-msgstr "Melayu"
-
-msgid "Maltese"
-msgstr "Malta"
 
 msgid "Manual entry"
 msgstr "Entri Manual"
@@ -630,11 +533,11 @@ msgstr "Min."
 msgid "Minimum"
 msgstr "Minimum"
 
-msgid "Mobile"
-msgstr "Seluler"
-
 msgid "Miss"
 msgstr "Nona"
+
+msgid "Mobile"
+msgstr "Seluler"
 
 msgid "Mobile Phone"
 msgstr "Ponsel"
@@ -651,41 +554,41 @@ msgstr "Terlambat lebih dari 60 hari"
 msgid "More than 90 days late"
 msgstr "Terlambat lebih dari 90 hari"
 
-msgid "More than one user found for that lookup"
-msgstr "Ditemukan lebih dari satu pengguna untuk pencarian tersebut"
-
 msgid "Most Likely"
 msgstr "Kemungkinan besar"
 
 msgid "Mother"
 msgstr "Ibu"
 
-msgid "Mrs."
-msgstr "Nyonya"
-
 msgid "Mr."
 msgstr "Tuan"
+
+msgid "Mrs."
+msgstr "Nyonya"
 
 msgid "Ms."
 msgstr "Nona"
 
-msgid "Name:"
-msgstr "Nama:"
+msgid "Nephew"
+msgstr "Keponakan laki-laki"
 
 msgid "Never Ask"
 msgstr "Jangan pernah tanya"
 
-msgid "New Donation"
-msgstr "Donasi Baru"
-
-msgid "Nephew"
-msgstr "Keponakan laki-laki"
-
 msgid "Never Contacted"
 msgstr "Tidak pernah dihubungi"
 
+msgid "New Donation"
+msgstr "Donasi Baru"
+
 msgid "Newsletter"
 msgstr "Buletin"
+
+msgid "Newsletter - Email"
+msgstr ""
+
+msgid "Newsletter - Physical"
+msgstr ""
 
 msgid "Newsletter Recipients"
 msgstr "Penerima Buletin"
@@ -699,14 +602,17 @@ msgstr "Minggu Depan"
 msgid "Niece"
 msgstr "Keponakan perempuan"
 
-msgid "No Gifts"
-msgstr "Tidak ada Hadiah"
+msgid "No"
+msgstr "Tidak"
 
 msgid "No Date"
 msgstr "Tidak ada tanggal"
 
-msgid "No"
-msgstr "Tidak"
+msgid "No Gifts"
+msgstr "Tidak ada Hadiah"
+
+msgid "No Incomplete Tasks"
+msgstr "Tidak ada Tugas yang belum selesai"
 
 msgid "No Subject"
 msgstr "Tidak ada Subjek"
@@ -720,38 +626,41 @@ msgstr "Tidak ada alamat pengiriman dalam file"
 msgid "No mailing address or email addess on file"
 msgstr "Tidak ada alamat pengiriman atau email dalam file"
 
-msgid "No users found for that lookup"
-msgstr "Tidak ada pengguna ditemukan untuk pencarian tersebut"
-
 msgid "None"
 msgstr "Tidak ada"
-
-msgid "None Selected"
-msgstr "Tidak ada yang dipilih"
-
-msgid "Norwegian"
-msgstr "Norwegia"
 
 msgid "Not Interested"
 msgstr "Tidak Tertarik"
 
-msgid "Notes"
-msgstr "Catatan"
-
 msgid "Not Received"
 msgstr "Tidak Diterima"
 
-msgid "One of my donors, %{donor} has a new current address."
-msgstr "Salah satu dari donor saya, %{donor} memiliki alamat baru."
+msgid "Notes"
+msgstr "Catatan"
+
+msgid "Nothing Selected"
+msgstr "Tidak ada yang dipilih"
 
 msgid "Notifications from MPDX"
 msgstr "Notifikasi dari MPDX"
+
+msgid "One of my donors, %{donor} has a new current address."
+msgstr "Salah satu dari donor saya, %{donor} memiliki alamat baru."
 
 msgid "One or More Gifts"
 msgstr "1 atau lebih hadiah"
 
 msgid "Other"
 msgstr "Lainnya"
+
+msgid "Other Email"
+msgstr "Email Lain"
+
+msgid "Other Phone"
+msgstr "Telepon Lain"
+
+msgid "Outstanding"
+msgstr ""
 
 msgid "Overdue"
 msgstr "Terlambat"
@@ -762,56 +671,45 @@ msgstr "Pasangan"
 msgid "Partner - Financial"
 msgstr "Partner - Keuangan"
 
+msgid "Partner - Pray"
+msgstr "Pasangan - Doa"
+
 msgid "Partner - Special"
 msgstr "Partner - Spesial"
 
-msgid "Partner - Pray"
-msgstr "Pasangan - Doa"
+msgid "Pending"
+msgstr ""
 
 msgid "Person"
 msgstr "Orang"
 
-msgid "Partner Status"
-msgstr "Status Partner"
-
-msgid "Phone 1"
-msgstr "Telepon 1"
-
-msgid "Phone 2"
-msgstr "Telepon 2"
-
-msgid "Phone 3"
-msgstr "Telepon 3"
-
-msgid "Phone 4"
-msgstr "Telepon 4"
-
 msgid "Physical"
 msgstr "Fisik"
+
+msgid "Please try updating it here: %{link}"
+msgstr "Silakan coba memperbarui di sini: %{link}"
 
 msgid "Please update their address to"
 msgstr "Silahkan perbaru alamat ke"
 
-msgid "Polish"
-msgstr "Polandia"
-
 msgid "Pledge"
 msgstr "Janji"
 
-msgid "Portuguese (Brazil)"
-msgstr "Portugis (Brazil)"
+#, fuzzy
+msgid "Pledge Status"
+msgstr "Status Partner"
 
-msgid "Portuguese (Portugal)"
-msgstr "Protugis (Portugal)"
-
-msgid "Primary Balance: %{balance}"
-msgstr "Saldo Utama: %{balance}"
+msgid "Prayer Request"
+msgstr ""
 
 msgid "Pre Call Letter"
 msgstr "Surat Pra Panggilan"
 
 msgid "Primary Email"
 msgstr "Email Utama"
+
+msgid "Primary Phone"
+msgstr "Telepon Utama"
 
 msgid "Quarterly"
 msgstr "Triwulan"
@@ -824,6 +722,9 @@ msgstr "GANTI DENGAN NAMA JALAN BARU"
 
 msgid "Received"
 msgstr "Diterima"
+
+msgid "Received, but not Processed"
+msgstr ""
 
 msgid "Referrals"
 msgstr "Referal"
@@ -840,52 +741,38 @@ msgstr "Surat Pengingat"
 msgid "Research Abandoned"
 msgstr "Riset Diabaikan"
 
-#. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "Pdt."
-
-msgid "Romanian"
-msgstr "Rumania"
-
-msgid "Russian"
-msgstr "Rusia"
-
-msgid "Separated"
-msgstr "Terpisah"
 
 msgid "Seasonal"
 msgstr "Musiman"
 
-#. this is a relationship status
+msgid "Separated"
+msgstr "Terpisah"
+
 msgid "Single"
 msgstr "Bujangan"
-
-msgid "Serbian"
-msgstr "Serbia"
 
 msgid "Sister"
 msgstr "Saudara Perempuan"
 
-msgid "Slovak"
-msgstr "Slovakia"
-
-msgid "Slovenian"
-msgstr "Slovenia"
-
 msgid "Son"
 msgstr "Anak Laki-laki"
-
-msgid "Spanish (Mexico)"
-msgstr "Spanyol (Meksiko)"
-
-msgid "Spanish (Spain)"
-msgstr "Spanyol (Spanyol)"
 
 msgid "Spouse Email"
 msgstr "Email Pasangan (suami/Istri)"
 
 msgid "Spouse First Name"
 msgstr "Nama Depan Pasangan"
+
+msgid "Spouse Other Email"
+msgstr "Email Lain Pasangan"
+
+msgid "Spouse Other Phone"
+msgstr "Telepon Lain Pasangan"
+
+msgid "Spouse Phone"
+msgstr "Telepon Pasangan"
 
 msgid "Sr."
 msgstr "Sr."
@@ -899,23 +786,17 @@ msgstr "Negara bagian"
 msgid "Status"
 msgstr "Status"
 
-msgid "Support Letter"
-msgstr "Surat Pendukung"
-
 msgid "Stopped giving for the last 2 months"
 msgstr "Berhenti memberi untuk 2 bulan terakhir"
 
-msgid "Swahili"
-msgstr "Swahili"
-
-msgid "Swedish"
-msgstr "Swedai"
-
-msgid "Tamil"
-msgstr "Tamil"
+msgid "Support Letter"
+msgstr "Surat Pendukung"
 
 msgid "Tags"
 msgstr "Tag"
+
+msgid "Talk to In Person"
+msgstr ""
 
 msgid "Task on MPDX"
 msgstr "Tugas pada MPDX"
@@ -929,9 +810,6 @@ msgstr "Sementara"
 msgid "Text Message"
 msgstr "Pesan Teks"
 
-msgid "Thai"
-msgstr "Thailand"
-
 msgid "Thank"
 msgstr "Terima kasih"
 
@@ -941,23 +819,50 @@ msgstr "Terima kasih!"
 msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
 msgstr "Email tersebut sudah ditandai sebagai \"sudah tidak valid.\" Silahkan edit rincian pribadi dengan mengklik nama di bagian bawah dan pastikan informasi yang tersedia sudah benar. Jika orang tersebut memiliki alamat email yang valid, maka akan menjadi alamat utama dan akan disinkronisasi ke MailChimp jika mereka berada dalam buletin berkala email Anda, silahkan hapus, pilih \"Keluar dari buletin\" atau buat email utama lainnya."
 
-msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
+msgid ""
+"The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n"
+"  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n"
+"  unable to sync your contacts to MailChimp."
 msgstr "Daftar alamat MailChimp yang sudah Anda hubungkan dengan akun MPDX memiliki bidang ekstra yang Anda ciptakan dan ditandai sebagai wajib. MPDX tidak tahu bagaimana mengisi bidang gabungan pelanggan, oleh karena itu tidak bisa disinkronisasi ke akun MailChimp Anda."
-
-msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
-msgstr "Tautan antara MPDX dan akun prayerletter.com Anda sudah behenti bekerja. Jika Anda ingin MPDX terus secara otomatis mengirimkan perubahan melalui prayerletters.com, silahkan klik tombol 'Aktifkan'"
 
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "Koneksi dengna akun LinkedIn harus diperbarui."
 
+msgid ""
+"The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n"
+"  automatically sync with your Google account, please go to %{link}\n"
+"  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n"
+"  that you had set already."
+msgstr "Tautan antara MPDX dan akun Google Anda telah berhenti bekerja. Jika Anda ingin MPDX untuk secara otomatis meng-sinkronisasi dengan akun Google Anda, silahkan ke %{link} dan klik tombol 'Segarkan Akun Google'. Kemudian, Anda harus secara manual mengaktifkan integrasi yang sudah Anda tetapkan."
+
+msgid ""
+"The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n"
+"  automatically push changes over to prayerletters.com, please go to\n"
+"  and click the 'Enable' button"
+msgstr "Tautan antara MPDX dan akun prayerletter.com Anda sudah behenti bekerja. Jika Anda ingin MPDX terus secara otomatis mengirimkan perubahan melalui prayerletters.com, silahkan klik tombol 'Aktifkan'"
+
 msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
 msgstr "Tautan ke akun facebook Anda harus disegarkan. <a href=\"/auth/facebook\"> klik di sini untuk menghubungkan kembali ke facebook</a> kemudian coba impor kembali."
 
-msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
-msgstr "Tautan antara MPDX dan akun Google Anda telah berhenti bekerja. Jika Anda ingin MPDX untuk secara otomatis meng-sinkronisasi dengan akun Google Anda, silahkan ke %{link} dan klik tombol 'Segarkan Akun Google'. Kemudian, Anda harus secara manual mengaktifkan integrasi yang sudah Anda tetapkan."
+msgid ""
+"The mailchimp API key associated with your MPDX account is no longer valid.\n"
+"If you would like Mailchimp syncronization to continue to work, please go to\n"
+" %{link} and update your API key."
+msgstr ""
+"Kunci APl mailchimp yang terkait dengan akun MPDX sudah tidak valid.\n"
+"Jika Anda ingin sinkronisasi Mailchimp terus bekerja, silahkan ke %{link} dan perbarui kunci APl ANda."
 
-msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
-msgstr "Kunci APl mailchimp yang terkait dengan akun MPDX sudah tidak valid.\nJika Anda ingin sinkronisasi Mailchimp terus bekerja, silahkan ke %{link} dan perbarui kunci APl ANda."
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Ada beberapa alasan mengapa impor bisa gagal. Seringkali kegagalan bisa disebabkan oleh masalah jaringan sementara. Silakan coba impor kembali. Jika gagal lagi, kirimkan email ke support@mpdx.org dan kami akan menyelidiki masalah iin."
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Ada beberapa alasan mengapa impor bisa gagal. Seringkali kegagalan disebabkan oleh masalah sementara dengan Facebook yang berada di luar kendali kami. Silakan coba impor kembali. Jika gagal lagi, kirimkan email ke support@mpdx.org dan kami akan menyelidiki masalah ini."
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr "Ada beberapa alasan mengapa impor bisa gagal. Alasan paling umum adalah masalah server sementara. Silakan coba impor kembali. Jika gagal lagi, kirim email ke support@mpdx.org dengan ekspor Tnt Anda terlampir. Dengan melampirkan file yang ingin Anda impor akan sangat membantu kami dalam mencoba menyelidiki mengapa impor gagal."
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Ada beberapa alasan mengapa impor bisa gagal. Alasan yang paling memungkinkan mengapa impor CSV bisa gagal adalah karena Nama Depan tidak diisi. Nama Depan adalah bidang wajib pada impor CSV. Kami telah melampirkan file CSV ke email ini yang berisi baris yang gagal diimpor. Kolom pertama dalam CSV ini berisi pesan kesalahan tentang baris tersebut. Silakan unduh CSV ini, perbaiki masalah di dalamnya, lalu coba impor kembali. Anda tidak perlu mengimpor kembali kontak yang berhasil diimpor sebelumnya. Jika gagal lagi, kirimkan email ke support@mpdx.org dan kami akan menyelidiki masalah ini."
 
 msgid "This Month"
 msgstr "Bulan Ini"
@@ -968,6 +873,9 @@ msgstr "Minggu Ini"
 msgid "This Year"
 msgstr "Tahun Ini"
 
+msgid "This donation was imported from Tnt."
+msgstr "Donasi ini diimpor dari Tnt."
+
 msgid "Timezone"
 msgstr "Zona waktu"
 
@@ -976,9 +884,6 @@ msgstr "Impor Tnt"
 
 msgid "To Do"
 msgstr "Harus dilakukan"
-
-msgid "To activate your invitation, click \"Accept\" below and log into MPDX."
-msgstr "Untuk mengaktivasi undangan Anda, klik \"Terima\" di bawah ini dan login ke MPDX."
 
 msgid "Today"
 msgstr "Hari ini"
@@ -995,14 +900,8 @@ msgstr "Total (bulan lau tidak termasuk dari total)"
 msgid "Totals"
 msgstr "Total"
 
-msgid "Turkish"
-msgstr "Turki"
-
 msgid "Type"
 msgstr "Jenis"
-
-msgid "Ukrainian"
-msgstr "Ukrainia"
 
 msgid "Uncle"
 msgstr "Paman"
@@ -1013,35 +912,23 @@ msgstr "Tidak diketahui"
 msgid "Unresponsive"
 msgstr "Tidak ada reaksi"
 
-msgid "User Agent:"
-msgstr "Agen Pengguna:"
-
-msgid "User ID:"
-msgstr "ID Pengguna:"
-
-msgid "User Info"
-msgstr "Info Pengguna"
-
 msgid "Upcoming"
 msgstr "Akan datang"
 
-msgid "User Preferences:"
-msgstr "Preferensi Pengguna:"
-
-msgid "Vietnamese"
-msgstr "Vietnam"
-
-msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
+msgid ""
+"We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n"
+"  chosen one of the options above, please go back to %{link}\n"
+"  and update your MailChimp settings."
 msgstr "Kami sudah memisahkan daftar MailChimp Anda dari MPDX untuk sementara untuk menghindari eror. Setelah Anda emmilih salah satu pilihan di atas, silahkan kembali ke %{link} dan perbarui pengaturan MailChimp Anda."
 
 msgid "Weekly"
 msgstr "Mingguan"
 
-msgid "Wife"
-msgstr "Istri"
-
 msgid "Widowed"
 msgstr "Janda"
+
+msgid "Wife"
+msgstr "Istri"
 
 msgid "Work"
 msgstr "Kerja"
@@ -1055,23 +942,23 @@ msgstr "Ya"
 msgid "Yesterday"
 msgstr "Kemarin"
 
-msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"preferences_url\">here</a>."
-msgstr "Anda mendapatkan notifikasi ini dari MPDX karena Anda memilih pengaturan email dalam preferensi untuk jenis notifikasi ini. Anda dapat mengubahnya  <a href=\"preferences_url\">here</a>."
-
-msgid "You have been invited by %{inviter} to access the MPDX account \"%{account}\"."
-msgstr "Anda sudah diundang oleh %{inviter} untuk mengakses akun MPDX \"%{account}\"."
-
-msgid "You are getting this notification from MPDX because you selected the notification option on your task details."
-msgstr "Anda mendapatkan notifikasi ini dari MPDX karena Anda memilih pilihan notifikasi pada rincian tugas Anda."
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr "Anda mendapatkan notifikasi ini dari MPDX karena Anda memilih pengaturan email dalam preferensi untuk jenis notifikasi ini. Anda dapat mengubahnya di sini <a href=\"%{preferences_url}\"></a>."
 
 msgid "You have no monthly recurring gift recommendations."
 msgstr "Anda tidak memiliki rekomendasi hadiah berulang bulanan."
 
-msgid "You need to go to https://mpdx.org and set up your account before using the mobile app."
-msgstr "Anda harus mengunjungi https://mpdx.org dan menetapkan akun sebelum menggunkan aplikasi seluler."
+msgid "You must log in to MPDX again"
+msgstr "Anda harus login kembali ke MDPX"
 
 msgid "You must select at least 2 contacts to merge."
 msgstr "Anda harus memilih minimal 2 kontak untuk digabung"
+
+msgid "You've been invited to access an account on MPDX"
+msgstr "Anda sudah diundang untuk mengakses akun pada MPDX"
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr "Anda sudah diundang untuk menjadi pembina untuk akun pada MPDX"
 
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "Kontak MPDX Anda \"%{contact}\" memiliki seorang <a href=\"%{edit_person_url}\">%{person_name}</a> yang disinkronisasi atau diekspor ke MailChimp namun sekarang merupakan email tidak terkirm: %{email}"
@@ -1091,11 +978,11 @@ msgstr "[MPDX] gagal mengimpor %{source} kontak Anda"
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] nama pengguna dan kata sandi Anda untuk %{source} invalid"
 
-msgid "can not be blank"
-msgstr "Tidak boleh kosong"
-
 msgid "at the time of event"
 msgstr "Waktu saat event berlangsung"
+
+msgid "can not be blank"
+msgstr "Tidak boleh kosong"
 
 msgid "converted as"
 msgstr "Dikonversi sebagai"
@@ -1105,118 +992,3 @@ msgstr "dari total"
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "Akun prayerletters.com harus disegarkan"
-
-msgid " is designated to the \"%{appeal_name}\" appeal."
-msgstr " ditunjuk untuk \"%{appeal_name}\" banding."
-
-msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-msgstr "%(Tugas ini diberikan tipe \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-
-msgid "%{number_of_failed_contacts} contacts failed to import."
-msgstr "%{number_of_failed_contacts} kontak gagal diimpor."
-
-msgid "%{number_of_successful_contacts} contacts imported successfully."
-msgstr "%{number_of_successful_contacts} kontak berhasil diimpor."
-
-msgid "%{org_name} said we have the wrong password for your account."
-msgstr "%{org_name} berkata bahwa kami memiliki kata sandi yang salah untuk akun Anda."
-
-msgid "Contact is on the email newsletter but has no people with a valid email address."
-msgstr "Kontak ada dalam buletin email tetapi tidak ada orang dengan alamat email yang valid."
-
-msgid "Contact is on the physical newsletter but has no mailing address."
-msgstr "Kontak ada dalam buletin fisik tetapi tidak ada alamat pengiriman."
-
-msgid "Google Integration Settings"
-msgstr "Pengaturan Integrasi Google"
-
-msgid "MPDX encountered errors while trying to import your %{source} contacts."
-msgstr "MPDX mengalami kesalahan saat mencoba mengimpor %{source} kontak Anda."
-
-msgid "MailChimp Integration Settings"
-msgstr "Pengaturan Integrasi MailChimp"
-
-msgid "No Incomplete Tasks"
-msgstr "Tidak ada Tugas yang belum selesai"
-
-msgid "Nothing Selected"
-msgstr "Tidak ada yang dipilih"
-
-msgid "Other Email"
-msgstr "Email Lain"
-
-msgid "Other Phone"
-msgstr "Telepon Lain"
-
-msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
-msgstr "Mitra (Semianual, anual, dll) memiliki donasi yang diharapkan satu bulan dari sekarang. Kirimkan pengingat kepada mereka."
-
-msgid "Partner gave a Special Gift"
-msgstr "Mitra memberikan Hadiah Spesial"
-
-msgid "Partner gave a larger gift than commitment"
-msgstr "Mitra memberikan hadiah yang lebih besar dari pada komitmen"
-
-msgid "Partner gave less than commitment"
-msgstr "Mitra memberikan hadiah lebih sedikit dari pada komitmen"
-
-msgid "Partner gave with commitment of semi-annual or more"
-msgstr "Mitra memberi komitmen semi-anual atau lebih"
-
-msgid "Partner have not had a thank you note logged in the past year"
-msgstr "Mitra belum memiliki catatan terima kasih yang tercatat di tahun lalu"
-
-msgid "Partner have not had an attempted call logged in the past year"
-msgstr "Mitra belum memiliki panggilan yang tercatat di tahun lalu"
-
-msgid "Partner missed a gift"
-msgstr "Mitra melewatkan hadiah"
-
-msgid "Partner recontinued giving"
-msgstr "Mitra tidak melanjutkan memberi"
-
-msgid "Partner started giving"
-msgstr "Mitra mulai memberi"
-
-msgid "Please try updating it here: %{link}"
-msgstr "Silakan coba memperbarui di sini: %{link}"
-
-msgid "Primary Phone"
-msgstr "Telepon Utama"
-
-msgid "Spouse Other Email"
-msgstr "Email Lain Pasangan"
-
-msgid "Spouse Other Phone"
-msgstr "Telepon Lain Pasangan"
-
-msgid "Spouse Phone"
-msgstr "Telepon Pasangan"
-
-msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr "Ada beberapa alasan mengapa impor bisa gagal. Seringkali kegagalan bisa disebabkan oleh masalah jaringan sementara. Silakan coba impor kembali. Jika gagal lagi, kirimkan email ke support@mpdx.org dan kami akan menyelidiki masalah iin."
-
-msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr "Ada beberapa alasan mengapa impor bisa gagal. Seringkali kegagalan disebabkan oleh masalah sementara dengan Facebook yang berada di luar kendali kami. Silakan coba impor kembali. Jika gagal lagi, kirimkan email ke support@mpdx.org dan kami akan menyelidiki masalah ini."
-
-msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
-msgstr "Ada beberapa alasan mengapa impor bisa gagal. Alasan paling umum adalah masalah server sementara. Silakan coba impor kembali. Jika gagal lagi, kirim email ke support@mpdx.org dengan ekspor Tnt Anda terlampir. Dengan melampirkan file yang ingin Anda impor akan sangat membantu kami dalam mencoba menyelidiki mengapa impor gagal."
-
-msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr "Ada beberapa alasan mengapa impor bisa gagal. Alasan yang paling memungkinkan mengapa impor CSV bisa gagal adalah karena Nama Depan tidak diisi. Nama Depan adalah bidang wajib pada impor CSV. Kami telah melampirkan file CSV ke email ini yang berisi baris yang gagal diimpor. Kolom pertama dalam CSV ini berisi pesan kesalahan tentang baris tersebut. Silakan unduh CSV ini, perbaiki masalah di dalamnya, lalu coba impor kembali. Anda tidak perlu mengimpor kembali kontak yang berhasil diimpor sebelumnya. Jika gagal lagi, kirimkan email ke support@mpdx.org dan kami akan menyelidiki masalah ini."
-
-msgid "This donation was imported from Tnt."
-msgstr "Donasi ini diimpor dari Tnt."
-
-msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
-msgstr "Anda mendapatkan notifikasi ini dari MPDX karena Anda memilih pengaturan email dalam preferensi untuk jenis notifikasi ini. Anda dapat mengubahnya di sini <a href=\"%{preferences_url}\"></a>."
-
-msgid "You must log in to MPDX again"
-msgstr "Anda harus login kembali ke MDPX"
-
-msgid "You've been invited to access an account on MPDX"
-msgstr "Anda sudah diundang untuk mengakses akun pada MPDX"
-
-msgid "You've been invited to be a coach for an account on MPDX"
-msgstr "Anda sudah diundang untuk menjadi pembina untuk akun pada MPDX"
-

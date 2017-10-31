@@ -28,17 +28,15 @@ class TntImport::AppealsImport
 
     appeals = {}
     xml_tables[appeal_table_name].each do |row|
-      appeal = @account_list.appeals.find_by(tnt_id: row['id'])
-
-      if appeal
-        # This allows staff who imported from Tnt earlier before we added the LastEdit import
-        # to re-run the import and get the dates for the previous appeals for the sake of the sort order.
-        appeal.update(created_at: row['LastEdit'])
-      else
-        appeal = @account_list.appeals.create(name: row['Description'],
-                                              created_at: row['LastEdit'],
-                                              tnt_id: row['id'])
-      end
+      appeal = @account_list.appeals.find_or_initialize_by(tnt_id: row['id'])
+      appeal.attributes = {
+        created_at: row['LastEdit'],
+        name: row['Description'],
+        active: row['Active'] || true,
+        amount: row['SpecialGoal'],
+        monthly_amount: row['MonthlyGoal']
+      }
+      appeal.save
       appeals[row['id']] = appeal
     end
     appeals

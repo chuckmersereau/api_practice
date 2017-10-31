@@ -26,6 +26,9 @@ class EmailAddress < ApplicationRecord
   validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
   validates :email, :remote_id, :location, updatable_only_when_source_is_mpdx: true
 
+  global_registry_bindings parent: :person,
+                           fields: { email: :email, primary: :boolean }
+
   def to_s
     email
   end

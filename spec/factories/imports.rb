@@ -38,6 +38,11 @@ FactoryGirl.define do
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_0_export_gifts.xml')) }
   end
 
+  factory :tnt_import_broad, parent: :tnt_import do
+    association :account_list
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
+  end
+
   factory :tnt_import_no_gifts, parent: :tnt_import do
     association :account_list
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_no_gifts.xml')) }
@@ -76,6 +81,11 @@ FactoryGirl.define do
   factory :tnt_import_campaigns_and_promises, parent: :tnt_import do
     association :account_list
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_with_campaign_promises.xml')) }
+  end
+
+  factory :tnt_import_gifts_without_appeal, parent: :tnt_import do
+    association :account_list
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_export_gifts_without_appeals.xml')) }
   end
 
   factory :csv_import, parent: :import do

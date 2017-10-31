@@ -22,9 +22,9 @@ class DesignationAccount < ApplicationRecord
     (user.account_lists & account_lists).first
   end
 
-  def update_donation_totals(donation)
+  def update_donation_totals(donation, reset: false)
     contacts.includes(:donor_accounts).where('donor_accounts.id' => donation.donor_account_id).find_each do |contact|
-      contact.update_donation_totals(donation)
+      contact.update_donation_totals(donation, reset: reset)
     end
   end
 

@@ -156,6 +156,8 @@ resource 'Pledges' do
 
       example 'Pledge [CREATE]', document: documentation_scope do
         explanation 'Create Pledge'
+
+        Pledge.destroy_all
         do_request data: form_data
 
         check_resource(additional_attribute_keys)

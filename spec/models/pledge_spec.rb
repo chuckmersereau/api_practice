@@ -17,6 +17,7 @@ RSpec.describe Pledge, type: :model do
     expect(described_class::PERMITTED_ATTRIBUTES).to eq(
       [
         :amount,
+        :amount_currency,
         :appeal_id,
         :created_at,
         :contact_id,
@@ -29,5 +30,17 @@ RSpec.describe Pledge, type: :model do
         :uuid
       ]
     )
+  end
+
+  context '#appeal' do
+    let(:appeal) { create(:appeal) }
+    let(:contact) { create(:contact) }
+
+    it 'restricted to a single entry per contact per appeal' do
+      create(:pledge, appeal: appeal, contact: contact)
+
+      expect { subject.update!(appeal: appeal, contact: contact) }.to \
+        raise_error ActiveRecord::RecordInvalid
+    end
   end
 end

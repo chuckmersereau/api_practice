@@ -17,7 +17,7 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
 
   # This is required for the index action!
   let!(:second_resource) do
-    create(:pledge, account_list: account_list, contact: contact, amount: 10.00)
+    create(:pledge, account_list: account_list, amount: 10.00)
   end
 
   # If needed, keep this ;)
@@ -107,7 +107,10 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
 
   include_examples 'show_examples'
 
-  include_examples 'create_examples'
+  context 'with no existing Pledges' do
+    before { Pledge.destroy_all }
+    include_examples 'create_examples'
+  end
 
   include_examples 'update_examples'
 

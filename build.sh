@@ -36,7 +36,7 @@ docker build \
     --build-arg PLS_CLIENT_SECRET=$PLS_CLIENT_SECRET \
     --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
     --build-arg WSAPI_KEY=$WSAPI_KEY \
-    -t 056154071827.dkr.ecr.us-east-1.amazonaws.com/$PROJECT_NAME:$GIT_COMMIT-$BUILD_NUMBER .
+    -t 056154071827.dkr.ecr.us-east-1.amazonaws.com/$PROJECT_NAME:$ENVIRONMENT-$BUILD_NUMBER .
 rc=$?
 
 if [ $rc -ne 0 ]; then

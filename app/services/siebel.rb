@@ -1,3 +1,6 @@
+# This service as been superseded by DonationImports::Siebel.
+# It should be deleted when DonationImports::Siebel is stable.
+
 require_dependency 'data_server'
 class Siebel < DataServer
   # Donations should sometimes be deleted if they were misclassifed and then
@@ -205,14 +208,11 @@ class Siebel < DataServer
     Retryable.retryable do
       date = Date.strptime(siebel_donation.donation_date, '%Y-%m-%d')
 
-      donation = designation_account.donations.find_by(remote_id: siebel_donation.id)
-      donation ||= designation_account.donations.find_by(tnt_id: siebel_donation.id)
-      donation ||= designation_account.donations.find_or_initialize_by(remote_id: nil, donor_account_id: donor_account.id, amount: siebel_donation.amount, donation_date: date)
-
-      donation.update!(
+      attributes = {
         amount: siebel_donation.amount,
         channel: siebel_donation.channel,
         currency: default_currency,
+        designation_account_id: designation_account.id,
         donation_date: date,
         donor_account_id: donor_account.id,
         motivation: siebel_donation.campaign_code,
@@ -221,7 +221,11 @@ class Siebel < DataServer
         remote_id: siebel_donation.id,
         tendered_amount: siebel_donation.amount,
         tendered_currency: default_currency
-      )
+      }
+
+      donation = DonationImports::Base::FindDonation.new(designation_profile: profile, attributes: attributes).find_and_merge
+      donation ||= Donation.new
+      donation.update!(attributes)
       donation
     end
   end
