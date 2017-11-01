@@ -61,7 +61,7 @@ RSpec.describe AddPledgesToDonationsWorker do
 
           expect { described_class.new.perform }.to change { Pledge.count }.by(1)
           pledge = Pledge.first
-          expect(pledge.amount).to eq (donation1.amount + donation2.amount)
+          expect(pledge.amount).to eq(donation1.amount + donation2.amount)
           expect(pledge.donations).to match_array [donation1, donation2]
         end
       end
