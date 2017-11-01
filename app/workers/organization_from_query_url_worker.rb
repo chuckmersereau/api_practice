@@ -21,6 +21,9 @@ class OrganizationFromQueryUrlWorker
     load_organization
     build_organization
     save_organization
+  rescue => ex
+    Rails.logger.debug "\FAILURE: #{@organization.query_ini_url}\n\n"
+    Rollbar.error(ex)
   end
 
   private
@@ -43,7 +46,7 @@ class OrganizationFromQueryUrlWorker
     @organization.save!
     Rails.logger.debug "\nSUCCESS: #{@organization.query_ini_url}\n\n"
   rescue => ex
-    Rollbar.error(ex, organization_params: organization_attributes)
+    Rollbar.error(ex, organization_attributes: organization_attributes)
   end
 
   def organization_attributes
