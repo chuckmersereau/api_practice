@@ -2,7 +2,16 @@ class OrganizationFromQueryUrlWorker
   include Sidekiq::Worker
   sidekiq_options queue: :api_organization_from_query_url_worker, unique: :until_executed
 
-  SECTIONS = %w(account_balance donations addresses addresses_by_personids profiles).freeze
+  SECTIONS = {
+    'ACCOUNT_BALANCE' => 'account_balance',
+    'DONATIONS' => 'donations',
+    'ADDRESSES' => 'addresses',
+    'ADDRESSES_BY_PERSONIDS' => 'addresses_by_personids',
+    'PROFILES' => 'profiles',
+    'OAuth_GetChallengeStartNum' => 'oauth_get_challenge_start_num',
+    'OAuth_ConvertToToken' => 'oauth_convert_to_token',
+    'OAuth_GetTokenInfo' => 'oauth_get_token_info'
+  }.freeze
 
   attr_accessor :name, :query_ini_url
 
@@ -17,39 +26,35 @@ class OrganizationFromQueryUrlWorker
   private
 
   def load_organization
-    @organization ||= Organization.find_by('name = ? OR query_ini_url = ?', name, query_ini_url)
+    @organization ||=
+      Organization.find_by(
+        'name = :name OR query_ini_url = :query_ini_url',
+        name: name,
+        query_ini_url: query_ini_url
+      )
   end
 
   def build_organization
     @organization ||= Organization.new(iso3166: nil, api_class: 'DataServer')
-    @organization.attributes = organization_params
+    @organization.attributes = organization_attributes
   end
 
   def save_organization
-    @organization.save
+    @organization.save!
     Rails.logger.debug "\nSUCCESS: #{@organization.query_ini_url}\n\n"
   rescue => ex
-    Rollbar.error(ex,
-                  organization_params: organization_params)
-  end
-
-  def organization_params
-    return @organization_params if @organization_params
-    @organization_params = {}
-    @organization_params = @organization_params.merge(organization_attributes)
-    @organization_params = @organization_params.merge(section_attributes)
-    @organization_params
+    Rollbar.error(ex, organization_params: organization_attributes)
   end
 
   def organization_attributes
-    {
+    @organization_attributes ||= {
       name: name,
       query_ini_url: query_ini_url,
       redirect_query_ini: ini['ORGANIZATION']['RedirectQueryIni'],
       abbreviation: ini['ORGANIZATION']['Abbreviation'],
       logo: ini['ORGANIZATION']['WebLogo-JPEG-470x120'],
       account_help_url: ini['ORGANIZATION']['AccountHelpUrl'],
-      minimum_gift_date: org.minimum_gift_date || ini['ORGANIZATION']['MinimumWebGiftDate'],
+      minimum_gift_date: @organization.minimum_gift_date || ini['ORGANIZATION']['MinimumWebGiftDate'],
       code: ini['ORGANIZATION']['Code'],
       query_authentication: ini['ORGANIZATION']['QueryAuthentication'].to_i == 1,
       org_help_email: ini['ORGANIZATION']['OrgHelpEmail'],
@@ -59,23 +64,18 @@ class OrganizationFromQueryUrlWorker
       request_profile_url: ini['ORGANIZATION']['RequestProfileUrl'],
       staff_portal_url: ini['ORGANIZATION']['StaffPortalUrl'],
       default_currency_code: ini['ORGANIZATION']['DefaultCurrencyCode'],
-      allow_passive_auth: ini['ORGANIZATION']['AllowPassiveAuth'] == 'True'
-    }
+      allow_passive_auth: ini['ORGANIZATION']['AllowPassiveAuth'] == 'True',
+      oauth_url: ini['ORGANIZATION']['OAuthUrl']
+    }.merge(section_attributes)
   end
 
-  def section_attributes(section_attributes = {})
-    SECTIONS.each do |section|
-      keys = ini.map do |k, _v|
-        k.key =~ /^#{section.upcase}[\.\d]*$/ ? k.key : nil
-      end.compact.sort.reverse
-      keys.each do |k|
-        if section_attributes["#{section}_url"].nil? && ini[k]['Url']
-          section_attributes["#{section}_url"] = ini[k]['Url']
-        end
-        if section_attributes["#{section}_params"].nil? && ini[k]['Post']
-          section_attributes["#{section}_params"] = ini[k]['Post']
-        end
-      end
+  def section_attributes
+    section_attributes = {}
+    SECTIONS.each do |key, section|
+      next unless ini[key]
+      section_attributes["#{section}_url"] = ini[key]['Url'] if ini[key]['Url']
+      section_attributes["#{section}_params"] = ini[key]['Post'] if ini[key]['Post']
+      section_attributes["#{section}_oauth"] = ini[key]['OAuth'] if ini[key]['OAuth']
     end
     section_attributes
   end
