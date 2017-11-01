@@ -14,6 +14,8 @@ class Organization < ApplicationRecord
 
   validates :name, :query_ini_url, presence: true
   validates :name, uniqueness: true, case_sensitive: false
+  before_create :guess_country
+  before_create :guess_locale
   scope :active, -> { where('addresses_url is not null') }
   scope :using_data_server, -> { where("api_class LIKE 'DataServer%'") }
 
@@ -37,6 +39,15 @@ class Organization < ApplicationRecord
     self[:default_currency_code] || 'USD'
   end
 
+  def guess_country
+    self.country = country_from_name
+  end
+
+  def guess_locale
+    return self.locale = 'en' unless country.present?
+    self.locale = ISO3166::Country.find_country_by_name(country)&.languages&.first || 'en'
+  end
+
   # We had an organization, DiscipleMakers with a lot of duplicate addresses in its contacts and donor
   # accounts due to a difference in how their data server donor import worked and a previous iteration of
   # MPDX accepting duplicate addresses there. This will merge dup addresses in their donor accounts and
@@ -52,5 +63,24 @@ class Organization < ApplicationRecord
     account_lists.find_each(batch_size: 1) do |account_list|
       account_list.contacts.find_each(batch_size: 5, &:merge_addresses)
     end
+  end
+
+  protected
+
+  def country_from_name
+    country_name = remove_prefixes_from_name
+    return 'Canada' if country_name == 'CAN'
+    ::CountrySelect::COUNTRIES_FOR_SELECT.find do |country|
+      country[:name] == country_name || country[:alternatives].split(' ').include?(country_name)
+    end.try(:[], :name)
+  end
+
+  def remove_prefixes_from_name
+    country_name = name
+    ['Campus Crusade for Christ - ', 'Cru - ', 'Power To Change - ', 'Gospel For Asia', 'Agape'].each do |prefix|
+      country_name = country_name.gsub(prefix, '')
+    end
+    country_name = country_name.split(' - ').last if country_name.include? ' - '
+    country_name.strip
   end
 end
