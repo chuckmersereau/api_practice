@@ -22,8 +22,6 @@ class MailChimpAccount < ApplicationRecord
   validates :account_list_id, :api_key, presence: true
   validates :api_key, format: /\A\w+-us\d+\z/
 
-  serialize :status_interest_ids, Hash
-  serialize :tags_interest_ids, Hash
   serialize :tags_details, Hash
   serialize :statuses_details, Hash
 
