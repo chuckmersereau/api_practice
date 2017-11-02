@@ -24,6 +24,8 @@ class MailChimpAccount < ApplicationRecord
 
   serialize :status_interest_ids, Hash
   serialize :tags_interest_ids, Hash
+  serialize :tags_details, Hash
+  serialize :statuses_details, Hash
 
   scope :that_belong_to, -> (user) { where(account_list_id: user.account_list_ids) }
 
