@@ -48,6 +48,7 @@ RSpec.describe MailChimp::Exporter::GroupAdder do
       expect(mock_interests).to receive(:retrieve).and_return('interests' => [{ 'name' => 'Tag_one' }])
       expect(mock_interests).to receive(:create).with(interests_create_body)
       subject.add_tags_groups(%w(Tag_one Tag_two))
+      expect(mail_chimp_account.tags_details[list_id][:interest_category_id]).to eq 'grouping_two_id'
     end
   end
 
@@ -60,6 +61,7 @@ RSpec.describe MailChimp::Exporter::GroupAdder do
       expect(mock_interests).to receive(:retrieve).and_return('interests' => [{ 'name' => 'Partner - Pray' }])
       expect(mock_interests).to receive(:create).with(interests_create_body)
       subject.add_status_groups(['Partner - Pray', 'Never Contacted'])
+      expect(mail_chimp_account.statuses_details[list_id][:interest_category_id]).to eq 'grouping_one_id'
     end
   end
 end
