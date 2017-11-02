@@ -87,6 +87,14 @@ class MailChimpAccount < ApplicationRecord
     Digest::MD5.hexdigest(email.downcase)
   end
 
+  def statuses_interest_ids_for_list(list_id)
+    get_interest_attribute_for_list(group: :status, attribute: :interest_ids, list_id: list_id)
+  end
+
+  def tags_interest_ids_for_list(list_id)
+    get_interest_attribute_for_list(group: :tag, attribute: :interest_ids, list_id: list_id)
+  end
+
   def get_interest_attribute_for_list(group:, attribute:, list_id:)
     send("#{group.to_s.pluralize}_details")&.dig(list_id, attribute)
   end
