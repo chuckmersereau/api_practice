@@ -87,6 +87,18 @@ class MailChimpAccount < ApplicationRecord
     Digest::MD5.hexdigest(email.downcase)
   end
 
+  def get_interest_attribute_for_list(group:, attribute:, list_id:)
+    send("#{group.to_s.pluralize}_details")&.dig(list_id, attribute)
+  end
+
+  def set_interest_attribute_for_list(group:, attribute:, list_id:, value:)
+    key = "#{group.to_s.pluralize}_details"
+    hash = send(key) || {}
+    hash[list_id] ||= {}
+    hash[list_id][attribute] = value
+    send("#{key}=", hash)
+  end
+
   private
 
   def gibbon_wrapper

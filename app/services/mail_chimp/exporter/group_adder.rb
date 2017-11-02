@@ -23,14 +23,16 @@ class MailChimp::Exporter
     private
 
     def add_groups(group_name, attribute, groups_to_add)
-      key = "#{attribute.to_s}_details"
-      interest_group_id = mail_chimp_account[key]&.dig(list_id, :interest_category_id)
+      interest_group_id = mail_chimp_account.get_interest_attribute_for_list(group: attribute,
+                                                                             attribute: :interest_category_id,
+                                                                             list_id: list_id)
       grouping = find_grouping(interest_group_id, group_name)
       grouping = create_grouping(group_name) unless grouping
 
-      mail_chimp_account[key] ||= {}
-      mail_chimp_account[key][list_id] ||= {}
-      mail_chimp_account[key][list_id][:interest_category_id] = grouping['id']
+      mail_chimp_account.set_interest_attribute_for_list(group: attribute,
+                                                         attribute: :interest_category_id,
+                                                         list_id: list_id,
+                                                         value: grouping['id'])
       mail_chimp_account.save
       mail_chimp_account.reload
 
@@ -55,7 +57,7 @@ class MailChimp::Exporter
 
     def find_grouping(interest_category_id, group_name)
       groupings = gibbon_list.interest_categories.retrieve(params: { 'count': '100' })['categories']
-      by_id = groupings.find {|grouping| grouping['id'] == interest_category_id}
+      by_id = groupings.find { |grouping| grouping['id'] == interest_category_id }
       by_id || groupings.find { |grouping| grouping['title'] == _(group_name) }
     rescue Gibbon::MailChimpError => error
       raise unless does_not_have_interest_groups_enabled?(error)
