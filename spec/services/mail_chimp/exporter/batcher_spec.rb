@@ -29,7 +29,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
       'interests' => [
         {
           'name' => 'status or tag',
-          'id' => 'random',
+          'id' => 'random'
         }
       ]
     )
