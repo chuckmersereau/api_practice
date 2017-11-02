@@ -76,7 +76,7 @@ class MailChimp::Exporter
     def add_status_and_tags_groupings_to_params(contact, member_params)
       member_params[:interests] = member_params[:interests].to_h
       member_params[:interests].merge!(interests_for_status(contact.status))
-      member_params[:interests].merge!(interests_for_tags(contact.tags))
+      member_params[:interests].merge!(interests_for_tags(contact.tag_list))
       member_params
     end
 
