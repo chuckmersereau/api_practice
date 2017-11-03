@@ -13,7 +13,7 @@ RSpec.describe OrganizationSerializer do
     context 'organization is not oauth capable' do
       let(:organization) { create(:organization, oauth_url: nil) }
 
-      it 'returns true' do
+      it 'returns false' do
         expect(subject[:oauth]).to eq false
       end
     end
