@@ -5,5 +5,6 @@ class OrganizationSerializer < ApplicationSerializer
              :default_currency_code,
              :logo,
              :name,
-             :gift_aid_percentage
+             :gift_aid_percentage,
+             :oauth
 end

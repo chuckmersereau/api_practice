@@ -65,6 +65,10 @@ class Organization < ApplicationRecord
     end
   end
 
+  def oauth
+    oauth_url.present?
+  end
+
   protected
 
   def country_from_name
