@@ -2,7 +2,7 @@ require 'omniauth'
 require 'omniauth-google-oauth2'
 require 'omniauth-mailchimp'
 require 'omniauth-prayer-letters'
-# require 'omniauth-donorhub'
+require 'omniauth-donorhub'
 
 Auth::Engine.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2,
