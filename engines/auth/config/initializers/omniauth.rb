@@ -2,6 +2,7 @@ require 'omniauth'
 require 'omniauth-google-oauth2'
 require 'omniauth-mailchimp'
 require 'omniauth-prayer-letters'
+# require 'omniauth-donorhub'
 
 Auth::Engine.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2,
@@ -18,6 +19,9 @@ Auth::Engine.config.middleware.use OmniAuth::Builder do
   provider :mailchimp,
            ENV.fetch('MAILCHIMP_CLIENT_ID'),
            ENV.fetch('MAILCHIMP_CLIENT_SECRET')
+  provider :donorhub,
+           ENV.fetch('DONORHUB_CLIENT_ID'),
+           ENV.fetch('DONORHUB_CLIENT_SECRET')
 end
 
 OmniAuth.config.on_failure = proc { |env|
