@@ -51,6 +51,9 @@ RSpec.describe ConstantList, type: :model do
   describe '#organizations_attributes' do
     before { 5.times { create(:organization) } }
     it { expect(subject.organizations_attributes).to be_a_hash_with_types String, Hash }
+    it 'keys matches array' do
+      expect(subject.organizations_attributes.first[1].keys).to match_array %i(name api_class help_email oauth)
+    end
   end
 
   describe '#assignable_locations' do
