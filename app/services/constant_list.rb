@@ -129,7 +129,7 @@ class ConstantList < ActiveModelSerializers::Model
       name: org.name,
       api_class: org.api_class,
       help_email: org.org_help_email,
-      oauth: org.oauth
+      oauth: org.oauth?
     }
   end
 

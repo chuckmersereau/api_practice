@@ -57,7 +57,8 @@ class Person::OrganizationAccount < ApplicationRecord
   end
 
   def requires_username_and_password?
-    organization ? organization.api(self).requires_username_and_password? && token.blank? : false
+    return false unless organization
+    organization.api(self).requires_username_and_password? && token.blank?
   end
 
   def queue_import_data

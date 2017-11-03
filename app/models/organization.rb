@@ -65,7 +65,7 @@ class Organization < ApplicationRecord
     end
   end
 
-  def oauth
+  def oauth?
     oauth_url.present?
   end
 

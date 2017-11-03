@@ -67,12 +67,12 @@ describe Organization do
     end
   end
 
-  describe '#oauth' do
+  describe '#oauth?' do
     context 'oauth_url is set' do
       subject { build(:organization, oauth_url: 'https://example.com') }
 
       it 'return true' do
-        expect(subject.oauth).to eq true
+        expect(subject.oauth?).to eq true
       end
     end
 
@@ -80,7 +80,7 @@ describe Organization do
       subject { build(:organization, oauth_url: nil) }
 
       it 'return true' do
-        expect(subject.oauth).to eq false
+        expect(subject.oauth?).to eq false
       end
     end
   end

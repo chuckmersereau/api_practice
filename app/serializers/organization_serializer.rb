@@ -7,4 +7,8 @@ class OrganizationSerializer < ApplicationSerializer
              :name,
              :gift_aid_percentage,
              :oauth
+
+  def oauth
+    object.oauth?
+  end
 end
