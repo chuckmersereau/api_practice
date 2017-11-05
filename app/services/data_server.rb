@@ -40,7 +40,12 @@ class DataServer
 
       profiles.each do |profile|
         Retryable.retryable do
-          designation_profile = @org.designation_profiles.where(user_id: @org_account.person_id, name: profile[:name], code: profile[:code]).first_or_create
+          designation_profile =
+            @org.designation_profiles.where(
+              user_id: @org_account.person_id,
+              name: profile[:name],
+              code: profile[:code]
+            ).first_or_create
           import_profile_balance(designation_profile)
           AccountList::FromProfileLinker.new(designation_profile, @org_account)
                                         .link_account_list! unless designation_profile.account_list
@@ -191,8 +196,14 @@ class DataServer
 
   def check_credentials!
     return unless @org_account.requires_username_and_password?
-    raise OrgAccountMissingCredentialsError, _('Your username and password are missing for this account.') unless @org_account.username && @org_account.password
-    raise OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org } unless @org_account.valid_credentials?
+    unless @org_account.username && @org_account.password
+      raise OrgAccountMissingCredentialsError,
+            _('Your username and password are missing for this account.')
+    end
+    unless @org_account.valid_credentials?
+      raise OrgAccountInvalidCredentialsError,
+            _('Your username and password for %{org} are invalid.').localize % { org: @org }
+    end
   end
 
   def validate_username_and_password
@@ -305,15 +316,20 @@ class DataServer
       lines = response.split(/\r?\n|\r/)
       first_line = lines.first.to_s.upcase
       if first_line + lines[1].to_s =~ /password|not registered/i
-        @org_account.update_column(:valid_credentials, false) if @org_account.valid_credentials? && !@org_account.new_record?
-        raise OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org }
+        if @org_account.valid_credentials? && !@org_account.new_record?
+          @org_account.update_column(:valid_credentials, false)
+        end
+        raise OrgAccountInvalidCredentialsError,
+              _('Your username and password for %{org} are invalid.').localize % { org: @org }
       elsif first_line.include?('ERROR') || first_line.include?('HTML')
-        raise DataServerError, response
+        raise DataServerError,
+              response
       end
 
       # look for a redirect
       if lines[1] && lines[1].include?('RedirectQueryIni')
-        raise Errors::UrlChanged, lines[1].split('=')[1]
+        raise Errors::UrlChanged,
+              lines[1].split('=')[1]
       end
 
       response
@@ -335,20 +351,33 @@ class DataServer
     master_person_from_source = organization.master_people.find_by('master_person_sources.remote_id' => remote_id.to_s)
 
     contact = donor_account.link_to_contact_for(account_list)
-    person = donor_account.people.joins(:contacts).where(master_person_id: master_person_from_source.id)
-                          .where('contacts.account_list_id' => account_list.id).readonly(false).first if master_person_from_source
+    person =
+      donor_account.people
+                   .joins(:contacts)
+                   .where(master_person_id: master_person_from_source.id)
+                   .where('contacts.account_list_id' => account_list.id)
+                   .readonly(false)
+                   .first if master_person_from_source
     person ||= contact.people.find_by(first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME'])
     person ||= donor_account.people.find_by(master_person_id: master_person_from_source.id) if master_person_from_source
 
     person ||= Person.new(master_person: master_person_from_source)
-    person.attributes = { first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME'], middle_name: line[prefix + 'MIDDLE_NAME'],
-                          title: line[prefix + 'TITLE'], suffix: line[prefix + 'SUFFIX'], gender: prefix.present? ? 'female' : 'male' }
+    person.attributes = { first_name: line[prefix + 'FIRST_NAME'],
+                          last_name: line[prefix + 'LAST_NAME'],
+                          middle_name: line[prefix + 'MIDDLE_NAME'],
+                          title: line[prefix + 'TITLE'],
+                          suffix: line[prefix + 'SUFFIX'],
+                          gender: prefix.present? ? 'female' : 'male' }
     # Make sure spouse always has a last name
     person.last_name = line['LAST_NAME'] if person.last_name.blank?
 
     # Phone numbers
-    person.phone_number = { 'number' => line[prefix + 'PHONE'] } if line[prefix + 'PHONE'].present? && line[prefix + 'PHONE'] != line[prefix + 'MOBILE_PHONE']
-    person.phone_number = { 'number' => line[prefix + 'MOBILE_PHONE'], 'location' => 'mobile' } if line[prefix + 'MOBILE_PHONE'].present?
+    if line[prefix + 'PHONE'].present? && line[prefix + 'PHONE'] != line[prefix + 'MOBILE_PHONE']
+      person.phone_number = { 'number' => line[prefix + 'PHONE'] }
+    end
+    if line[prefix + 'MOBILE_PHONE'].present?
+      person.phone_number = { 'number' => line[prefix + 'MOBILE_PHONE'], 'location' => 'mobile' }
+    end
 
     # email address
     person.email = line[prefix + 'EMAIL'] if line[prefix + 'EMAIL'] && line[prefix + 'EMAIL_VALID'] != 'FALSE'
@@ -356,7 +385,9 @@ class DataServer
     person.save(validate: false)
 
     donor_account.people << person unless donor_account.people.include?(person)
-    donor_account.master_people << person.master_person unless donor_account.master_people.include?(person.master_person)
+    unless donor_account.master_people.include?(person.master_person)
+      donor_account.master_people << person.master_person
+    end
 
     contact = account_list.contacts.for_donor_account(donor_account).first
     contact_person = contact.add_person(person, donor_account)
@@ -364,7 +395,9 @@ class DataServer
     # create the master_person_source if needed
     unless master_person_from_source
       Retryable.retryable do
-        organization.master_person_sources.where(remote_id: remote_id.to_s).first_or_create(master_person_id: person.master_person.id)
+        organization.master_person_sources
+                    .where(remote_id: remote_id.to_s)
+                    .first_or_create(master_person_id: person.master_person.id)
       end
     end
 
@@ -376,15 +409,19 @@ class DataServer
     company = user.partner_companies.find_by(master_company_id: master_company.id) if master_company
 
     company ||= account_list.companies.new(master_company: master_company)
-    company.assign_attributes(name: line['LAST_NAME_ORG'],
-                              phone_number: line['PHONE'],
-                              street: [line['ADDR1'], line['ADDR2'], line['ADDR3'], line['ADDR4']].select(&:present?).join("\n"),
-                              city: line['CITY'],
-                              state: line['STATE'],
-                              postal_code: line['ZIP'],
-                              country: line['CNTRY_DESCR'])
+    company.assign_attributes(
+      name: line['LAST_NAME_ORG'],
+      phone_number: line['PHONE'],
+      street: [line['ADDR1'], line['ADDR2'], line['ADDR3'], line['ADDR4']].select(&:present?).join("\n"),
+      city: line['CITY'],
+      state: line['STATE'],
+      postal_code: line['ZIP'],
+      country: line['CNTRY_DESCR']
+    )
     company.save!
-    donor_account.update_attributes(master_company_id: company.master_company_id) unless donor_account.master_company_id == company.master_company.id
+    unless donor_account.master_company_id == company.master_company.id
+      donor_account.update_attributes(master_company_id: company.master_company_id)
+    end
     company
   end
 
@@ -392,10 +429,20 @@ class DataServer
     account_list ||= profile.account_list
     donor_account = Retryable.retryable do
       donor_account = @org.donor_accounts.where(account_number: line['PEOPLE_ID']).first_or_initialize
+      # if the acccount already existed, update the name
       donor_account.attributes = { name: line['ACCT_NAME'],
-                                   donor_type: line['PERSON_TYPE'] == 'P' ? 'Household' : 'Organization' } # if the acccount already existed, update the name
+                                   donor_type: line['PERSON_TYPE'] == 'P' ? 'Household' : 'Organization' }
       # physical address
-      if [line['ADDR1'], line['ADDR2'], line['ADDR3'], line['ADDR4'], line['CITY'], line['STATE'], line['ZIP'], line['CNTRY_DESCR']].any?(&:present?)
+      if [
+        line['ADDR1'],
+        line['ADDR2'],
+        line['ADDR3'],
+        line['ADDR4'],
+        line['CITY'],
+        line['STATE'],
+        line['ZIP'],
+        line['CNTRY_DESCR']
+      ].any?(&:present?)
         donor_account.addresses_attributes = [{
           street: [line['ADDR1'], line['ADDR2'], line['ADDR3'], line['ADDR4']].select(&:present?).join("\n"),
           city: line['CITY'],
@@ -452,7 +499,11 @@ class DataServer
         tendered_currency: line['TENDERED_CURRENCY'] || default_currency
       }
 
-      donation = DonationImports::Base::FindDonation.new(designation_profile: profile, attributes: attributes).find_and_merge
+      donation =
+        DonationImports::Base::FindDonation.new(
+          designation_profile: profile,
+          attributes: attributes
+        ).find_and_merge
       donation ||= Donation.new
       donation.update!(attributes)
       donation
