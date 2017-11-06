@@ -28,6 +28,14 @@ class Person::OrganizationAccount < ApplicationRecord
                           :username,
                           :uuid].freeze
 
+  def self.find_or_create_from_auth(token, oauth_url, user)
+    organization = Organization.find_by!(oauth_url: oauth_url)
+    organization_account = user.organization_accounts.find_or_initialize_by(organization: organization)
+    organization_account.token = token
+    organization_account.save!
+    organization_account
+  end
+
   def to_s
     str = organization.to_s
     employee_id = user.relay_accounts.where(remote_id: remote_id).pluck(:employee_id).first
@@ -49,7 +57,8 @@ class Person::OrganizationAccount < ApplicationRecord
   end
 
   def requires_username_and_password?
-    organization.api(self).requires_username_and_password? if organization
+    return false unless organization
+    organization.api(self).requires_username_and_password? && token.blank?
   end
 
   def queue_import_data

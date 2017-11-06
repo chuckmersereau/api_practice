@@ -1,3 +1,3 @@
 require 'omniauth'
 
-OmniAuth.config.full_host = 'http://auth.lvh.me:3000'
+OmniAuth.config.full_host = 'https://auth.lvh.me:5000'

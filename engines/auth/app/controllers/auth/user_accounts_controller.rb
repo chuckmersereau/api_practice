@@ -9,7 +9,12 @@ module Auth
       warden.set_user(fetch_current_user, scope: :user)
       session['redirect_to'] = params[:redirect_to]
       session['account_list_id'] = params[:account_list_id]
-      redirect_to "/auth/#{params[:provider]}"
+      if params[:provider] == 'donorhub'
+        organization = Organization.find_by!(uuid: params[:organization_id])
+        redirect_to "/auth/donorhub?oauth_url=#{URI.encode(organization.oauth_url)}"
+      else
+        redirect_to "/auth/#{params[:provider]}"
+      end
     end
 
     def failure

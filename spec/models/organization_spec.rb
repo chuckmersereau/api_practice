@@ -5,7 +5,7 @@ describe Organization do
     expect(described_class.new(name: 'foo').to_s).to eq('foo')
   end
 
-  describe 'guess_country' do
+  describe '#guess_country' do
     context 'name does not convert to country' do
       subject { build(:organization, name: 'No match here') }
 
@@ -41,7 +41,7 @@ describe Organization do
     end
   end
 
-  context '#guess_locale' do
+  describe '#guess_locale' do
     context 'country is blank' do
       subject { build(:organization, country: nil) }
 
@@ -63,6 +63,24 @@ describe Organization do
 
       it 'returns locale of country' do
         expect(subject.guess_locale).to eq 'fr'
+      end
+    end
+  end
+
+  describe '#oauth?' do
+    context 'oauth_url is set' do
+      subject { build(:organization, oauth_url: 'https://example.com') }
+
+      it 'return true' do
+        expect(subject.oauth?).to eq true
+      end
+    end
+
+    context 'oauth_url is set' do
+      subject { build(:organization, oauth_url: nil) }
+
+      it 'return true' do
+        expect(subject.oauth?).to eq false
       end
     end
   end
