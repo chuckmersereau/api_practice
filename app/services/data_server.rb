@@ -2,23 +2,21 @@ require 'csv'
 require 'erb'
 
 class DataServer
+  delegate :requires_credentials?, to: :class
+
   include ERB::Util
 
   KNOWN_DIFFERING_IMPORT_PERSON_TYPES = [
     'I', # Navigators
   ].freeze
 
-  def self.requires_username_and_password?
+  def self.requires_credentials?
     true
   end
 
   def initialize(org_account)
     @org_account = org_account
     @org = org_account.organization
-  end
-
-  def requires_username_and_password?
-    self.class.requires_username_and_password?
   end
 
   def import_all(date_from)
@@ -195,18 +193,18 @@ class DataServer
   end
 
   def check_credentials!
-    return unless @org_account.requires_username_and_password?
-    unless @org_account.username && @org_account.password
+    return unless requires_credentials?
+    unless @org_account.username && @org_account.password || @org_account.token
       raise OrgAccountMissingCredentialsError,
-            _('Your username and password are missing for this account.')
+            _('Your credentials are missing for this account.')
     end
     unless @org_account.valid_credentials?
       raise OrgAccountInvalidCredentialsError,
-            _('Your username and password for %{org} are invalid.').localize % { org: @org }
+            _('Your credentials for %{org} are invalid.').localize % { org: @org }
     end
   end
 
-  def validate_username_and_password
+  def validate_credentials
     begin
       if @org.profiles_url.present?
         Retryable.retryable on: Errors::UrlChanged, times: 1, then: update_url(:profiles_url) do
@@ -292,12 +290,22 @@ class DataServer
     params = Hash[raw_params.split('&').map { |p| p.split('=') }]
     replaced_params = {}
     params.each do |k, v|
-      replaced_params[k] = @org_account.username if v == '$ACCOUNT$'
-      replaced_params[k] = @org_account.password if v == '$PASSWORD$'
+      if v == '$ACCOUNT$'
+        replaced_params[k] = @org_account.token.blank? ? @org_account.username : ''
+      end
+      if v == '$PASSWORD$'
+        replaced_params[k] = @org_account.token.blank? ? @org_account.password : ''
+      end
       replaced_params[k] = options[:profile] if options[:profile] && v == '$PROFILE$'
       replaced_params[k] = options[:datefrom] if options[:datefrom] && v == '$DATEFROM$'
       replaced_params[k] = options[:dateto] if options[:dateto].present? && v == '$DATETO$'
       replaced_params[k] = options[:personid].to_s if options[:personid].present? && v == '$PERSONIDS$'
+    end
+    unless @org_account.token.blank?
+      params['client_id'] = ENV.fetch('DONORHUB_CLIENT_ID')
+      params['client_secret'] = ENV.fetch('DONORHUB_CLIENT_SECRET')
+      params['client_instance'] = 'app'
+      params['oauth_token'] = @org_account.token
     end
     replaced_params.merge!(params.slice(*(params.keys - replaced_params.keys)))
     replaced_params

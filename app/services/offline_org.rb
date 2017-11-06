@@ -11,7 +11,7 @@ class OfflineOrg < DataServer
     AccountList::FromProfileLinker.new(profile, @org_account).link_account_list!
   end
 
-  def self.requires_username_and_password?
+  def self.requires_credentials?
     false
   end
 

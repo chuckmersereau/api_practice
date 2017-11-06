@@ -415,26 +415,26 @@ describe DataServer do
     end
   end
 
-  describe 'validate_username_and_password' do
+  describe 'validate_credentials' do
     it 'should validate using the profiles url if there is one' do
       expect(@data_server).to receive(:get_params).and_return({})
       expect(@data_server).to receive(:get_response).with(@org.profiles_url, {})
-      expect(@data_server.validate_username_and_password).to eq(true)
+      expect(@data_server.validate_credentials).to eq(true)
     end
     it 'should validate using the account balance url if there is no profiles url' do
       @org.profiles_url = nil
       expect(@data_server).to receive(:get_params).and_return({})
       expect(@data_server).to receive(:get_response).with(@org.account_balance_url, {})
-      expect(@data_server.validate_username_and_password).to eq(true)
+      expect(@data_server.validate_credentials).to eq(true)
     end
     it 'should return false if the error message says the username/password were wrong' do
       expect(@data_server).to receive(:get_response).and_raise(DataServerError.new('Either your username or password were incorrect.'))
-      expect(@data_server.validate_username_and_password).to eq(false)
+      expect(@data_server.validate_credentials).to eq(false)
     end
     it 'should re-raise other errors' do
       expect(@data_server).to receive(:get_response).and_raise(DataServerError.new('other error'))
       expect do
-        @data_server.validate_username_and_password
+        @data_server.validate_credentials
       end.to raise_error(DataServerError)
     end
   end

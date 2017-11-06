@@ -1,16 +1,14 @@
 class DonationImports::Siebel < DonationImports::Base
+  delegate :requires_credentials?, to: :class
+
   def import_all(date_from = 1.year.ago)
     import_profiles
     import_donors
     import_donations(date_from)
   end
 
-  def self.requires_username_and_password?
+  def self.requires_credentials?
     false
-  end
-
-  def requires_username_and_password?
-    self.class.requires_username_and_password?
   end
 
   def import_profiles

@@ -166,32 +166,32 @@ describe Person::OrganizationAccount do
     end
   end
 
-  describe '#requires_username_and_password' do
+  describe '#requires_credentials' do
     context 'organization requires username and password' do
       before do
-        allow(organization).to receive(:api) { OpenStruct.new(requires_username_and_password?: true) }
+        allow(organization).to receive(:api) { OpenStruct.new(requires_credentials?: true) }
       end
 
       it 'returns true' do
-        expect(org_account.requires_username_and_password?).to eq true
+        expect(org_account.requires_credentials?).to eq true
       end
 
       context 'token is set' do
         before { org_account.token = 'abc' }
 
         it 'returns false' do
-          expect(org_account.requires_username_and_password?).to eq false
+          expect(org_account.requires_credentials?).to eq false
         end
       end
     end
 
     context 'organization does not require username and password' do
       before do
-        allow(organization).to receive(:api) { OpenStruct.new(requires_username_and_password?: false) }
+        allow(organization).to receive(:api) { OpenStruct.new(requires_credentials?: false) }
       end
 
       it 'returns false' do
-        expect(org_account.requires_username_and_password?).to eq false
+        expect(org_account.requires_credentials?).to eq false
       end
     end
 
@@ -199,7 +199,7 @@ describe Person::OrganizationAccount do
       before { org_account.organization = nil }
 
       it 'returns false' do
-        expect(org_account.requires_username_and_password?).to eq false
+        expect(org_account.requires_credentials?).to eq false
       end
     end
   end

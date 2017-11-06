@@ -1,21 +1,21 @@
 require 'rails_helper'
 
-describe CredentialValidator do
+describe AuthenticationValidator do
   before(:each) do
     @record = FactoryGirl.build(:organization_account)
     @validator = CredentialValidator.new({})
   end
 
-  describe 'when using requires username and password' do
+  describe 'when using requires credentials' do
     before(:each) do
-      allow(@record).to receive(:requires_username_and_password?) { true }
+      allow(@record).to receive(:requires_credentials?) { true }
     end
 
     it 'should not add error if the record is missing an org' do
       @record.organization = nil
       @record.valid?
       expect(@record.errors.full_messages).not_to include(
-        _('Your username and password for %{org} are invalid.').localize % { org: @record.organization }
+        _('Your credentials for %{org} are invalid.').localize % { org: @record.organization }
       )
     end
 
@@ -23,7 +23,7 @@ describe CredentialValidator do
       @record.username = nil
       @record.valid?
       expect(@record.errors.full_messages).not_to include(
-        _('Your username and password for %{org} are invalid.').localize % { org: @record.organization }
+        _('Your credentials for %{org} are invalid.').localize % { org: @record.organization }
       )
     end
 
@@ -31,17 +31,17 @@ describe CredentialValidator do
       @record.password = nil
       @record.valid?
       expect(@record.errors.full_messages).not_to include(
-        _('Your username and password for %{org} are invalid.').localize % { org: @record.organization }
+        _('Your credentials for %{org} are invalid.').localize % { org: @record.organization }
       )
     end
 
-    it 'should add error if the username and password are invalid' do
+    it 'should add error if the credentials are invalid' do
       @api = FakeApi.new
       allow(@record.organization).to receive(:api) { @api }
-      allow(@api).to receive(:validate_username_and_password) { false }
+      allow(@api).to receive(:validate_credentials) { false }
       @validator.validate(@record)
       expect(@record.errors.full_messages).to eq(
-        [_('Your username and password for %{org} are invalid.').localize % { org: @record.organization }]
+        [_('Your credentials for %{org} are invalid.').localize % { org: @record.organization }]
       )
     end
 
@@ -56,17 +56,17 @@ describe CredentialValidator do
     end
   end
 
-  describe 'when username and password is not required' do
+  describe 'when credentials is not required' do
     before(:each) do
-      allow(@record).to receive(:requires_username_and_password?) { false }
+      allow(@record).to receive(:requires_credentials?) { false }
     end
 
-    it 'should not add error if the username and password are blank' do
+    it 'should not add error if the credentials are blank' do
       @record.username = nil
       @record.password = nil
       @validator.validate(@record)
       expect(@record.errors.full_messages).not_to include(
-        _('Your username and password for %{org} are invalid.').localize % { org: @record.organization }
+        _('Your credentials for %{org} are invalid.').localize % { org: @record.organization }
       )
     end
   end

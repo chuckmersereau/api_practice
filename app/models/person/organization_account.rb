@@ -7,13 +7,13 @@ class Person::OrganizationAccount < ApplicationRecord
   include Async
   include Sidekiq::Worker
   sidekiq_options queue: :api_person_organization_account, retry: false, unique: :until_executed
+  delegate :requires_credentials?, to: :organization
 
   serialize :password, Encryptor.new
 
   after_create :set_up_account_list, :queue_import_data
   validates :organization_id, :person_id, presence: true
-  validates :username, :password, presence: { if: :requires_username_and_password? }
-  validates_with CredentialValidator
+  validates_with CredentialsValidator, if: :requires_credentials?
   after_validation :set_valid_credentials
   after_destroy :destroy_designation_profiles
   belongs_to :organization
@@ -54,11 +54,6 @@ class Person::OrganizationAccount < ApplicationRecord
 
   def self.clear_stalled_downloads
     where('locked_at is not null and locked_at < ?', 2.days.ago).update_all(downloading: false, locked_at: nil)
-  end
-
-  def requires_username_and_password?
-    return false unless organization
-    organization.api(self).requires_username_and_password? && token.blank?
   end
 
   def queue_import_data
