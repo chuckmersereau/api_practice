@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Reports::DonationMonthlyTotals do
   around do |test|
-    travel_to Time.zone.local(2017, 11, 2, 01, 04, 44) do
+    travel_to Time.zone.local(2017, 11, 2, 1, 4, 0) do
       test.run
     end
   end
