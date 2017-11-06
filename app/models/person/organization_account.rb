@@ -3,6 +3,8 @@ require_dependency 'credential_validator'
 require 'async'
 
 class Person::OrganizationAccount < ApplicationRecord
+  class MissingCredentialsError < StandardError; end
+  class InvalidCredentialsError < StandardError; end
   include Person::Account
   include Async
   include Sidekiq::Worker
@@ -72,7 +74,7 @@ class Person::OrganizationAccount < ApplicationRecord
     return if locked_at || new_record? || !valid_rechecked_credentials
     update_columns(downloading: true, last_download_attempt_at: Time.current)
     import_donations
-  rescue OrgAccountInvalidCredentialsError, OrgAccountMissingCredentialsError
+  rescue InvalidCredentialsError, MissingCredentialsError
     update_column(:valid_credentials, false)
     ImportMailer.delay.credentials_error(self)
   ensure

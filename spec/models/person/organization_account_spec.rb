@@ -73,7 +73,7 @@ describe Person::OrganizationAccount do
 
     context 'when password error' do
       before do
-        allow(api).to receive(:import_all).and_raise(OrgAccountInvalidCredentialsError)
+        allow(api).to receive(:import_all).and_raise(Person::OrganizationAccount::InvalidCredentialsError)
         org_account.person.email = 'foo@example.com'
 
         org_account.downloading = false
@@ -101,7 +101,7 @@ describe Person::OrganizationAccount do
 
     context 'when password and username missing' do
       before do
-        allow(api).to receive(:import_all).and_raise(OrgAccountMissingCredentialsError)
+        allow(api).to receive(:import_all).and_raise(Person::OrganizationAccount::MissingCredentialsError)
         org_account.person.email = 'foo@example.com'
 
         org_account.downloading = false
