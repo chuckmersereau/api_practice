@@ -22,8 +22,8 @@ class ConvertCredentialsWorker
     url = organization_account.organization.oauth_convert_to_token_url
     params = params(organization_account)
     response = get_response(url, params)
-    CSV.new(response, headers: :first_row, header_converters: ->(h) { h.underscore }).each do |line|
-      organization_account.update(username: nil, password: nil, token: line['token']) if line['token']
+    CSV.new(response, headers: :first_row).each do |line|
+      organization_account.update(token: line['Token']) if line['Token']
     end
   rescue => ex
     Rollbar.error(ex, organization_account_id: organization_account.id)

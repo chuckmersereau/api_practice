@@ -323,14 +323,17 @@ class DataServer
   end
 
   def get_response(url, params)
-    Rails.logger.debug(
-      url: url, payload: params, timeout: nil,
-      user: u(org_account.username), password: u(org_account.password)
-    )
-    RestClient::Request.execute(
-      method: :post, url: url, payload: params, timeout: nil,
-      user: u(org_account.username), password: u(org_account.password)
-    ) do |response, _request, _result, &_block|
+    request_params = {
+      method: :post,
+      url: url,
+      payload: params,
+      timeout: nil,
+      user: u(org_account.username),
+      password: u(org_account.password)
+    }
+
+    Rails.logger.debug(request_params)
+    RestClient::Request.execute(request_params) do |response, _request, _result, &_block|
       raise(DataServerError, response) if response.code == 500
 
       response = EncodingUtil.normalized_utf8(response.to_str)
@@ -345,14 +348,12 @@ class DataServer
         raise Person::OrganizationAccount::InvalidCredentialsError,
               _('Your credentials for %{org} are invalid.').localize % { org: org }
       elsif first_line.include?('ERROR') || first_line.include?('HTML')
-        raise DataServerError,
-              response
+        raise DataServerError, response
       end
 
       # look for a redirect
       if lines[1] && lines[1].include?('RedirectQueryIni')
-        raise Errors::UrlChanged,
-              lines[1].split('=')[1]
+        raise Errors::UrlChanged, lines[1].split('=')[1]
       end
 
       response
@@ -374,13 +375,14 @@ class DataServer
     master_person_from_source = org.master_people.find_by('master_person_sources.remote_id' => remote_id.to_s)
 
     contact = donor_account.link_to_contact_for(account_list)
-    person =
-      donor_account.people
-                   .joins(:contacts)
-                   .where(master_person_id: master_person_from_source.id)
-                   .where('contacts.account_list_id' => account_list.id)
-                   .readonly(false)
-                   .first if master_person_from_source
+    if master_person_from_source
+      person = donor_account.people
+                            .joins(:contacts)
+                            .where(master_person_id: master_person_from_source.id)
+                            .where('contacts.account_list_id' => account_list.id)
+                            .readonly(false)
+                            .first
+    end
     person ||= contact.people.find_by(first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME'])
     person ||= donor_account.people.find_by(master_person_id: master_person_from_source.id) if master_person_from_source
 
@@ -456,16 +458,11 @@ class DataServer
       donor_account.attributes = { name: line['ACCT_NAME'],
                                    donor_type: line['PERSON_TYPE'] == 'P' ? 'Household' : 'Organization' }
       # physical address
-      if [
-        line['ADDR1'],
-        line['ADDR2'],
-        line['ADDR3'],
-        line['ADDR4'],
-        line['CITY'],
-        line['STATE'],
-        line['ZIP'],
+      address_fields = [
+        line['ADDR1'], line['ADDR2'], line['ADDR3'], line['ADDR4'], line['CITY'], line['STATE'], line['ZIP'],
         line['CNTRY_DESCR']
-      ].any?(&:present?)
+      ]
+      if address_fields.any?(&:present?)
         donor_account.addresses_attributes = [{
           street: [line['ADDR1'], line['ADDR2'], line['ADDR3'], line['ADDR4']].select(&:present?).join("\n"),
           city: line['CITY'],

@@ -46,8 +46,6 @@ RSpec.describe ConvertCredentialsWorker do
   it 'should update organization_account' do
     subject.perform
     organization_account.reload
-    expect(organization_account.username).to eq nil
-    expect(organization_account.password).to eq nil
     expect(organization_account.token).to eq 'abc-123'
   end
 end
