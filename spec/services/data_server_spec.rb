@@ -399,19 +399,19 @@ describe DataServer do
       no_user_account.username = nil
       expect do
         DataServer.new(no_user_account).import_donors(profile)
-      end.to raise_error(OrgAccountMissingCredentialsError, 'Your username and password are missing for this account.')
+      end.to raise_error(OrgAccountMissingCredentialsError, 'Your credentials are missing for this account.')
       no_pass_account = @org_account.dup
       no_pass_account.password = nil
       expect do
         DataServer.new(no_pass_account).import_donors(profile)
-      end.to raise_error(OrgAccountMissingCredentialsError, 'Your username and password are missing for this account.')
+      end.to raise_error(OrgAccountMissingCredentialsError, 'Your credentials are missing for this account.')
     end
     it 'raise an error if credentials are invalid' do
       @org_account.valid_credentials = false
       expect do
         DataServer.new(@org_account).import_donors(profile)
       end.to raise_error(OrgAccountInvalidCredentialsError,
-                         _('Your username and password for %{org} are invalid.').localize % { org: @org })
+                         _('Your credentials for %{org} are invalid.').localize % { org: @org })
     end
   end
 
@@ -451,7 +451,7 @@ describe DataServer do
       stub_request(:post, 'http://example.com').to_return(body: data_server_body)
       expect do
         @data_server.send(:get_response, 'http://example.com', {})
-      end.to raise_error(OrgAccountInvalidCredentialsError, 'Your username and password for MyString are invalid.')
+      end.to raise_error(OrgAccountInvalidCredentialsError, 'Your credentials for MyString are invalid.')
     end
 
     it 'raises OrgAccountInvalidCredentialsError if the first line of the response is BAD_PASSWORD' do
