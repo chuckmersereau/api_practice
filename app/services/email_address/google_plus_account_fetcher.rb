@@ -19,12 +19,16 @@ class EmailAddress::GooglePlusAccountFetcher
   private
 
   def fetch_google_plus_json_object
-    uri = URI("https://picasaweb.google.com/data/entry/api/user/#{email_address.email}?alt=json")
+    uri = URI("https://picasaweb.google.com/data/entry/api/user/#{email_encoded}?alt=json")
 
     response = Net::HTTP.get(uri)
 
     JSON.parse(response)
   rescue JSON::ParserError
     nil
+  end
+
+  def email_encoded
+    URI.encode_www_form_component(email_address.email)
   end
 end

@@ -3,13 +3,14 @@ require 'rails_helper'
 RSpec.describe EmailAddress::GooglePlusAccountFetcher do
   context '#fetch_google_plus_account' do
     before do
-      stub_request(:get, "https://picasaweb.google.com/data/entry/api/user/#{email_address.email}?alt=json")
+      stub_request(:get, "https://picasaweb.google.com/data/entry/api/user/#{encoded_email}?alt=json")
         .to_return(status: 200,
                    body: response_body,
                    headers: { accept: 'application/json' })
     end
 
     let(:google_plus_account_fetcher) { described_class.new(email_address) }
+    let(:encoded_email) { URI.encode_www_form_component(email_address.email) }
 
     context 'when the api email_address is associated to google plus account' do
       let(:email_address) { build(:email_address) }
@@ -35,6 +36,17 @@ RSpec.describe EmailAddress::GooglePlusAccountFetcher do
 
       it 'builds the proper google_plus_account object from the google api response' do
         expect(google_plus_account_fetcher.fetch_google_plus_account).to be_nil
+      end
+    end
+
+    context 'when the api email_address has invalid URI characters' do
+      let(:email_address) { build(:email_address, email: 'r/a[n]d?o=m@gmail.com') }
+
+      let(:response_body) { "Unable to find user with email #{email_address}" }
+
+      it 'does not raise an error' do
+        expect { google_plus_account_fetcher.fetch_google_plus_account }
+          .not_to raise_error(URI::InvalidURIError)
       end
     end
   end
