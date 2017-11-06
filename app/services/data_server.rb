@@ -328,7 +328,7 @@ class DataServer
           @org_account.update_column(:valid_credentials, false)
         end
         raise OrgAccountInvalidCredentialsError,
-              _('Your username and password for %{org} are invalid.').localize % { org: @org }
+              _('Your credentials for %{org} are invalid.').localize % { org: @org }
       elsif first_line.include?('ERROR') || first_line.include?('HTML')
         raise DataServerError,
               response
