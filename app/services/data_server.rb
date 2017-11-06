@@ -419,8 +419,8 @@ class DataServer
     unless master_person_from_source
       Retryable.retryable do
         org.master_person_sources
-                    .where(remote_id: remote_id.to_s)
-                    .first_or_create(master_person_id: person.master_person.id)
+           .where(remote_id: remote_id.to_s)
+           .first_or_create(master_person_id: person.master_person.id)
       end
     end
 
