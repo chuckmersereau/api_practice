@@ -13,7 +13,7 @@ class Person::OrganizationAccount < ApplicationRecord
 
   after_create :set_up_account_list, :queue_import_data
   validates :organization_id, :person_id, presence: true
-  validates_with CredentialsValidator, if: :requires_credentials?
+  validates_with CredentialValidator, if: :requires_credentials?
   after_validation :set_valid_credentials
   after_destroy :destroy_designation_profiles
   belongs_to :organization

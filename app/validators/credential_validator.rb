@@ -1,4 +1,4 @@
-class CredentialsValidator < ActiveModel::Validator
+class CredentialValidator < ActiveModel::Validator
   def validate(record)
     # we don't want this error to show up if there is already an error
     return if record.errors[:organization_id].present? || record.errors[:person_id].present?

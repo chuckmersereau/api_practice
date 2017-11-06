@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe AuthenticationValidator do
+describe CredentialValidator do
   before(:each) do
     @record = FactoryGirl.build(:organization_account)
     @validator = CredentialValidator.new({})
