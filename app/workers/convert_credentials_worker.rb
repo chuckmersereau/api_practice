@@ -10,7 +10,8 @@ class ConvertCredentialsWorker
   def perform
     Person::OrganizationAccount
       .joins(:organization)
-      .where('person_organization_accounts.token IS NULL AND organizations.oauth_convert_to_token_url IS NOT NULL')
+      .where(token: nil)
+      .where.not(organizations: { oauth_convert_to_token_url: nil })
       .find_each do |organization_account|
       convert(organization_account)
     end
