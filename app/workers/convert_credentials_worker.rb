@@ -8,16 +8,17 @@ class ConvertCredentialsWorker
   sidekiq_options queue: :api_convert_credentials_worker
 
   def perform
+    people_with_convertible_passwords.find_each(&method(:convert))
+  end
+
+  protected
+
+  def people_with_convertible_passwords
     Person::OrganizationAccount
       .joins(:organization)
       .where(token: nil)
       .where.not(organizations: { oauth_convert_to_token_url: nil })
-      .find_each do |organization_account|
-      convert(organization_account)
-    end
   end
-
-  protected
 
   def convert(organization_account)
     url = organization_account.organization.oauth_convert_to_token_url
