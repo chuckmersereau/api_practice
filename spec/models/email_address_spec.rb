@@ -171,5 +171,15 @@ describe EmailAddress do
 
       first_person.primary_email_address.reload.update(email: 'new@email.com')
     end
+
+    it 'triggers sync when changing primary email address' do
+      expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+        mail_chimp_account.id, 'primary_list_id', [contact.id]
+      )
+
+      not_primary = first_person.email_addresses.create(email: 'spam@gmail.com')
+
+      not_primary.update(primary: true)
+    end
   end
 end

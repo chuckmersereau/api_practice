@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 describe Person::OrganizationAccount do
+  let(:user) { create(:user) }
+  let(:organization) { create(:fake_org, name: 'MyString') }
   let(:org_account) do
     create(:organization_account,
-           organization: create(:fake_org, name: 'MyString'),
+           organization: organization,
+           person: user,
            remote_id: SecureRandom.uuid)
   end
   let(:api) { FakeApi.new }
@@ -14,7 +17,47 @@ describe Person::OrganizationAccount do
       .and_return([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
   end
 
-  context '#import_all_data' do
+  describe '.find_or_create_from_auth' do
+    let(:oauth_url) { 'https://www.mytntware.com/dataserver/toontown/staffportal/oauth/authorize.aspx' }
+    let!(:oauth_organization) { create(:fake_org, oauth_url: oauth_url) }
+
+    context 'organization_account does not exist' do
+      it 'creates an organization_account' do
+        expect { described_class.find_or_create_from_auth('abc', oauth_url, user) }.to(
+          change { described_class.count }.by(1)
+        )
+        organization_account = described_class.find_by(organization: oauth_organization, person: user)
+        expect(organization_account.user).to eq user
+        expect(organization_account.organization).to eq oauth_organization
+        expect(organization_account.token).to eq 'abc'
+      end
+
+      context 'organization cannot be found' do
+        it 'raise error' do
+          expect { described_class.find_or_create_from_auth('abc', 'fake_url', user) }.to raise_error
+        end
+      end
+    end
+
+    context 'organization_account does exist' do
+      let!(:organization_account) do
+        create(:organization_account,
+               organization: oauth_organization,
+               person: user,
+               token: '123')
+      end
+
+      it 'updates organization_account token' do
+        expect { described_class.find_or_create_from_auth('abc', oauth_url, user) }.to_not(
+          change { described_class.count }
+        )
+        organization_account = described_class.find_by(organization: oauth_organization, person: user)
+        expect(organization_account.token).to eq 'abc'
+      end
+    end
+  end
+
+  describe '#import_all_data' do
     it 'updates last_download_attempt_at' do
       travel_to Time.current do
         expect { org_account.import_all_data }.to change { org_account.reload.last_download_attempt_at }.from(nil).to(Time.current)
@@ -96,7 +139,7 @@ describe Person::OrganizationAccount do
     end
   end
 
-  context '#setup_up_account_list' do
+  describe '#setup_up_account_list' do
     let(:account_list) { create(:account_list) }
 
     it "doesn't create a new list if an existing list contains only the designation number for a profile" do
@@ -117,9 +160,47 @@ describe Person::OrganizationAccount do
     end
   end
 
-  context '#to_s' do
+  describe '#to_s' do
     it 'makes a pretty string' do
       expect(org_account.to_s).to eq('MyString: foo')
+    end
+  end
+
+  describe '#requires_username_and_password' do
+    context 'organization requires username and password' do
+      before do
+        allow(organization).to receive(:api) { OpenStruct.new(requires_username_and_password?: true) }
+      end
+
+      it 'returns true' do
+        expect(org_account.requires_username_and_password?).to eq true
+      end
+
+      context 'token is set' do
+        before { org_account.token = 'abc' }
+
+        it 'returns false' do
+          expect(org_account.requires_username_and_password?).to eq false
+        end
+      end
+    end
+
+    context 'organization does not require username and password' do
+      before do
+        allow(organization).to receive(:api) { OpenStruct.new(requires_username_and_password?: false) }
+      end
+
+      it 'returns false' do
+        expect(org_account.requires_username_and_password?).to eq false
+      end
+    end
+
+    context 'organization is nil' do
+      before { org_account.organization = nil }
+
+      it 'returns false' do
+        expect(org_account.requires_username_and_password?).to eq false
+      end
     end
   end
 end

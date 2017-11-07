@@ -5,7 +5,6 @@ class Person::OrganizationAccountSerializer < ApplicationSerializer
              :last_download,
              :locked_at,
              :remote_id,
-             :token,
              :username
 
   belongs_to :organization

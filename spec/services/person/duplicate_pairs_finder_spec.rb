@@ -212,4 +212,15 @@ describe Person::DuplicatePairsFinder do
       }.from(0)
     end
   end
+
+  context 'person with nil phone numbers' do
+    let!(:person) { create(:person, first_name: 'Jane', last_name: 'Doe', gender: nil).tap { |person| contact.people << person } }
+    let!(:phone_number) { create(:phone_number, number: '1.234.567.890!  ').tap { |phone_number| person.phone_numbers << phone_number } }
+
+    before { phone_number.update_column(:number, nil) }
+
+    it 'does not raise a NoMethodError' do
+      expect { build_finder.find_and_save }.to_not raise_error(NoMethodError)
+    end
+  end
 end
