@@ -46,7 +46,7 @@ RSpec.describe Api::V2::Admin::OrganizationsController do
       expect { post :create, full_correct_attributes }.to change { Organization.count }.from(0).to(1)
       organization = Organization.first
       expect(organization.query_ini_url).to match '.{8}\.example\.com'
-      expect(organization.api_class).to eq 'OfflineOrg'
+      expect(organization.api_class.to_s).to eq 'OfflineOrg'
       expect(organization.addresses_url).to eq 'example.com'
     end
   end

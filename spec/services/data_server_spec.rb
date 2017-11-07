@@ -2,53 +2,63 @@ require 'rails_helper'
 
 describe DataServer do
   let(:account_list) { create(:account_list) }
-  let(:profile) { create(:designation_profile, organization: @org, user: @person.to_user, account_list: account_list) }
-
-  let(:raw_data1) do
-    '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE","SUFFIX",'\
-    '"SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR",'\
-    "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodriguez, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
-    '"24555","(376) 706-670","MEX","Ramon","","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","","4/4/2003","4/4/2003",'\
-    "\"\",\"P\",\"Rodriguez\",\"\"\r\n"
+  let!(:organization) { create(:organization, name: 'MyString') }
+  let!(:person) { create(:person) }
+  let!(:organization_account) { build(:organization_account, person: person, organization: organization) }
+  let!(:data_server) { described_class.new(organization_account) }
+  let(:profile) do
+    create(:designation_profile, organization: organization, user: person.to_user, account_list: account_list)
   end
-
-  before(:each) do
-    @org = create(:organization, name: 'MyString')
-    @person = create(:person)
-    @org_account = build(:organization_account, person: @person, organization: @org)
-    @data_server = DataServer.new(@org_account)
+  let(:raw_data1) do
+    '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE",'\
+    '"SUFFIX","SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED",'\
+    '"PHONE_CHANGED","CNTRY_DESCR","PERSON_TYPE","LAST_NAME_ORG","SP_SUFFIX"'\
+    "\r\n"\
+    '"17083","Rodriguez, Ramon y Celeste (Moreno)","Bahia Acapulco 379","Chihuahua","CHH","24555","(376) 706-670",'\
+    '"MEX","Ramon","","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","","4/4/2003","4/4/2003","","P","Rodriguez",'\
+    '""'\
+    "\r\n"
   end
 
   it 'should import all' do
     date_from = '01/01/1951'
-    expect(@data_server).to receive(:import_profiles).and_return([profile])
-    expect(@data_server).to receive(:import_donors).with(profile, date_from)
-    expect(@data_server).to receive(:import_donations).with(profile, date_from)
-    @data_server.import_all(date_from)
+    expect(data_server).to receive(:import_profiles).and_return([profile])
+    expect(data_server).to receive(:import_donors).with(profile, date_from)
+    expect(data_server).to receive(:import_donations).with(profile, date_from)
+    data_server.import_all(date_from)
   end
 
   it 'should return designation numbers for a profile code' do
     designation_numbers = ['031231']
-    expect(@data_server).to receive(:profile_balance).and_return(designation_numbers: designation_numbers)
-    expect(@data_server.send(:designation_numbers, profile.code)).to eq(designation_numbers)
+    expect(data_server).to receive(:profile_balance).and_return(designation_numbers: designation_numbers)
+    expect(data_server.send(:designation_numbers, profile.code)).to eq(designation_numbers)
   end
 
   it 'should return a list of all profiles with their associated designation numbers' do
     designation_numbers = ['031231']
     profiles = [{ name: 'Profile 1', code: 'Profile 1' }, { name: 'Profile 2', code: '' }]
-    allow(@data_server).to receive(:designation_numbers).and_return(designation_numbers)
-    allow(@data_server).to receive(:profiles).and_return(profiles)
-    expect(@data_server.profiles_with_designation_numbers.first[:name]).to eq 'Profile 1'
-    expect(@data_server.profiles_with_designation_numbers.first[:designation_numbers])
+    allow(data_server).to receive(:designation_numbers).and_return(designation_numbers)
+    allow(data_server).to receive(:profiles).and_return(profiles)
+    expect(data_server.profiles_with_designation_numbers.first[:name]).to eq 'Profile 1'
+    expect(data_server.profiles_with_designation_numbers.first[:designation_numbers])
       .to eq(designation_numbers)
   end
 
   context '.import_profiles' do
-    let(:data_server) { DataServer.new(@org_account) }
+    let(:data_server) { described_class.new(organization_account) }
 
     it 'in US format' do
-      stub_request(:post, /.*profiles/).to_return(body: "ROLE_CODE,ROLE_DESCRIPTION\n,\"Staff Account (0559826)\"\n")
-      stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"0000000\",\"2012-03-23 16:01:39.0\",\"123.45\",\"Test Account\"\n")
+      stub_request(:post, /.*profiles/).to_return(
+        body: 'ROLE_CODE,ROLE_DESCRIPTION'\
+              "\n"\
+              ',"Staff Account (0559826)"'
+      )
+      stub_request(:post, /.*accounts/).to_return(
+        body: '"EMPLID","EFFDT","BALANCE","ACCT_NAME"'\
+              "\n"\
+              '"0000000","2012-03-23 16:01:39.0","123.45","Test Account"'\
+              "\n"
+      )
       expect(data_server).to receive(:import_profile_balance)
 
       expect do
@@ -56,9 +66,23 @@ describe DataServer do
       end.to change(DesignationProfile, :count).by(1)
     end
     it 'in DataServer format' do
-      stub_request(:post, /.*profiles/).to_return(body: "\xEF\xBB\xBF\"PROFILE_CODE\",\"PROFILE_DESCRIPTION\"\r\n\"1769360689\",\"MPD Coach (All Staff Donations)\"\r\n"\
-                                                        "\"1769360688\",\"My Campus Accounts\"\r\n\"\",\"My Staff Account\"\r\n")
-      stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"0000000\",\"2012-03-23 16:01:39.0\",\"123.45\",\"Test Account\"\n")
+      stub_request(:post, /.*profiles/).to_return(
+        body: "\xEF\xBB\xBF"\
+              '"PROFILE_CODE","PROFILE_DESCRIPTION"'\
+              "\r\n"\
+              '"1769360689","MPD Coach (All Staff Donations)"'\
+              "\r\n"\
+              '"1769360688","My Campus Accounts"'\
+              "\r\n"\
+              '"","My Staff Account"'\
+              "\r\n"
+      )
+      stub_request(:post, /.*accounts/).to_return(
+        body: '"EMPLID","EFFDT","BALANCE","ACCT_NAME"'\
+              "\n"\
+              '"0000000","2012-03-23 16:01:39.0","123.45","Test Account"'\
+              "\n"
+      )
       expect do
         data_server.import_profiles
       end.to change(DesignationProfile, :count).by(3)
@@ -68,8 +92,8 @@ describe DataServer do
       let(:profile_linker) { double(link_account_list!: nil) }
 
       before do
-        @org.designation_profiles << profile
-        @org.update(profiles_url: nil)
+        organization.designation_profiles << profile
+        organization.update(profiles_url: nil)
 
         allow(data_server).to receive(:import_profile_balance)
         allow(AccountList::FromProfileLinker).to receive(:new) { profile_linker }
@@ -82,7 +106,7 @@ describe DataServer do
 
         expect(data_server).to have_received(:import_profile_balance)
         expect(AccountList::FromProfileLinker).to have_received(:new)
-          .with(profile, @org_account)
+          .with(profile, organization_account)
         expect(profile_linker).to have_received(:link_account_list!)
       end
 
@@ -91,214 +115,235 @@ describe DataServer do
 
         expect(data_server).to have_received(:import_profile_balance)
         expect(AccountList::FromProfileLinker).not_to have_received(:new)
-          .with(profile, @org_account)
+          .with(profile, organization_account)
       end
     end
   end
 
   describe 'import donors' do
+    let(:account_list1) { create(:account_list) }
+    let(:account_list2) { create(:account_list) }
+
     it 'should update the addresses_url on the org if the url changed' do
       stub_request(:post, /.*addresses/).to_return(body: "whatever\nRedirectQueryIni=foo")
       stub_request(:post, 'http://foo/')
       expect do
-        @data_server.import_donors(profile)
-      end.to change(@org, :addresses_url).to('foo')
+        data_server.import_donors(profile)
+      end.to change(organization, :addresses_url).to('foo')
     end
 
     it 'removes a profile that a user no longer has access to' do
-      stub_request(:post, /.*addresses/).to_return(body: 'ERROR The user logging in has no profile associated with "1983834942".')
+      stub_request(:post, /.*addresses/).to_return(
+        body: 'ERROR The user logging in has no profile associated with "1983834942".'
+      )
       profile # instantiate record
       expect do
-        @data_server.import_donors(profile)
+        data_server.import_donors(profile)
       end.to change(DesignationProfile, :count).by(-1)
     end
 
     it 'should import a company' do
-      stub_request(:post, /.*addresses/).to_return(body:
-                                                     '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE","SUFFIX",'\
-        '"SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR",'\
-        "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"19238\",\"ACorporation\",\"123 mi casa blvd.\",\"Colima\",\"COL\",\"456788\",\"(52) 45 456-5678\","\
-        "\"MEX\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"8/15/2003\",\"8/15/2003\",\"\",\"O\",\"ACorporation\",\"\"\r\n")
-      expect(@data_server).to receive(:add_or_update_donor_account)
-      expect(@data_server).to receive(:add_or_update_company)
-      @data_server.import_donors(profile)
+      stub_request(:post, /.*addresses/).to_return(
+        body: '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME",'\
+              '"TITLE","SUFFIX","SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4",'\
+              '"ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR","PERSON_TYPE","LAST_NAME_ORG","SP_SUFFIX"'\
+              "\r\n"\
+              '"19238","ACorporation","123 mi casa blvd.","Colima","COL","456788","(52) 45 456-5678",'\
+              '"MEX","","","","","","","","","","","","8/15/2003","8/15/2003","","O","ACorporation",""'\
+              "\r\n"
+      )
+      expect(data_server).to receive(:add_or_update_donor_account)
+      expect(data_server).to receive(:add_or_update_company)
+      data_server.import_donors(profile)
     end
 
     it 'should import an individual' do
       stub_request(:post, /.*addresses/).to_return(body: raw_data1)
       primary_contact = double('person')
       other_person = double('person')
-      expect(@data_server).to receive(:add_or_update_primary_contact)
+      expect(data_server).to receive(:add_or_update_primary_contact)
         .and_return([primary_contact, other_person])
-      expect(@data_server).to receive(:add_or_update_spouse)
+      expect(data_server).to receive(:add_or_update_spouse)
       expect(primary_contact).to receive(:add_spouse)
       expect(other_person).to receive(:add_spouse)
-      @data_server.import_donors(profile)
+      data_server.import_donors(profile)
     end
 
     it 'should create a new contact in the right account list' do
       stub_request(:post, /.*addresses/).to_return(body: raw_data1)
-      @account_list1 = create(:account_list)
-      @account_list2 = create(:account_list)
-      profile = create(:designation_profile, user: @org_account.user, account_list: @account_list2)
-      @org_account.user.account_lists = [@account_list1, @account_list2]
+      profile = create(:designation_profile, user: organization_account.user, account_list: account_list2)
+      organization_account.user.account_lists = [account_list1, account_list2]
       expect do
-        @data_server.import_donors(profile)
+        data_server.import_donors(profile)
       end.to change(Contact, :count)
-      expect(@account_list2.contacts.last.name).to eq('Rodriguez, Ramon y Celeste (Moreno)')
+      expect(account_list2.contacts.last.name).to eq('Rodriguez, Ramon y Celeste (Moreno)')
     end
 
     it 'should create a new person in the right account list and donor account' do
       stub_request(:post, /.*addresses/).to_return(body: raw_data1)
-      @account_list1 = create(:account_list)
-      @account_list2 = create(:account_list)
-      profile = create(:designation_profile, user: @org_account.user, account_list: @account_list2)
-      @org_account.user.account_lists = [@account_list1, @account_list2]
-      donor_account = create(:donor_account, organization: @org_account.organization, account_number: '17083')
+      profile = create(:designation_profile, user: organization_account.user, account_list: account_list2)
+      organization_account.user.account_lists = [account_list1, account_list2]
+      donor_account = create(:donor_account, organization: organization_account.organization, account_number: '17083')
       expect do
-        @data_server.import_donors(profile)
+        data_server.import_donors(profile)
       end.to change(Person, :count)
-      new_person = @account_list2.contacts.last.people.order('contact_people.primary::int desc').references(:contact_people).last
+      new_person =
+        account_list2.contacts.last.people.order('contact_people.primary::int desc').references(:contact_people).last
       expect(new_person.last_name).to eq 'Rodriguez'
       expect(new_person.middle_name).to eq ''
       expect(new_person.donor_accounts.last).to eq donor_account
-
-      stub_request(:post, /.*addresses/).to_return(body:
-                                                     '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE","SUFFIX",'\
-        '"SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR",'\
-        "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodrigues, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
-        '"24555","(376) 706-670","MEX","Ramon","C","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","","4/4/2003","4/4/2003",'\
-        "\"\",\"P\",\"Rodrigues\",\"\"\r\n")
-      @data_server.import_donors(profile)
+      stub_request(:post, /.*addresses/).to_return(
+        body: '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME",'\
+              '"TITLE","SUFFIX","SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4",'\
+              '"ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR","PERSON_TYPE","LAST_NAME_ORG","SP_SUFFIX"'\
+              "\r\n"\
+              '"17083","Rodrigues, Ramon y Celeste (Moreno)","Bahia Acapulco 379","Chihuahua","CHH",'\
+              '"24555","(376) 706-670","MEX","Ramon","C","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","",'\
+              '"4/4/2003","4/4/2003","","P","Rodrigues",""'\
+              "\r\n"
+      )
+      data_server.import_donors(profile)
       expect(new_person.reload.last_name).to eq 'Rodrigues'
       expect(new_person.middle_name).to eq 'C'
     end
 
     it "should notify Rollbar if PERSON_TYPE is not 'O' or 'P'" do
-      stub_request(:post, /.*addresses/).to_return(body:
-                                                     '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE","SUFFIX",'\
-        '"SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR",'\
-        "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodriguez, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
-        '"24555","(376) 706-670","MEX","Ramon","","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","","4/4/2003","4/4/2003",'\
-        "\"\",\"BAD_PERSON_TYPE\",\"Rodriguez\",\"\"\r\n")
+      stub_request(:post, /.*addresses/).to_return(
+        body: '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME",'\
+              '"TITLE","SUFFIX","SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4",'\
+              '"ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR","PERSON_TYPE","LAST_NAME_ORG","SP_SUFFIX"'\
+              "\r\n"\
+              '"17083","Rodrigues, Ramon y Celeste (Moreno)","Bahia Acapulco 379","Chihuahua","CHH",'\
+              '"24555","(376) 706-670","MEX","Ramon","C","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","",'\
+              '"4/4/2003","4/4/2003","","BAD_PERSON_TYPE","Rodrigues",""'\
+              "\r\n"
+      )
       expect(Rollbar).to receive(:error)
-      @data_server.import_donors(profile)
+      data_server.import_donors(profile)
     end
     it 'should add or update primary contact' do
-      expect(@data_server).to receive(:add_or_update_person)
-      @data_server.send(:add_or_update_primary_contact, create(:account_list), '', create(:donor_account))
+      expect(data_server).to receive(:add_or_update_person)
+      data_server.send(:add_or_update_primary_contact, create(:account_list), '', create(:donor_account))
     end
     it 'should add or update spouse' do
-      expect(@data_server).to receive(:add_or_update_person)
-      @data_server.send(:add_or_update_spouse, create(:account_list), '', create(:donor_account))
+      expect(data_server).to receive(:add_or_update_person)
+      data_server.send(:add_or_update_spouse, create(:account_list), '', create(:donor_account))
     end
     it 'should put the spouse last name correctly if it downloads a blank SP_LAST_NAME' do
-      adams_line = { 'PEOPLE_ID' => '11111', 'ACCT_NAME' => 'Adams, Tim and Leah', 'ADDR1' => '123 mi casa blvd.', 'CITY' => 'Colima', 'STATE' => 'COL',
-                     'ZIP' => '456788', 'PHONE' => '(52) 45 456-5678', 'COUNTRY' => 'MEX', 'FIRST_NAME' => 'Tim', 'MIDDLE_NAME' => '', 'TITLE' => 'Mr',
-                     'SUFFIX' => '', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Leah', 'SP_MIDDLE_NAME' => '', 'SP_TITLE' => 'Mrs', 'ADDR2' => '', 'ADDR3' => '',
-                     'ADDR4' => '', 'ADDR_CHANGED' => '8/15/2003', 'PHONE_CHANGED' => '8/15/2003', 'CNTRY_DESCR' => '', 'PERSON_TYPE' => 'O',
-                     'LAST_NAME' => 'Adams', 'SP_SUFFIX' => '' }
+      adams_line = {
+        'PEOPLE_ID' => '11111', 'ACCT_NAME' => 'Adams, Tim and Leah', 'ADDR1' => '123 mi casa blvd.',
+        'CITY' => 'Colima', 'STATE' => 'COL', 'ZIP' => '456788', 'PHONE' => '(52) 45 456-5678', 'COUNTRY' => 'MEX',
+        'FIRST_NAME' => 'Tim', 'MIDDLE_NAME' => '', 'TITLE' => 'Mr', 'SUFFIX' => '', 'SP_LAST_NAME' => '',
+        'SP_FIRST_NAME' => 'Leah', 'SP_MIDDLE_NAME' => '', 'SP_TITLE' => 'Mrs', 'ADDR2' => '', 'ADDR3' => '',
+        'ADDR4' => '', 'ADDR_CHANGED' => '8/15/2003', 'PHONE_CHANGED' => '8/15/2003', 'CNTRY_DESCR' => '',
+        'PERSON_TYPE' => 'O', 'LAST_NAME' => 'Adams', 'SP_SUFFIX' => ''
+      }
       al = create(:account_list)
-      @data_server.send(:add_or_update_spouse, al, adams_line, create(:donor_account))
+      data_server.send(:add_or_update_spouse, al, adams_line, create(:donor_account))
       person = Person.where(first_name: 'Leah').last
       expect(person.last_name).to eql('Adams')
     end
 
     describe 'add or update a company' do
       let(:line) do
-        { 'PEOPLE_ID' => '19238', 'ACCT_NAME' => 'ACorporation', 'ADDR1' => '123 mi casa blvd.', 'CITY' => 'Colima', 'STATE' => 'COL',
-          'ZIP' => '456788', 'PHONE' => '(52) 45 456-5678', 'COUNTRY' => 'MEX', 'FIRST_NAME' => '', 'MIDDLE_NAME' => '', 'TITLE' => '',
-          'SUFFIX' => '', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => '', 'SP_MIDDLE_NAME' => '', 'SP_TITLE' => '', 'ADDR2' => '', 'ADDR3' => '',
-          'ADDR4' => '', 'ADDR_CHANGED' => '8/15/2003', 'PHONE_CHANGED' => '8/15/2003', 'CNTRY_DESCR' => '', 'PERSON_TYPE' => 'O',
-          'LAST_NAME_ORG' => 'ACorporation', 'SP_SUFFIX' => '' }
+        {
+          'PEOPLE_ID' => '19238', 'ACCT_NAME' => 'ACorporation', 'ADDR1' => '123 mi casa blvd.', 'CITY' => 'Colima',
+          'STATE' => 'COL', 'ZIP' => '456788', 'PHONE' => '(52) 45 456-5678', 'COUNTRY' => 'MEX', 'FIRST_NAME' => '',
+          'MIDDLE_NAME' => '', 'TITLE' => '', 'SUFFIX' => '', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => '',
+          'SP_MIDDLE_NAME' => '', 'SP_TITLE' => '', 'ADDR2' => '', 'ADDR3' => '', 'ADDR4' => '',
+          'ADDR_CHANGED' => '8/15/2003', 'PHONE_CHANGED' => '8/15/2003', 'CNTRY_DESCR' => '', 'PERSON_TYPE' => 'O',
+          'LAST_NAME_ORG' => 'ACorporation', 'SP_SUFFIX' => ''
+        }
       end
+      let(:account_list) { create(:account_list) }
+      let(:user) { User.find(person.id) }
+      let(:donor_account) { create(:donor_account) }
 
-      before(:each) do
-        @account_list = create(:account_list)
-        @user = User.find(@person.id)
-        @donor_account = create(:donor_account)
-      end
       it 'should add a company with an existing master company' do
         create(:company, name: 'ACorporation')
         expect do
-          @data_server.send(:add_or_update_company, @account_list, @user, line, @donor_account)
+          data_server.send(:add_or_update_company, account_list, user, line, donor_account)
         end.to_not change(MasterCompany, :count)
       end
       it 'should add a company without an existing master company and create a master company' do
         expect do
-          @data_server.send(:add_or_update_company, @account_list, @user, line, @donor_account)
+          data_server.send(:add_or_update_company, account_list, user, line, donor_account)
         end.to change(MasterCompany, :count).by(1)
       end
       it 'should update an existing company' do
         company = create(:company, name: 'ACorporation')
-        @user.account_lists << @account_list
-        @account_list.companies << company
+        user.account_lists << account_list
+        account_list.companies << company
         expect do
-          new_company = @data_server.send(:add_or_update_company, @account_list, @user, line, @donor_account)
+          new_company = data_server.send(:add_or_update_company, account_list, user, line, donor_account)
           expect(new_company).to eq(company)
         end.to_not change(Company, :count)
       end
       it 'should associate new company with the donor account' do
-        @data_server.send(:add_or_update_company, @account_list, @user, line, @donor_account)
-        expect(@donor_account.master_company_id).not_to be_nil
+        data_server.send(:add_or_update_company, account_list, user, line, donor_account)
+        expect(donor_account.master_company_id).not_to be_nil
       end
     end
 
     describe 'add or update contact' do
       let(:line) do
-        { 'PEOPLE_ID' => '17083', 'ACCT_NAME' => 'Rodrigue', 'ADDR1' => 'Ramon y Celeste (Moreno)', 'CITY' => 'Bahia Acapulco 379',
-          'STATE' => 'Chihuahua', 'ZIP' => 'CHH', 'PHONE' => '24555', 'COUNTRY' => '(376) 706-670', 'FIRST_NAME' => 'MEX',
-          'MIDDLE_NAME' => 'Ramon', 'TITLE' => '', 'SUFFIX' => 'Sr.', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Moreno',
-          'SP_MIDDLE_NAME' => 'Celeste', 'SP_TITLE' => 'Gonzalez', 'ADDR2' => 'Sra.', 'ADDR3' => '', 'ADDR4' => '',
-          'ADDR_CHANGED' => '', 'PHONE_CHANGED' => '4/4/2003', 'CNTRY_DESCR' => '4/4/2003', 'PERSON_TYPE' => '',
-          'LAST_NAME_ORG' => 'P', 'SP_SUFFIX' => 'Rodriguez' }
+        {
+          'PEOPLE_ID' => '17083', 'ACCT_NAME' => 'Rodrigue', 'ADDR1' => 'Ramon y Celeste (Moreno)',
+          'CITY' => 'Bahia Acapulco 379', 'STATE' => 'Chihuahua', 'ZIP' => 'CHH', 'PHONE' => '24555',
+          'COUNTRY' => '(376) 706-670', 'FIRST_NAME' => 'MEX', 'MIDDLE_NAME' => 'Ramon', 'TITLE' => '',
+          'SUFFIX' => 'Sr.', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Moreno', 'SP_MIDDLE_NAME' => 'Celeste',
+          'SP_TITLE' => 'Gonzalez', 'ADDR2' => 'Sra.', 'ADDR3' => '', 'ADDR4' => '', 'ADDR_CHANGED' => '',
+          'PHONE_CHANGED' => '4/4/2003', 'CNTRY_DESCR' => '4/4/2003', 'PERSON_TYPE' => '', 'LAST_NAME_ORG' => 'P',
+          'SP_SUFFIX' => 'Rodriguez'
+        }
+      end
+      let(:account_list) { create(:account_list) }
+      let(:user) { User.find(person.id) }
+      let(:donor_account) { create(:donor_account) }
+
+      before do
+        donor_account.link_to_contact_for(account_list)
       end
 
-      before(:each) do
-        @account_list = create(:account_list)
-        @user = User.find(@person.id)
-        @donor_account = create(:donor_account)
-        @donor_account.link_to_contact_for(@account_list)
-      end
       it 'should add a contact with an existing master person' do
         mp = create(:master_person)
-        @donor_account.organization.master_person_sources.create(master_person_id: mp.id, remote_id: 1)
+        donor_account.organization.master_person_sources.create(master_person_id: mp.id, remote_id: 1)
         expect do
-          @data_server.send(:add_or_update_person, @account_list, line, @donor_account, 1)
+          data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
         end.to_not change(MasterPerson, :count)
       end
       it 'should add a contact without an existing master person and create a master person' do
         expect do
           expect do
-            @data_server.send(:add_or_update_person, @account_list, line, @donor_account, 1)
+            data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
           end.to change(MasterPerson, :count).by(1)
         end.to change(Person, :count).by(2)
       end
 
       it 'should add a new contact with no spouse prefix' do
         expect do
-          @data_server.send(:add_or_update_person, @account_list, line, @donor_account, 1)
+          data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
         end.to change(MasterPerson, :count).by(1)
       end
       it 'should add a new contact with a spouse prefix' do
         expect do
-          @data_server.send(:add_or_update_person, @account_list, line, @donor_account, 1, 'SP_')
+          data_server.send(:add_or_update_person, account_list, line, donor_account, 1, 'SP_')
         end.to change(MasterPerson, :count).by(1)
       end
       it 'should update an existing person' do
         person = create(:person)
-        @user.account_lists << @account_list
-        @donor_account.master_people << person.master_person
-        @donor_account.people << person
-        @donor_account.organization.master_person_sources.create(master_person_id: person.master_person_id, remote_id: 1)
+        user.account_lists << account_list
+        donor_account.master_people << person.master_person
+        donor_account.people << person
+        donor_account.organization.master_person_sources.create(master_person_id: person.master_person_id, remote_id: 1)
         expect do
-          new_contact, _other = @data_server.send(:add_or_update_person, @account_list, line, @donor_account, 1)
+          new_contact, _other = data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
           expect(new_contact).to eq(person)
         end.to_not change(MasterPerson, :count)
       end
       it 'should associate new contacts with the donor account' do
         expect do
-          @data_server.send(:add_or_update_person, @account_list, line, @donor_account, 1)
+          data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
         end.to change(MasterPersonDonorAccount, :count).by(1)
       end
     end
@@ -310,27 +355,29 @@ describe DataServer do
     end
 
     let(:line) do
-      { 'PEOPLE_ID' => '17083', 'ACCT_NAME' => 'Rodrigue', 'ADDR1' => 'Ramon y Celeste (Moreno)', 'CITY' => 'Bahia Acapulco 379',
-        'STATE' => 'Chihuahua', 'ZIP' => '24555', 'PHONE' => '(376) 706-670', 'COUNTRY' => 'CHH', 'FIRST_NAME' => 'Ramon',
-        'MIDDLE_NAME' => '', 'TITLE' => '', 'SUFFIX' => 'Sr.', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Moreno',
-        'SP_MIDDLE_NAME' => 'Celeste', 'SP_TITLE' => 'Gonzalez', 'ADDR2' => 'Sra.', 'ADDR3' => '', 'ADDR4' => '',
-        'ADDR_CHANGED' => '2/14/2002', 'PHONE_CHANGED' => '4/4/2003', 'CNTRY_DESCR' => 'USA', 'PERSON_TYPE' => '',
-        'LAST_NAME_ORG' => 'P', 'SP_SUFFIX' => 'Rodriguez' }
+      {
+        'PEOPLE_ID' => '17083', 'ACCT_NAME' => 'Rodrigue', 'ADDR1' => 'Ramon y Celeste (Moreno)',
+        'CITY' => 'Bahia Acapulco 379', 'STATE' => 'Chihuahua', 'ZIP' => '24555', 'PHONE' => '(376) 706-670',
+        'COUNTRY' => 'CHH', 'FIRST_NAME' => 'Ramon', 'MIDDLE_NAME' => '', 'TITLE' => '', 'SUFFIX' => 'Sr.',
+        'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Moreno', 'SP_MIDDLE_NAME' => 'Celeste', 'SP_TITLE' => 'Gonzalez',
+        'ADDR2' => 'Sra.', 'ADDR3' => '', 'ADDR4' => '', 'ADDR_CHANGED' => '2/14/2002', 'PHONE_CHANGED' => '4/4/2003',
+        'CNTRY_DESCR' => 'USA', 'PERSON_TYPE' => '', 'LAST_NAME_ORG' => 'P', 'SP_SUFFIX' => 'Rodriguez'
+      }
     end
 
     it 'creates a new contact' do
       expect do
-        @data_server.send(:add_or_update_donor_account, line, profile)
+        data_server.send(:add_or_update_donor_account, line, profile)
       end.to change(Contact, :count)
     end
 
     it "doesn't add duplicate addresses with standard country name, just one correct address" do
       line['CNTRY_DESCR'] = 'United States'
       expect do
-        @data_server.send(:add_or_update_donor_account, line, profile)
+        data_server.send(:add_or_update_donor_account, line, profile)
       end.to change(Address, :count).by(2)
       expect do
-        @data_server.send(:add_or_update_donor_account, line, profile)
+        data_server.send(:add_or_update_donor_account, line, profile)
       end.to change(Address, :count).by(0)
 
       expect(account_list.contacts.count).to eq(1)
@@ -353,15 +400,15 @@ describe DataServer do
 
     it "doesn't add duplicate addresses with alternate country name" do
       expect do
-        @data_server.send(:add_or_update_donor_account, line, profile)
+        data_server.send(:add_or_update_donor_account, line, profile)
       end.to change(Address, :count).by(2)
       expect do
-        @data_server.send(:add_or_update_donor_account, line, profile)
+        data_server.send(:add_or_update_donor_account, line, profile)
       end.to change(Address, :count).by(0)
     end
 
     it 'sets the address as primary if the donor account has no other primary addresses' do
-      @data_server.send(:add_or_update_donor_account, line, profile)
+      data_server.send(:add_or_update_donor_account, line, profile)
       contact = account_list.contacts.first
       donor_account = contact.donor_accounts.first
       expect(contact.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
@@ -369,10 +416,10 @@ describe DataServer do
     end
 
     it 'leaves existing primary address in the donor account' do
-      donor_account = create(:donor_account, organization: @org, account_number: '17083')
+      donor_account = create(:donor_account, organization: organization, account_number: '17083')
       prior_address = create(:address, primary_mailing_address: true)
       donor_account.addresses << prior_address
-      @data_server.send(:add_or_update_donor_account, line, profile)
+      data_server.send(:add_or_update_donor_account, line, profile)
       contact = account_list.contacts.first
       expect(contact.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
       expect(donor_account.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
@@ -387,7 +434,7 @@ describe DataServer do
                                 update_from_donor_account: nil)
       allow(DataServer::ContactAddressUpdate).to receive(:new) { updater }
 
-      @data_server.send(:add_or_update_donor_account, line, profile)
+      data_server.send(:add_or_update_donor_account, line, profile)
 
       expect(updater).to have_received(:update_from_donor_account)
     end
@@ -395,46 +442,58 @@ describe DataServer do
 
   describe 'check_credentials!' do
     it 'raise an error if credentials are missing' do
-      no_user_account = @org_account.dup
+      no_user_account = organization_account.dup
       no_user_account.username = nil
       expect do
-        DataServer.new(no_user_account).import_donors(profile)
-      end.to raise_error(OrgAccountMissingCredentialsError, 'Your username and password are missing for this account.')
-      no_pass_account = @org_account.dup
+        described_class.new(no_user_account).import_donors(profile)
+      end.to raise_error(
+        Person::OrganizationAccount::MissingCredentialsError,
+        'Your credentials are missing for this account.'
+      )
+      no_pass_account = organization_account.dup
       no_pass_account.password = nil
       expect do
-        DataServer.new(no_pass_account).import_donors(profile)
-      end.to raise_error(OrgAccountMissingCredentialsError, 'Your username and password are missing for this account.')
+        described_class.new(no_pass_account).import_donors(profile)
+      end.to raise_error(
+        Person::OrganizationAccount::MissingCredentialsError,
+        'Your credentials are missing for this account.'
+      )
     end
     it 'raise an error if credentials are invalid' do
-      @org_account.valid_credentials = false
+      organization_account.valid_credentials = false
       expect do
-        DataServer.new(@org_account).import_donors(profile)
-      end.to raise_error(OrgAccountInvalidCredentialsError,
-                         _('Your username and password for %{org} are invalid.').localize % { org: @org })
+        described_class.new(organization_account).import_donors(profile)
+      end.to raise_error(
+        Person::OrganizationAccount::InvalidCredentialsError,
+        'Your credentials for MyString are invalid.'
+      )
     end
   end
 
-  describe 'validate_username_and_password' do
+  describe 'validate_credentials' do
     it 'should validate using the profiles url if there is one' do
-      expect(@data_server).to receive(:get_params).and_return({})
-      expect(@data_server).to receive(:get_response).with(@org.profiles_url, {})
-      expect(@data_server.validate_username_and_password).to eq(true)
+      expect(data_server).to receive(:get_params).and_return({})
+      expect(data_server).to receive(:get_response).with(organization.profiles_url, {})
+      expect(data_server.validate_credentials).to eq(true)
     end
     it 'should validate using the account balance url if there is no profiles url' do
-      @org.profiles_url = nil
-      expect(@data_server).to receive(:get_params).and_return({})
-      expect(@data_server).to receive(:get_response).with(@org.account_balance_url, {})
-      expect(@data_server.validate_username_and_password).to eq(true)
+      organization.profiles_url = nil
+      expect(data_server).to receive(:get_params).and_return({})
+      expect(data_server).to receive(:get_response).with(organization.account_balance_url, {})
+      expect(data_server.validate_credentials).to eq(true)
     end
     it 'should return false if the error message says the username/password were wrong' do
-      expect(@data_server).to receive(:get_response).and_raise(DataServerError.new('Either your username or password were incorrect.'))
-      expect(@data_server.validate_username_and_password).to eq(false)
+      expect(data_server).to receive(:get_response).and_raise(
+        DataServerError.new('Either your username or password were incorrect.')
+      )
+      expect(data_server.validate_credentials).to eq(false)
     end
     it 'should re-raise other errors' do
-      expect(@data_server).to receive(:get_response).and_raise(DataServerError.new('other error'))
+      expect(data_server).to receive(:get_response).and_raise(
+        DataServerError.new('other error')
+      )
       expect do
-        @data_server.validate_username_and_password
+        data_server.validate_credentials
       end.to raise_error(DataServerError)
     end
   end
@@ -443,44 +502,47 @@ describe DataServer do
     it 'should raise a DataServerError if the first line of the response is ERROR' do
       stub_request(:post, 'http://example.com').to_return(body: "ERROR\nmessage")
       expect do
-        @data_server.send(:get_response, 'http://example.com', {})
+        data_server.send(:get_response, 'http://example.com', {})
       end.to raise_error(DataServerError, "ERROR\nmessage")
     end
 
     def expect_bad_passsword_err(data_server_body)
       stub_request(:post, 'http://example.com').to_return(body: data_server_body)
       expect do
-        @data_server.send(:get_response, 'http://example.com', {})
-      end.to raise_error(OrgAccountInvalidCredentialsError, 'Your username and password for MyString are invalid.')
+        data_server.send(:get_response, 'http://example.com', {})
+      end.to raise_error(
+        Person::OrganizationAccount::InvalidCredentialsError,
+        'Your credentials for MyString are invalid.'
+      )
     end
 
-    it 'raises OrgAccountInvalidCredentialsError if the first line of the response is BAD_PASSWORD' do
+    it 'raises InvalidCredentialsError if the first line of the response is BAD_PASSWORD' do
       expect_bad_passsword_err("BAD_PASSWORD\nmessage")
     end
 
-    it 'raises OrgAccountInvalidCredentialsError if the first line includes the word "password"' do
+    it 'raises InvalidCredentialsError if the first line includes the word "password"' do
       expect_bad_passsword_err("You have entered an invalid login and/or password\nmessage")
     end
 
-    it 'raises OrgAccountInvalidCredentialsError if the second line includes the word "password"' do
+    it 'raises InvalidCredentialsError if the second line includes the word "password"' do
       expect_bad_passsword_err("﻿ERROR\rAn error occurred in GetServiceTicketFromUserNamePassword")
     end
 
-    it 'raises OrgAccountInvalidCredentialsError if the second line includes the word "password"' do
+    it 'raises InvalidCredentialsError if the second line includes the word "password"' do
       expect_bad_passsword_err("﻿ERROR\nPerhaps the username or password are incorrect")
     end
 
-    it 'raises OrgAccountInvalidCredentialsError if the second line includes the phrase "not registered"' do
+    it 'raises InvalidCredentialsError if the second line includes the phrase "not registered"' do
       expect_bad_passsword_err("﻿ERROR\nThe user logging in is not registered with this system")
     end
 
-    it 'raises OrgAccountInvalidCredentialsError if the first line includes a byte order mark' do
+    it 'raises InvalidCredentialsError if the first line includes a byte order mark' do
       expect_bad_passsword_err("ERROR\r\nAuthentication failed.  Perhaps the username or password are incorrect.")
     end
 
     it 'raises no error when the creds are encoded' do
-      @org_account.username = 'tester@tester.com'
-      @org_account.password = 'abcd543!'
+      organization_account.username = 'tester@tester.com'
+      organization_account.password = 'abcd543!'
 
       execute_params = {
         method: :post, url: 'http://example.com', payload: [], timeout: nil,
@@ -488,58 +550,74 @@ describe DataServer do
       }
       # We can't use webmock to spec this since webmock smart matches on encoding
       expect(RestClient::Request).to_not receive(:execute).with(execute_params)
-      @data_server.send(:get_response, 'http://example.com', {})
+      data_server.send(:get_response, 'http://example.com', {})
     end
 
     it 'correctly parses special characters in utf-8' do
       stub_request(:post, 'http://example.com').to_return(body: 'Agapé')
-      expect(@data_server.send(:get_response, 'http://example.com', {}))
+      expect(data_server.send(:get_response, 'http://example.com', {}))
         .to eq('Agapé')
     end
   end
 
   describe 'import account balances' do
     it 'should update a profile balance' do
-      stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"0000000\",\"2012-03-23 16:01:39.0\",\"123.45\",\"Test Account\"\n")
-      expect(@data_server).to receive(:check_credentials!)
+      stub_request(:post, /.*accounts/).to_return(
+        body: '"EMPLID","EFFDT","BALANCE","ACCT_NAME"'\
+              "\n"\
+              '"0000000","2012-03-23 16:01:39.0","123.45","Test Account"'\
+              "\n"
+      )
+      expect(data_server).to receive(:check_credentials!)
       expect do
-        @data_server.import_profile_balance(profile)
+        data_server.import_profile_balance(profile)
       end.to change(profile, :balance).to(123.45)
     end
     it 'should update a designation account balance' do
-      stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"0000000\",\"2012-03-23 16:01:39.0\",\"123.45\",\"Test Account\"\n")
-      @designation_account = create(:designation_account, organization: @org, designation_number: '0000000')
-      @data_server.import_profile_balance(profile)
-      expect(@designation_account.reload.balance).to eq(123.45)
+      stub_request(:post, /.*accounts/).to_return(
+        body: '"EMPLID","EFFDT","BALANCE","ACCT_NAME"'\
+              "\n"\
+              '"0000000","2012-03-23 16:01:39.0","123.45","Test Account"'\
+              "\n"
+      )
+      designation_account = create(:designation_account, organization: organization, designation_number: '0000000')
+      data_server.import_profile_balance(profile)
+      expect(designation_account.reload.balance).to eq(123.45)
     end
   end
 
   describe 'import donations' do
     let(:line) do
-      { 'DONATION_ID' => '1062', 'PEOPLE_ID' => '12271', 'ACCT_NAME' => 'Garci, Reynaldo', 'DESIGNATION' => '10640', 'MOTIVATION' => '',
-        'PAYMENT_METHOD' => 'EFECTIVO', 'TENDERED_CURRENCY' => 'MXN', 'MEMO' => '', 'DISPLAY_DATE' => '4/23/2003', 'AMOUNT' => '1000.0000',
-        'TENDERED_AMOUNT' => '1000.0000' }
+      {
+        'DONATION_ID' => '1062', 'PEOPLE_ID' => '12271', 'ACCT_NAME' => 'Garci, Reynaldo', 'DESIGNATION' => '10640',
+        'MOTIVATION' => '', 'PAYMENT_METHOD' => 'EFECTIVO', 'TENDERED_CURRENCY' => 'MXN', 'MEMO' => '',
+        'DISPLAY_DATE' => '4/23/2003', 'AMOUNT' => '1000.0000', 'TENDERED_AMOUNT' => '1000.0000'
+      }
     end
 
     def stub_donations_request
-      stub_request(:post, /.*donations/).to_return(body:
-                                                     "\xEF\xBB\xBF\"DONATION_ID\",\"PEOPLE_ID\",\"ACCT_NAME\",\"DESIGNATION\",\"MOTIVATION\",\"PAYMENT_METHOD\",\"TENDERED_CURRENCY\",\"MEMO\","\
-        "\"DISPLAY_DATE\",\"AMOUNT\",\"TENDERED_AMOUNT\"\r\n\"1062\",\"12271\",\"Garcia, Reynaldo\",\"10640\",\"\",\"EFECTIVO\",\"MXN\",\"\",\"4/23/2003\","\
-        "\"1000.0000\",\"1000.0000\"\r\n")
-      expect(@data_server).to receive(:check_credentials!)
+      stub_request(:post, /.*donations/).to_return(
+        body: "\xEF\xBB\xBF"\
+              '"DONATION_ID","PEOPLE_ID","ACCT_NAME","DESIGNATION","MOTIVATION","PAYMENT_METHOD","TENDERED_CURRENCY",'\
+              '"MEMO","DISPLAY_DATE","AMOUNT","TENDERED_AMOUNT"'\
+              "\r\n"\
+              '"1062","12271","Garcia, Reynaldo","10640","","EFECTIVO","MXN","","4/23/2003","1000.0000","1000.0000"'\
+              "\r\n"
+      )
+      expect(data_server).to receive(:check_credentials!)
     end
 
     it 'creates a donation' do
       stub_donations_request
-      expect(@data_server).to receive(:find_or_create_designation_account)
-      expect(@data_server).to receive(:add_or_update_donation)
-      expect(@data_server).to receive(:delete_removed_donations)
-      @data_server.import_donations(profile, DateTime.new(1951, 1, 1), '2/2/2012')
+      expect(data_server).to receive(:find_or_create_designation_account)
+      expect(data_server).to receive(:add_or_update_donation)
+      expect(data_server).to receive(:delete_removed_donations)
+      data_server.import_donations(profile, DateTime.new(1951, 1, 1), '2/2/2012')
     end
 
     it 'removes non-manual donations in the date range but no longer in import', versioning: true do
       stub_donations_request
-      da = create(:designation_account, organization: @org, designation_number: line['DESIGNATION'])
+      da = create(:designation_account, organization: organization, designation_number: line['DESIGNATION'])
 
       removed_donation = create(:donation)
       manual_donation = create(:donation, remote_id: nil)
@@ -547,7 +625,7 @@ describe DataServer do
       da.donations += [manual_donation, old_donation, removed_donation]
       other_designation = create(:donation)
 
-      @data_server.import_donations(profile, Date.today - 2.weeks, Date.today)
+      data_server.import_donations(profile, Date.today - 2.weeks, Date.today)
 
       expect(Donation.find_by(id: removed_donation.id)).to be_nil
       expect(Donation.find(manual_donation.id)).to be_present
@@ -556,13 +634,13 @@ describe DataServer do
     end
 
     it 'finds an existing designation account' do
-      account = create(:designation_account, organization: @org, designation_number: line['DESIGNATION'])
-      expect(@data_server.send(:find_or_create_designation_account, line['DESIGNATION'], profile)).to eq(account)
+      account = create(:designation_account, organization: organization, designation_number: line['DESIGNATION'])
+      expect(data_server.send(:find_or_create_designation_account, line['DESIGNATION'], profile)).to eq(account)
     end
 
     it 'creates a new designation account' do
       expect do
-        @data_server.send(:find_or_create_designation_account, line['DESIGNATION'], profile)
+        data_server.send(:find_or_create_designation_account, line['DESIGNATION'], profile)
       end.to change(DesignationAccount, :count)
     end
 
@@ -575,32 +653,66 @@ describe DataServer do
 
       it 'adds a new donation' do
         expect do
-          @data_server.send(:add_or_update_donation, line, designation_account, profile)
+          data_server.send(:add_or_update_donation, line, designation_account, profile)
         end.to change(Donation, :count)
       end
 
       it 'updates an existing donation with a remote_id' do
-        donation = create(:donation, remote_id: '1062', tnt_id: nil, amount: 1, designation_account: designation_account)
+        donation = create(
+          :donation,
+          remote_id: '1062',
+          tnt_id: nil,
+          amount: 1,
+          designation_account: designation_account
+        )
         expect do
-          donation = @data_server.send(:add_or_update_donation, line.merge!('AMOUNT' => '5'), designation_account, profile)
+          donation = data_server.send(
+            :add_or_update_donation,
+            line.merge!('AMOUNT' => '5'),
+            designation_account,
+            profile
+          )
           expect(donation.amount).to eq(5)
         end.to_not change(Donation, :count)
       end
 
       it 'updates an existing donation with a tnt_id' do
-        donation = create(:donation, remote_id: nil, tnt_id: '1062', amount: 1, designation_account: designation_account)
+        donation = create(
+          :donation,
+          remote_id: nil,
+          tnt_id: '1062',
+          amount: 1,
+          designation_account: designation_account
+        )
         expect do
-          donation = @data_server.send(:add_or_update_donation, line.merge!('AMOUNT' => '5'), designation_account, profile)
+          donation = data_server.send(
+            :add_or_update_donation,
+            line.merge!('AMOUNT' => '5'),
+            designation_account,
+            profile
+          )
           expect(donation.amount).to eq(5)
         end.to_not change(Donation, :count)
       end
 
       it 'updates an existing donation that does not have a remote_id or tnt_id' do
-        donation = create(:donation, remote_id: nil, tnt_id: nil, amount: 100.00, donation_date: Date.parse('2003-04-23'), designation_account: designation_account)
-        donation.donor_account.update(organization: @org, account_number: line['PEOPLE_ID'])
+        donation = create(
+          :donation,
+          remote_id: nil,
+          tnt_id: nil,
+          amount: 100.00,
+          donation_date: Date.parse('2003-04-23'),
+          designation_account: designation_account
+        )
+        donation.donor_account.update(organization: organization, account_number: line['PEOPLE_ID'])
 
         expect do
-          donation = @data_server.send(:add_or_update_donation, line.merge!('AMOUNT' => '100'), designation_account, profile)
+          donation = data_server.send(
+            :add_or_update_donation,
+            line.merge!('AMOUNT' => '100'),
+            designation_account,
+            profile
+          )
           expect(donation.remote_id).to eq('1062')
         end.to_not change(Donation, :count)
       end
@@ -609,51 +721,115 @@ describe DataServer do
         line_one = line
         line_two = line.merge('DONATION_ID' => '1063')
 
-        expect { @data_server.send(:add_or_update_donation, line_one, designation_account, profile) }.to change { Donation.count }.from(0).to(1)
-        expect { @data_server.send(:add_or_update_donation, line_two, designation_account, profile) }.to change { Donation.count }.from(1).to(2)
+        expect { data_server.send(:add_or_update_donation, line_one, designation_account, profile) }.to(
+          change { Donation.count }.from(0).to(1)
+        )
+        expect { data_server.send(:add_or_update_donation, line_two, designation_account, profile) }.to(
+          change { Donation.count }.from(1).to(2)
+        )
       end
 
       it 'uses the find donation service' do
-        donation = create(:donation, remote_id: '1062', tnt_id: nil, amount: 1, designation_account: designation_account)
+        donation = create(
+          :donation,
+          remote_id: '1062',
+          tnt_id: nil,
+          amount: 1,
+          designation_account: designation_account
+        )
         expect_any_instance_of(DonationImports::Base::FindDonation).to receive(:find_and_merge).and_return(donation)
 
         expect do
-          @data_server.send(:add_or_update_donation, line, designation_account, profile)
+          data_server.send(:add_or_update_donation, line, designation_account, profile)
         end.to_not change { Donation.count }.from(1)
       end
     end
 
     context '#parse_date' do
       it 'supports dates formatted as %m/%d/%y %H:%M:%S' do
-        expect(@data_server.send(:parse_date, '5/15/2014 15:22:13')).to eq(Date.new(2014, 5, 15))
+        expect(data_server.send(:parse_date, '5/15/2014 15:22:13')).to eq(Date.new(2014, 5, 15))
       end
 
       it 'supports dates formatted as MM/DD/YYYY' do
-        expect(@data_server.send(:parse_date, '5/15/2014')).to eq(Date.new(2014, 5, 15))
+        expect(data_server.send(:parse_date, '5/15/2014')).to eq(Date.new(2014, 5, 15))
       end
 
       it 'supports dates formatted as YYYY-MM-DD' do
-        expect(@data_server.send(:parse_date, '2014-05-15')).to eq(Date.new(2014, 5, 15))
+        expect(data_server.send(:parse_date, '2014-05-15')).to eq(Date.new(2014, 5, 15))
       end
 
       it 'returns nil for a badly formatted date' do
-        expect(@data_server.send(:parse_date, '2014-99-2')).to be_nil
+        expect(data_server.send(:parse_date, '2014-99-2')).to be_nil
       end
 
       it 'returns nil for nil' do
-        expect(@data_server.send(:parse_date, nil)).to be_nil
+        expect(data_server.send(:parse_date, nil)).to be_nil
       end
 
       it 'returns nil for empty string' do
-        expect(@data_server.send(:parse_date, '')).to be_nil
+        expect(data_server.send(:parse_date, '')).to be_nil
       end
 
       it 'returns the date if given a date object' do
-        expect(@data_server.send(:parse_date, Date.today)).to eq Date.today
+        expect(data_server.send(:parse_date, Date.today)).to eq Date.today
       end
 
       it 'returns the date for a time if given' do
-        expect(@data_server.send(:parse_date, Time.now)).to eq Date.today
+        expect(data_server.send(:parse_date, Time.now)).to eq Date.today
+      end
+    end
+  end
+
+  describe '#get_params' do
+    it 'returns hash of params with basic credentials' do
+      expect(
+        data_server.send(
+          :get_params,
+          organization.donations_params,
+          profile: '',
+          datefrom: '01/01/1951',
+          dateto: '2/2/2012',
+          personid: '1'
+        )
+      ).to eq(
+        'UserName' => 'foo',
+        'Password' => 'bar',
+        'Profile' => '',
+        'DateFrom' => '01/01/1951',
+        'DateTo' => '2/2/2012',
+        'Action' => 'Gifts'
+      )
+    end
+
+    context 'oauth' do
+      before do
+        allow(ENV).to receive(:fetch).with('DONORHUB_CLIENT_ID') { 'DONORHUB_CLIENT_ID' }
+        allow(ENV).to receive(:fetch).with('DONORHUB_CLIENT_SECRET') { 'DONORHUB_CLIENT_SECRET' }
+        organization_account.token = 'abc-123'
+      end
+
+      it 'returns hash of params with oauth credentials' do
+        expect(
+          data_server.send(
+            :get_params,
+            organization.donations_params,
+            profile: '',
+            datefrom: '01/01/1951',
+            dateto: '2/2/2012',
+            personid: '1'
+          )
+        ).to eq(
+          'UserName' => '',
+          'Password' => '',
+          'Profile' => '',
+          'DateFrom' => '01/01/1951',
+          'DateTo' => '2/2/2012',
+          'Action' => 'Gifts',
+          'client_id' => 'DONORHUB_CLIENT_ID',
+          'client_secret' => 'DONORHUB_CLIENT_SECRET',
+          'client_instance' => 'app',
+          'oauth_token' => 'abc-123'
+        )
       end
     end
   end

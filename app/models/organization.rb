@@ -4,6 +4,7 @@ class Organization < ApplicationRecord
   include Async # To allow batch processing of address merges
   include Sidekiq::Worker
   sidekiq_options queue: :api_organization, retry: false, unique: :until_executed
+  delegate :requires_credentials?, to: :api_class
 
   has_many :designation_accounts, dependent: :destroy
   has_many :designation_profiles, dependent: :destroy
@@ -23,12 +24,12 @@ class Organization < ApplicationRecord
     name
   end
 
-  def api(org_account)
-    api_class.constantize.new(org_account)
+  def api_class
+    super.constantize
   end
 
-  def requires_username_and_password?
-    api_class.constantize.requires_username_and_password?
+  def api(org_account)
+    api_class.new(org_account)
   end
 
   def self.cru_usa

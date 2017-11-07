@@ -11,7 +11,7 @@ class Siebel < DataServer
   # import as typically only a couple at most will be misclassified.
   MAX_DONATIONS_TO_DELETE_AT_ONCE = 3
 
-  def self.requires_username_and_password?
+  def self.require_credentials?
     false
   end
 

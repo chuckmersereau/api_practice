@@ -73,7 +73,7 @@ describe Person::OrganizationAccount do
 
     context 'when password error' do
       before do
-        allow(api).to receive(:import_all).and_raise(OrgAccountInvalidCredentialsError)
+        allow(api).to receive(:import_all).and_raise(Person::OrganizationAccount::InvalidCredentialsError)
         org_account.person.email = 'foo@example.com'
 
         org_account.downloading = false
@@ -101,7 +101,7 @@ describe Person::OrganizationAccount do
 
     context 'when password and username missing' do
       before do
-        allow(api).to receive(:import_all).and_raise(OrgAccountMissingCredentialsError)
+        allow(api).to receive(:import_all).and_raise(Person::OrganizationAccount::MissingCredentialsError)
         org_account.person.email = 'foo@example.com'
 
         org_account.downloading = false
@@ -166,40 +166,32 @@ describe Person::OrganizationAccount do
     end
   end
 
-  describe '#requires_username_and_password' do
-    context 'organization requires username and password' do
+  describe '#requires_credentials' do
+    context 'organization requires credentials' do
       before do
-        allow(organization).to receive(:api) { OpenStruct.new(requires_username_and_password?: true) }
+        allow(organization).to receive(:requires_credentials?) { true }
       end
 
       it 'returns true' do
-        expect(org_account.requires_username_and_password?).to eq true
-      end
-
-      context 'token is set' do
-        before { org_account.token = 'abc' }
-
-        it 'returns false' do
-          expect(org_account.requires_username_and_password?).to eq false
-        end
+        expect(org_account.requires_credentials?).to eq true
       end
     end
 
-    context 'organization does not require username and password' do
+    context 'organization does not require credentials' do
       before do
-        allow(organization).to receive(:api) { OpenStruct.new(requires_username_and_password?: false) }
+        allow(organization).to receive(:requires_credentials?) { false }
       end
 
       it 'returns false' do
-        expect(org_account.requires_username_and_password?).to eq false
+        expect(org_account.requires_credentials?).to eq false
       end
     end
 
     context 'organization is nil' do
       before { org_account.organization = nil }
 
-      it 'returns false' do
-        expect(org_account.requires_username_and_password?).to eq false
+      it 'returns nil' do
+        expect(org_account.requires_credentials?).to eq nil
       end
     end
   end

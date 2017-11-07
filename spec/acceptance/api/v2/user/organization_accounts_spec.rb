@@ -53,7 +53,7 @@ resource 'User > Organization Accounts' do
   end
 
   before do
-    allow_any_instance_of(DataServer).to receive(:validate_username_and_password).and_return(true)
+    allow_any_instance_of(DataServer).to receive(:validate_credentials).and_return(true)
     allow_any_instance_of(Person::OrganizationAccount).to receive(:queue_import_data)
     allow_any_instance_of(Person::OrganizationAccount).to receive(:set_up_account_list)
   end
