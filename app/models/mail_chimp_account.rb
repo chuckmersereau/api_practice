@@ -22,8 +22,8 @@ class MailChimpAccount < ApplicationRecord
   validates :account_list_id, :api_key, presence: true
   validates :api_key, format: /\A\w+-us\d+\z/
 
-  serialize :status_interest_ids, Hash
-  serialize :tags_interest_ids, Hash
+  serialize :tags_details, Hash
+  serialize :statuses_details, Hash
 
   scope :that_belong_to, -> (user) { where(account_list_id: user.account_list_ids) }
 
@@ -83,6 +83,26 @@ class MailChimpAccount < ApplicationRecord
 
   def email_hash(email)
     Digest::MD5.hexdigest(email.downcase)
+  end
+
+  def statuses_interest_ids_for_list(list_id)
+    get_interest_attribute_for_list(group: :status, attribute: :interest_ids, list_id: list_id)
+  end
+
+  def tags_interest_ids_for_list(list_id)
+    get_interest_attribute_for_list(group: :tag, attribute: :interest_ids, list_id: list_id)
+  end
+
+  def get_interest_attribute_for_list(group:, attribute:, list_id:)
+    send("#{group.to_s.pluralize}_details")&.dig(list_id, attribute)
+  end
+
+  def set_interest_attribute_for_list(group:, attribute:, list_id:, value:)
+    key = "#{group.to_s.pluralize}_details"
+    hash = send(key) || {}
+    hash[list_id] ||= {}
+    hash[list_id][attribute] = value
+    send("#{key}=", hash)
   end
 
   private

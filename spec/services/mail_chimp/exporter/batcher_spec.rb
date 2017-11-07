@@ -28,7 +28,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
     allow(mock_interests).to receive(:retrieve).and_return(
       'interests' => [
         {
-          'name' => 'Status or Tag',
+          'name' => 'status or tag',
           'id' => 'random'
         }
       ]
@@ -95,7 +95,15 @@ RSpec.describe MailChimp::Exporter::Batcher do
 
       expect do
         subject.subscribe_contacts([contact])
-      end.to change { mail_chimp_account.mail_chimp_members.reload.count }.by(1)
+      end.to change { mail_chimp_account.mail_chimp_members(true).count }.by(1)
+    end
+
+    it 'adds tag interests' do
+      contact.tag_list.add('status or tag')
+
+      subject.subscribe_contacts([contact])
+
+      expect(mail_chimp_account.mail_chimp_members(true).last.tags.compact).to_not be_empty
     end
   end
 

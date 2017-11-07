@@ -1826,7 +1826,9 @@ CREATE TABLE mail_chimp_accounts (
     tags_interest_ids text,
     sync_all_active_contacts boolean,
     prayer_letter_last_sent timestamp without time zone,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    tags_details text,
+    statuses_details text
 );
 
 
@@ -7173,4 +7175,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171023022515');
 INSERT INTO schema_migrations (version) VALUES ('20171024045755');
 
 INSERT INTO schema_migrations (version) VALUES ('20171101004028');
+
+INSERT INTO schema_migrations (version) VALUES ('20171102140700');
 
