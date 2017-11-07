@@ -33,7 +33,7 @@ class MailChimp::Exporter
                                                          attribute: :interest_category_id,
                                                          list_id: list_id,
                                                          value: grouping['id'])
-      mail_chimp_account.save
+      mail_chimp_account.save(validate: false)
       mail_chimp_account.reload
 
       groups_already_present = fetch_groups_already_present_for_grouping(grouping)

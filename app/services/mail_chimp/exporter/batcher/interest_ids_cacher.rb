@@ -30,7 +30,7 @@ class MailChimp::Exporter
                                .interests.retrieve(params: { 'count': '100' })['interests']
         interests = Hash[interests.map { |interest| [interest['name'], interest['id']] }]
         mail_chimp_account.set_interest_attribute_for_list(group: attribute, attribute: :interest_ids, list_id: list_id, value: interests)
-        mail_chimp_account.save
+        mail_chimp_account.save(validate: false)
         mail_chimp_account.reload
       end
 
