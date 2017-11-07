@@ -46,7 +46,6 @@ resource 'User > Organization Accounts' do
       last_download
       locked_at
       remote_id
-      token
       username
       updated_at
       updated_in_db_at
@@ -54,7 +53,7 @@ resource 'User > Organization Accounts' do
   end
 
   before do
-    allow_any_instance_of(DataServer).to receive(:validate_username_and_password).and_return(true)
+    allow_any_instance_of(DataServer).to receive(:validate_credentials).and_return(true)
     allow_any_instance_of(Person::OrganizationAccount).to receive(:queue_import_data)
     allow_any_instance_of(Person::OrganizationAccount).to receive(:set_up_account_list)
   end
@@ -79,7 +78,6 @@ resource 'User > Organization Accounts' do
         response_field 'last_download',     'Last Download',     type: 'String'
         response_field 'locked_at',         'Locked At',         type: 'String'
         response_field 'remote_id',         'Remote Id',         type: 'String'
-        response_field 'token',             'Token',             type: 'String'
         response_field 'username',          'Username',          type: 'String'
         response_field 'updated_at',        'Updated At',        type: 'String'
         response_field 'updated_in_db_at',  'Updated In Db At',  type: 'String'

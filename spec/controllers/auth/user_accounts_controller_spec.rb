@@ -13,7 +13,7 @@ describe Auth::UserAccountsController, :auth, type: :controller do
       auth_login(user)
       get :create, provider: provider
       expect(response.status).to be(302)
-      expect(response.location).to match(/#{provider}/)
+      expect(response.location).to include(provider.to_s)
     end
 
     it 'adds the current user to the session' do
@@ -26,6 +26,29 @@ describe Auth::UserAccountsController, :auth, type: :controller do
       auth_login(user)
       get :create, provider: provider, account_list_id: '4'
       expect(session['account_list_id']).to eq('4')
+    end
+
+    context 'provider is donorhub' do
+      let(:provider) { :donorhub }
+      let!(:organization) do
+        create(
+          :organization,
+          oauth_url: 'https://www.mytntware.com/dataserver/toontown/staffportal/oauth/authorize.aspx'
+        )
+      end
+      it 'redirects the user to the requested provider' do
+        auth_login(user)
+        get :create, provider: provider, organization_id: organization.uuid
+        expect(response.status).to be(302)
+        expect(response.location).to include("#{provider}?oauth_url=#{URI.encode(organization.oauth_url)}")
+      end
+
+      context 'organization does not exist' do
+        it 'should return an unauthorized response' do
+          get :create, provider: provider, organization_id: '123'
+          expect(response.status).to be(401)
+        end
+      end
     end
   end
 

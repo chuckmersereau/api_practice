@@ -109,7 +109,7 @@ class EmailAddress < ApplicationRecord
   end
 
   def should_trigger_mail_chimp_sync?
-    primary? && (email_changed? || !persisted?)
+    primary? && (primary_changed? || email_changed? || !persisted?)
   end
 
   def start_google_plus_account_fetcher_job

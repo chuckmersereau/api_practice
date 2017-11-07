@@ -2,15 +2,15 @@ class FakeApi
   def initialize(*_args)
   end
 
-  def self.requires_username_and_password?
+  def self.requires_credentials?
     true
   end
 
-  def requires_username_and_password?
-    self.class.requires_username_and_password?
+  def requires_credentials?
+    self.class.requires_credentials?
   end
 
-  def validate_username_and_password(*_args)
+  def validate_credentials(*_args)
     true
   end
 

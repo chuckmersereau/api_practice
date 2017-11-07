@@ -50,7 +50,8 @@ class Person::DuplicatePairsFinder < ApplicationDuplicatePairsFinder
 
   def normalize_phone_numbers(phone_numbers)
     return [] unless phone_numbers
-    phone_numbers.collect { |phone_number| phone_number.number.gsub(/\D/, '') }
+    phone_numbers.collect { |phone_number| phone_number.number&.gsub(/\D/, '') }
+                 .compact
   end
 
   def normalize_gender(gender)

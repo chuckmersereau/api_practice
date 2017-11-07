@@ -44,10 +44,10 @@ RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller 
     }
   end
 
-  let(:incorrect_attributes) { { username: nil } }
+  let(:incorrect_attributes) { nil }
 
   before do
-    allow_any_instance_of(DataServer).to receive(:validate_username_and_password).and_return(true)
+    allow_any_instance_of(DataServer).to receive(:validate_credentials).and_return(true)
     allow_any_instance_of(Person::OrganizationAccount).to receive(:set_up_account_list)
   end
 

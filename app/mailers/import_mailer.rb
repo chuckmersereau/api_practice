@@ -27,7 +27,7 @@ class ImportMailer < ApplicationMailer
     return unless user
     @account = account
 
-    mail(to: user.email, subject: _('[MPDX] Your username and password for %{source} are invalid').localize % { source: account.organization.name })
+    mail(to: user.email, subject: _('[MPDX] Your credentials for %{source} are invalid').localize % { source: account.organization.name })
   end
 
   private

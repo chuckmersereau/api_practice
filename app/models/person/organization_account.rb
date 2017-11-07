@@ -3,17 +3,19 @@ require_dependency 'credential_validator'
 require 'async'
 
 class Person::OrganizationAccount < ApplicationRecord
+  class MissingCredentialsError < StandardError; end
+  class InvalidCredentialsError < StandardError; end
   include Person::Account
   include Async
   include Sidekiq::Worker
   sidekiq_options queue: :api_person_organization_account, retry: false, unique: :until_executed
+  delegate :requires_credentials?, to: :organization, allow_nil: true
 
   serialize :password, Encryptor.new
 
   after_create :set_up_account_list, :queue_import_data
   validates :organization_id, :person_id, presence: true
-  validates :username, :password, presence: { if: :requires_username_and_password? }
-  validates_with CredentialValidator
+  validates_with CredentialValidator, if: :requires_credentials?
   after_validation :set_valid_credentials
   after_destroy :destroy_designation_profiles
   belongs_to :organization
@@ -27,6 +29,14 @@ class Person::OrganizationAccount < ApplicationRecord
                           :updated_in_db_at,
                           :username,
                           :uuid].freeze
+
+  def self.find_or_create_from_auth(token, oauth_url, user)
+    organization = Organization.find_by!(oauth_url: oauth_url)
+    organization_account = user.organization_accounts.find_or_initialize_by(organization: organization)
+    organization_account.token = token
+    organization_account.save!
+    organization_account
+  end
 
   def to_s
     str = organization.to_s
@@ -48,10 +58,6 @@ class Person::OrganizationAccount < ApplicationRecord
     where('locked_at is not null and locked_at < ?', 2.days.ago).update_all(downloading: false, locked_at: nil)
   end
 
-  def requires_username_and_password?
-    organization.api(self).requires_username_and_password? if organization
-  end
-
   def queue_import_data
     async(:import_all_data)
   end
@@ -68,7 +74,7 @@ class Person::OrganizationAccount < ApplicationRecord
     return if locked_at || new_record? || !valid_rechecked_credentials
     update_columns(downloading: true, last_download_attempt_at: Time.current)
     import_donations
-  rescue OrgAccountInvalidCredentialsError, OrgAccountMissingCredentialsError
+  rescue InvalidCredentialsError, MissingCredentialsError
     update_column(:valid_credentials, false)
     ImportMailer.delay.credentials_error(self)
   ensure
