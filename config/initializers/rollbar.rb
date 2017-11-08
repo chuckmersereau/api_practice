@@ -56,13 +56,6 @@ Rollbar.configure do |config|
   # setup for Heroku. See:
   # https://devcenter.heroku.com/articles/deploying-to-a-custom-rails-environment
   config.environment = ENV['ROLLBAR_ENV'] || Rails.env
-  config.js_options = {
-    accessToken: ENV['ROLLBAR_FRONTEND_TOKEN'],
-    captureUncaught: true,
-    payload: {
-      environment: config.environment
-    }
-  }
 end
 
 module Rollbar
