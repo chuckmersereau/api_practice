@@ -10,7 +10,7 @@ RSpec.describe Contact::Filter::RelatedTaskAction do
   let!(:contact_one)   { create(:contact, status: 'Partner - Financial', account_list: account_list, tasks: [task_one]) }
   let!(:contact_two)   { create(:contact, status: 'Partner - Financial', account_list: account_list, tasks: [task_one]) }
   let!(:contact_three) { create(:contact, status: 'Partner - Financial', account_list: account_list, tasks: [task_two]) }
-  let!(:contact_four) { create(:contact, status: 'Partner - Financial', account_list: account_list) }
+  let!(:contact_four)  { create(:contact, status: 'Partner - Financial', account_list: account_list) }
 
   describe '#config' do
     it 'returns expected config' do
@@ -42,12 +42,24 @@ RSpec.describe Contact::Filter::RelatedTaskAction do
     end
 
     context 'filter by Related Task Action Type' do
-      it 'returns only contacts that have no related tasks when null is passed' do
+      it 'returns only contacts that have no related tasks when "none" is passed' do
+        expect(described_class.query(contacts, { related_task_action: 'none' }, nil).to_a).to eq [contact_four]
         expect(described_class.query(contacts, { related_task_action: 'null' }, nil).to_a).to eq [contact_four]
       end
       it 'returns only contacts with tasks of the specified activity type when specified' do
         expect(described_class.query(contacts, { related_task_action: 'Email' }, nil).to_a).to match_array [contact_one, contact_two]
         expect(described_class.query(contacts, { related_task_action: 'Call' }, nil).to_a).to eq [contact_three]
+      end
+    end
+
+    context 'filter by Related Task Action Type, with non-task Activities' do
+      before do
+        contact_four.activities << create(:activity)
+      end
+
+      it 'returns contacts no no related tasks, but with other non-task activities' do
+        expect(described_class.query(contacts, { related_task_action: 'none' }, nil).to_a).to include contact_four
+        expect(described_class.query(contacts, { related_task_action: 'null' }, nil).to_a).to include contact_four
       end
     end
   end
