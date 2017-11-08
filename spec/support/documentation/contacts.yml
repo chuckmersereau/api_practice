@@ -415,7 +415,7 @@ filter_params: &filters
     required: false
   related_task_action:
     description:
-      Filter by Action; Accepts multiple parameters, with values 'null', or an activity type like 'Call'
+      Filter by Action; Accepts multiple parameters, with values 'none', or an activity type like 'Call'
     required: false
   state:
     description:
