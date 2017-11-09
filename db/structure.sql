@@ -4792,7 +4792,7 @@ CREATE INDEX index_background_batch_requests_on_background_batch_id ON backgroun
 -- Name: index_background_batch_requests_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_background_batch_requests_on_uuid ON background_batch_requests USING btree (uuid);
+CREATE UNIQUE INDEX index_background_batch_requests_on_uuid ON background_batch_requests USING btree (uuid);
 
 
 --
@@ -7177,4 +7177,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171024045755');
 INSERT INTO schema_migrations (version) VALUES ('20171101004028');
 
 INSERT INTO schema_migrations (version) VALUES ('20171102140700');
+
+INSERT INTO schema_migrations (version) VALUES ('20171108032537');
 
