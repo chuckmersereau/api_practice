@@ -127,8 +127,9 @@ class ConstantList < ActiveModelSerializers::Model
   def org_attributes_hash(org)
     {
       name: org.name,
-      api_class: org.api_class,
-      help_email: org.org_help_email
+      api_class: org.api_class.to_s,
+      help_email: org.org_help_email,
+      oauth: org.oauth?
     }
   end
 

@@ -1826,7 +1826,9 @@ CREATE TABLE mail_chimp_accounts (
     tags_interest_ids text,
     sync_all_active_contacts boolean,
     prayer_letter_last_sent timestamp without time zone,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    tags_details text,
+    statuses_details text
 );
 
 
@@ -2351,7 +2353,22 @@ CREATE TABLE organizations (
     uses_key_auth boolean DEFAULT false,
     locale character varying DEFAULT 'en'::character varying NOT NULL,
     gift_aid_percentage numeric,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    oauth_url character varying,
+    oauth_get_challenge_start_num_url character varying,
+    oauth_get_challenge_start_num_params character varying,
+    oauth_get_challenge_start_num_oauth character varying,
+    oauth_convert_to_token_url character varying,
+    oauth_convert_to_token_params character varying,
+    oauth_convert_to_token_oauth character varying,
+    oauth_get_token_info_url character varying,
+    oauth_get_token_info_params character varying,
+    oauth_get_token_info_oauth character varying,
+    account_balance_oauth character varying,
+    donations_oauth character varying,
+    addresses_oauth character varying,
+    addresses_by_personids_oauth character varying,
+    profiles_oauth character varying
 );
 
 
@@ -7156,3 +7173,8 @@ INSERT INTO schema_migrations (version) VALUES ('20171011173827');
 INSERT INTO schema_migrations (version) VALUES ('20171023022515');
 
 INSERT INTO schema_migrations (version) VALUES ('20171024045755');
+
+INSERT INTO schema_migrations (version) VALUES ('20171101004028');
+
+INSERT INTO schema_migrations (version) VALUES ('20171102140700');
+

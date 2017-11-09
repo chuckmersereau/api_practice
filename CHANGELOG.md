@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 4 November 2017
+- user/organization_accounts no longer returns token field
+
 ## 30 October 2017
 - Updated 4 filters.
   - gave_more_than_pledged_within is now gave_more_than_pledged_range

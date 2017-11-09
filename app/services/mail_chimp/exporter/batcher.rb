@@ -76,7 +76,7 @@ class MailChimp::Exporter
     def add_status_and_tags_groupings_to_params(contact, member_params)
       member_params[:interests] = member_params[:interests].to_h
       member_params[:interests].merge!(interests_for_status(contact.status))
-      member_params[:interests].merge!(interests_for_tags(contact.tags))
+      member_params[:interests].merge!(interests_for_tags(contact.tag_list))
       member_params
     end
 
@@ -167,26 +167,26 @@ class MailChimp::Exporter
     end
 
     def interests_for_tags(tags)
-      Hash[cached_interest_ids(:tags_interest_ids).map do |tag, interest_id|
+      Hash[cached_interest_ids(:tags).map do |tag, interest_id|
         [interest_id, tags.include?(tag)]
       end]
     end
 
     def interests_for_status(contact_status)
-      Hash[cached_interest_ids(:status_interest_ids).map do |status, interest_id|
+      Hash[cached_interest_ids(:statuses).map do |status, interest_id|
         [interest_id, status == _(contact_status)]
       end]
     end
 
     def tags_for_interest_ids(interests)
-      mail_chimp_account.tags_interest_ids.invert.values_at(
-        fetch_interest_ids(:tags_interest_ids, interests).first
+      mail_chimp_account.tags_interest_ids_for_list(list_id).invert.values_at(
+        fetch_interest_ids(:tags, interests).first
       ) if interests.present?
     end
 
     def status_for_interest_ids(interests)
-      mail_chimp_account.status_interest_ids.invert[
-        fetch_interest_ids(:status_interest_ids, interests).first
+      mail_chimp_account.statuses_interest_ids_for_list(list_id).invert[
+        fetch_interest_ids(:statuses, interests).first
       ] if interests.present?
     end
 

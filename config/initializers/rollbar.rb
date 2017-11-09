@@ -14,7 +14,7 @@ Rollbar.configure do |config|
   # config.person_method = "my_current_user"
   # config.person_id_method = "my_id"
   # config.person_username_method = "my_username"
-  # config.person_email_method = "my_email"
+  config.person_email_method = :email_address
 
   # If you want to attach custom data to all exception and message reports,
   # provide a lambda like the following. It should return a hash.
@@ -56,13 +56,6 @@ Rollbar.configure do |config|
   # setup for Heroku. See:
   # https://devcenter.heroku.com/articles/deploying-to-a-custom-rails-environment
   config.environment = ENV['ROLLBAR_ENV'] || Rails.env
-  config.js_options = {
-    accessToken: ENV['ROLLBAR_FRONTEND_TOKEN'],
-    captureUncaught: true,
-    payload: {
-      environment: config.environment
-    }
-  }
 end
 
 module Rollbar

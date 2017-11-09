@@ -15,6 +15,7 @@
 :verbose: false
 :concurrency: 5
 :queues:
+  - ["api_background_batch_request",                     1]
   - ["api_account_list",                                 2]
   - ["api_account_list_import_data",                     1]
   - ["api_account_list_import_data_enqueuer_worker",     10]
@@ -36,7 +37,8 @@
   - ["api_lower_retry_worker",                           2]
   - ["api_org_donor_accounts_address_cleaner",           2]
   - ["api_organization",                                 2]
-  - ["api_organization_fetcher_worker",                  2]
+  - ["api_organization_from_query_url_worker",           2]
+  - ["api_organizations_from_csv_url_worker",            2]
   - ["api_person_facebook_account",                      2]
   - ["api_person_organization_account",                  2]
   - ["api_pls_account",                                  2]
