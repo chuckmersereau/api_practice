@@ -169,6 +169,10 @@ class User < Person
     AccountList.readable_by(self)
   end
 
+  def email_address
+    email&.email
+  end
+
   private
 
   def default_account_list_is_valid
