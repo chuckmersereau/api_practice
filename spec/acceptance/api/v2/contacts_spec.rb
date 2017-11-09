@@ -176,7 +176,7 @@ resource 'Contacts' do
       parameter 'filter[pledge_received]',                'Filter by Commitment Received; Accepts values "true", or "false"',                                    required: false
       parameter 'filter[referrer]',                       'Filter by Referrer; Accepts multiple parameters, with values "none", "any", or a Contact ID',         required: false
       parameter 'filter[region]',                         'Filter by Region; Accepts multiple parameters, with values "none", or a region name',                 required: false
-      parameter 'filter[related_task_action]',            'Filter by Action; Accepts multiple parameters, with values "null", or an activity type like "Call"',  required: false
+      parameter 'filter[related_task_action]',            'Filter by Action; Accepts multiple parameters, with values "none", or an activity type like "Call"',  required: false
       parameter 'filter[state]',                          'Filter by State; Accepts multiple parameters, with values "none", or a state',                        required: false
       parameter 'filter[status]',                         'Filter by Status; Accepts multiple parameters, with values "active", "hidden", "null", "Never Contacted", '\
                                                           '"Ask in Future", "Cultivate Relationship", "Contact for Appointment", "Appointment Scheduled", '\

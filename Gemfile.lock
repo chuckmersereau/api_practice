@@ -645,7 +645,7 @@ GEM
       netrc (~> 0.8)
     retriable (3.0.2)
     retryable-rb (1.1.0)
-    rollbar (2.8.3)
+    rollbar (2.15.5)
       multi_json
     rollout (2.0.0)
       redis
@@ -903,7 +903,7 @@ DEPENDENCIES
   responders (~> 2.4.0)
   rest-client (~> 2.0.2)
   retryable-rb (~> 1.1.0)
-  rollbar (~> 2.8.3)
+  rollbar (~> 2.15.5)
   rollout (~> 2.0.0)
   roo (~> 1.13.2)
   rspec (~> 3.4)
