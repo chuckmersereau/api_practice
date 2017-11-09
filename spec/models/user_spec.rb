@@ -247,4 +247,23 @@ describe User do
       end
     end
   end
+
+  describe '#email_address' do
+    context 'has email_address set up' do
+      let(:address) { 'clark.kent@gmail.com' }
+      before { subject.email_addresses.build(email: address) }
+
+      it 'returns a string' do
+        expect(subject.email_address).to eq address
+      end
+    end
+
+    context 'has no email_address' do
+      before { subject.email_addresses.delete_all }
+
+      it 'returns nil' do
+        expect(subject.email_address).to be nil
+      end
+    end
+  end
 end
