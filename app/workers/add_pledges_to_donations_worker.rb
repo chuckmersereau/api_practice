@@ -29,7 +29,8 @@ class AddPledgesToDonationsWorker
       pledge.donations << donation
       pledge.update(amount: pledge.amount + donation_amount)
     else
-      pledge.update(amount: donation_amount, expected_date: donation.donation_date, donations: [donation])
+      pledge.assign_attributes(amount: donation_amount, expected_date: donation.donation_date, donations: [donation])
+      pledge.save
     end
   end
 end
