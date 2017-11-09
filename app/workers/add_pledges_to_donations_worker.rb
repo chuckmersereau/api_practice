@@ -23,12 +23,14 @@ class AddPledgesToDonationsWorker
   end
 
   def create_pledge(account_list, donation, contact, appeal)
-    account_list.pledges.create(
-      amount: donation.appeal_amount.to_i.positive? ? donation.appeal_amount : donation.amount,
-      appeal: appeal,
-      contact: contact,
-      donations: [donation],
-      expected_date: donation.donation_date
-    )
+    donation_amount = donation.appeal_amount.to_i.positive? ? donation.appeal_amount : donation.amount
+    pledge = account_list.pledges.find_or_initialize_by(appeal: appeal, contact: contact)
+    if pledge.id
+      pledge.donations << donation
+      pledge.update(amount: pledge.amount + donation_amount)
+    else
+      pledge.assign_attributes(amount: donation_amount, expected_date: donation.donation_date, donations: [donation])
+      pledge.save
+    end
   end
 end
