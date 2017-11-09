@@ -5,14 +5,16 @@ class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
     render_analytics
   end
 
+  protected
+
+  def permit_coach?
+    true
+  end
+
   private
 
   def authorize_analytics
     authorize(load_account_list, :show?)
-  end
-
-  def analytics_scope
-    account_lists
   end
 
   def load_analytics
@@ -20,7 +22,7 @@ class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= analytics_scope.find_by_uuid_or_raise!(params[:account_list_id])
+    @account_list ||= account_lists.find_by_uuid_or_raise!(params[:account_list_id])
   end
 
   def analytics_params
