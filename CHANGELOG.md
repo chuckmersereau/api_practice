@@ -2,6 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 8 November 2017
+- designation account display name field no longer duplicates designation_number
+- donor account display name field no longer duplicates account_number
+
 ## 4 November 2017
 - user/organization_accounts no longer returns token field
 

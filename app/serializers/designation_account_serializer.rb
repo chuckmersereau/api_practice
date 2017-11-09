@@ -15,7 +15,7 @@ class DesignationAccountSerializer < ApplicationSerializer
   def display_name
     return _('Unknown') if object.name.blank? && object.designation_number.blank?
     return object.designation_number if object.name.blank?
-    return object.name if object.designation_number.blank?
+    return object.name if object.designation_number.blank? || object.name.include?(object.designation_number)
     "#{object.name} (#{object.designation_number})"
   end
 

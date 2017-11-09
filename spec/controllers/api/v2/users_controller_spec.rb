@@ -32,7 +32,7 @@ RSpec.describe Api::V2::UsersController, type: :controller do
           preferences: {
             default_account_list: second_account_list.uuid
           },
-          updated_in_db_at: user.updated_at
+          overwrite: true
         }
       }
 
