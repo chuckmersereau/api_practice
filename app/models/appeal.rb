@@ -51,22 +51,38 @@ class Appeal < ApplicationRecord
   end
 
   def pledges_amount_total
-    pledges.sum(:amount)
+    ConvertedTotal.new(
+      pledges.joins(:contact).pluck('pledges.amount, contacts.pledge_currency, pledges.created_at'),
+      account_list.salary_currency_or_default
+    ).total
   end
 
   def pledges_amount_not_received_not_processed
-    pledges.where(status: :not_received).sum(:amount)
+    ConvertedTotal.new(
+      pledges_by_status(:not_received),
+      account_list.salary_currency_or_default
+    ).total
   end
 
   def pledges_amount_received_not_processed
-    pledges.where(status: :received_not_processed).sum(:amount)
+    ConvertedTotal.new(
+      pledges_by_status(:received_not_processed),
+      account_list.salary_currency_or_default
+    ).total
   end
 
   def pledges_amount_processed
-    pledges.where(status: :processed).sum(:amount)
+    ConvertedTotal.new(
+      pledges_by_status(:processed),
+      account_list.salary_currency_or_default
+    ).total
   end
 
   protected
+
+  def pledges_by_status(status)
+    pledges.where(status: status).joins(:contact).pluck('pledges.amount, contacts.pledge_currency, pledges.created_at')
+  end
 
   def create_contact_associations
     create_excluded_appeal_contacts_from_filter
