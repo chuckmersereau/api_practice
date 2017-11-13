@@ -666,12 +666,26 @@ class Contact < ApplicationRecord
   def sync_with_mail_chimp
     return unless account_list.mail_chimp_account
 
+    if account_list.mail_chimp_account.relevant_contacts([id]).exists?
+      send_update_to_mailchimp
+    else
+      send_check_removal_mailchimp
+    end
+  end
+
+  private
+
+  def send_update_to_mailchimp
     MailChimp::ExportContactsWorker.perform_async(
       account_list.mail_chimp_account.id, account_list.mail_chimp_account.primary_list_id, [id]
     )
   end
 
-  private
+  def send_check_removal_mailchimp
+    MailChimp::ExportContactsWorker.perform_async(
+      account_list.mail_chimp_account.id, account_list.mail_chimp_account.primary_list_id, []
+    )
+  end
 
   def sync_with_mail_chimp_required?
     @sync_mail_chimp
@@ -762,11 +776,7 @@ class Contact < ApplicationRecord
   end
 
   def check_state_for_mail_chimp_sync
-    @sync_mail_chimp = if relevant_nested_attribute_changed? || relevant_contact_attribute_changed?
-                         true
-                       else
-                         false
-                       end
+    @sync_mail_chimp = (relevant_nested_attribute_changed? || relevant_contact_attribute_changed?)
     true
   end
 

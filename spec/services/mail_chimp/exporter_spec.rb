@@ -3,7 +3,7 @@ require 'rails_helper'
 describe MailChimp::Exporter do
   let(:list_id) { 'list_one_id' }
 
-  let(:mail_chimp_account) { create(:mail_chimp_account, active: true) }
+  let(:mail_chimp_account) { create(:mail_chimp_account, active: true, primary_list_id: list_id) }
   let(:account_list) { mail_chimp_account.account_list }
 
   subject { described_class.new(mail_chimp_account, list_id) }

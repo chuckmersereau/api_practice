@@ -15,13 +15,19 @@ class MailChimp::Exporter
 
   def export_contacts!(contact_ids)
     contacts_to_export = fetch_contacts_to_export(contact_ids)
-    emails_of_members_to_remove = fetch_emails_of_members_to_remove
+
+    # on non-primary lists, all of the subscriptions should be manual, so they shouldn't be auto-cleaned
+    emails_of_members_to_remove = fetch_emails_of_members_to_remove if primary_list?
 
     export_adds_and_updates(contacts_to_export) if contacts_to_export.present?
     export_deletes(emails_of_members_to_remove) if emails_of_members_to_remove.present?
   end
 
   private
+
+  def primary_list?
+    @list_id == mail_chimp_account.primary_list_id
+  end
 
   def appeal_export?
     @appeal_id.present?
