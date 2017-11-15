@@ -2,8 +2,14 @@ require 'rails_helper'
 
 describe MailChimp::Exporter do
   let(:list_id) { 'list_one_id' }
-
-  let(:mail_chimp_account) { create(:mail_chimp_account, active: true, primary_list_id: list_id) }
+  let(:mail_chimp_account) do
+    create(
+      :mail_chimp_account,
+      active: true,
+      sync_all_active_contacts: true,
+      primary_list_id: list_id
+    )
+  end
   let(:account_list) { mail_chimp_account.account_list }
 
   subject { described_class.new(mail_chimp_account, list_id) }
@@ -19,11 +25,16 @@ describe MailChimp::Exporter do
 
   let(:mock_gibbon_list) { double(:mock_gibbon_list) }
 
-  let(:contacts) do
-    create_list(:contact, 3,
-                account_list: account_list,
-                tag_list: 'tag',
-                people: [build(:person, primary_email_address: build(:email_address))])
+  let!(:contacts) do
+    create_list(
+      :contact,
+      3,
+      account_list: account_list,
+      tag_list: 'tag',
+      people: [
+        build(:person, primary_email_address: build(:email_address))
+      ]
+    )
   end
 
   let(:appeal) { create(:appeal, account_list: account_list) }
@@ -38,14 +49,19 @@ describe MailChimp::Exporter do
   end
 
   context '#export_contacts!' do
-    let!(:mail_chimp_member) { create(:mail_chimp_member, mail_chimp_account: mail_chimp_account, list_id: list_id) }
+    let(:contact) { Contact.first }
+    let!(:mail_chimp_member) do
+      create(
+        :mail_chimp_member,
+        mail_chimp_account: mail_chimp_account,
+        list_id: list_id,
+        email: contact.people.first.primary_email_address.email
+      )
+    end
 
     before do
       allow_any_instance_of(MailChimp::GibbonWrapper).to receive(:list_emails).and_return(['email@gmail.com'])
       allow_any_instance_of(MailChimp::GibbonWrapper).to receive(:gibbon_list_object).and_return(mock_gibbon_list)
-      allow_any_instance_of(MailChimpAccount).to receive(:relevant_contacts).and_return(Contact.limit(2))
-      allow_any_instance_of(MailChimpAccount).to receive(:active_contacts_with_emails).and_return(Contact.limit(1))
-
       allow(described_class::GroupAdder).to receive(:new).and_return(mock_group_adder)
       allow(described_class::Batcher).to receive(:new).and_return(mock_batcher)
       allow(described_class::MergeFieldAdder).to receive(:new).and_return(mock_merge_field_adder)
@@ -58,10 +74,20 @@ describe MailChimp::Exporter do
       expect(mock_merge_field_adder).to receive(:add_merge_field).with('GREETING')
 
       expect(mock_batcher).to receive(:subscribe_contacts).with(contacts)
-
-      expect(mock_batcher).to receive(:unsubscribe_members).with([mail_chimp_member.email])
+      expect(mock_batcher).to_not receive(:unsubscribe_members)
 
       subject.export_contacts!(contacts.map(&:id))
+    end
+
+    context 'sync_all_active_contacts = false' do
+      before do
+        mail_chimp_account.sync_all_active_contacts = false
+      end
+
+      it 'removes correct emails' do
+        expect(mock_batcher).to receive(:unsubscribe_members).with([mail_chimp_member.email])
+        subject.export_contacts! nil
+      end
     end
   end
 end
