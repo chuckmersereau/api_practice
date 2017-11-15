@@ -48,6 +48,23 @@ RSpec.describe AddPledgesToDonationsWorker do
           end
         end
       end
+
+      context 'contact has two donations on appeal' do
+        let!(:donor_account) { create(:donor_account) }
+        let!(:contact) { create(:contact, account_list: account_list) }
+        before { donor_account.contacts << contact }
+        let!(:donation1) { create(:donation, donor_account: donor_account) }
+        let!(:donation2) { create(:donation, donor_account: donor_account) }
+
+        it 'should create pledges' do
+          donor_account.donations.update_all(appeal_id: appeal.id)
+
+          expect { described_class.new.perform }.to change { Pledge.count }.by(1)
+          pledge = Pledge.first
+          expect(pledge.amount).to eq(donation1.amount + donation2.amount)
+          expect(pledge.donations).to match_array [donation1, donation2]
+        end
+      end
     end
   end
 end

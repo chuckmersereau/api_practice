@@ -748,6 +748,14 @@ describe Contact do
         contact.timezone = 'PST'
         contact.save!
       end
+
+      it 'does not notify the mail chimp account if contact is not in scope' do
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account.id, 'primary_list_id', []
+        )
+
+        contact.update(send_newsletter: 'None', status: 'Never Ask')
+      end
     end
 
     context 'without mail_chimp_account' do

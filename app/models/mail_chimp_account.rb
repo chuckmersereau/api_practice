@@ -57,11 +57,10 @@ class MailChimpAccount < ApplicationRecord
   end
 
   def relevant_contacts(contact_ids = nil)
-    if sync_all_active_contacts
-      active_contacts_with_emails(contact_ids)
-    else
-      newsletter_contacts_with_emails(contact_ids)
-    end
+    # if we there explicit contact_ids, then we want to allow all of the contacts to be synced
+    return active_contacts_with_emails(contact_ids) if contact_ids || sync_all_active_contacts
+
+    newsletter_contacts_with_emails(contact_ids)
   end
 
   def active_contacts_with_emails(contact_ids)

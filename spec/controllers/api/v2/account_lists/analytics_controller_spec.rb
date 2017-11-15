@@ -84,4 +84,27 @@ RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
       end
     end
   end
+
+  describe '#show (for a User::Coach)' do
+    include_context 'common_variables'
+
+    let(:coach) { create(:user).becomes(User::Coach) }
+
+    before do
+      account_list.coaches << coach
+    end
+
+    it 'shows resource to users that are signed in' do
+      api_login(coach)
+      get :show, full_params
+      expect(response.status).to eq(200), invalid_status_detail
+      expect(response.body)
+        .to include(resource.send(reference_key).to_json) if reference_key
+    end
+
+    it 'does not show resource to users that are not signed in' do
+      get :show, full_params
+      expect(response.status).to eq(401), invalid_status_detail
+    end
+  end
 end

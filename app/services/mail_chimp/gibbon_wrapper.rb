@@ -58,10 +58,6 @@ class MailChimp::GibbonWrapper
     lists.select { |list| list.id != mail_chimp_appeal_list.try(:appeal_list_id) }
   end
 
-  def export_to_list(contacts)
-    MailChimpAccount::Exporter.new(self).export_to_list(contacts)
-  end
-
   def queue_export_if_list_changed
     queue_export_to_primary_list if changed.include?('primary_list_id')
   end

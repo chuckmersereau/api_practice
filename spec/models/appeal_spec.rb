@@ -73,30 +73,85 @@ describe Appeal do
   context 'pledges related fields' do
     subject { create(:appeal) }
 
-    let!(:processed_pledge)                  { create(:pledge, status: :processed, amount: 200.00, appeal: subject) }
-    let!(:received_not_processed_pledge)     { create(:pledge, status: :received_not_processed, amount: 300.00, appeal: subject) }
-    let!(:not_received_not_processed_pledge) { create(:pledge, amount: 400.00, appeal: subject) }
+    let!(:processed_pledge) do
+      create(
+        :pledge,
+        status: :processed,
+        amount: 200.00,
+        appeal: subject,
+        created_at: Time.now.beginning_of_day
+      )
+    end
+    let!(:received_not_processed_pledge) do
+      create(
+        :pledge,
+        status: :received_not_processed,
+        amount: 300.00,
+        appeal: subject,
+        created_at: Time.now.beginning_of_day
+      )
+    end
+    let!(:not_received_not_processed_pledge) do
+      create(
+        :pledge,
+        amount: 400.00,
+        appeal: subject,
+        created_at: Time.now.beginning_of_day
+      )
+    end
 
     describe '#pledges_amount_total' do
       it 'returns the total amount of all pledges' do
+        expect(ConvertedTotal).to receive(:new).with(
+          [
+            [processed_pledge.amount,
+             processed_pledge.contact.read_attribute(:pledge_currency),
+             processed_pledge.created_at],
+            [received_not_processed_pledge.amount,
+             received_not_processed_pledge.contact.read_attribute(:pledge_currency),
+             received_not_processed_pledge.created_at],
+            [not_received_not_processed_pledge.amount,
+             not_received_not_processed_pledge.contact.read_attribute(:pledge_currency),
+             not_received_not_processed_pledge.created_at]
+          ],
+          subject.account_list.salary_currency_or_default
+        ).and_call_original
         expect(subject.pledges_amount_total).to eq(900.00)
       end
     end
 
     describe '#pledges_amount_not_received_not_processed' do
       it 'returns the total amount of pledges that were not processed and received' do
+        expect(ConvertedTotal).to receive(:new).with(
+          [[not_received_not_processed_pledge.amount,
+            not_received_not_processed_pledge.contact.read_attribute(:pledge_currency),
+            not_received_not_processed_pledge.created_at]],
+          subject.account_list.salary_currency_or_default
+        ).and_call_original
         expect(subject.pledges_amount_not_received_not_processed).to eq(400.00)
       end
     end
 
     describe '#pledges_amount_received_not_processed' do
       it 'returns the total amount of all pledges that were received and not processed' do
+        expect(ConvertedTotal).to receive(:new).with(
+          [[received_not_processed_pledge.amount,
+            received_not_processed_pledge.contact.read_attribute(:pledge_currency),
+            received_not_processed_pledge.created_at]],
+          subject.account_list.salary_currency_or_default
+        ).and_call_original
         expect(subject.pledges_amount_received_not_processed).to eq(300.00)
       end
     end
 
     describe '#pledges_amount_processed' do
       it 'returns the total amount of all pledges that were received that were' do
+        expect(ConvertedTotal).to receive(:new).with(
+          [[processed_pledge.amount,
+            processed_pledge.contact.read_attribute(:pledge_currency),
+            processed_pledge.created_at]],
+          subject.account_list.salary_currency_or_default
+        ).and_call_original
         expect(subject.pledges_amount_processed).to eq(200.00)
       end
     end

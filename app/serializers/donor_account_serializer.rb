@@ -11,6 +11,7 @@ class DonorAccountSerializer < ApplicationSerializer
 
   def display_name
     return object.account_number if name.blank?
+    return name if object.account_number.blank? || name.include?(object.account_number)
     "#{name} (#{object.account_number})"
   end
 
