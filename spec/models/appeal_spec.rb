@@ -263,5 +263,29 @@ describe Appeal do
       expect(subject.appeal_contacts.count).to eq(0)
       expect(subject.excluded_appeal_contacts.count).to eq(0)
     end
+
+    it 'successes with all front-end filters' do
+      end_date = Date.today
+      start_date = end_date - 5.months
+      date_range = "#{start_date.strftime('%Y-%m-%d')}..#{end_date.strftime('%Y-%m-%d')}"
+
+      contact1.update(tag_list: %w(cru))
+
+      subject.inclusion_filter = {
+        'account_list_id' => account_list.uuid,
+        'tags' => 'asdf',
+        'any_tags' => true
+      }
+
+      subject.exclusion_filter = {
+        'gave_more_than_pledged_range' => date_range,
+        'pledge_amount_increased_range' => date_range,
+        'started_giving_range' => date_range,
+        'stopped_giving_range' => "#{start_date.strftime('%Y-%m-%d')}..#{(end_date - 1.month).strftime('%Y-%m-%d')}",
+        'no_appeals' => true
+      }
+
+      expect { subject.save }.to_not raise_exception
+    end
   end
 end
