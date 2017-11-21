@@ -146,6 +146,10 @@ module JsonApiService
 
           expect(fetcher[:mock_people]).to eq expected_results
         end
+
+        it 'raises KeyError for an unknown resource type' do
+          expect { fetcher[:object] }.to raise_error KeyError
+        end
       end
 
       context 'the second time' do
