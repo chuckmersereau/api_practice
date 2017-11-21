@@ -12,6 +12,9 @@ module Auth
       if params[:provider] == 'donorhub'
         organization = Organization.find_by!(uuid: params[:organization_id])
         redirect_to "/auth/donorhub?oauth_url=#{URI.encode(organization.oauth_url)}"
+      elsif params[:provider] == 'sidekiq'
+        raise AuthenticationError unless current_user.developer
+        redirect_to '/sidekiq'
       else
         redirect_to "/auth/#{params[:provider]}"
       end
