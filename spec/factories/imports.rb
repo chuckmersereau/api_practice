@@ -191,4 +191,9 @@ FactoryGirl.define do
     source 'tnt'
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_multi_org.xml')) }
   end
+
+  factory :tnt_import_with_multiple_task_contacts, parent: :import do
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_with_multiple_task_contacts.xml')) }
+    source 'tnt'
+  end
 end
