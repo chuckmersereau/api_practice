@@ -5,9 +5,9 @@ describe TntImport::PersonImport do
 
   let(:row) { tnt_import_parsed_xml_sample_contact_row }
   let(:prefix) { '' }
+  let(:contact) { create(:contact) }
+  let(:override) { true }
   let(:import) do
-    contact = create(:contact)
-    override = true
     TntImport::PersonImport.new(row, contact, prefix, override)
   end
 
@@ -198,6 +198,38 @@ describe TntImport::PersonImport do
       expect(person.anniversary_month).to eq(11)
       expect(person.anniversary_day).to eq(4)
       expect(person.anniversary_year).to eq(1994)
+    end
+
+    context 'override == true' do
+      let(:override) { true }
+
+      it 'ensures import\'s primary person is set as the contact\'s #primary_person' do
+        import.import
+        TntImport::PersonImport.new(row, contact, 'Spouse', true).import
+
+        spouse = contact.people.find { |p| p.id != contact.primary_person_id }
+        contact.primary_person_id = spouse.id
+        expect(contact.reload.primary_person.first_name).to eq 'Helen'
+
+        import.import
+        expect(contact.reload.primary_person.first_name).to eq 'Bob'
+      end
+    end
+
+    context 'override == false' do
+      let(:override) { false }
+
+      it 'ensures import\'s primary person is set as the contact\'s #primary_person' do
+        import.import
+        TntImport::PersonImport.new(row, contact, 'Spouse', true).import
+
+        spouse = contact.people.find { |p| p.id != contact.primary_person_id }
+        contact.primary_person_id = spouse.id
+        expect(contact.reload.primary_person.first_name).to eq 'Helen'
+
+        import.import
+        expect(contact.reload.primary_person.first_name).to eq 'Helen'
+      end
     end
   end
 

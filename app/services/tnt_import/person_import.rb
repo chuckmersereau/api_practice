@@ -51,6 +51,7 @@ class TntImport::PersonImport
     update_person_phones(person, row, prefix)
     update_person_emails(person, row, prefix)
     update_person_social_media_accounts(person, row, prefix)
+    update_contact_primary_person(person, prefix)
     person
   end
 
@@ -126,5 +127,9 @@ class TntImport::PersonImport
   def tnt_email_preferred?(row, email_num, person_prefix)
     preferred_bit_index = (person_prefix == 'Spouse' ? 3 : 0) + email_num
     row['PreferredEmailTypes'].present? && row['PreferredEmailTypes'].to_i[preferred_bit_index] == 1
+  end
+
+  def update_contact_primary_person(person, prefix)
+    @contact.primary_person_id = person.id if @override && prefix == ''
   end
 end
