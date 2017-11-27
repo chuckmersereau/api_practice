@@ -13,7 +13,10 @@ gem 'activesupport-json_encoder', '~> 1.1.0'
 gem 'acts-as-taggable-on', '~> 4.0.0'
 gem 'assignable_values', '~> 0.11.2'
 gem 'attributes_history', '~> 0.0.3'
-gem 'axlsx', '= 2.0.1'
+# Rubyzip before 1.2.1 has a directory traversal vulnerability: CVE-2017-5946
+gem 'axlsx',
+    git: 'https://github.com/randym/axlsx.git',
+    ref: '776037c0fc799bb09da8c9ea47980bd3bf296874'
 gem 'axlsx_rails', '~> 0.5.0'
 gem 'carrierwave', '~> 0.11.2'
 gem 'charlock_holmes', '~> 0.7.4'
@@ -68,7 +71,7 @@ gem 'retryable-rb', '~> 1.1.0'
 gem 'rollbar', '~> 2.15.5'
 gem 'rollout', '~> 2.0.0'
 gem 'ruby-rtf', '~> 0.0.1'
-gem 'rubyzip', '= 1.0.0'
+gem 'rubyzip', '~> 1.2.1'
 gem 'sidekiq-cron', '~> 0.4.4'
 gem 'sidekiq-unique-jobs', '~> 5.0.8'
 gem 'siebel_donations', '1.0.7'
@@ -133,7 +136,7 @@ group :test do
   gem 'rb-fsevent', require: false
   gem 'roo', '~> 1.13.2'
   gem 'rspec-retry', '~> 0.5.5'
-  gem 'rubocop', '= 0.42', require: false
+  gem 'rubocop', '~> 0.49.0', require: false
   gem 'shoulda-matchers', '~> 3.1.1'
   gem 'test_after_commit'
   gem 'webmock', '< 3'

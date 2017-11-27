@@ -17,6 +17,7 @@ before_script:
 script:
 - bin/travis_parallel_test.sh
 - bin/travis_rubocop.sh
+- bin/travis_bundle_audit.sh
 - bin/travis_docs.sh
 - bundle exec rake coveralls:push
 branches:
