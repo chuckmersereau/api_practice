@@ -29,6 +29,17 @@ class ConstantListExhibit < DisplayCase::Exhibit
     ]
   end
 
+  def pledge_currencies_translated_hashes
+    codes.map do |code|
+      currency = currency_information(code.upcase)
+      {
+        id: currency[:code],
+        key: currency[:code],
+        value: currency[:code_symbol_string]
+      }
+    end
+  end
+
   def locale_display_name(name, code)
     format '%s (%s)', name, code
   end

@@ -27,8 +27,8 @@ resource 'Account Lists > Imports > from CSV' do
   let(:file_headers_mappings) do
     {
       'city' => 'city',
-      'commitment_amount' => 'amount',
-      'commitment_frequency' => 'frequency',
+      'pledge_amount' => 'amount',
+      'pledge_frequency' => 'frequency',
       'contact_name' => 'fname',
       'country' => 'country',
       'email_1' => 'email_address',
@@ -55,7 +55,7 @@ resource 'Account Lists > Imports > from CSV' do
       'status' => [
         { 'id' => 'Partner - Financial', 'values' => ['Praying and giving'] }
       ],
-      'commitment_frequency' => [
+      'pledge_frequency' => [
         { 'id' => '1.0', 'values' => ['Monthly'] }
       ],
       'newsletter' => [

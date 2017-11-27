@@ -1,5 +1,5 @@
 module ContactsHelper
-  COMMITMENT_AMOUNT_INDEX = 12
+  PLEDGE_AMOUNT_INDEX = 12
 
   def spreadsheet_header_titles
     [_('Contact Name'), _('First Name'), _('Last Name'), _('Spouse First Name'), _('Greeting'), _('Envelope Greeting'),
@@ -27,7 +27,7 @@ module ContactsHelper
   def type_array
     a = Array.new(spreadsheet_header_titles.count, :string)
     # Commitment Amount is a number
-    a[COMMITMENT_AMOUNT_INDEX] = :float
+    a[PLEDGE_AMOUNT_INDEX] = :float
     a
   end
 
