@@ -34,8 +34,8 @@ class MailChimp::Exporter
   end
 
   def export_adds_and_updates(contacts)
-    group_adder.add_status_groups(statuses_from_contacts(contacts))
-    group_adder.add_tags_groups(tags_from_contacts(contacts))
+    group_adder.add_status_interests(statuses_from_contacts(contacts))
+    group_adder.add_tags_interests(tags_from_contacts(contacts))
 
     merge_variables_to_add.each do |merge_variable|
       merge_field_adder.add_merge_field(merge_variable)
@@ -49,7 +49,7 @@ class MailChimp::Exporter
   end
 
   def group_adder
-    @group_adder ||= GroupAdder.new(mail_chimp_account, gibbon_wrapper, list_id)
+    @group_adder ||= InterestAdder.new(mail_chimp_account, gibbon_wrapper, list_id)
   end
 
   def batcher

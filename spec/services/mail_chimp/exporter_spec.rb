@@ -62,14 +62,14 @@ describe MailChimp::Exporter do
     before do
       allow_any_instance_of(MailChimp::GibbonWrapper).to receive(:list_emails).and_return(['email@gmail.com'])
       allow_any_instance_of(MailChimp::GibbonWrapper).to receive(:gibbon_list_object).and_return(mock_gibbon_list)
-      allow(described_class::GroupAdder).to receive(:new).and_return(mock_group_adder)
+      allow(described_class::InterestAdder).to receive(:new).and_return(mock_group_adder)
       allow(described_class::Batcher).to receive(:new).and_return(mock_batcher)
       allow(described_class::MergeFieldAdder).to receive(:new).and_return(mock_merge_field_adder)
     end
 
-    it 'calls GroupAdder, MergeFieldAdder and Batcher instances with correct arguments' do
-      expect(mock_group_adder).to receive(:add_status_groups).with(['Partner - Financial', 'Partner - Pray'])
-      expect(mock_group_adder).to receive(:add_tags_groups).with(['tag'])
+    it 'calls InterestAdder, MergeFieldAdder and Batcher instances with correct arguments' do
+      expect(mock_group_adder).to receive(:add_status_interests).with(['Partner - Financial', 'Partner - Pray'])
+      expect(mock_group_adder).to receive(:add_tags_interests).with(['tag'])
 
       expect(mock_merge_field_adder).to receive(:add_merge_field).with('GREETING')
 
