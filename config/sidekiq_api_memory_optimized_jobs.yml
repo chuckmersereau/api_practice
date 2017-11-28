@@ -14,3 +14,4 @@
   - ["api_google_plus_account_fetcher_worker",       1]
   - ["api_import_csv",                               1]
   - ["mailers",                                      1]
+  - ["api_audit_change_worker",                      1]

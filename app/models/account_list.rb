@@ -100,6 +100,8 @@ class AccountList < ApplicationRecord
     notification_preferences_attributes: NotificationPreference::PERMITTED_ATTRIBUTES
   ].freeze
 
+  audited
+
   alias unsafe_destroy destroy
   def destroy
     raise "It's not safe to call #destroy on an AccountList record. Because the large amount of dependents " \

@@ -3,6 +3,15 @@ class Contact < ApplicationRecord
   acts_as_taggable
   extend ApplicationHelper
 
+  PAPER_TRAIL_IGNORED_FIELDS = [
+    :account_list_id, :updated_at, :notes_saved_at, :status_confirmed_at,
+    :total_donations, :last_donation_date, :first_donation_date,
+    :last_activity, :last_appointment, :last_letter, :last_phone_call, :last_pre_call, :last_thank,
+    :uncompleted_tasks_count, :notes, :deprecated_not_duplicated_with, :status_valid
+  ].freeze
+
+  audited associated_with: :account_list, except: PAPER_TRAIL_IGNORED_FIELDS
+
   # Track status and pledge details at most once per day in separate table
   has_attributes_history for: [:status, :pledge_amount, :pledge_frequency,
                                :pledge_received, :pledge_start_date],

@@ -2,6 +2,13 @@ class Person < ApplicationRecord
   include BetweenScopeable
   include YearCompletable
 
+  PAPER_TRAIL_IGNORED_FIELDS = [
+    :updated_at, :global_registry_id, :global_registry_mdm_id, :sign_in_count,
+    :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip
+  ].freeze
+
+  audited associated_with: :contact, except: PAPER_TRAIL_IGNORED_FIELDS
+
   between_scopes_for :anniversary
   between_scopes_for :birthday
 

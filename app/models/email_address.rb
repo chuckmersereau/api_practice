@@ -3,6 +3,8 @@ class EmailAddress < ApplicationRecord
   include HasPrimary
   @@primary_scope = :person
 
+  audited associated_with: :person, except: [:updated_at, :global_registry_id, :checked_for_google_plus_account]
+
   PERMITTED_ATTRIBUTES = [:created_at,
                           :email,
                           :historic,

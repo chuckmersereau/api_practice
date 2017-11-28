@@ -1,6 +1,8 @@
 class Activity < ApplicationRecord
   acts_as_taggable
 
+  audited associated_with: :account_list, except: [:updated_at, :activity_comments_count, :notification_scheduled]
+
   belongs_to :account_list
   belongs_to :notification, inverse_of: :tasks
 

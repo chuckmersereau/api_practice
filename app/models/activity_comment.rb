@@ -1,4 +1,6 @@
 class ActivityComment < ApplicationRecord
+  audited associated_with: :activity, on: [:destroy]
+
   belongs_to :activity, counter_cache: true, touch: true
   belongs_to :person
 

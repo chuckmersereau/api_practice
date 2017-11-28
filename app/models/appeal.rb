@@ -2,6 +2,8 @@ class Appeal < ApplicationRecord
   include Filtering
   include Filtering::Contacts
 
+  audited associated_with: :account_list, except: [:updated_at]
+
   attr_accessor :inclusion_filter, :exclusion_filter
   belongs_to :account_list
   has_one :mail_chimp_account, through: :account_list

@@ -1,4 +1,6 @@
 class Donation < ApplicationRecord
+  audited on: [:destroy]
+
   belongs_to :donor_account
   belongs_to :designation_account
   belongs_to :appeal
