@@ -96,10 +96,10 @@ Lint/ScriptPermission:
 Metrics/AbcSize:
   Max: 164
 
-# Offense count: 968
+# Offense count: 4
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
-  Max: 1073
+  Max: 58
 
 # Offense count: 63
 Metrics/CyclomaticComplexity:
