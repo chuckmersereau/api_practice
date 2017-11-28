@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'warden', '~> 1.2.3'
 
   s.add_development_dependency 'dotenv-rails', '~> 2.1.1'
-  s.add_development_dependency 'rubocop'
+  s.add_development_dependency 'rubocop', '~> 0.49.0'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'factory_girl_rails'
