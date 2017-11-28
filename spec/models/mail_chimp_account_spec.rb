@@ -11,11 +11,23 @@ describe MailChimpAccount do
   let(:newsletter_contacts) do
     contacts = []
     2.times do
-      contacts << create(:contact, people: [create(:person, email_addresses: [build(:email_address)])], account_list: account_list_with_mailchimp, send_newsletter: 'Email')
+      contacts << create(
+        :contact,
+        people: [create(:person, email_addresses: [build(:email_address)])],
+        account_list: account_list_with_mailchimp,
+        send_newsletter: 'Email'
+      )
     end
     contacts
   end
-  let(:non_newsletter_contact) { create(:contact, people: [create(:person, email_addresses: [build(:email_address)])], account_list: account_list_with_mailchimp, send_newsletter: 'Physical') }
+  let(:non_newsletter_contacts) do
+    [create(
+      :contact,
+      people: [create(:person, email_addresses: [build(:email_address)])],
+      account_list: account_list_with_mailchimp,
+      send_newsletter: 'Physical'
+    )]
+  end
 
   it 'validates the format of an api key' do
     expect(MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
@@ -36,7 +48,7 @@ describe MailChimpAccount do
     expect(mail_chimp_account.validation_error).to match(/Your API key may be invalid/)
   end
 
-  context '#appeal_open_rate' do
+  describe '#appeal_open_rate' do
     let(:mock_gibbon) { double(:mock_gibbon) }
     let(:mock_gibbon_list) { double(:mock_gibbon_list) }
 
@@ -62,12 +74,15 @@ describe MailChimpAccount do
   end
 
   context 'email generating methods' do
+    let(:contacts) { newsletter_contacts + non_newsletter_contacts }
+    let(:contact_ids) { contacts.map(&:id) }
+
     before do
       newsletter_contacts
-      non_newsletter_contact
+      non_newsletter_contacts
     end
 
-    context '#relevant_emails' do
+    describe '#relevant_emails' do
       it 'returns the right list of emails which depends on the settings set by the user' do
         expect(mail_chimp_account.relevant_emails.size).to eq(2)
         mail_chimp_account.update(sync_all_active_contacts: true)
@@ -75,11 +90,26 @@ describe MailChimpAccount do
       end
     end
 
-    context '#relevant_contacts' do
-      it 'returns the right list of contacts which again depends on the settings set by the user' do
-        expect(mail_chimp_account.relevant_contacts.last).to eq(newsletter_contacts.last)
-        mail_chimp_account.update(sync_all_active_contacts: true)
-        expect(mail_chimp_account.relevant_contacts.last).to eq(non_newsletter_contact)
+    describe '#relevant_contacts' do
+      context 'contact_ids set' do
+        it 'returns newsletter configured contacts' do
+          expect(mail_chimp_account.relevant_contacts(contact_ids)).to match_array(newsletter_contacts)
+        end
+        context 'force_sync is true' do
+          it 'return all contacts' do
+            expect(mail_chimp_account.relevant_contacts(contact_ids, true)).to match_array(contacts)
+          end
+        end
+      end
+      it 'returns newsletter configured contacts' do
+        expect(mail_chimp_account.relevant_contacts).to match_array(newsletter_contacts)
+      end
+      context 'sync_all_active_contacts = true' do
+        before { mail_chimp_account.update(sync_all_active_contacts: true) }
+
+        it 'returns all active contacts' do
+          expect(mail_chimp_account.relevant_contacts).to match_array(contacts)
+        end
       end
     end
   end

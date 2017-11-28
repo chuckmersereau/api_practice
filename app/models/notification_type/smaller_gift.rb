@@ -10,10 +10,11 @@ class NotificationType::SmallerGift < NotificationType
   def smaller_gift?(contact)
     return unless contact.pledge_frequency && contact.pledge_amount
 
-    if contact.pledge_frequency < 1
+    without_gift_aid = contact.donations.without_gift_aid
+
+    if contact.pledge_frequency < 1 && without_gift_aid.any?
       return contact.last_donation.present? &&
-             contact.amount_with_gift_aid(contact.donations.without_gift_aid
-                                                 .first.amount) < contact.pledge_amount
+             contact.amount_with_gift_aid(without_gift_aid.first.amount) < contact.pledge_amount
     end
 
     monthly_avg_with_prev_gift_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_with_prev_gift)

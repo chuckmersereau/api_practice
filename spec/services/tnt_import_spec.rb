@@ -307,18 +307,23 @@ describe TntImport do
   end
 
   context '#import_tasks' do
+    let(:contacts) do
+      xml.tables['TaskContact'].map do |row|
+        create(:contact, tnt_id: row['ContactID'])
+      end
+    end
+    let(:contact_ids) { Hash[contacts.map { |c| [c.tnt_id.to_s, c.id] }] }
+
     it 'creates a new task' do
       expect do
-        task_ids_by_tnt_task_id = import.send(:import_tasks)
-        task = Task.find(task_ids_by_tnt_task_id.first[1])
-        expect(task.remote_id).to eq('-1918558789')
+        new_tasks = import.send(:import_tasks, contact_ids)
+        expect(new_tasks.first.remote_id).to eq('-1918558789')
       end.to change(Task, :count).by(1)
     end
 
     it 'sets start_at' do
-      task_ids_by_tnt_task_id = import.send(:import_tasks)
-      task = Task.find(task_ids_by_tnt_task_id.first[1])
-      expect(task.start_at).to eq(tnt_import.user.time_zone.parse('2006-09-09 16:30:00'))
+      new_tasks = import.send(:import_tasks, contact_ids)
+      expect(new_tasks.first.start_at).to eq(tnt_import.user.time_zone.parse('2006-09-09 16:30:00'))
     end
 
     it 'updates an existing task' do
@@ -337,7 +342,7 @@ describe TntImport do
 
     it 'adds notes as a task comment' do
       task = create(:task, source: 'tnt', remote_id: task_rows.first['id'], account_list: tnt_import.account_list)
-      import.send(:import_tasks)
+      import.send(:import_tasks, contact_ids)
       expect(task.comments.first.body).to eq('Notes')
     end
 
@@ -350,9 +355,8 @@ describe TntImport do
 
     it 'sets the task as complete' do
       expect(TntImport::TntCodes).to receive(:task_status_completed?).and_return(true)
-      task_ids_by_tnt_task_id = import.send(:import_tasks)
-      task = Task.find(task_ids_by_tnt_task_id.first[1])
-      expect(task.completed).to eq(true)
+      new_tasks = import.send(:import_tasks, contact_ids)
+      expect(new_tasks.first.completed).to eq(true)
     end
   end
 

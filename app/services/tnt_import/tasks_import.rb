@@ -13,46 +13,32 @@ class TntImport::TasksImport
 
   def import
     return unless xml_tables['Task'].present? && xml_tables['TaskContact'].present?
-    task_ids_by_tnt_task_id = {}
 
-    xml_tables['Task'].each do |row|
-      next unless TntImport::TntCodes.import_task_type?(row['TaskTypeID'])
+    new_tasks = []
+    all_tasks = build_tasks
 
-      task = build_task_from_row(row)
-
-      next unless task.save
-
-      import_comments_for_task(task: task, notes: row['Notes'], tnt_task_type_id: row['TaskTypeID'])
-
-      task_ids_by_tnt_task_id[row['id']] = task.id
-    end
-
-    contact_ids_with_new_tasks = []
-
-    # Add contacts to tasks
-    xml_tables['TaskContact'].each do |row|
-      task_id = task_ids_by_tnt_task_id[row['TaskID']]
-      contact_id = contact_ids_by_tnt_contact_id[row['ContactID']]
-
-      next unless task_id && contact_id
-
-      ActivityContact.where(activity_id: task_id, contact_id: contact_id).first_or_create! do |activity_contact|
-        activity_contact.skip_task_counter_update = true
-        contact_ids_with_new_tasks << contact_id
+    contact_ids_with_new_tasks =
+      xml_tables['TaskContact'].map do |contact_row|
+        begin
+          task, contact_id = create_task_for_contact!(contact_row, all_tasks)
+          new_tasks << task
+          contact_id
+        rescue ActiveRecord::RecordInvalid
+          nil
+        end
       end
-    end
 
-    update_contacts_task_counters!(contact_ids_with_new_tasks)
-
-    task_ids_by_tnt_task_id
+    update_contacts_task_counters!(contact_ids_with_new_tasks.compact)
+    new_tasks
   end
 
   private
 
   attr_reader :xml_tables, :contact_ids_by_tnt_contact_id
 
-  def update_contacts_task_counters!(contact_ids)
-    Contact.where(id: contact_ids).find_each(&:update_uncompleted_tasks_count)
+  def build_tasks
+    xml_tables['Task'].map    { |r| build_task_from_row(r) }
+                      .select { |t| TntImport::TntCodes.import_task_type?(t.activity_type) }
   end
 
   def build_task_from_row(row)
@@ -66,7 +52,45 @@ class TntImport::TasksImport
 
     task.completed = TntImport::TntCodes.task_status_completed?(row['Status'])
     task.completed_at = parse_date(row['LastEdit'], @user) if task.completed
-
     task
+  end
+
+  def create_task_for_contact!(contact_row, tasks)
+    task_prototype = tasks.find { |t| t.remote_id == contact_row['TaskID'] }
+    contact_id = contact_ids_by_tnt_contact_id[contact_row['ContactID']]
+    return unless task_prototype && contact_id
+
+    task = create_task_from_prototype!(task_prototype, contact_id)
+
+    ActivityContact.where(activity_id: task.id, contact_id: contact_id).first_or_create! do |activity_contact|
+      activity_contact.skip_task_counter_update = true
+    end
+    task.reload if task.id
+
+    [task, contact_id]
+  end
+
+  def create_task_from_prototype!(prototype, contact_id)
+    dup_task(prototype, contact_id).tap do |task|
+      task.save!
+
+      row = xml_tables['Task'].find { |r| r['id'] == task.remote_id }
+      import_comments_for_task(task: task, notes: row['Notes'],
+                               tnt_task_type_id: row['TaskTypeID'])
+    end
+  end
+
+  def dup_task(task, contact_id)
+    return task.dup unless task.id
+
+    if task.contacts.empty? || task.contacts.any? { |c| c.id == contact_id }
+      task
+    else
+      task.dup.tap { |t| t.uuid = nil }
+    end
+  end
+
+  def update_contacts_task_counters!(contact_ids)
+    Contact.where(id: contact_ids).find_each(&:update_uncompleted_tasks_count)
   end
 end

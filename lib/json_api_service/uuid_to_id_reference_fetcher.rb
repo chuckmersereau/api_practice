@@ -35,7 +35,7 @@ module JsonApiService
 
     def fetch_references_for(resource_type)
       resource_class  = resource_lookup.find(resource_type)
-      found_uuids     = uuids[resource_type]
+      found_uuids     = uuids.fetch(resource_type)
 
       raise_record_not_found(resource_type, found_uuids) if found_uuids.any? { |uuid| !::UUID_REGEX.match(uuid) }
 

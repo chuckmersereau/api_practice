@@ -372,6 +372,7 @@ class Contact < ApplicationRecord
     if person_id
       cp = contact_people.find_by(person_id: person_id)
       cp&.update_attributes(primary: true)
+      @primary_or_first_person = nil
     end
     person_id
   end

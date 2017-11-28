@@ -41,6 +41,14 @@ RegexpLiteral:
 ClassLength:
   Enabled: false
 
+BlockLength:
+  Exclude:
+    - spec/**/*
+    - config/routes.rb\
+    - Gemfile
+    - Guardfile
+    - lib/tasks/mpdx.rake
+
 Style/ClassAndModuleChildren:
   Enabled: false
 

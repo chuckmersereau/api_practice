@@ -16,9 +16,9 @@ describe ImportSerializer do
       import.file_headers_mappings = {
         'church'               => 'church',
         'city'                 => 'city',
-        'commitment_amount'    => 'amount',
-        'commitment_currency'  => 'currency',
-        'commitment_frequency' => 'frequency',
+        'pledge_amount'        => 'amount',
+        'pledge_currency'      => 'currency',
+        'pledge_frequency'     => 'frequency',
         'contact_name'         => 'fname',
         'country'              => 'country',
         'email_1'              => 'email-address',
@@ -46,29 +46,29 @@ describe ImportSerializer do
       }
 
       import.file_constants_mappings = {
-        'commitment_currency' => {
-          'cad' => 'CAD',
-          'usd' => nil
-        },
-        'commitment_frequency' => {
-          '1_0' => 'Monthly',
-          nil => nil
-        },
-        'likely_to_give' => {
-          'most_likely' => 'Yes',
-          'least_likely' => 'No'
-        },
-        'newsletter' => {
-          'both' => 'Both'
-        },
-        'send_appeals' => {
-          'true' => 'Yes',
-          'false' => 'No'
-        },
-        'status' => {
-          'partner_financial' => 'Praying and giving',
-          'partner_pray' => 'Praying'
-        }
+        'pledge_currency' => [
+          { id: 'CAD', values: ['CAD'] },
+          { id: 'USD', values: ['nil'] }
+        ],
+        'pledge_frequency' => [
+          { id: 'Monthly', values: ['Monthly'] },
+          { id: '', values: [''] }
+        ],
+        'likely_to_give' => [
+          { id: 'Most Likely', values: ['Yes'] },
+          { id: 'Least Likely', values: ['No'] }
+        ],
+        'newsletter' => [
+          { id: 'Both', values: ['Both'] }
+        ],
+        'send_appeals' => [
+          { id: true, values: ['Yes'] },
+          { id: false, values: ['No'] }
+        ],
+        'status' => [
+          { id: 'Partner - Financial', values: ['Praying and giving'] },
+          { id: 'Partner - Pray', values: ['Praying'] }
+        ]
       }
 
       CsvImport.new(import).update_cached_file_data

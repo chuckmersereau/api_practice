@@ -127,9 +127,9 @@ FactoryGirl.define do
       import.file_headers_mappings = {
         'church'               => 'church',
         'city'                 => 'city',
-        'commitment_amount'    => 'amount',
-        'commitment_currency'  => 'currency',
-        'commitment_frequency' => 'frequency',
+        'pledge_amount'        => 'amount',
+        'pledge_currency'      => 'currency',
+        'pledge_frequency'     => 'frequency',
         'country'              => 'country',
         'email_1'              => 'email_address',
         'first_name'           => 'fname',
@@ -157,31 +157,30 @@ FactoryGirl.define do
       }
 
       import.file_constants_mappings = {
-        'commitment_currency' => {
-          'cad' => 'CAD',
-          'usd' => ''
-        },
-        'commitment_frequency' => {
-          '1_0' => 'Monthly',
-          '' => ''
-        },
-        'likely_to_give' => {
-          'most_likely' => 'Yes',
-          'least_likely' => 'No'
-        },
-        'newsletter' => {
-          'both' => 'Both'
-        },
-        'send_appeals' => {
-          'true' => 'Yes',
-          'false' => 'No'
-        },
-        'status' => {
-          'partner_financial' => 'Praying and giving',
-          'partner_pray' => 'Praying'
-        }
+        'pledge_currency' => [
+          { id: 'CAD', values: ['CAD'] },
+          { id: 'USD', values: [''] }
+        ],
+        'pledge_frequency' => [
+          { id: 'Monthly', values: ['Monthly'] },
+          { id: '', values: [''] }
+        ],
+        'likely_to_give' => [
+          { id: 'Most Likely', values: ['Yes'] },
+          { id: 'Least Likely', values: ['No'] }
+        ],
+        'newsletter' => [
+          { id: 'Both', values: ['Both'] }
+        ],
+        'send_appeals' => [
+          { id: true, values: ['Yes'] },
+          { id: false, values: ['No'] }
+        ],
+        'status' => [
+          { id: 'Partner - Financial', values: ['Praying and giving'] },
+          { id: 'Partner - Pray', values: ['Praying'] }
+        ]
       }
-
       import.save
     end
   end
@@ -190,5 +189,10 @@ FactoryGirl.define do
     association :account_list
     source 'tnt'
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_multi_org.xml')) }
+  end
+
+  factory :tnt_import_with_multiple_task_contacts, parent: :import do
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_with_multiple_task_contacts.xml')) }
+    source 'tnt'
   end
 end

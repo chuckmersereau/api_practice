@@ -34,8 +34,8 @@ class MailChimp::Exporter
   end
 
   def export_adds_and_updates(contacts)
-    group_adder.add_status_groups(statuses_from_contacts(contacts))
-    group_adder.add_tags_groups(tags_from_contacts(contacts))
+    group_adder.add_status_interests(statuses_from_contacts(contacts))
+    group_adder.add_tags_interests(tags_from_contacts(contacts))
 
     merge_variables_to_add.each do |merge_variable|
       merge_field_adder.add_merge_field(merge_variable)
@@ -49,7 +49,7 @@ class MailChimp::Exporter
   end
 
   def group_adder
-    @group_adder ||= GroupAdder.new(mail_chimp_account, gibbon_wrapper, list_id)
+    @group_adder ||= InterestAdder.new(mail_chimp_account, gibbon_wrapper, list_id)
   end
 
   def batcher
@@ -61,11 +61,11 @@ class MailChimp::Exporter
   end
 
   def fetch_emails_of_members_to_remove
-    relevant_mail_chimp_members.pluck(:email) - mail_chimp_account.newsletter_emails
+    relevant_mail_chimp_members.pluck(:email) - mail_chimp_account.relevant_emails
   end
 
   def fetch_contacts_to_export(contact_ids)
-    relevant_contact_scope = mail_chimp_account.relevant_contacts(contact_ids)
+    relevant_contact_scope = mail_chimp_account.relevant_contacts(contact_ids, true)
                                                .includes(primary_contact_person: :person, people: :primary_email_address)
     relevant_contact_scope.find_each.map do |contact|
       contact if contact_changed_or_new?(contact)

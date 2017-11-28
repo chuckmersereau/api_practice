@@ -54,18 +54,10 @@ class ConstantList < ActiveModelSerializers::Model
 
   def csv_import
     @csv_import ||= {
-      supported_headers: CsvImport.supported_headers,
-      required_headers: CsvImport.required_headers,
       constants: CsvImport.constants,
       max_file_size_in_bytes: Import::MAX_FILE_SIZE_IN_BYTES,
-      constants_from_top_level: {
-        commitment_currency: :pledge_currencies,
-        commitment_frequency: :pledge_frequency_hashes,
-        likely_to_give: :assignable_likely_to_give_hashes,
-        newsletter: :assignable_send_newsletter_hashes,
-        send_appeals: :send_appeals_hashes,
-        status: :status_hashes
-      }
+      required_headers: CsvImport.required_headers,
+      supported_headers: CsvImport.supported_headers
     }
   end
 
@@ -88,6 +80,10 @@ class ConstantList < ActiveModelSerializers::Model
       true => 'Yes',
       false => 'No'
     }
+  end
+
+  def to_exhibit
+    @exhibit ||= exhibit(self)
   end
 
   private

@@ -60,11 +60,11 @@ class CsvRowContactBuilder
       greeting: csv_row['greeting'],
       envelope_greeting: csv_row['envelope_greeting'],
       status: csv_row['status'],
-      pledge_amount: csv_row['commitment_amount'],
+      pledge_amount: csv_row['pledge_amount'],
       notes: csv_row['notes'],
-      pledge_frequency: csv_row['commitment_frequency'],
+      pledge_frequency: csv_row['pledge_frequency'],
       send_newsletter: csv_row['newsletter'],
-      pledge_currency: csv_row['commitment_currency'],
+      pledge_currency: csv_row['pledge_currency'],
       likely_to_give: csv_row['likely_to_give'],
       no_appeals: !true?(csv_row['send_appeals']),
       website: csv_row['website']
@@ -145,7 +145,7 @@ class CsvRowContactBuilder
 
   def strip_csv_row_fields
     new_csv_row = csv_row
-    strippable_headers = csv_row.headers - csv_file_constants_mappings_facade.header_ids
+    strippable_headers = csv_row.headers - csv_file_constants_mappings.constant_names
     strippable_headers.each do |header|
       new_csv_row[header] = csv_row[header]&.strip
     end
@@ -170,14 +170,15 @@ class CsvRowContactBuilder
   def rebuild_csv_row_with_mpdx_constants(old_csv_row)
     return old_csv_row if import.file_constants_mappings.blank?
     new_csv_row = old_csv_row
-    csv_file_constants_mappings_facade.header_ids.each do |mpdx_constant_header|
+    csv_file_constants_mappings.constant_names.each do |mpdx_constant_header|
       value_to_change = old_csv_row[mpdx_constant_header]
-      new_csv_row[mpdx_constant_header] = csv_file_constants_mappings_facade.convert_value(mpdx_constant_header, value_to_change)
+      new_csv_row[mpdx_constant_header] =
+        csv_file_constants_mappings.convert_value_to_constant_id(mpdx_constant_header, value_to_change)
     end
     new_csv_row
   end
 
-  def csv_file_constants_mappings_facade
-    @csv_file_constants_mappings_facade ||= CsvFileConstantsMappingsFacade.new(import.file_constants_mappings)
+  def csv_file_constants_mappings
+    @csv_file_constants_mappings ||= CsvValueToConstantMappings.new(import.file_constants_mappings)
   end
 end

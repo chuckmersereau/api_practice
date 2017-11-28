@@ -9,20 +9,20 @@ describe Auth::UserAccountsController, :auth, type: :controller do
     before(:each) do
     end
 
-    it 'redirects the user to the requested provider' do
+    it 'should redirect the user to the requested provider' do
       auth_login(user)
       get :create, provider: provider
       expect(response.status).to be(302)
       expect(response.location).to include(provider.to_s)
     end
 
-    it 'adds the current user to the session' do
+    it 'should add the current user to the session' do
       auth_login(user)
       get :create, provider: provider
       expect(session['warden.user.user.key']).to be(user.id)
     end
 
-    it 'stores an account_list_id param in the session' do
+    it 'should store an account_list_id param in the session' do
       auth_login(user)
       get :create, provider: provider, account_list_id: '4'
       expect(session['account_list_id']).to eq('4')
@@ -36,7 +36,7 @@ describe Auth::UserAccountsController, :auth, type: :controller do
           oauth_url: 'https://www.mytntware.com/dataserver/toontown/staffportal/oauth/authorize.aspx'
         )
       end
-      it 'redirects the user to the requested provider' do
+      it 'should redirect the user to the requested provider' do
         auth_login(user)
         get :create, provider: provider, organization_id: organization.uuid
         expect(response.status).to be(302)
@@ -46,6 +46,25 @@ describe Auth::UserAccountsController, :auth, type: :controller do
       context 'organization does not exist' do
         it 'should return an unauthorized response' do
           get :create, provider: provider, organization_id: '123'
+          expect(response.status).to be(401)
+        end
+      end
+    end
+
+    context 'provider is sidekiq' do
+      let(:provider) { :sidekiq }
+      let(:user) { create(:user_with_account, developer: true) }
+      it 'should redirect user to sidekiq' do
+        auth_login(user)
+        get :create, provider: provider
+        expect(response.status).to be(302)
+        expect(response.location).to include('sidekiq')
+      end
+
+      context 'user is not developer' do
+        let(:user) { create(:user_with_account, developer: false) }
+        it 'should return an unauthorized response' do
+          get :create, provider: provider
           expect(response.status).to be(401)
         end
       end

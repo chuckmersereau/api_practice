@@ -10,57 +10,28 @@ describe CsvImport do
   end
 
   it 'defines constants that are consistent with the supported headers' do
-    expect(CsvImport::SUPPORTED_HEADERS & CsvImport::CONSTANT_HEADERS.keys).to eq CsvImport::CONSTANT_HEADERS.keys
+    expect(CsvImport.supported_headers.keys & CsvImport.constants.keys).to eq CsvImport.constants.keys
   end
 
   it 'defines required headers that are consistent with the supported headers' do
-    expect(CsvImport::SUPPORTED_HEADERS & CsvImport::REQUIRED_HEADERS).to eq CsvImport::REQUIRED_HEADERS
+    expect(CsvImport.supported_headers.keys & CsvImport.required_headers.keys).to eq CsvImport.required_headers.keys
   end
 
   describe '.supported_headers' do
     it 'returns a Hash of Strings' do
-      expect(CsvImport.supported_headers).to be_a_hash_with_types(String, String)
-    end
-  end
-
-  describe '.supported_headers_hashes' do
-    it 'returns an Array of Hashes' do
-      expect(CsvImport.supported_headers_hashes).to be_a(Array)
-      CsvImport.supported_headers_hashes.each do |hash|
-        expect(hash).to be_a_hash_with_types(String, String)
-      end
+      expect(CsvImport.supported_headers).to be_a_hash_with_types(Symbol, String)
     end
   end
 
   describe '.required_headers' do
     it 'returns a Hash of Strings' do
-      expect(CsvImport.required_headers).to be_a_hash_with_types(String, String)
-    end
-  end
-
-  describe '.required_headers_hashes' do
-    it 'returns an Array of Hashes' do
-      expect(CsvImport.required_headers_hashes).to be_a(Array)
-      CsvImport.required_headers_hashes.each do |hash|
-        expect(hash).to be_a_hash_with_types(String, String)
-      end
+      expect(CsvImport.required_headers).to be_a_hash_with_types(Symbol, String)
     end
   end
 
   describe '.constants' do
     it 'returns a Hash of Hashes' do
-      expect(CsvImport.constants).to be_a_hash_with_types(String, Hash)
-    end
-  end
-
-  describe '.constants_hashes' do
-    it 'returns an Array of Hashes' do
-      expect(CsvImport.constants_hashes).to be_a(Array)
-      CsvImport.constants_hashes.each do |hash|
-        expect(hash).to be_a(Hash)
-        expect(hash['id']).to be_a(String)
-        expect(hash['values']).to be_a(Array)
-      end
+      expect(CsvImport.constants).to be_a_hash_with_types(Symbol, Array)
     end
   end
 
@@ -86,9 +57,9 @@ describe CsvImport do
       csv_import.file_headers_mappings = {
         'church'               => 'church',
         'city'                 => 'mailing_city',
-        'commitment_amount'    => 'commitment_amount',
-        'commitment_currency'  => 'commitment_currency',
-        'commitment_frequency' => 'commitment_frequency',
+        'pledge_amount'        => 'commitment_amount',
+        'pledge_currency'      => 'commitment_currency',
+        'pledge_frequency'     => 'commitment_frequency',
         'country'              => 'mailing_country',
         'email_1'              => 'primary_email',
         'envelope_greeting'    => 'envelope_greeting',
@@ -108,17 +79,17 @@ describe CsvImport do
         'zip'                  => 'mailing_postal_code'
       }
       csv_import.file_constants_mappings = {
-        'commitment_currency' => [
-          { 'id' => 'CAD', values: ['CAD'] }
+        'pledge_currency' => [
+          { id: 'CAD', values: ['CAD'] }
         ],
-        'commitment_frequency' => [
-          { 'id' => '1.0', values: ['Monthly'] }
+        'pledge_frequency' => [
+          { id: 'Monthly', values: ['Monthly'] }
         ],
         'newsletter' => [
-          { 'id' => 'Both', values: ['Both'] }
+          { id: 'Both', values: ['Both'] }
         ],
         'status' => [
-          { 'id' => 'Partner - Pray', values: ['Partner - Pray'] }
+          { id: 'Partner - Pray', values: ['Partner - Pray'] }
         ]
       }
     end
@@ -137,18 +108,18 @@ describe CsvImport do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_iso_8950_1.csv')))
       import.update_cached_file_data
       csv_import.file_constants_mappings = {
-        'commitment_currency' => {
-          'cad' => ''
-        },
-        'commitment_frequency' => {
-          '' => ''
-        },
-        'newsletter' => {
-          '' => ''
-        },
-        'status' => {
-          'partner_pray' => ''
-        }
+        'pledge_currency' => [
+          { id: 'CAD', values: [''] }
+        ],
+        'pledge_frequency' => [
+          { id: '', values: [''] }
+        ],
+        'newsletter' => [
+          { id: '', values: [''] }
+        ],
+        'status' => [
+          { id: 'Partner - Pray', values: [''] }
+        ]
       }
       csv_import.update(in_preview: false)
       expect { import.import }.to change { Contact.count }.from(1).to(2)
@@ -158,12 +129,12 @@ describe CsvImport do
     it 'changes None to an empty string in the send newsletter field' do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_none.csv')))
       import.update_cached_file_data
-      csv_import.file_constants_mappings['newsletter'] = {
-        '' => 'None'
-      }
+      csv_import.file_constants_mappings['newsletter'] = [
+        { id: '', values: ['None'] }
+      ]
       csv_import.update(in_preview: false)
       expect { import.import }.to change { Contact.count }.from(1).to(2)
-      expect(Contact.first.send_newsletter).to eq('')
+      expect(Contact.first.send_newsletter).to eq(nil)
     end
 
     it 'does not error if csv file uses inconsistent newlines like \n then later \r\n' do
@@ -183,9 +154,9 @@ describe CsvImport do
       csv_import.file_headers_mappings = {
         'church'               => 'church',
         'city'                 => 'city',
-        'commitment_amount'    => 'amount',
-        'commitment_currency'  => 'currency',
-        'commitment_frequency' => 'frequency',
+        'pledge_amount'        => 'amount',
+        'pledge_currency'      => 'currency',
+        'pledge_frequency'     => 'frequency',
         'country'              => 'country',
         'email_1'              => 'email_address',
         'first_name'           => 'fname',
@@ -212,29 +183,29 @@ describe CsvImport do
       }
 
       csv_import.file_constants_mappings = {
-        'commitment_currency' => {
-          'cad' => 'CAD',
-          'usd' => ''
-        },
-        'commitment_frequency' => {
-          '1_0' => 'Monthly',
-          '' => ''
-        },
-        'likely_to_give' => {
-          'most_likely' => 'Yes',
-          'least_likely' => 'No'
-        },
-        'newsletter' => {
-          'both' => 'Both'
-        },
-        'send_appeals' => {
-          'true' => 'Yes',
-          'false' => 'No'
-        },
-        'status' => {
-          'partner_financial' => 'Praying and giving',
-          'partner_pray' => 'Praying'
-        }
+        'pledge_currency' => [
+          { id: 'CAD', values: ['CAD'] },
+          { id: 'USD', values: [''] }
+        ],
+        'pledge_frequency' => [
+          { id: 'Monthly', values: ['Monthly'] },
+          { id: '', values: [''] }
+        ],
+        'likely_to_give' => [
+          { id: 'Most Likely', values: ['Yes'] },
+          { id: 'Least Likely', values: ['No'] }
+        ],
+        'newsletter' => [
+          { id: 'Both', values: ['Both'] }
+        ],
+        'send_appeals' => [
+          { id: true, values: ['Yes'] },
+          { id: false, values: ['No'] }
+        ],
+        'status' => [
+          { id: 'Partner - Financial', values: ['Praying and giving'] },
+          { id: 'Partner - Pray', values: ['Praying'] }
+        ]
       }
 
       import.update_cached_file_data
@@ -272,7 +243,9 @@ describe CsvImport do
       end
 
       it 'returns false if no jobs were queued' do
-        allow_any_instance_of(ImportUploader).to receive(:path).and_return(Rails.root.join('spec/fixtures/sample_csv_blank.csv').to_s)
+        allow_any_instance_of(ImportUploader).to receive(:path).and_return(
+          Rails.root.join('spec/fixtures/sample_csv_blank.csv').to_s
+        )
         csv_import.in_preview = false
         expect(import.import).to eq(false)
       end
@@ -283,7 +256,9 @@ describe CsvImport do
       end
 
       it 'imports valid contacts successfully and stores invalid contacts in the file_row_failures' do
-        allow_any_instance_of(ImportUploader).to receive(:path).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv').to_s)
+        allow_any_instance_of(ImportUploader).to receive(:path).and_return(
+          Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv').to_s
+        )
         csv_import.in_preview = false
         expect do
           expect(import.import).to eq(true)
@@ -324,9 +299,11 @@ describe CsvImport do
           expect(contact.spouse.uuid).to be_present if contact.spouse
           contact.addresses.each { |address| expect(address.uuid).to be_present }
           contact.primary_person.email_addresses.each { |email_address| expect(email_address.uuid).to be_present }
-          contact.spouse.email_addresses.each { |email_address| expect(email_address.uuid).to be_present } if contact.spouse
           contact.primary_person.phone_numbers.each { |phone_number| expect(phone_number.uuid).to be_present }
-          contact.spouse.phone_numbers.each { |phone_number| expect(phone_number.uuid).to be_present } if contact.spouse
+          if contact.spouse
+            contact.spouse.email_addresses.each { |email_address| expect(email_address.uuid).to be_present }
+            contact.spouse.phone_numbers.each { |phone_number| expect(phone_number.uuid).to be_present }
+          end
         end
       end
     end
@@ -336,37 +313,39 @@ describe CsvImport do
     it 'assigns file_headers when setting file' do
       import = create(:csv_import_custom_headers, in_preview: true)
       csv_import = CsvImport.new(import)
-      expect { csv_import.update_cached_file_data }.to change { import.reload.file_headers }.from({}).to('fullname' => 'fullname',
-                                                                                                         'fname' => 'fname',
-                                                                                                         'lname' => 'lname',
-                                                                                                         'spouse_fname' => 'Spouse-fname',
-                                                                                                         'spouse_lname' => 'Spouse-lname',
-                                                                                                         'greeting' => 'greeting',
-                                                                                                         'mailing_greeting' => 'mailing-greeting',
-                                                                                                         'church' => 'church',
-                                                                                                         'street' => 'street',
-                                                                                                         'city' => 'city',
-                                                                                                         'province' => 'province',
-                                                                                                         'zip_code' => 'zip-code',
-                                                                                                         'country' => 'country',
-                                                                                                         'status' => 'status',
-                                                                                                         'amount' => 'amount',
-                                                                                                         'frequency' => 'frequency',
-                                                                                                         'currency' => 'currency',
-                                                                                                         'newsletter' => 'newsletter',
-                                                                                                         'tags' => 'tags',
-                                                                                                         'email_address' => 'email-address',
-                                                                                                         'spouse_email_address' => 'Spouse-email-address',
-                                                                                                         'phone' => 'phone',
-                                                                                                         'spouse_phone_number' => 'Spouse-phone-number',
-                                                                                                         'extra_notes' => 'extra-notes',
-                                                                                                         'skip' => 'skip',
-                                                                                                         'likely_giver' => 'likely-giver',
-                                                                                                         'metro' => 'metro',
-                                                                                                         'region' => 'region',
-                                                                                                         'appeals' => 'appeals',
-                                                                                                         'website' => 'website',
-                                                                                                         'referred_by' => 'referred_by')
+      expect { csv_import.update_cached_file_data }.to change { import.reload.file_headers }.from({}).to(
+        'fullname' => 'fullname',
+        'fname' => 'fname',
+        'lname' => 'lname',
+        'spouse_fname' => 'Spouse-fname',
+        'spouse_lname' => 'Spouse-lname',
+        'greeting' => 'greeting',
+        'mailing_greeting' => 'mailing-greeting',
+        'church' => 'church',
+        'street' => 'street',
+        'city' => 'city',
+        'province' => 'province',
+        'zip_code' => 'zip-code',
+        'country' => 'country',
+        'status' => 'status',
+        'amount' => 'amount',
+        'frequency' => 'frequency',
+        'currency' => 'currency',
+        'newsletter' => 'newsletter',
+        'tags' => 'tags',
+        'email_address' => 'email-address',
+        'spouse_email_address' => 'Spouse-email-address',
+        'phone' => 'phone',
+        'spouse_phone_number' => 'Spouse-phone-number',
+        'extra_notes' => 'extra-notes',
+        'skip' => 'skip',
+        'likely_giver' => 'likely-giver',
+        'metro' => 'metro',
+        'region' => 'region',
+        'appeals' => 'appeals',
+        'website' => 'website',
+        'referred_by' => 'referred_by'
+      )
     end
 
     it 'assigns file_constants when setting file' do
@@ -389,16 +368,23 @@ describe CsvImport do
       import = create(:csv_import_custom_headers, in_preview: true)
       csv_import = CsvImport.new(import)
       expect { csv_import.update_cached_file_data }.to change { import.reload.file_row_samples }.from([]).to(
-        [['Johnny and Janey Doey', ' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
-          '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD',
-          'Both', 'christmas-card,      family', ' john@example.com ', ' jane@example.com ', '(213) 222-3333',
-          '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe', 'Mary Kim'],
-         ['Bobby & Saray Parky', 'Bob', 'Park', 'Sara', 'Kim', 'Hello!', nil, nil, '123 Street West ', 'A Small Town', 'Quebec',
-          'L8D 3B9 ', 'Canada', 'Praying and giving', '10', 'Monthly', nil, 'Both', 'bob', 'bob@park.com',
-          'sara@kim.com', '+12345678901', '+10987654321', nil, 'Yes', 'No', 'metro', 'region', 'No', 'website', nil],
-         ['Joey Many', 'Joe', 'Man', nil, nil, nil, nil, nil, 'Apartment, Unit 123', 'Big City', 'BC', nil, 'CA', 'Praying',
-          nil, nil, nil, 'Both', nil, 'joe@inter.net', nil, '123.456.7890', nil, 'notes', nil, 'Yes', 'metro',
-          'region', 'Yes', 'website', nil]]
+        [
+          [
+            'Johnny and Janey Doey', ' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family',
+            'Westside Baptist Church', '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201', 'USA', 'Praying',
+            '50', 'Monthly', 'CAD', 'Both', 'christmas-card,      family', ' john@example.com ', ' jane@example.com ',
+            '(213) 222-3333', '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes',
+            'http://www.john.doe', 'Mary Kim'
+          ], [
+            'Bobby & Saray Parky', 'Bob', 'Park', 'Sara', 'Kim', 'Hello!', nil, nil, '123 Street West ', 'A Small Town',
+            'Quebec', 'L8D 3B9 ', 'Canada', 'Praying and giving', '10', 'Monthly', nil, 'Both', 'bob', 'bob@park.com',
+            'sara@kim.com', '+12345678901', '+10987654321', nil, 'Yes', 'No', 'metro', 'region', 'No', 'website', nil
+          ], [
+            'Joey Many', 'Joe', 'Man', nil, nil, nil, nil, nil, 'Apartment, Unit 123', 'Big City', 'BC', nil, 'CA',
+            'Praying', nil, nil, nil, 'Both', nil, 'joe@inter.net', nil, '123.456.7890', nil, 'notes', nil, 'Yes',
+            'metro', 'region', 'Yes', 'website', nil
+          ]
+        ]
       )
     end
   end
@@ -409,21 +395,25 @@ describe CsvImport do
 
     before do
       import.in_preview = false
-      allow_any_instance_of(ImportUploader).to receive(:path).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv').to_s)
+      allow_any_instance_of(ImportUploader).to receive(:path).and_return(
+        Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv').to_s
+      )
       csv_import.import
       import.reload
     end
 
     it 'generates a csv file as a string that contains the failed rows' do
-      expect(csv_import.generate_csv_from_file_row_failures).to eq('Error Message,fullname,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
-                                                                   'street,city,province,zip-code,country,status,amount,frequency,currency,newsletter,tags,' \
-                                                                   'email-address,Spouse-email-address,phone,Spouse-phone-number,extra-notes,skip,likely-giver' \
-                                                                   ",metro,region,appeals,website,referred_by\n\"Validation failed: Email is invalid, Email is invalid\",Bob" \
-                                                                   ',Park,Sara,Kim,Hello!,,,123 Street West,A Small Town,Quebec,L8D 3B9,Canada,Praying and giving' \
-                                                                   ',10,Monthly,,Both,bob,this is not a valid email,this is also not a valid email,+12345678901' \
-                                                                   ",+10987654321,,Yes,No,metro,region,No,website\n\"Validation failed: First name can't be blank, " \
-                                                                   "Name can't be blank\",,,,,,,,\"Apartment, Unit 123\",Big City,BC,,CA,Praying,,,,Both,,joe@inter.net" \
-                                                                   ",,123.456.7890,,notes,,Yes,metro,region,Yes,website\n")
+      expect(csv_import.generate_csv_from_file_row_failures).to eq(
+        'Error Message,fullname,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
+        'street,city,province,zip-code,country,status,amount,frequency,currency,newsletter,tags,' \
+        'email-address,Spouse-email-address,phone,Spouse-phone-number,extra-notes,skip,likely-giver' \
+        ",metro,region,appeals,website,referred_by\n\"Validation failed: Email is invalid, Email is invalid\",Bob" \
+        ',Park,Sara,Kim,Hello!,,,123 Street West,A Small Town,Quebec,L8D 3B9,Canada,Praying and giving' \
+        ',10,Monthly,,Both,bob,this is not a valid email,this is also not a valid email,+12345678901' \
+        ",+10987654321,,Yes,No,metro,region,No,website\n\"Validation failed: First name can't be blank, " \
+        "Name can't be blank\",,,,,,,,\"Apartment, Unit 123\",Big City,BC,,CA,Praying,,,,Both,,joe@inter.net" \
+        ",,123.456.7890,,notes,,Yes,metro,region,Yes,website\n"
+      )
     end
   end
 end

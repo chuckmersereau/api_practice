@@ -4,90 +4,65 @@
 require 'csv'
 
 class CsvImport
-  # These are all the header values that MPDX supports for import.
-  SUPPORTED_HEADERS = [
-    'Church',
-    'City',
-    'Commitment Amount',
-    'Commitment Currency',
-    'Commitment Frequency',
-    'Country',
-    'Email 1',
-    'Email 2',
-    'Envelope Greeting',
-    'First Name',
-    'Full Name',
-    'Greeting',
-    'Last Name',
-    'Likely To Give',
-    'Metro Area',
-    'Newsletter',
-    'Notes',
-    'Phone 1',
-    'Phone 2',
-    'Phone 3',
-    'Referred By',
-    'Region',
-    'Send Appeals?',
-    'Spouse Email',
-    'Spouse First Name',
-    'Spouse Last Name',
-    'Spouse Phone',
-    'State',
-    'Status',
-    'Street',
-    'Tags',
-    'Website',
-    'Zip'
-  ].freeze
-
-  # These are the headers that MPDX requires at minimum for CSV import.
-  # In the future the names can be removed from REQUIRED_HEADERS, because the frontend will handle them specially. The frontend will require `(first_name && last_name) || full_name`
-  REQUIRED_HEADERS = ['First Name', 'Last Name'].freeze
-
-  BOOLEAN_CONSTANTS = ['true', 'false', ''].freeze
-
-  # This is a list of supported headers that have constant values,
-  # the user's CSV might have different values so we need to map the user's values to MPDX constant values.
-  CONSTANT_HEADERS = {
-    'Commitment Currency'  => ConstantList.new.codes << '',
-    'Commitment Frequency' => ConstantList.new.pledge_frequencies.keys.collect(&:to_s) << '',
-    'Likely To Give'       => ConstantList.new.assignable_likely_to_give << '',
-    'Newsletter'           => ConstantList.new.assignable_send_newsletter << '',
-    'Send Appeals?'        => BOOLEAN_CONSTANTS,
-    'Status'               => ConstantList.new.assignable_statuses << ''
-  }.freeze
-
   delegate :account_list, to: :@import
 
   def self.supported_headers
-    transform_array_to_hash_with_underscored_keys(SUPPORTED_HEADERS.dup)
-  end
-
-  def self.supported_headers_hashes
-    SUPPORTED_HEADERS.collect { |header| { id: header&.parameterize&.underscore, value: _(header) }.with_indifferent_access }
+    {
+      church: _('Church'),
+      city: _('City'),
+      pledge_amount: _('Commitment Amount'),
+      pledge_currency: _('Commitment Currency'),
+      pledge_frequency: _('Commitment Frequency'),
+      country: _('Country'),
+      email_1: _('Email 1'),
+      email_2: _('Email 2'),
+      envelope_greeting: _('Envelope Greeting'),
+      first_name: _('First Name'),
+      full_name: _('Full Name'),
+      greeting: _('Greeting'),
+      last_name: _('Last Name'),
+      likely_to_give: _('Likely To Give'),
+      metro_area: _('Metro Area'),
+      newsletter: _('Newsletter'),
+      notes: _('Notes'),
+      phone_1: _('Phone 1'),
+      phone_2: _('Phone 2'),
+      phone_3: _('Phone 3'),
+      referred_by: _('Referred By'),
+      region: _('Region'),
+      send_appeals: _('Send Appeals?'),
+      spouse_email: _('Spouse Email'),
+      spouse_first_name: _('Spouse First Name'),
+      spouse_last_name: _('Spouse Last Name'),
+      spouse_phone: _('Spouse Phone'),
+      state: _('State'),
+      status: _('Status'),
+      street: _('Street'),
+      tags: _('Tags'),
+      website: _('Website'),
+      zip: _('Zip')
+    }
   end
 
   def self.required_headers
-    transform_array_to_hash_with_underscored_keys(REQUIRED_HEADERS.dup)
-  end
-
-  def self.required_headers_hashes
-    REQUIRED_HEADERS.collect { |header| { id: header&.parameterize&.underscore, value: _(header) }.with_indifferent_access }
+    {
+      first_name: _('First Name'),
+      last_name: _('Last Name')
+    }
   end
 
   def self.constants
-    CONSTANT_HEADERS.keys.each_with_object({}.with_indifferent_access) do |header, hash|
-      hash[header.parameterize.underscore] = transform_array_to_hash_with_underscored_keys(CONSTANT_HEADERS[header].dup)
-      hash
-    end
+    constants_exhibit = ConstantList.new.to_exhibit
+    {
+      pledge_currency: constants_exhibit.pledge_currencies_translated_hashes,
+      pledge_frequency: constants_exhibit.pledge_frequency_translated_hashes,
+      likely_to_give: constants_exhibit.assignable_likely_to_give_translated_hashes,
+      newsletter: constants_exhibit.assignable_send_newsletter_translated_hashes,
+      send_appeals: constants_exhibit.send_appeals_translated_hashes,
+      status: constants_exhibit.status_translated_hashes
+    }
   end
 
-  def self.constants_hashes
-    CONSTANT_HEADERS.keys.collect { |header| { id: header&.parameterize&.underscore, values: CONSTANT_HEADERS[header] }.with_indifferent_access }
-  end
-
-  # This helper method transforms an Array like ['A Test', 'B Test'] to a Hash like { a_test: 'A Test', b_test: 'B Test' }
   def self.transform_array_to_hash_with_underscored_keys(array)
     array.each_with_object({}.with_indifferent_access) do |value, hash|
       hash[value&.parameterize&.underscore] = value

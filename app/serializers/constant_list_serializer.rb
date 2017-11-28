@@ -106,6 +106,6 @@ class ConstantListSerializer < ActiveModel::Serializer
   private
 
   def constants_exhibit
-    @constants_exhibit ||= exhibit(object)
+    @constants_exhibit ||= object.to_exhibit
   end
 end

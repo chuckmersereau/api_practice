@@ -38,5 +38,14 @@ describe NotificationType::SmallerGift do
       contact.update(first_donation_date: nil, last_donation_date: nil) # sometimes these aren't set
       expect(smaller_gift.check(account_list)).to be_empty
     end
+
+    it 'does not raise an error if all donations are by GIFT_AID' do
+      contact.update!(pledge_frequency: 0.5)
+      donation.update!(payment_method: Donation::GIFT_AID)
+
+      expect do
+        expect(smaller_gift.check(account_list)).to be_empty
+      end.not_to raise_error NoMethodError
+    end
   end
 end
