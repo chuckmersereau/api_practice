@@ -82,15 +82,17 @@ class MailChimp::Exporter
     end
 
     def create_interests(interest_category_id, interests)
-      interests.reject(&:blank?).map do |interest|
+      hash = {}
+      interests.reject(&:blank?).each do |interest|
         begin
           interest = gibbon_list.interest_categories(interest_category_id).interests.create(body: { name: interest })
-          { interest['name'] => interest['id'] }
+          hash[interest['name']] = interest['id']
         rescue Gibbon::MailChimpError => error
           break if maximum_number_of_interests_per_list?(error)
           raise unless already_exists_on_list?(error)
         end
-      end.reduce({}, :merge) || {}
+      end
+      hash
     end
 
     def does_not_have_interest_interests_enabled?(error)

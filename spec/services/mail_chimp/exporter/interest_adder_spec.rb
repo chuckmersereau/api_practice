@@ -58,6 +58,25 @@ RSpec.describe MailChimp::Exporter::InterestAdder do
       )
       expect(mail_chimp_account.tags_details[list_id][:interest_category_id]).to eq 'grouping_two_id'
     end
+
+    it 'is fine if there are too many interests' do
+      allow(mock_interest_categories).to receive(:retrieve).and_return(
+        { 'categories' => [grouping_one] },
+        'categories' => [grouping_one, grouping_two]
+      )
+      allow(mock_interest_categories).to receive(:create).with(interest_categories_create_body)
+      allow(mock_interests).to receive(:retrieve).and_return(
+        'interests' => [{ 'name' => 'Tag_one', 'id' => 'NDZA' }]
+      )
+
+      # create a new exception that emulates mailchimp reaching the interest limit
+      exception = Gibbon::MailChimpError.new
+      allow(exception).to receive(:status_code).and_return(400)
+      allow(exception).to receive(:detail).and_return('Cannot have more than 2 interests per list')
+      allow(mock_interests).to receive(:create).with(interests_create_body).and_raise(exception)
+
+      expect { subject.add_tags_interests(%w(Tag_one Tag_two)) }.to_not raise_exception
+    end
   end
 
   context '#add_status_interests' do
