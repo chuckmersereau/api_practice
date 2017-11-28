@@ -695,7 +695,10 @@ describe Contact do
 
   context '#sync_with_mail_chimp' do
     context 'with mail_chimp account' do
-      let!(:mail_chimp_account) { create(:mail_chimp_account, account_list: account_list, primary_list_id: 'primary_list_id') }
+      let(:contact) { create(:contact, account_list: account_list, send_newsletter: 'Email') }
+      let!(:mail_chimp_account) do
+        create(:mail_chimp_account, account_list: account_list, primary_list_id: 'primary_list_id')
+      end
 
       before do
         person_and_email_address
@@ -737,7 +740,7 @@ describe Contact do
 
       it 'notifies the mail chimp account when a person is opted out' do
         expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
-          mail_chimp_account.id, 'primary_list_id', [contact.id]
+          mail_chimp_account.id, 'primary_list_id', []
         )
         contact.people.first.optout_enewsletter = true
         contact.save!

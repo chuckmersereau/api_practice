@@ -5,7 +5,8 @@ describe EmailAddress do
     let(:person) { create(:person) }
     let(:address) { 'test@example.com' }
 
-    include_examples 'updatable_only_when_source_is_mpdx_validation_examples', attributes: [:email, :remote_id, :location], factory_type: :email_address
+    include_examples 'updatable_only_when_source_is_mpdx_validation_examples',
+                     attributes: [:email, :remote_id, :location], factory_type: :email_address
 
     include_examples 'after_validate_set_source_to_mpdx_examples', factory_type: :email_address
 
@@ -94,7 +95,10 @@ describe EmailAddress do
     it 'expands the email field if it has multiple emails, makes only the first primary, keeps other attrs' do
       {
         { email: 'a@a.co', historic: true } => [{ email: 'a@a.co', historic: true }],
-        { email: 'a@a.co, b@b.co', location: 'a' } => [{ email: 'a@a.co', location: 'a' }, { email: 'b@b.co', location: 'a' }],
+        { email: 'a@a.co, b@b.co', location: 'a' } => [
+          { email: 'a@a.co', location: 'a' },
+          { email: 'b@b.co', location: 'a' }
+        ],
         { email: 'a@a.co; John Doe <b@b.co>', primary: true, location: 'b' } => [
           { email: 'a@a.co', primary: true, location: 'b' }, { email: 'b@b.co', primary: false, location: 'b' }
         ]
@@ -118,7 +122,8 @@ describe EmailAddress do
       email_address_two = create(:email_address, source: 'not mpdx', person: email_address_one.person)
       expect(email_address_two.valid_values).to eq(false)
       expect(email_address_two.source).to_not eq(EmailAddress::MANUAL_SOURCE)
-      email_address_three = create(:email_address, source: EmailAddress::MANUAL_SOURCE, person: email_address_one.person)
+      email_address_three =
+        create(:email_address, source: EmailAddress::MANUAL_SOURCE, person: email_address_one.person)
       expect(email_address_three.valid_values).to eq(true)
     end
   end
@@ -136,7 +141,15 @@ describe EmailAddress do
   describe '#sync_with_mail_chimp_account' do
     let!(:mail_chimp_account) { build(:mail_chimp_account, primary_list_id: 'primary_list_id') }
     let!(:account_list) { create(:account_list, mail_chimp_account: mail_chimp_account) }
-    let!(:contact) { create(:contact, primary_person: first_person, people: [second_person], account_list: account_list) }
+    let!(:contact) do
+      create(
+        :contact,
+        primary_person: first_person,
+        people: [second_person],
+        account_list: account_list,
+        send_newsletter: 'Email'
+      )
+    end
     let!(:first_person) { create(:person, primary_email_address: build(:email_address)) }
     let!(:second_person) { create(:person, email_addresses: [build(:email_address)]) }
 
