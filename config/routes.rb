@@ -204,7 +204,12 @@ Rails.application.routes.draw do
   get  'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post 'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
 
-  if Rails.env.development? || Rails.env.qa?
+  def user_constraint(request, attribute)
+    user_id = request.env.dig('rack.session', 'warden.user.user.key', 0, 0)
+    User.find_by(id: user_id)&.public_send(attribute)
+  end
+
+  constraints -> (request) { user_constraint(request, :developer) || Rails.env.development? } do
     mount Sidekiq::Web => '/sidekiq'
   end
 end
