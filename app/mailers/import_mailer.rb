@@ -1,7 +1,7 @@
 class ImportMailer < ApplicationMailer
   def success(import, successes = nil)
     user = import.user
-    return unless user
+    return unless user&.email
     @import = import
     @successes = successes
     I18n.locale = user.locale || 'en'
@@ -11,7 +11,7 @@ class ImportMailer < ApplicationMailer
 
   def failed(import, successes = nil, failures = nil)
     user = import.user
-    return unless user
+    return unless user&.email
     @import = import
     @successes = successes
     @failures = failures
@@ -24,7 +24,7 @@ class ImportMailer < ApplicationMailer
 
   def credentials_error(account)
     user = account.person
-    return unless user
+    return unless user&.email
     @account = account
 
     mail(to: user.email, subject: _('[MPDX] Your credentials for %{source} are invalid').localize % { source: account.organization.name })
