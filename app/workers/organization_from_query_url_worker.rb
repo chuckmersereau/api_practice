@@ -76,9 +76,16 @@ class OrganizationFromQueryUrlWorker
     section_attributes = {}
     SECTIONS.each do |key, section|
       next unless ini[key]
-      section_attributes["#{section}_url"] = ini[key]['Url'] if ini[key]['Url']
-      section_attributes["#{section}_params"] = ini[key]['Post'] if ini[key]['Post']
-      section_attributes["#{section}_oauth"] = ini[key]['OAuth'] if ini[key]['OAuth']
+      # This code will pick up all keys with a .2, etc at the end
+      keys = ini.map do |k, _v|
+        k.key.match?(/^#{key}[\.\d]*$/) ? k.key : nil
+      end.compact.sort
+      # The last value is saved (.2 is favored over .1)
+      keys.each do |k|
+        section_attributes["#{section}_url"] = ini[k]['Url'] if ini[k]['Url']
+        section_attributes["#{section}_params"] = ini[k]['Post'] if ini[k]['Post']
+        section_attributes["#{section}_oauth"] = ini[k]['OAuth'] if ini[k]['OAuth']
+      end
     end
     section_attributes
   end

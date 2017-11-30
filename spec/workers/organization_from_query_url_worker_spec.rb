@@ -55,9 +55,13 @@ RSpec.describe OrganizationFromQueryUrlWorker do
       described_class::SECTIONS.each do |key, section|
         it "sets the correct #{section}_attributes" do
           expect(organization.send("#{section}_url")).to eq ini[key]['Url']
-          expect(organization.send("#{section}_params")).to eq ini[key]['Post']
+          expect(organization.send("#{section}_params")).to eq ini[key]['Post'] unless key == 'DONATIONS'
           expect(organization.send("#{section}_oauth")).to eq ini[key]['OAuth']
         end
+      end
+
+      it 'sets the correct donation_params' do
+        expect(organization.donations_params).to eq ini['DONATIONS.3.4']['Post']
       end
     end
 
