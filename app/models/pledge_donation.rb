@@ -19,6 +19,7 @@ class PledgeDonation < ApplicationRecord
   end
 
   def all_donations_have_been_received?
-    pledge.amount <= pledge.donations.reload.to_a.sum(&:converted_amount)
+    # floating point comparison us yucky, converting to a BigDecimal should be a little better
+    pledge.amount.to_d <= pledge.donations.reload.to_a.sum(&:converted_amount).to_d
   end
 end

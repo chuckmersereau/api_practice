@@ -232,7 +232,7 @@ describe TntImport::GiftsImport do
           .and change { Donation.count }.from(0).to(2)
         pledge = Pledge.first
         donation = pledge.donations.first
-        expect(pledge.amount).to eq(25)
+        expect(pledge.amount).to eq(841)
         expect(pledge.amount_currency).to eq('USD')
         expect(pledge.expected_date.to_date).to eq(donation.donation_date.to_date)
         expect(pledge.contact).to eq(donation.donor_account.contacts.first)
