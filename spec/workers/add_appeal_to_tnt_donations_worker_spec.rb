@@ -23,13 +23,19 @@ RSpec.describe AddAppealToTntDonationsWorker do
       end
 
       it 'created related pledge' do
-        appeal.contacts << contact
-
         expect { described_class.new.perform(import.id) }.to change { Pledge.count }.by(1)
         pledge = Pledge.last
         expect(pledge.amount).to eq donation.reload.appeal_amount
         expect(pledge.appeal).to eq appeal
         expect(pledge.contact).to eq contact
+        expect(pledge).to be_processed
+      end
+
+      it 'created related AppealContact' do
+        expect { described_class.new.perform(import.id) }.to change { AppealContact.count }.by(1)
+        appeal_contact = AppealContact.last
+        expect(appeal_contact.appeal).to eq appeal
+        expect(appeal_contact.contact).to eq contact
       end
 
       it 'links based on date/amount/donor' do
@@ -38,6 +44,18 @@ RSpec.describe AddAppealToTntDonationsWorker do
         described_class.new.perform(import.id)
 
         expect(donation.reload.appeal).to eq appeal
+      end
+    end
+
+    context 'existing donation' do
+      it 'increases the pledge' do
+        appeal.contacts << contact
+        create(:donation, amount: 20, appeal_amount: 20, donation_date: '2005-06-01'.to_date, appeal: appeal,
+                          donor_account: donor_account, designation_account: designation)
+
+        expect { described_class.new.perform(import.id) }.to change { Pledge.count }.by(0)
+        pledge = Pledge.last
+        expect(pledge.amount).to eq 45
       end
     end
 

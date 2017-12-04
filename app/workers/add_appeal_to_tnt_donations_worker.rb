@@ -34,7 +34,16 @@ class AddAppealToTntDonationsWorker
     return if donation.blank? || donation.appeal_id.present?
 
     donation.update(appeal: appeal, appeal_amount: appeal_amount(gift_row))
+    ensure_summed_pledge_amount(donation)
     donation
+  end
+
+  def ensure_summed_pledge_amount(donation)
+    pledge = donation.reload.pledges.first
+    return unless pledge
+    donations = pledge.donations.to_a
+    return unless donations.many?
+    pledge.update(amount: donations.sum(&:appeal_amount))
   end
 
   def find_appeal(gift_row)
