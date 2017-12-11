@@ -134,7 +134,8 @@ class GoogleContactsIntegrator
       @cache.remove_g_contact(g_contact)
       cleanup_inactive_g_contact(g_contact_link, num_retries - 1)
     else
-      raise status.inspect
+      raise format('HTTP %p returned. Could not clean up inactive contact (after %d tries): %p',
+                   status, num_retries, g_contact)
     end
   rescue => e
     Rollbar.raise_or_notify(e)
