@@ -6,10 +6,10 @@ Rails.application.routes.draw do
 
   def user_constraint(request, attribute)
     # format: { warden.user.user.key => [[1], "$2a$10$KItas1NKsvunK0O5w9ioWu"] }
-    return unless request.session &&
-                  request.session['warden.user.user.key'] &&
-                  request.session['warden.user.user.key'][0]
-    user_id = request.session['warden.user.user.key'][0]
+    return unless request.env['rack.session'] &&
+                  request.env['rack.session']['warden.user.user.key'] &&
+                  request.env['rack.session']['warden.user.user.key'][0]
+    user_id = request.session['warden.user.user.key'][0].first
     User.find_by(id: user_id)&.public_send(attribute)
   end
 
