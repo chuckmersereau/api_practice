@@ -5,12 +5,8 @@ Rails.application.routes.draw do
   mount Auth::Engine, at: '/', constraints: {subdomain: 'auth'}
 
   def user_constraint(request, attribute)
-    # format: { warden.user.user.key => [[1], "$2a$10$KItas1NKsvunK0O5w9ioWu"] }
-    return unless request.env['rack.session'] &&
-                  request.env['rack.session']['warden.user.user.key'] &&
-                  request.env['rack.session']['warden.user.user.key'][0]
-    user_id = request.session['warden.user.user.key'][0]
-    User.find_by(id: user_id)&.public_send(attribute)
+    binding.pry
+    request.env['warden'].user(:user)&.public_send(attribute)
   end
 
   constraints -> (request) { user_constraint(request, :developer) || Rails.env.development? } do
