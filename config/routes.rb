@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   mount Auth::Engine, at: '/', constraints: {subdomain: 'auth'}
 
   def user_constraint(request, attribute)
-    binding.pry
     request.env['warden'].user(:user)&.public_send(attribute)
   end
 
