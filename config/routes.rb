@@ -2,13 +2,9 @@ require 'sidekiq/pro/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  mount Auth::Engine, at: '/', constraints: {subdomain: 'auth'}
+  mount Auth::Engine, at: '/', constraints: { subdomain: 'auth' }
 
-  def user_constraint(request, attribute)
-    request.env['warden'].user(:user)&.public_send(attribute)
-  end
-
-  constraints -> (request) { user_constraint(request, :developer) || Rails.env.development? } do
+  authenticated :user, ->(u) { u.developer } do
     mount Sidekiq::Web => '/sidekiq'
   end
 
