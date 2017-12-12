@@ -1,8 +1,11 @@
 class Donation < ApplicationRecord
+  audited on: [:destroy]
+
   belongs_to :donor_account
   belongs_to :designation_account
   belongs_to :appeal
 
+  has_many :contacts, through: :donor_account
   has_many :pledge_donations, dependent: :destroy
   has_many :pledges, through: :pledge_donations
 
@@ -46,6 +49,7 @@ class Donation < ApplicationRecord
   scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
 
   after_create :update_totals
+  after_save :update_contacts, if: :donor_account_id_changed?, on: :update
   after_save :update_appeal_relations
   after_destroy :reset_totals
 
@@ -85,6 +89,11 @@ class Donation < ApplicationRecord
 
   private
 
+  def update_contacts
+    DonorAccount.find(donor_account_id_was)&.contacts&.each(&:save) if donor_account_id_was
+    contacts.each(&:save)
+  end
+
   def update_appeal_relations
     add_appeal_contacts
 
@@ -98,7 +107,7 @@ class Donation < ApplicationRecord
   end
 
   def update_totals(reset: false)
-    donor_account.update_donation_totals(self, reset: reset)
+    donor_account&.update_donation_totals(self, reset: reset)
     designation_account&.update_donation_totals(self, reset: reset)
   end
 

@@ -1,4 +1,6 @@
 class AccountListInvite < ApplicationRecord
+  audited associated_with: :account_list
+
   belongs_to :account_list
   belongs_to :invited_by_user, class_name: 'User'
   belongs_to :accepted_by_user, class_name: 'User'

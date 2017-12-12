@@ -2,6 +2,8 @@ class Appeal < ApplicationRecord
   include Filtering
   include Filtering::Contacts
 
+  audited associated_with: :account_list, except: [:updated_at]
+
   attr_accessor :inclusion_filter, :exclusion_filter
   belongs_to :account_list
   has_one :mail_chimp_account, through: :account_list
@@ -9,8 +11,8 @@ class Appeal < ApplicationRecord
   has_many :contacts, through: :appeal_contacts, source: :contact
   has_many :excluded_appeal_contacts, dependent: :delete_all
   has_many :excluded_contacts, through: :excluded_appeal_contacts, source: :contact
-  has_many :donations
-  has_many :pledges
+  has_many :donations, dependent: :nullify
+  has_many :pledges, dependent: :delete_all
   validates :name, :account_list_id, presence: true
   after_create :create_contact_associations
   default_scope { order(created_at: :desc) }

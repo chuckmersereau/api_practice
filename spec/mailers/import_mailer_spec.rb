@@ -57,17 +57,48 @@ describe ImportMailer do
         expect(mail.attachments.size).to eq(0)
       end
     end
+
+    context 'import user has no email addresses' do
+      let(:import) { create(:tnt_import) }
+
+      before { import.user.email_addresses = [] }
+
+      it 'does not raise ArgumentError' do
+        expect { ImportMailer.failed(import).deliver_now! }.not_to raise_error
+      end
+    end
   end
 
   describe '#success' do
+    let(:email_address) { build(:email_address, email: 't@t.co') }
+    let(:user) { double(email: email_address, locale: 'en') }
+    let(:import) { double(user: user, user_friendly_source: 'tnt') }
+    let(:mail) { ImportMailer.success(import) }
+
     it 'assigns to field correctly' do
-      email_address = build(:email_address, email: 't@t.co')
-      user = double(email: email_address, locale: 'en')
-      import = double(user: user, user_friendly_source: 'tnt')
-
-      mail = ImportMailer.success(import)
-
       expect(mail.to).to eq ['t@t.co']
+    end
+
+    context 'import user has no email addresses' do
+      let(:user) { double(email: nil, locale: 'en') }
+
+      it 'does not raise ArgumentError' do
+        expect { mail.deliver_now! }.not_to raise_error
+      end
+    end
+  end
+
+  describe '#success' do
+    let(:user) { create(:user) }
+    let(:account) { create(:organization_account, person: user) }
+    let(:mail) { ImportMailer.credentials_error(account) }
+
+    context 'import user has no email addresses' do
+      before { user.email_addresses = [] }
+
+      it 'does not raise ArgumentError' do
+        expect { mail.deliver_now! }.not_to raise_error
+      end
     end
   end
 end

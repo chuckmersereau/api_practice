@@ -288,4 +288,15 @@ describe Appeal do
       expect { subject.save }.to_not raise_exception
     end
   end
+
+  describe '#destroy' do
+    let(:donor_account) { create(:donor_account, contacts: [contact]) }
+    let!(:donation) { create(:donation, donor_account: donor_account, appeal: subject) }
+
+    it 'nullifies related donations' do
+      subject.destroy
+
+      expect(donation.reload.appeal_id).to be nil
+    end
+  end
 end

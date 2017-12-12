@@ -205,7 +205,11 @@ Rails.application.routes.draw do
   post 'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
 
   def user_constraint(request, attribute)
-    user_id = request.env.dig('rack.session', 'warden.user.user.key', 0, 0)
+    # format: { warden.user.user.key => [[1], "$2a$10$KItas1NKsvunK0O5w9ioWu"] }
+    return unless request.session &&
+                  request.session['warden.user.user.key'] &&
+                  request.session['warden.user.user.key'][0]
+    user_id = request.session['warden.user.user.key'][0]
     User.find_by(id: user_id)&.public_send(attribute)
   end
 

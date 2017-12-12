@@ -3,6 +3,8 @@ require 'smarty_streets'
 class Address < ApplicationRecord
   include Concerns::AfterValidationSetSourceToMPDX
 
+  audited associated_with: :addressable, except: [:updated_at, :addressable_type]
+
   belongs_to :addressable, polymorphic: true, touch: true
   belongs_to :master_address
   belongs_to :source_donor_account, class_name: 'DonorAccount'

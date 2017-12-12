@@ -1,4 +1,6 @@
 class ActivityContact < ApplicationRecord
+  audited associated_with: :activity, on: [:destroy]
+
   attr_accessor :skip_task_counter_update
   belongs_to :activity
   belongs_to :task, foreign_key: 'activity_id'

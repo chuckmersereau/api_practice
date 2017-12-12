@@ -1,4 +1,6 @@
 class AppealContact < ApplicationRecord
+  audited associated_with: :appeal, on: [:destroy]
+
   belongs_to :appeal, foreign_key: 'appeal_id'
   belongs_to :contact
   validates :appeal, :contact, presence: true

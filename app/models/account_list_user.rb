@@ -4,6 +4,8 @@ class AccountListUser < ApplicationRecord
 
   after_destroy :change_user_default_account_list_if_needed
 
+  audited on: [:destroy]
+
   private
 
   def change_user_default_account_list_if_needed

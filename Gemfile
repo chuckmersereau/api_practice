@@ -13,6 +13,7 @@ gem 'activesupport-json_encoder', '~> 1.1.0'
 gem 'acts-as-taggable-on', '~> 4.0.0'
 gem 'assignable_values', '~> 0.11.2'
 gem 'attributes_history', '~> 0.0.3'
+gem 'audited', '~> 4.5.0'
 # Rubyzip before 1.2.1 has a directory traversal vulnerability: CVE-2017-5946
 gem 'axlsx',
     git: 'https://github.com/randym/axlsx.git',
@@ -27,6 +28,7 @@ gem 'deadlock_retry', '~> 1.2.0'
 gem 'devise', '~> 4.2.1'
 gem 'display_case', '= 0.0.5'
 gem 'dotenv-rails', '~> 2.1.1'
+gem 'elasticsearch-persistence', '~> 5.0.1'
 gem 'email_reply_parser', '~> 0.5.9'
 gem 'email_validator', '~> 1.6.0'
 gem 'fb_graph', '~> 2.6.0'

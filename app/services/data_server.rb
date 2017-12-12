@@ -358,6 +358,10 @@ class DataServer
 
       response
     end
+  rescue OpenSSL::SSL::SSLError => e
+    raise DataServerError,
+          format('Could not securely connect to host %p. Reason: %s',
+                 URI(url).host, e)
   end
 
   def add_or_update_primary_contact(account_list, line, donor_account)

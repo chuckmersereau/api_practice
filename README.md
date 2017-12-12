@@ -100,6 +100,20 @@ There are two different test sets that we are running:
 
 Run `bundle exec rubocop -a` to attempt auto-correction of your Rubocop offenses.
 
+### ElasticSearch Change Auditing
+
+Model change auditing in ElasticSearch can be enabled by setting the `ELASTICSEARCH_URL` value in your .env.local. 
+
+To run ElasticSearch locally:
+- start it with the `start_es.sh` script
+- set `ELASTICSEARCH_URL=localhost` in .env.local
+- restart your rails server
+- [start a sidekiq instance](#sidekiq)
+- Once logging has started you can view the logs at <http://localhost:5601/app/kibana>
+- Kibana will require you set up an index pattern, we suggest using `mpdx-development-*` as the index pattern and `created_at` from the time filter. (Reminder: it will not allow you to create an index pattern until you have pushed into ElasticSearch)
+- to stop the ElasticSearch container, run `docker kill elasticsearch-local`
+
+If start_es.sh errors with 'Error response from daemon: Conflict. The container name "/elasticsearch-local" is already in use', run `docker rm elasticsearch-local`.
 
 ## Branches
 

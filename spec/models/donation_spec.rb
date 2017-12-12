@@ -4,13 +4,41 @@ describe Donation do
   let(:designation_account) { create(:designation_account) }
   let(:donation) { create(:donation, donation_date: Date.new(2015, 4, 5), designation_account: designation_account) }
 
-  context '#localized_date' do
+  describe '#localized_date' do
     it 'is just date' do
       expect(donation.localized_date).to eq 'April 05, 2015'
     end
   end
 
-  context 'update_related_pledge' do
+  describe '#update_contacts' do
+    let(:contact) { create(:contact) }
+    let(:donor_account) { create(:donor_account, contacts: [contact]) }
+
+    context 'donor_account_id is updated' do
+      let(:donation) { create(:donation, designation_account: designation_account, donor_account: donor_account) }
+      let(:new_contact) { create(:contact) }
+      let(:new_donor_account) { create(:donor_account, contacts: [new_contact]) }
+
+      it 'updates old donor account contacts and new donor account contacts' do
+        allow(DonorAccount).to receive(:find).with(donor_account.id).and_return(donor_account)
+        expect(contact).to receive(:save).once
+        allow(donation).to receive(:contacts).and_return([new_contact])
+        expect(new_contact).to receive(:save).once
+        donation.update(donor_account: new_donor_account)
+      end
+    end
+
+    context 'donor_account_id is added' do
+      let(:donation) { create(:donation, designation_account: designation_account, donor_account: nil) }
+
+      it 'updates donor account contacts' do
+        expect_any_instance_of(Contact).to receive(:save).once.and_call_original
+        donation.update(donor_account: donor_account)
+      end
+    end
+  end
+
+  describe '#update_related_pledge' do
     let(:pledge)   { create(:pledge, amount: 100.00) }
     let(:donation) { build(:donation) }
     let!(:persisted_donation) { create(:donation) }
@@ -43,7 +71,7 @@ describe Donation do
     end
   end
 
-  context 'add_appeal_contacts' do
+  describe '#add_appeal_contacts' do
     let(:appeal) { create(:appeal) }
 
     it 'adds a contact to the appeal if that contacts donation is added' do

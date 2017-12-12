@@ -1,4 +1,6 @@
 class Pledge < ApplicationRecord
+  audited associated_with: :appeal, on: [:destroy]
+
   belongs_to :account_list
   belongs_to :appeal
   belongs_to :contact

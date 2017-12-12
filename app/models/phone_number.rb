@@ -3,6 +3,8 @@ class PhoneNumber < ApplicationRecord
   include HasPrimary
   @@primary_scope = :person
 
+  audited associated_with: :person, except: [:updated_at, :global_registry_id]
+
   LOCATIONS = [_('Mobile'), _('Home'), _('Work')].freeze
 
   PERMITTED_ATTRIBUTES = [:created_at,
