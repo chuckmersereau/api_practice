@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     return unless request.env['rack.session'] &&
                   request.env['rack.session']['warden.user.user.key'] &&
                   request.env['rack.session']['warden.user.user.key'][0]
-    user_id = request.session['warden.user.user.key'][0].first
+    user_id = request.session['warden.user.user.key'][0]
     User.find_by(id: user_id)&.public_send(attribute)
   end
 
