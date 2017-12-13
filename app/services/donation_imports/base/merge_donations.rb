@@ -4,22 +4,15 @@
 
 class DonationImports::Base
   class MergeDonations
-    attr_accessor :donations, :attributes, :verbose
+    attr_accessor :donations, :attributes
 
-    def initialize(donations, verbose: false)
+    def initialize(donations)
       @donations = donations.to_a
       @attributes = {}.with_indifferent_access
-      @verbose = verbose
     end
 
     def merge
-      if donations.size <= 1
-        if verbose
-          log { format('Skipping single Donation<id: %p>', donations.first.id) }
-        end
-        return donations.first
-      end
-
+      return donations.first if donations.size <= 1
       find_attributes_from_all_donations
       merge_donations_into_one
     end
@@ -39,24 +32,9 @@ class DonationImports::Base
     end
 
     def merge_donations_into_one
-      log_merges if verbose
-
       donations[1..-1].each(&:destroy)
       donations.first.update!(attributes)
       donations.first
-    end
-
-    def log_merges
-      log do
-        format('Merging Donations<ids: %p> into Donation<id: %p> with attributes <%p>',
-               donations[1..-1].map(&:id), donations.first.id, attributes)
-      end
-    end
-
-    def log(&blk)
-      # Because the sidekiq config sets the logging level to Fatal, log to
-      # fatal so that we can see these in the logs
-      Rails.logger.tagged('DonationDups[merge]') { Rails.logger.fatal(&blk) }
     end
   end
 end

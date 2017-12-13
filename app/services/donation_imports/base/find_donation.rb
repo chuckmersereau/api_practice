@@ -4,12 +4,11 @@
 
 class DonationImports::Base
   class FindDonation
-    attr_accessor :designation_profile, :attributes, :verbose
+    attr_accessor :designation_profile, :attributes
 
-    def initialize(designation_profile:, attributes:, verbose: false)
+    def initialize(designation_profile:, attributes:)
       @designation_profile = designation_profile
       @attributes = attributes.with_indifferent_access
-      @verbose = verbose
     end
 
     def find_and_merge
@@ -20,13 +19,6 @@ class DonationImports::Base
         # One way this could happen is if the donation was imported
         # from Tnt before we started storing the tnt_id.
         donations = find_donations_by_donor_and_amount_and_date
-
-        if verbose
-          log do
-            format('Could not find Donations by #remote_id(%p), but found %d via amount and date: Donations<ids: %p>',
-                   attributes[:remote_id], donations.size, donations.map(&:id))
-          end
-        end
       end
 
       # The donation may have ended up in the incorrect designation account, or in multiple
@@ -34,21 +26,7 @@ class DonationImports::Base
       # does not know which designation account to put it in, so it makes up a new one.
       # Since we now know the correct designation account (in attributes)
       # we will correct the error by running a merge process.
-      MergeDonations.new(donations, verbose: verbose).merge
-    end
-
-    protected
-
-    # because the DesignationAccount created when the user imports from Tnt was created
-    # un-associated to a DesignationProfile, we need to also look at those 'placeholder' accounts
-    def searchable_designation_ids
-      profile_accounts = designation_profile.designation_accounts.pluck(:id)
-
-      account_list = designation_profile.account_list
-      return profile_accounts unless account_list
-      placeholder_accounts = account_list.designation_accounts.where(designation_number: nil).pluck(:id)
-
-      profile_accounts + placeholder_accounts
+      MergeDonations.new(donations).merge
     end
 
     private
@@ -67,8 +45,16 @@ class DonationImports::Base
       Donation.where(designation_account_id: searchable_designation_ids)
     end
 
-    def log(&blk)
-      Rails.logger.tagged('DonationDups[find]') { Rails.logger.debug(&blk) }
+    # because the DesignationAccount created when the user imports from Tnt was created
+    # un-associated to a DesignationProfile, we need to also look at those 'placeholder' accounts
+    def searchable_designation_ids
+      profile_accounts = designation_profile.designation_accounts.pluck(:id)
+
+      account_list = designation_profile.account_list
+      return profile_accounts unless account_list
+      placeholder_accounts = account_list.designation_accounts.where(designation_number: nil).pluck(:id)
+
+      profile_accounts + placeholder_accounts
     end
   end
 end
