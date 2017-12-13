@@ -3,6 +3,11 @@ require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
   mount Auth::Engine, at: '/', constraints: {subdomain: 'auth'}
+
+  authenticated :user, ->(u) { u.developer } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   namespace :api do
     post :graphql, to: 'graphql#create'
 
@@ -203,17 +208,4 @@ Rails.application.routes.draw do
 
   get  'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post 'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
-
-  def user_constraint(request, attribute)
-    # format: { warden.user.user.key => [[1], "$2a$10$KItas1NKsvunK0O5w9ioWu"] }
-    return unless request.session &&
-                  request.session['warden.user.user.key'] &&
-                  request.session['warden.user.user.key'][0]
-    user_id = request.session['warden.user.user.key'][0]
-    User.find_by(id: user_id)&.public_send(attribute)
-  end
-
-  constraints -> (request) { user_constraint(request, :developer) || Rails.env.development? } do
-    mount Sidekiq::Web => '/sidekiq'
-  end
 end
