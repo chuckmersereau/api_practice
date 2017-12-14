@@ -127,7 +127,7 @@ RSpec.describe UserFromCasService, type: :service do
   end
 
   def stub_cas_requests
-    url           = "https://thekey.me/cas/p3/serviceValidate?service=#{mock_service}&ticket=#{mock_ticket}"
+    url           = "#{ENV['CAS_BASE_URL']}/p3/serviceValidate?service=#{mock_service}&ticket=#{mock_ticket}"
     data_filepath = Rails.root.join('spec', 'fixtures', 'cas', 'successful_ticket_validation_response_body.xml')
     response_body = File.read(data_filepath)
 

@@ -1,15 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe CasTicketValidatorService, type: :service do
-  let!(:service) { CasTicketValidatorService.new(ticket: 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a', service: 'http://my.service') }
+  let!(:service) do
+    described_class.new(ticket: 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a', service: 'http://my.service')
+  end
 
   after do
-    ENV['CAS_BASE_URL'] = 'https://thekey.me/cas'
+    ENV['CAS_BASE_URL'] = 'https://stage.thekey.me/cas'
   end
 
   describe '#initialize' do
     it 'initializes attributes successfully' do
-      service = CasTicketValidatorService.new(ticket: 'test-ticket', service: 'http://my.service')
+      service = described_class.new(ticket: 'test-ticket', service: 'http://my.service')
       expect(service.ticket).to eq('test-ticket')
       expect(service.service).to eq('http://my.service')
     end
@@ -17,13 +19,26 @@ RSpec.describe CasTicketValidatorService, type: :service do
 
   context 'invalid ticket' do
     before do
-      stub_request(:get, 'https://thekey.me/cas/p3/serviceValidate?service=http://my.service&ticket=ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a')
-        .to_return(status: 200, body: File.open(Rails.root.join('spec', 'fixtures', 'cas', 'invalid_ticket_validation_response_body.xml')).read)
+      stub_request(
+        :get,
+        "#{ENV['CAS_BASE_URL']}/p3/serviceValidate?"\
+        'service=http://my.service&ticket=ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a'
+      ).to_return(
+        status: 200,
+        body: File.open(
+          Rails.root.join('spec', 'fixtures', 'cas', 'invalid_ticket_validation_response_body.xml')
+        ).read
+      )
     end
 
     describe '#validate' do
       it 'raises an authentication error with a message' do
-        expect { service.validate }.to raise_error Exceptions::AuthenticationError, "INVALID_TICKET: Ticket 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a' not recognized"
+        expect { service.validate }.to(
+          raise_error(
+            Exceptions::AuthenticationError,
+            "INVALID_TICKET: Ticket 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a' not recognized"
+          )
+        )
       end
     end
 
@@ -36,8 +51,16 @@ RSpec.describe CasTicketValidatorService, type: :service do
 
   context 'valid ticket' do
     before do
-      stub_request(:get, 'https://thekey.me/cas/p3/serviceValidate?service=http://my.service&ticket=ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a')
-        .to_return(status: 200, body: File.open(Rails.root.join('spec', 'fixtures', 'cas', 'successful_ticket_validation_response_body.xml')).read)
+      stub_request(
+        :get,
+        "#{ENV['CAS_BASE_URL']}/p3/serviceValidate?"\
+        'service=http://my.service&ticket=ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a'
+      ).to_return(
+        status: 200,
+        body: File.open(
+          Rails.root.join('spec', 'fixtures', 'cas', 'successful_ticket_validation_response_body.xml')
+        ).read
+      )
     end
 
     describe '#validate' do
@@ -82,12 +105,22 @@ RSpec.describe CasTicketValidatorService, type: :service do
   describe 'depends on CAS_BASE_URL environment variable' do
     it 'raises an error if the variable is not present' do
       ENV['CAS_BASE_URL'] = nil
-      expect { service.validate }.to raise_error(RuntimeError, 'expected CAS_BASE_URL environment variable to be present and using https')
+      expect { service.validate }.to(
+        raise_error(
+          RuntimeError,
+          'expected CAS_BASE_URL environment variable to be present and using https'
+        )
+      )
     end
 
     it 'raises an error if the url is not secure' do
-      ENV['CAS_BASE_URL'] = 'http://thekey.me/cas'
-      expect { service.validate }.to raise_error(RuntimeError, 'expected CAS_BASE_URL environment variable to be present and using https')
+      ENV['CAS_BASE_URL'] = 'http://stage.thekey.me/cas'
+      expect { service.validate }.to(
+        raise_error(
+          RuntimeError,
+          'expected CAS_BASE_URL environment variable to be present and using https'
+        )
+      )
     end
   end
 end
