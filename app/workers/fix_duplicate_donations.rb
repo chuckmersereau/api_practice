@@ -21,19 +21,17 @@ class FixDuplicateDonations
   def log_worker_progress
     pre_count = donations_scope.count
     start_time = Time.zone.now
-    log { format('Started at %p', start_time) }
+    log(format('Started at %p', start_time))
 
     yield
 
     post_count = donations_scope.count
     changed_ids = donations_scope.where('updated_at >= ?', start_time).pluck(:id)
 
-    log { format('Finished Job after %d seconds', Time.zone.now - start_time) }
-    log do
-      format('Donation.count: before<%p>, after<%p>, delta<%p>',
-             pre_count, post_count, pre_count - post_count)
-    end
-    log { format('Updated Donations<ids: %p>', changed_ids) }
+    log(format('Finished Job after %d seconds', Time.zone.now - start_time))
+    log(format('Donation.count: before<%p>, after<%p>, delta<%p>',
+               pre_count, post_count, pre_count - post_count))
+    log(format('Updated Donations<ids: %p>', changed_ids))
   end
 
   def cleanup_donation(d)
@@ -135,9 +133,9 @@ class FixDuplicateDonations
      support@mpdx.org".gsub(/ +/, ' ')
   end
 
-  def log(&blk)
+  def log(message)
     # Because the sidekiq config sets the logging level to Fatal, log to fatal
     # so that we can see these in the logs
-    Rails.logger.tagged('DonationDups[worker]') { Rails.logger.fatal(&blk) }
+    Rails.logger.fatal("DonationDups[worker]: #{message}")
   end
 end
