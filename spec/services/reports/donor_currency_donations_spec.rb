@@ -31,6 +31,13 @@ RSpec.describe Reports::DonorCurrencyDonations, type: :model do
   end
 
   before do
+    account_list.update(salary_currency: 'CAD')
+    create(:currency_rate, code: 'EUR', exchanged_on: Date.current, rate: 0.88)
+    create(:currency_rate, code: 'CAD', exchanged_on: Date.current - 1.month, rate: 0.69)
+    create(:currency_rate, code: 'EUR', exchanged_on: 13.months.ago.end_of_month - 1.day, rate: 0.5)
+  end
+
+  before do
     account_list.designation_accounts << designation_account
     contact.donor_accounts << donor_account
   end
@@ -67,6 +74,11 @@ RSpec.describe Reports::DonorCurrencyDonations, type: :model do
     it 'should sum donations by months' do
       expect(totals[:months].select(&:zero?).size).to eq 12
       expect(totals[:months].select { |m| m == 3 }.size).to eq 1
+    end
+
+    it 'should convert donation totals to salary currency' do
+      expect(subject['EUR'][:totals][:year_converted]).to eq 1.568181818
+      expect(subject['CAD'][:totals][:year_converted]).to eq 3.0
     end
 
     it 'should include each donation record' do
