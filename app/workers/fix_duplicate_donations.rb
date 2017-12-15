@@ -93,9 +93,11 @@ class FixDuplicateDonations
     match_attributes = donation.attributes.with_indifferent_access.slice(*MATCH_ATTRIBUTES)
     match_attributes[:appeal_id] = [donation.appeal_id, nil] if donation.appeal_id
 
-    find_contact(donation).donations
-                          .where(match_attributes)
-                          .where.not(designation_account_id: donation.designation_account_id)
+    contact = find_contact(donation)
+    return unless contact
+    contact.donations
+           .where(match_attributes)
+           .where.not(designation_account_id: donation.designation_account_id)
   end
 
   def link_appeal(donation, matches)
@@ -109,7 +111,7 @@ class FixDuplicateDonations
 
   def send_email
     return if @cleaned_donations.empty?
-    addresses = account_list.users.collect(&:email).uniq.compact
+    addresses = account_list.users.collect(&:email_address).uniq.compact
     return if addresses.empty?
     mail = ActionMailer::Base.mail(from: 'support@mpdx.org',
                                    to: addresses,
