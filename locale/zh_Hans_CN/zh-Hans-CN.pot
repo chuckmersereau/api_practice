@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-10-04 13:46+0000\n"
-"PO-Revision-Date: 2017-10-04 13:46+0000\n"
+"POT-Creation-Date: 2017-12-04 15:05+0000\n"
+"PO-Revision-Date: 2017-12-04 15:05+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: zh_Hans_CN\n"
@@ -11,29 +11,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "%{contact_name} just gave their first gift. Send them a Thank You."
-msgstr "%{contact_name} 给了他们的第一笔奉献支持。向他们发送感谢信。"
-
-msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
-msgstr "%{contact_name} 在一个月内有预期的奉献支持。 联系跟进。"
-
-msgid "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
-msgstr "\"显示 #{b}%{count}#{eb}的{b}%{from}#{sp}-#{sp}%{to}#{eb} \""
-
-msgid "%{contact_name} seems to have missed a gift. Call to follow up."
-msgstr "%{contact_name} 似乎忘记了给奉献。 打电话跟进。"
-
-msgid "\"Task scheduled for #{ l(@task.start_at) }:\""
-msgstr "“为＃{l（@ task.start_at）}的计划安排任务：”"
-
-msgid "%{number} ext %{extension}"
-msgstr "%{number} 延伸 %{extension}"
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr "被指定为 \"%{appeal_name}\" 筹款需求。"
 
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "\"%{name}\" (支持者 #%{account_number})"
 
-msgid "%{org_name} said we have the wrong password for your account.\n\nPlease try updating it here: %{link}"
-msgstr "%{org_name} 表示我们拥有的您的帐户密码是错误的。\n\n请尝试在此更新：%{link}"
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr "%(该任务在TntConnect中被赋予了类型“#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+
+msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
+msgstr "%{contact_name} 在一个月内有预期的奉献支持。 联系跟进。"
+
+msgid "%{contact_name} just gave their first gift. Send them a Thank You."
+msgstr "%{contact_name} 给了他们的第一笔奉献支持。向他们发送感谢信。"
+
+msgid "%{contact_name} seems to have missed a gift. Call to follow up."
+msgstr "%{contact_name} 似乎忘记了给奉献。 打电话跟进。"
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr "%{number_of_failed_contacts} 联系人无法导入。"
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr "%{number_of_successful_contacts} 联系人成功导入。"
+
+msgid "%{number} ext %{extension}"
+msgstr "%{number} 延伸 %{extension}"
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr "%{org_name} 表示我们拥有的您的账户密码是错误的。"
+
+msgid "-- All --"
+msgstr "--全部--"
+
+msgid "-- All Active --"
+msgstr "-- 全部活跃的 --"
 
 msgid "-- All Hidden --"
 msgstr "--全部隐藏--"
@@ -44,41 +56,38 @@ msgstr "-- 任何 --"
 msgid "-- Do not ask --"
 msgstr "-- 不要询问 --"
 
-msgid "-- Unspecified --"
-msgstr "-- 未指定 --"
+msgid "-- Has referrer --"
+msgstr "--有推荐人--"
 
 msgid "-- None --"
 msgstr "-- 无 --"
 
-msgid "... Show More"
-msgstr "... 显示更多"
-
-msgid "1 hour before"
-msgstr "一个小时前"
+msgid "-- Unspecified --"
+msgstr "-- 未指定 --"
 
 msgid "1 day before"
-msgstr "一天前"
+msgstr "1天前"
+
+msgid "1 hour before"
+msgstr "1小时前"
 
 msgid "1 week before"
-msgstr "一周前"
+msgstr "1周前"
 
 msgid "15 minutes before"
 msgstr "15分钟前"
 
 msgid "2 days before"
-msgstr "两天前"
+msgstr "2天前"
+
+msgid "2 hours before"
+msgstr "2小时前"
 
 msgid "30 minutes before"
 msgstr "30分钟前"
 
-msgid "2 hours before"
-msgstr "两个小时前"
-
 msgid "5 minutes before"
 msgstr "5分钟前"
-
-msgid "Accept MPDX Account Invite"
-msgstr "接受MPDX帐户邀请"
 
 msgid "Account List"
 msgstr "账户清单"
@@ -95,44 +104,41 @@ msgstr "添加另一个账户"
 msgid "Address"
 msgstr "地址"
 
-msgid "Afrikaans"
-msgstr "南非荷兰语"
-
 msgid "Address No Longer Valid"
 msgstr "地址不再有效"
-
-msgid "Annual"
-msgstr "每年"
-
-msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
-msgstr "您组织中的另一个联系人已经拥有您尝试分配给此联系人的捐助者帐号。"
 
 msgid "All"
 msgstr "全部"
 
+msgid "Annual"
+msgstr "每年"
+
 msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
-msgstr "您组织中的另一个联系人已经拥有您尝试分配给此联系人的捐助者帐号。 请让它更独特。"
+msgstr "您机构中的另一个联系人已经拥有您尝试分配给此联系人的支持者帐号。 请让这个账号更特别些。"
+
+msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
+msgstr "您组织中的另一个联系人已经拥有您尝试分配给此联系人的捐助者帐号。"
 
 msgid "Appeal"
-msgstr "要求款项"
+msgstr "筹款需求"
 
 msgid "Appointment"
 msgstr "预约"
 
-msgid "Aunt"
-msgstr "阿姨"
+msgid "Appointment Scheduled"
+msgstr "已安排的约定会面"
+
+msgid "Are marked as do not ask for appeals"
+msgstr "被标记为不要寻求筹款"
 
 msgid "Ask in Future"
 msgstr "以后再问"
 
-msgid "Appointment Scheduled"
-msgstr "已安排的约定会面"
+msgid "Aunt"
+msgstr "阿姨"
 
 msgid "Average"
 msgstr "平均"
-
-msgid "Arabic"
-msgstr "阿拉伯语"
 
 #. "Avg." is an abbreviation for "Average"
 msgid "Avg."
@@ -141,38 +147,20 @@ msgstr "平均"
 msgid "Balance: %{balance}"
 msgstr "余额：%{balance}"
 
-msgid "Belarusian"
-msgstr "白俄罗斯语"
-
 msgid "Both"
 msgstr "（两个）都"
 
 msgid "Brother"
 msgstr "弟兄"
 
-msgid "Browser:"
-msgstr "浏览器："
-
 msgid "Business"
 msgstr "事情"
-
-msgid "Bulgarian"
-msgstr "保加利亚语"
-
-msgid "Call for Decision"
-msgstr "电话询问决定"
-
-msgid "Catalan"
-msgstr "加泰罗尼亚语"
 
 msgid "Call"
 msgstr "电话"
 
-msgid "Chinese (Simplified)"
-msgstr "中文（简体）"
-
-msgid "Chinese (Traditional)"
-msgstr "中文（繁体）"
+msgid "Call for Decision"
+msgstr "电话询问决定"
 
 msgid "Church"
 msgstr "教会"
@@ -180,14 +168,11 @@ msgstr "教会"
 msgid "City"
 msgstr "城市"
 
-msgid "Click here to download the file"
-msgstr "点击此处下载文件"
-
-msgid "Click to see all balances"
-msgstr "点击查看所有余额"
-
 msgid "Commitment"
 msgstr "委身的支持"
+
+msgid "Commitment Amount"
+msgstr "委身支持的金额"
 
 msgid "Commitment Currency"
 msgstr "委身支持的货币"
@@ -198,9 +183,6 @@ msgstr "委身支持的详细信息"
 msgid "Commitment Frequency"
 msgstr "委身支持的频率"
 
-msgid "Commitment Amount"
-msgstr "委身支持的金额"
-
 msgid "Commitment Received"
 msgstr "已收到的委身支持"
 
@@ -210,17 +192,44 @@ msgstr "公司"
 msgid "Completed"
 msgstr "完成"
 
+msgid "Contact Church"
+msgstr "联系的教会"
+
+msgid "Contact Commitment Details"
+msgstr "联系人委身支持的详细信息"
+
+msgid "Contact Details"
+msgstr "联系细详信息"
+
+msgid "Contact Gift Details"
+msgstr "联系人奉献支持详细信息"
+
 msgid "Contact Information"
 msgstr "联系信息"
 
-msgid "Contact Details"
-msgstr "联系细详细信息"
+msgid "Contact Likely To Give"
+msgstr "联系人支持可能性大"
 
 msgid "Contact Location"
-msgstr "联系人地点"
+msgstr "联系位置"
 
 msgid "Contact Name"
 msgstr "联系人姓名"
+
+msgid "Contact Newsletter"
+msgstr "联系人代祷信"
+
+msgid "Contact Referrer"
+msgstr "联系推荐人"
+
+msgid "Contact Status"
+msgstr "联系人状态"
+
+msgid "Contact Timezone"
+msgstr "联系人时区"
+
+msgid "Contact Type"
+msgstr "联系人类型"
 
 msgid "Contact for Appointment"
 msgstr "联系预约"
@@ -237,17 +246,8 @@ msgstr "表/堂姐妹"
 msgid "Cousin (Male)"
 msgstr "表/堂兄弟"
 
-msgid "Croatian"
-msgstr "克罗地亚语"
-
 msgid "Currency"
 msgstr "货币"
-
-msgid "Danish"
-msgstr "丹麦语"
-
-msgid "Czech"
-msgstr "捷克语"
 
 msgid "Date Range"
 msgstr "日期范围"
@@ -270,93 +270,67 @@ msgstr "完成"
 msgid "Donor system"
 msgstr "支持者系统"
 
-msgid "Dutch"
-msgstr "荷兰语"
-
-msgid "Email"
-msgstr "电子邮件"
-
 msgid "Dr."
 msgstr "博士"
-
-msgid "Email 1"
-msgstr "电子邮件 1"
 
 msgid "Due Date"
 msgstr "截止日期"
 
-msgid "Email 2"
-msgstr "电子邮件 2"
-
-msgid "Email 3"
-msgstr "电子邮件 3"
-
-msgid "Email 4"
-msgstr "电子邮件 4"
+msgid "Email"
+msgstr "电子邮件"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "订婚"
 
-msgid "Email:"
-msgstr "电子邮件："
-
-msgid "English"
-msgstr "英语"
-
-msgid "Estonian"
-msgstr "爱沙尼亚语"
-
-msgid "Every 2 Weeks"
-msgstr "每2周"
+#. This is how a person's name is formatted on the first line of an envelope.
+msgid "Envelope Greeting"
+msgstr "信封问候语"
 
 msgid "Every 2 Months"
 msgstr "每2个月"
 
+msgid "Every 2 Weeks"
+msgstr "每2周"
+
 msgid "Every 2 Years"
-msgstr "每两年"
+msgstr "每2年"
 
 msgid "Every 4 Months"
 msgstr "每4个月"
 
 msgid "Every 6 Months"
-msgstr "每六个月"
+msgstr "每6个月"
+
+msgid "Exact Gift Amount"
+msgstr "准确的奉献支持金额"
+
+msgid "Expired Referral"
+msgstr "过期的介绍"
 
 msgid "Facebook Message"
 msgstr "Facebook讯息"
 
-msgid "Farsi"
-msgstr "波斯语"
+msgid "Facebook Profile"
+msgstr "Facebook个人资料"
 
 msgid "Father"
 msgstr "父亲"
 
-msgid "Finnish"
-msgstr "芬兰语"
-
 msgid "First Gift"
-msgstr "第一笔礼物"
+msgstr "第一笔奉献支持"
 
 msgid "First Name"
 msgstr "名"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
-msgstr "对于MailChimp集成，我们建议您在MailChimp上设置一个新列表以供使用\n（不是新帐户，只是一个新的列表），并留下该列表的所有MailChimp默认值。\n如果您使用新的列表进行设置，则设置为接收您的简报的每个人都将被复制\n您可以自动管理MPDX的所有更新（即更改电子邮件时）\nMPDX上的地址将在mailchimp上更新）。"
-
-msgid "French (Canada)"
-msgstr "法语（加拿大）"
-
-msgid "French (France)"
-msgstr "法语（法国）"
+msgstr "对于MailChimp集成，我们建议您在MailChimp上设置一个新列表以供使用（不是新帐户，只是一个新的列表），并留下该列表的所有MailChimp默认值。如果您使用新的列表进行设置，则设置为接收您的代祷信的每个人都将被自动复制。您可以管理MPDX的所有更新（即当您更改MPDX上的电子邮件地址时mailchimp也会更新）。"
 
 msgid "Future"
 msgstr "未来"
 
-msgid "German"
-msgstr "德语"
-
 msgid "Gave a special gift in the last 3 months"
-msgstr "过去三个月里支持过特别奉献"
+msgstr "过去3个月里支持过特别奉献"
 
 msgid "Gift Amount Higher Than or Equal To"
 msgstr "奉献支持金额高于或等于"
@@ -364,111 +338,78 @@ msgstr "奉献支持金额高于或等于"
 msgid "Gift Amount Less Than or Equal To"
 msgstr "奉献支持金额小于或等于"
 
-msgid "Gift Date"
-msgstr "奉献支持日期"
-
 msgid "Gift Amount Range"
 msgstr "奉献支持金额范围"
+
+msgid "Gift Date"
+msgstr "奉献支持日期"
 
 msgid "Gift Details"
 msgstr "奉献支持详细信息"
 
-msgid "Granddaughter"
-msgstr "（外）孙女"
-
 msgid "Gift Options"
 msgstr "奉献支持选项"
 
-msgid "Google import"
-msgstr "谷歌导入"
+msgid "Google Integration Settings"
+msgstr "谷歌集成设置"
 
 msgid "Google account needs to be refreshed"
 msgstr "谷歌账户需要刷新"
 
+msgid "Google import"
+msgstr "谷歌导入"
+
 msgid "Google sync"
 msgstr "谷歌同步"
+
+msgid "Granddaughter"
+msgstr "（外）孙女"
 
 msgid "Grandfather"
 msgstr "（外）祖父"
 
-msgid "Grandson"
-msgstr "（外）孙子"
-
 msgid "Grandmother"
 msgstr "（外）祖母"
 
-msgid "Greek"
-msgstr "希腊语"
+msgid "Grandson"
+msgstr "（外）孙子"
 
 msgid "Greeting"
 msgstr "欢迎"
 
-msgid "Hebrew"
-msgstr "希伯来语"
-
-msgid "Hindi"
-msgstr "印地语"
-
 msgid "History"
 msgstr "历史"
 
-msgid "Home Phone"
-msgstr "家庭电话"
-
 msgid "Home"
 msgstr "家"
+
+msgid "Home Phone"
+msgstr "家庭电话"
 
 #. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "尊敬的"
 
-msgid "Hungarian"
-msgstr "匈牙利语"
-
 msgid "Husband"
 msgstr "丈夫"
-
-msgid "Icelandic"
-msgstr "冰岛语"
-
-msgid "If we let you delete that account you won't be able to log in anymore."
-msgstr "如果我们让您删除该帐户，您将无法再登录。"
 
 msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
 msgstr "如果你想坚持现有的列表，你将需要使这个额外的合并字段不是必填项目。"
 
-msgid "Increased their giving in the last 3 months"
-msgstr "在过去3个月内增加了他们的支持"
+msgid "Increase Gift Recommendation"
+msgstr "增加奉献支持的建议"
 
-msgid "Import File:"
-msgstr "导入文件："
+msgid "Increased their giving in the last 3 months"
+msgstr "在过去3个月内增加了他们的奉献支持"
 
 msgid "Insights for "
 msgstr "洞察力"
-
-msgid "Indonesian"
-msgstr "印度尼西亚语"
-
-msgid "Irish"
-msgstr "爱尔兰语"
-
-msgid "Italian"
-msgstr "意大利语"
-
-msgid "Japanese"
-msgstr "日语"
 
 msgid "Joined my team in the last 3 months"
 msgstr "在过去3个月加入我的支持者团队"
 
 msgid "Jr."
 msgstr "小"
-
-msgid "Korean"
-msgstr "韩语"
-
-msgid "Khmer"
-msgstr "高棉语"
 
 msgid "Language"
 msgstr "语言"
@@ -497,9 +438,6 @@ msgstr "过去两年"
 msgid "Last Week"
 msgstr "上周"
 
-msgid "Latvian"
-msgstr "拉脱维亚语"
-
 msgid "Last Year"
 msgstr "去年"
 
@@ -512,32 +450,41 @@ msgstr "逾期至"
 msgid "Least Likely"
 msgstr "小"
 
-msgid "Letter"
-msgstr "信件"
-
 msgid "Less than 30 days late"
 msgstr "少于30天延迟"
+
+msgid "Letter"
+msgstr "信件"
 
 msgid "Likely"
 msgstr "一般"
 
-msgid "Lithuanian"
-msgstr "立陶宛语"
-
 msgid "Likely To Give"
 msgstr "支持可能性大"
-
-msgid "MPDX Support Team"
-msgstr "MPDX支持团队"
 
 msgid "MPDX List: %{name}"
 msgstr "MPDX清单：%{name}"
 
-msgid "Macedonian"
-msgstr "马其顿语"
+msgid "MPDX Support Team"
+msgstr "MPDX支持团队"
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr "尝试导入您 %{source} 联系人时，MPDX遇到错误。"
 
 msgid "MPDX has finished importing your %{source} contacts."
 msgstr "MPDX已经完成导入您的%{source}联系人。"
+
+msgid "MailChimp Integration Settings"
+msgstr "MailChimp集成设置"
+
+msgid "MailChimp subscriber email bounced"
+msgstr "MailChimp订阅者邮件退回"
+
+msgid "Mailchimp API Key no longer valid"
+msgstr "MailChimp API 钥匙不再有效"
+
+msgid "Mailchimp List is requiring an additional merge field"
+msgstr "Mailchimp列表需要一个额外的合并字段"
 
 msgid "Mailing"
 msgstr "邮寄"
@@ -548,20 +495,14 @@ msgstr "邮寄城市"
 msgid "Mailing Country"
 msgstr "邮寄国家"
 
-msgid "Mailing State"
-msgstr "邮寄州"
-
 msgid "Mailing Postal Code"
 msgstr "邮寄邮政编码"
 
+msgid "Mailing State"
+msgstr "邮寄州"
+
 msgid "Mailing Street Address"
 msgstr "邮寄街道地址"
-
-msgid "Malay"
-msgstr "马来语"
-
-msgid "Maltese"
-msgstr "马耳他语"
 
 msgid "Manual entry"
 msgstr "手动输入"
@@ -581,11 +522,11 @@ msgstr "最小值"
 msgid "Minimum"
 msgstr "最小"
 
-msgid "Mobile"
-msgstr "移动电话"
-
 msgid "Miss"
 msgstr "小姐"
+
+msgid "Mobile"
+msgstr "移动电话"
 
 msgid "Mobile Phone"
 msgstr "移动电话"
@@ -602,41 +543,41 @@ msgstr "逾期60天以上"
 msgid "More than 90 days late"
 msgstr "逾期90天以上"
 
-msgid "More than one user found for that lookup"
-msgstr "查找到多个用户"
-
 msgid "Most Likely"
 msgstr "大"
 
 msgid "Mother"
 msgstr "母亲"
 
-msgid "Mrs."
-msgstr "夫人"
-
 msgid "Mr."
 msgstr "先生"
+
+msgid "Mrs."
+msgstr "夫人"
 
 msgid "Ms."
 msgstr "女士"
 
-msgid "Name:"
-msgstr "名字："
+msgid "Nephew"
+msgstr "侄子"
 
 msgid "Never Ask"
 msgstr "从不询问"
 
-msgid "New Donation"
-msgstr "新奉献支持"
-
-msgid "Nephew"
-msgstr "侄子"
-
 msgid "Never Contacted"
 msgstr "从未联系过"
 
+msgid "New Donation"
+msgstr "新奉献支持"
+
 msgid "Newsletter"
 msgstr "代祷信"
+
+msgid "Newsletter - Email"
+msgstr "代祷信 - 电子邮件"
+
+msgid "Newsletter - Physical"
+msgstr "代祷信 - 纸张信"
 
 msgid "Newsletter Recipients"
 msgstr "代祷信收件人"
@@ -650,14 +591,17 @@ msgstr "下周"
 msgid "Niece"
 msgstr "侄女"
 
-msgid "No Gifts"
-msgstr "无奉献支持"
+msgid "No"
+msgstr "不"
 
 msgid "No Date"
 msgstr "无日期"
 
-msgid "No"
-msgstr "不"
+msgid "No Gifts"
+msgstr "无奉献支持"
+
+msgid "No Incomplete Tasks"
+msgstr "无未完成任务"
 
 msgid "No Subject"
 msgstr "无主题"
@@ -671,38 +615,41 @@ msgstr "无邮寄地址在档"
 msgid "No mailing address or email addess on file"
 msgstr "无邮寄地址或电子邮件地址在档"
 
-msgid "No users found for that lookup"
-msgstr "查找不到用户"
-
 msgid "None"
 msgstr "无"
-
-msgid "None Selected"
-msgstr "无选中"
-
-msgid "Norwegian"
-msgstr "挪威语"
 
 msgid "Not Interested"
 msgstr "没兴趣"
 
-msgid "Notes"
-msgstr "备注"
-
 msgid "Not Received"
 msgstr "未收到"
 
-msgid "One of my donors, %{donor} has a new current address."
-msgstr "我的一个支持者， %{donor} 有一个新地址。"
+msgid "Notes"
+msgstr "备注"
+
+msgid "Nothing Selected"
+msgstr "无选中项"
 
 msgid "Notifications from MPDX"
 msgstr "MPDX通知"
+
+msgid "One of my donors, %{donor} has a new current address."
+msgstr "我的一个支持者， %{donor} 有一个新地址。"
 
 msgid "One or More Gifts"
 msgstr "一个或多个奉献支持"
 
 msgid "Other"
 msgstr "其他"
+
+msgid "Other Email"
+msgstr "其他电子邮件"
+
+msgid "Other Phone"
+msgstr "其他电话"
+
+msgid "Outstanding"
+msgstr "未支付"
 
 msgid "Overdue"
 msgstr "逾期"
@@ -713,50 +660,35 @@ msgstr "支持者"
 msgid "Partner - Financial"
 msgstr "支持者-金钱"
 
+msgid "Partner - Pray"
+msgstr "支持者-祷告"
+
 msgid "Partner - Special"
 msgstr "支持者-特殊"
 
-msgid "Partner - Pray"
-msgstr "支持者-祷告"
+msgid "Pending"
+msgstr "待定"
 
 msgid "Person"
 msgstr "人"
 
-msgid "Partner Status"
-msgstr "支持者状态"
-
-msgid "Phone 1"
-msgstr "电话 1"
-
-msgid "Phone 2"
-msgstr "电话 2"
-
-msgid "Phone 3"
-msgstr "电话 3"
-
-msgid "Phone 4"
-msgstr "电话 4"
-
 msgid "Physical"
 msgstr "纸质的"
+
+msgid "Please try updating it here: %{link}"
+msgstr "请尝试在此更新：%{link}"
 
 msgid "Please update their address to"
 msgstr "请更新他们的地址至"
 
-msgid "Polish"
-msgstr "波兰语"
-
 msgid "Pledge"
 msgstr "承诺"
 
-msgid "Portuguese (Brazil)"
-msgstr "葡萄牙语（巴西）"
+msgid "Pledge Status"
+msgstr "承诺的状态"
 
-msgid "Portuguese (Portugal)"
-msgstr "葡萄牙语（葡萄牙）"
-
-msgid "Primary Balance: %{balance}"
-msgstr "主余额：%{balance}"
+msgid "Prayer Request"
+msgstr "代祷事项"
 
 msgid "Pre Call Letter"
 msgstr "电话谈话前的信件"
@@ -764,8 +696,14 @@ msgstr "电话谈话前的信件"
 msgid "Primary Email"
 msgstr "首选邮件地址"
 
+msgid "Primary Phone"
+msgstr "首选电话"
+
 msgid "Quarterly"
 msgstr "每季度"
+
+msgid "REPLACE WITH NEW CITY, STATE, ZIP"
+msgstr "更新城市，州，邮编"
 
 msgid "REPLACE WITH NEW STREET"
 msgstr "更新街道"
@@ -773,11 +711,14 @@ msgstr "更新街道"
 msgid "Received"
 msgstr "已收到"
 
+msgid "Received, but not Processed"
+msgstr "收到，尚未处理"
+
 msgid "Referrals"
-msgstr "推荐名单"
+msgstr "介绍"
 
 msgid "Referrer"
-msgstr "介绍人"
+msgstr "推荐人"
 
 msgid "Region"
 msgstr "区域"
@@ -785,46 +726,28 @@ msgstr "区域"
 msgid "Reminder Letter"
 msgstr "提醒信"
 
+msgid "Research Abandoned"
+msgstr "废弃的研究\n"
+
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "牧师"
 
-msgid "Romanian"
-msgstr "罗马尼亚语"
-
-msgid "Russian"
-msgstr "俄语"
+msgid "Seasonal"
+msgstr "即节的"
 
 msgid "Separated"
 msgstr "分居"
-
-msgid "Seasonal"
-msgstr "即节的"
 
 #. this is a relationship status
 msgid "Single"
 msgstr "单身"
 
-msgid "Serbian"
-msgstr "塞尔维亚语"
-
 msgid "Sister"
 msgstr "姐妹"
 
-msgid "Slovak"
-msgstr "斯洛伐克语"
-
-msgid "Slovenian"
-msgstr "斯洛文尼亚语"
-
 msgid "Son"
 msgstr "儿子"
-
-msgid "Spanish (Mexico)"
-msgstr "西班牙语（墨西哥）"
-
-msgid "Spanish (Spain)"
-msgstr "西班牙语（西班牙）"
 
 msgid "Spouse Email"
 msgstr "配偶的电子邮件"
@@ -832,11 +755,20 @@ msgstr "配偶的电子邮件"
 msgid "Spouse First Name"
 msgstr "配偶姓"
 
+msgid "Spouse Other Email"
+msgstr "配偶的其他电子邮件"
+
+msgid "Spouse Other Phone"
+msgstr "配偶的其他电话"
+
+msgid "Spouse Phone"
+msgstr "配偶的电话"
+
 msgid "Sr."
 msgstr "高级"
 
 msgid "Starred"
-msgstr "已标注"
+msgstr "已标星号"
 
 msgid "State"
 msgstr "州"
@@ -845,19 +777,16 @@ msgid "Status"
 msgstr "状态"
 
 msgid "Stopped giving for the last 2 months"
-msgstr "过去两个月停止支持"
+msgstr "过去2个月停止支持"
 
-msgid "Swahili"
-msgstr "斯瓦希里语"
-
-msgid "Swedish"
-msgstr "瑞典语"
-
-msgid "Tamil"
-msgstr "泰米尔语"
+msgid "Support Letter"
+msgstr "支持信"
 
 msgid "Tags"
 msgstr "标签"
+
+msgid "Talk to In Person"
+msgstr "亲自讲"
 
 msgid "Task on MPDX"
 msgstr "MPDX任务"
@@ -871,9 +800,6 @@ msgstr "临时"
 msgid "Text Message"
 msgstr "短信"
 
-msgid "Thai"
-msgstr "泰语"
-
 msgid "Thank"
 msgstr "谢谢"
 
@@ -886,20 +812,32 @@ msgstr "该电子邮件已被标记为“不再有效”。 请通过点击上�
 msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
 msgstr "链接到您MPDX帐户的MailChimp邮件列表有一个额外的合并字段创建并标记为必需。 MPDX不知道如何填充您的客户合并字段，因此无法将您的联系人同步到MailChimp。"
 
-msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
-msgstr "MPDX和您的prayerletters.com帐户之间的链接已停止工作。 如果您想继续让MPDX自动将更改推送到prayerletters.com，请转到并点击“启用”按钮"
-
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "与您LinkedIn帐户的连接需要更新。"
-
-msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
-msgstr "与您Facebook帐户的链接需要刷新。 <a href=\"/auth/facebook\">点击此处重新连接到Facebook </a>，然后再次尝试导入。"
 
 msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
 msgstr "MPDX和您Google帐户之间的链接已停止工作。 如果您想继续使用MPDX自动与您的Google帐户同步，请访问%{link}并点击“刷新Google帐户”按钮。 之后，您需要手动重新启用任何您已经设置好的集成。"
 
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
+msgstr "MPDX和您的prayerletters.com帐户之间的链接已停止工作。 如果您想继续让MPDX自动将更改推送到prayerletters.com，请转到并点击“启用”按钮"
+
+msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
+msgstr "与您Facebook帐户的链接需要刷新。 <a href=\"/auth/facebook\">点击此处重新连接到Facebook </a>，然后再次尝试导入。"
+
 msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
 msgstr "与您MPDX帐户相关联的mailchimp API密钥已失效。如果您希望Mailchimp同步继续，请转到\n %{link} 并更新您的API密钥。"
+
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "导入可能会失败的原因有很多。 通常故障可能是一个暂时的网络问题。 请尝试再次导入。 如果再次失败，请发送电子邮件至support@mpdx.org，我们会调查是什么问题。"
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "导入可能会失败的原因有很多。 通常，失败是由于一个我们不可控的与Facebook相关的暂时问题。请尝试再次导入。 如果再次失败，请发送电子邮件至support@mpdx.org，我们会调查是什么问题。"
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr "导入可能会失败的原因有很多。 最常见的原因是临时服务器问题。 请尝试再次导入。 如果再次失败，请发送电子邮件至support@mpdx.org，并附上您的Tnt导出。 使用您要导入的文件将大大帮助我们确定导入失败的原因。"
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "导入可能会失败的原因有很多。 CSV导入失败的最可能原因是由于姓。 姓是CSV导入的必填字段。 我们已将CSV文件附加到此电子邮件中，其中包含无法导入的行。 此CSV中的第一列包含有关该行的错误消息。 请下载此CSV，解决其中的问题，然后尝试重新导入。 您不需要重新导入以前成功导入的联系人。 如果再次失败，请发送电子邮件至support@mpdx.org，我们会调查是什么问题。"
 
 msgid "This Month"
 msgstr "这个月"
@@ -910,6 +848,9 @@ msgstr "这周"
 msgid "This Year"
 msgstr "今年"
 
+msgid "This donation was imported from Tnt."
+msgstr "这笔奉献支持是从Tnt导入的。"
+
 msgid "Timezone"
 msgstr "时区"
 
@@ -918,9 +859,6 @@ msgstr "Tnt导入"
 
 msgid "To Do"
 msgstr "去做"
-
-msgid "To activate your invitation, click \"Accept\" below and log into MPDX."
-msgstr "要激活您的邀请，请点击下面的“接受”并登录到MPDX。"
 
 msgid "Today"
 msgstr "今天"
@@ -937,14 +875,8 @@ msgstr "总数（上个月除外）"
 msgid "Totals"
 msgstr "总数"
 
-msgid "Turkish"
-msgstr "土耳其语"
-
 msgid "Type"
 msgstr "类型"
-
-msgid "Ukrainian"
-msgstr "乌克兰语"
 
 msgid "Uncle"
 msgstr "叔叔"
@@ -955,23 +887,8 @@ msgstr "未知"
 msgid "Unresponsive"
 msgstr "无回应"
 
-msgid "User Agent:"
-msgstr "用户代理："
-
-msgid "User ID:"
-msgstr "用户名："
-
-msgid "User Info"
-msgstr "用户信息"
-
 msgid "Upcoming"
 msgstr "即将到来"
-
-msgid "User Preferences:"
-msgstr "用户首选项："
-
-msgid "Vietnamese"
-msgstr "越南语"
 
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "我们暂时将您的MailChimp列表与MPDX断开，以防止进一步的错误。 一旦您选择上述选项之一，请返回 %{link}您的MailChimp设置。"
@@ -979,11 +896,11 @@ msgstr "我们暂时将您的MailChimp列表与MPDX断开，以防止进一步�
 msgid "Weekly"
 msgstr "每周"
 
-msgid "Wife"
-msgstr "妻子"
-
 msgid "Widowed"
 msgstr "丧偶的"
+
+msgid "Wife"
+msgstr "妻子"
 
 msgid "Work"
 msgstr "工作"
@@ -991,29 +908,41 @@ msgstr "工作"
 msgid "Work Phone"
 msgstr "工作电话"
 
+msgid "Yes"
+msgstr "是"
+
 msgid "Yesterday"
 msgstr "昨天"
 
-msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"preferences_url\">here</a>."
-msgstr "您从MPDX获取此通知是因为您在首选项中检查了此类通知的电子邮件设置。 您可以在此处将其更改为<a href=\"preferences_url\"></a>。"
-
-msgid "You have been invited by %{inviter} to access the MPDX account \"%{account}\"."
-msgstr "％{inviter}邀请您访问MPDX帐户“％{account}”。"
-
-msgid "You are getting this notification from MPDX because you selected the notification option on your task details."
-msgstr "您从MPDX获取此通知，因为您在任务详细信息中选择了通知选项。"
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr "您从MPDX获取此通知是因为您在首选项中检查了此类通知的电子邮件设置。 您可以在此处将其更改 为<a href=\"%{preferences_url}\"></a>。"
 
 msgid "You have no monthly recurring gift recommendations."
 msgstr "您没有每月重复的奉献推荐。"
 
-msgid "You need to go to https://mpdx.org and set up your account before using the mobile app."
-msgstr "在使用移动应用之前，您需要先访问https://mpdx.org并设置您的帐户。"
+msgid "You must log in to MPDX again"
+msgstr "您必须再次登录MPDX"
 
 msgid "You must select at least 2 contacts to merge."
 msgstr "您必须至少选择2个联系人进行合并。"
 
+msgid "You've been invited to access an account on MPDX"
+msgstr "您已被邀请访问MPDX上的帐户"
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr "您被邀请成为MPDX帐户的辅导"
+
+msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
+msgstr "您的MPDX联系人\"%{contact}\"已经同步或导出到MailChimp的人<a href=\"%{edit_person_url}\">%{person_name}</a> ，但现在有一个无法投递的电子邮件：%{email}"
+
+msgid "Your username and password are missing for this account."
+msgstr "此帐户缺少您的用户名和密码。"
+
 msgid "Your username and password for %{org} are invalid."
 msgstr "您的 %{org} 用户名和密码无效。"
+
+msgid "[MPDX] Importing your %{source} contacts completed"
+msgstr "[MPDX]完成导入您的%{source} 个联系人"
 
 msgid "[MPDX] Importing your %{source} contacts failed"
 msgstr "[MPDX]导入您的%{source} 联系人失败"
@@ -1021,96 +950,18 @@ msgstr "[MPDX]导入您的%{source} 联系人失败"
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX]您的%{source} 用户名和密码无效"
 
+msgid "at the time of event"
+msgstr "在事情发生时"
+
 msgid "can not be blank"
 msgstr "不能是空白的"
 
-msgid "at the time of event"
-msgstr "在事件发生时"
+msgid "converted as"
+msgstr "换算成"
+
+msgid "of total"
+msgstr "总数的___"
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "prayerletters.com帐户需要刷新"
-
-msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-msgstr "%(该任务在TntConnect中被赋予了类型“#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-
-msgid "%{number_of_failed_contacts} contacts failed to import."
-msgstr "%{number_of_failed_contacts} 联系人无法导入。"
-
-msgid "%{number_of_successful_contacts} contacts imported successfully."
-msgstr "%{number_of_successful_contacts} 联系人成功导入。"
-
-msgid "%{org_name} said we have the wrong password for your account."
-msgstr "%{org_name} 表示我们拥有的您的账户密码是错误的。"
-
-msgid "Contact is on the email newsletter but has no people with a valid email address."
-msgstr "联系人在电子邮件通讯上，但没有人有有效的电子邮件地址。"
-
-msgid "Contact is on the physical newsletter but has no mailing address."
-msgstr "联系人在纸质通讯上，但没有邮寄地址。"
-
-msgid "Google Integration Settings"
-msgstr "谷歌集成设置"
-
-msgid "MPDX encountered errors while trying to import your %{source} contacts."
-msgstr "尝试导入您 %{source} 联系人时，MPDX遇到错误。"
-
-msgid "MailChimp Integration Settings"
-msgstr "MailChimp集成设置"
-
-msgid "No Incomplete Tasks"
-msgstr "无未完成任务"
-
-msgid "Nothing Selected"
-msgstr "无选中项"
-
-msgid "Other Email"
-msgstr "其他电子邮件"
-
-msgid "Other Phone"
-msgstr "其他电话"
-
-msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
-msgstr "支持者（半年，年度等）一个月内预计有一笔奉献。 给他们一个提醒。"
-
-msgid "Partner gave a Special Gift"
-msgstr "支持者给了一笔特别奉献"
-
-msgid "Partner gave a larger gift than commitment"
-msgstr "支持者给了一笔比承诺的更多的奉献"
-
-msgid "Partner gave less than commitment"
-msgstr "支持者比承诺的给的少"
-
-msgid "Partner gave with commitment of semi-annual or more"
-msgstr "支持者承诺委身支持半年以上"
-
-msgid "Partner have not had a thank you note logged in the past year"
-msgstr "支持者在过去一年没有登录查看过感谢信"
-
-msgid "Partner started giving"
-msgstr "支持者开始支持"
-
-msgid "Please try updating it here: %{link}"
-msgstr "请尝试在此更新：%{link}"
-
-msgid "Primary Phone"
-msgstr "首选电话"
-
-msgid "Spouse Other Email"
-msgstr "配偶的其他电子邮件"
-
-msgid "Spouse Other Phone"
-msgstr "配偶的其他电话"
-
-msgid "Spouse Phone"
-msgstr "配偶的电话"
-
-msgid "You must log in to MPDX again"
-msgstr "您必须再次登录MPDX"
-
-msgid "You've been invited to access an account on MPDX"
-msgstr "您已被邀请访问MPDX上的帐户"
-
-msgid "You've been invited to be a coach for an account on MPDX"
-msgstr "您被邀请成为MPDX帐户的教练"
 
