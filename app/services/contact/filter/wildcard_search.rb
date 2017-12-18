@@ -41,4 +41,8 @@ class Contact::Filter::WildcardSearch < Contact::Filter::Base
 
     @contacts.where(or_conditions, query_params(search_term_parts_hash.merge(contact_ids: contact_ids)))
   end
+
+  def valid_filters?(filters)
+    super && filters[:wildcard_search].is_a?(String)
+  end
 end
