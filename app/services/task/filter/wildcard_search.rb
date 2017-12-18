@@ -29,8 +29,4 @@ class Task::Filter::WildcardSearch < Task::Filter::Base
   def wildcard_string
     "%#{@filters[:wildcard_search]}%"
   end
-
-  def valid_filters?(filters)
-    super && filters[:wildcard_search].is_a?(String)
-  end
 end

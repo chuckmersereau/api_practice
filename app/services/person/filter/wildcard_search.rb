@@ -35,8 +35,4 @@ class Person::Filter::WildcardSearch < Person::Filter::Base
 
     @people.where(or_conditions, query_params(search_term_parts_hash.merge(person_ids: person_ids)))
   end
-
-  def valid_filters?(filters)
-    super && filters[:wildcard_search].is_a?(String)
-  end
 end
