@@ -334,34 +334,48 @@ class DataServer
 
     Rails.logger.debug(request_params)
     RestClient::Request.execute(request_params) do |response, _request, _result, &_block|
-      raise(DataServerError, response) if response.code == 500
-
-      response = EncodingUtil.normalized_utf8(response.to_str)
-
-      # check for error response
-      lines = response.split(/\r?\n|\r/)
-      first_line = lines.first.to_s.upcase
-      if first_line + lines[1].to_s =~ /password|not registered/i
-        if org_account.valid_credentials? && !org_account.new_record?
-          org_account.update_column(:valid_credentials, false)
-        end
-        raise Person::OrganizationAccount::InvalidCredentialsError,
-              _('Your credentials for %{org} are invalid.').localize % { org: org }
-      elsif first_line.include?('ERROR') || first_line.include?('HTML')
+      case response.code
+      when 403 then
+        raise_invalid_credentials
+      when 500 then
         raise DataServerError, response
+      else
+        handle_ok_response(response)
       end
-
-      # look for a redirect
-      if lines[1] && lines[1].include?('RedirectQueryIni')
-        raise Errors::UrlChanged, lines[1].split('=')[1]
-      end
-
-      response
     end
   rescue OpenSSL::SSL::SSLError => e
     raise DataServerError,
           format('Could not securely connect to host %p. Reason: %s',
                  URI(url).host, e)
+  end
+
+  def handle_ok_response(response)
+    response = EncodingUtil.normalized_utf8(response.to_str)
+
+    # check for error response
+    lines = response.split(/\r?\n|\r/)
+    first_line = lines.first.to_s.upcase
+    if first_line + lines[1].to_s =~ /password|not registered|not authorized/i
+      raise_invalid_credentials
+    elsif first_line.include?('ERROR') || first_line.include?('HTML')
+      raise DataServerError, response
+    end
+
+    # look for a redirect
+    if lines[1] && lines[1].include?('RedirectQueryIni')
+      raise Errors::UrlChanged, lines[1].split('=')[1]
+    end
+
+    response
+  end
+
+  def raise_invalid_credentials
+    if org_account.valid_credentials? && !org_account.new_record?
+      org_account.update_column(:valid_credentials, false)
+    end
+
+    raise Person::OrganizationAccount::InvalidCredentialsError,
+          _('Your credentials for %{org} are invalid.').localize % { org: org }
   end
 
   def add_or_update_primary_contact(account_list, line, donor_account)
