@@ -3191,7 +3191,6 @@ ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 --
 
 CREATE TABLE wv_donation_amt_recommendation (
-    id integer NOT NULL,
     organization_id integer,
     donor_number character varying,
     designation_number character varying,
@@ -3208,25 +3207,6 @@ CREATE TABLE wv_donation_amt_recommendation (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: wv_donation_amt_recommendation_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE wv_donation_amt_recommendation_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: wv_donation_amt_recommendation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE wv_donation_amt_recommendation_id_seq OWNED BY wv_donation_amt_recommendation.id;
 
 
 --
@@ -3794,13 +3774,6 @@ ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclas
 --
 
 ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
-
-
---
--- Name: wv_donation_amt_recommendation id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY wv_donation_amt_recommendation ALTER COLUMN id SET DEFAULT nextval('wv_donation_amt_recommendation_id_seq'::regclass);
 
 
 --
@@ -4449,14 +4422,6 @@ ALTER TABLE ONLY tags
 
 ALTER TABLE ONLY versions
     ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
-
-
---
--- Name: wv_donation_amt_recommendation wv_donation_amt_recommendation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY wv_donation_amt_recommendation
-    ADD CONSTRAINT wv_donation_amt_recommendation_pkey PRIMARY KEY (id);
 
 
 --
