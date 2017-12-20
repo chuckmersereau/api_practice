@@ -3,7 +3,7 @@
 class CreateWvDonationAmtRecommendation < ActiveRecord::Migration
   def change
     unless ActiveRecord::Base.connection.table_exists? 'wv_donation_amt_recommendation'
-      create_table :wv_donation_amt_recommendation do |t|
+      create_table :wv_donation_amt_recommendation, id: false do |t|
         t.integer :organization_id
         t.string :donor_number
         t.string :designation_number
