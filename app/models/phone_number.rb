@@ -38,7 +38,7 @@ class PhoneNumber < ApplicationRecord
     normalized_or_not = [normalized_number.number, attributes[:number]]
 
     number = person.phone_numbers.find_by(number: normalized_or_not)
-    if number
+    if number && (attributes[:source] != TntImport::SOURCE || number.source == attributes[:source])
       number.update_attributes(attributes)
     else
       attributes['primary'] = (person.phone_numbers.present? ? false : true) if attributes['primary'].nil?

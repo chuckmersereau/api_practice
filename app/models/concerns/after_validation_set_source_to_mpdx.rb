@@ -13,7 +13,7 @@ module Concerns::AfterValidationSetSourceToMPDX
   def source_should_be_changed_to_mpdx?
     persisted? &&
       errors.none? &&
-      source == 'TntImport' &&
+      source == ::TntImport::SOURCE &&
       !changes.keys.map(&:to_sym).include?(:source) &&
       changes.any? { |_attribute, values| values.second.present? }
   end

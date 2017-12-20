@@ -20,9 +20,7 @@ describe TntImport::ContactImport do
   before { stub_smarty_streets }
 
   describe '#update_contact' do
-    before do
-      @contact = Contact.new(notes: 'Another note')
-    end
+    let(:contact) { create(:contact, notes: 'Another note') }
 
     it 'updates notes correctly' do
       contact = Contact.new
@@ -40,13 +38,24 @@ describe TntImport::ContactImport do
     end
 
     it 'updates newsletter preferences correctly' do
-      import.send(:update_contact, @contact, contact_rows.first)
-      expect(@contact.send_newsletter).to eq('Physical')
+      import.send(:update_contact, contact, contact_rows.first)
+      expect(contact.send_newsletter).to eq('Physical')
     end
 
     it 'sets the address region' do
-      import.send(:update_contact, @contact, contact_rows.first)
-      expect(@contact.addresses.first.region).to eq('State College')
+      import.send(:update_contact, contact, contact_rows.first)
+      expect(contact.addresses.first.region).to eq('State College')
+    end
+
+    it 'creates a duplicate address if original is not from TntImport' do
+      import.send(:update_contact, contact, contact_rows.first)
+      contact.addresses.first.update!(source: 'Something Else')
+
+      import.send(:update_contact, contact, contact_rows.first)
+
+      expect(contact.addresses.count).to eq 2
+      expect(contact.addresses.first.source).to eq 'Something Else'
+      expect(contact.addresses.second.source).to eq 'TntImport'
     end
 
     it 'sets the greeting' do

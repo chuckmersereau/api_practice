@@ -1,4 +1,6 @@
 class TntImport
+  SOURCE = 'TntImport'.freeze
+
   def initialize(import)
     @import = import
     @account_list = @import.account_list
