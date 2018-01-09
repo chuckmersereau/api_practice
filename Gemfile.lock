@@ -837,7 +837,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff
     xml-simple (1.1.5)
-    yard (0.9.9)
+    yard (0.9.12)
     zonebie (0.6.1)
 
 PLATFORMS
