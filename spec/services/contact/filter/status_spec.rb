@@ -25,6 +25,26 @@ RSpec.describe Contact::Filter::Status do
         expect(described_class.query(contacts, { status: 'hidden, null' }, nil)).to match_array([contact_with_no_status, inactive_contact])
       end
     end
+
+    context 'with reverse_FILTER' do
+      subject { described_class.query(contacts, query, nil) }
+      let(:query) { { status: status, reverse_status: true } }
+
+      context 'status: "active"' do
+        let(:status) { 'active' }
+        it('returns hidden contacts') { is_expected.to match_array([inactive_contact]) }
+      end
+
+      context 'status: "null"' do
+        let(:status) { 'null' }
+        it('returns hidden contacts') { is_expected.to match_array([inactive_contact]) }
+      end
+
+      context 'status: "hidden"' do
+        let(:status) { 'hidden' }
+        it('returns null/blank contacts') { is_expected.to match_array([contact_with_no_status]) }
+      end
+    end
   end
 
   describe '#config' do

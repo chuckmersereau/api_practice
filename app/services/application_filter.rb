@@ -27,7 +27,7 @@ class ApplicationFilter
     filters[name] ||= default_selection if default_selection.present?
 
     return unless valid_filters?(filters)
-    return scope.where.not(id: execute_query(scope, filters).ids.uniq) if filters["reverse_#{name}".to_sym].to_s == 'true'
+    return reverse_query(scope, filters) if reverse?(filters)
     execute_query(scope, filters).distinct
   end
 
@@ -95,6 +95,13 @@ class ApplicationFilter
   def execute_query(_contacts, _filters)
   end
 
+  # Override this method if your filter needs special logic (ie: not the default
+  # "WHERE NOT ..." functionality) to reverse a given filter.
+  # @return [ActiveRecord::Relation, nil] A Relation which reverses the given
+  #   filters, or +nil+ to fall back to the default "WHERE NOT" behavior.
+  def execute_reverse_query(scope, filters)
+  end
+
   def name
     class_name.demodulize.underscore.to_sym
   end
@@ -135,5 +142,14 @@ class ApplicationFilter
     return false if filters[name].is_a?(Array)
     return false if filters[name].is_a?(Hash)
     true
+  end
+
+  def reverse?(filters)
+    filters[:"reverse_#{name}"].to_s == 'true'
+  end
+
+  def reverse_query(scope, filters)
+    reverse = execute_reverse_query(scope, filters.dup)
+    reverse || scope.where.not(id: execute_query(scope, filters).ids.uniq)
   end
 end

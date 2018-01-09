@@ -12,6 +12,22 @@ class Contact::Filter::Status < Contact::Filter::Base
     contacts.where(status: status_filters)
   end
 
+  def execute_reverse_query(contacts, filters)
+    status_filters = parse_list(filters[:status])
+
+    if (%w(active null) & status_filters).any?
+      status_filters -= %w(active null)
+      status_filters << 'hidden'
+    elsif status_filters.delete('hidden')
+      status_filters << 'null'
+    else
+      return nil
+    end
+
+    filters[:status] = status_filters.join(',')
+    execute_query(contacts, filters)
+  end
+
   def title
     _('Status')
   end
