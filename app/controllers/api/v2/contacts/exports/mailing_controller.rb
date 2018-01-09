@@ -5,6 +5,7 @@ class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
   supports_content_types :any
 
   include ActionController::MimeResponds
+  include Filtering::Contacts
 
   def index
     load_contacts

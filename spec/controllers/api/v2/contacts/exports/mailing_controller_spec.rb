@@ -65,5 +65,14 @@ describe Api::V2::Contacts::Exports::MailingController, type: :controller do
       expect(response.body).to include(third_contact.name)
       expect(response.body).to_not include(contact.name)
     end
+
+    it 'allows filtering by donation amount range' do
+      filters = { donation_amount_range: { max: 1000, min: 1 } }
+      api_login(user)
+
+      get :index, format: :csv, filter: filters
+
+      expect(response.status).to eq(200)
+    end
   end
 end

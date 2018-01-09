@@ -62,18 +62,18 @@ class Contact::Filter::Donation < Contact::Filter::Base
 
   def contact_ids_with_donation_to_account_lists
     @contact_ids_with_donation_to_account_lists ||=
-      Donation.unscoped
-              .where(account_lists_donations_as_sql_condition)
-              .joins(donor_account: [:contacts])
-              .where(contacts: { account_list_id: account_lists })
-              .distinct
-              .pluck('"contacts"."id"')
+      ::Donation.unscoped
+                .where(account_lists_donations_as_sql_condition)
+                .joins(donor_account: [:contacts])
+                .where(contacts: { account_list_id: account_lists })
+                .distinct
+                .pluck('"contacts"."id"')
   end
 
   # The last donation queries use the SQL aggregation MAX functions to
   # find donation_date grouped by the donor_account_id.
   def last_donation_ids_for_each_donor_account
-    Donation.where(account_lists_donations_as_sql_condition).joins(
+    ::Donation.where(account_lists_donations_as_sql_condition).joins(
       <<~JOIN
         INNER JOIN (SELECT donor_account_id, MAX(donation_date) AS max_donation_date
                     FROM donations
@@ -88,7 +88,7 @@ class Contact::Filter::Donation < Contact::Filter::Base
   # The first donation queries use the SQL aggregation MIN functions to
   # find donation_date grouped by the donor_account_id.
   def first_donation_ids_for_each_donor_account
-    Donation.where(account_lists_donations_as_sql_condition).joins(
+    ::Donation.where(account_lists_donations_as_sql_condition).joins(
       <<~JOIN
         INNER JOIN (SELECT donor_account_id, MIN(donation_date) AS min_donation_date
                     FROM donations
