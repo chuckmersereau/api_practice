@@ -75,6 +75,12 @@ describe Api::V2::ContactsController, type: :controller do
         expect(JSON.parse(response.body)['data'].length).to eq(1)
       end
     end
+
+    context 'wildcard_search filter' do
+      it "doesn't blow up with date-like string" do
+        expect { get :index, filter: { wildcard_search: '2011-11-01' } }.to_not raise_exception
+      end
+    end
   end
 
   describe 'Nested Creating / Updating of Resources' do

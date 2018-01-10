@@ -9,6 +9,7 @@ class TntImport::AddressesBuilder
         postal_code = row["#{location}PostalCode"]
         country = row["#{location}Country"] == 'United States of America' ? 'United States' : row["#{location}Country"]
         next unless [street, city, state, postal_code].any?(&:present?)
+
         primary_address = false
         primary_address = row['MailingAddressType'].to_i == (i + 1) if override
         if primary_address && contact
@@ -18,9 +19,11 @@ class TntImport::AddressesBuilder
             address.save
           end
         end
-        addresses << {  street: street, city: city, state: state, postal_code: postal_code, country: country,
-                        location: location,  region: row['Region'], primary_mailing_address: primary_address,
-                        source: 'TntImport'  }
+
+        attrs = { street: street, city: city, state: state, postal_code: postal_code, country: country,
+                  location: location, region: row['Region'], primary_mailing_address: primary_address,
+                  source: TntImport::SOURCE }
+        addresses << attrs unless contact.addresses.where(attrs).any?
       end
       addresses
     end

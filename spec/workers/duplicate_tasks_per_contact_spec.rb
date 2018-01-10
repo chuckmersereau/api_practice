@@ -1,13 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe DuplicateTasksPerContact do
-  subject { described_class.new }
+  subject do
+    described_class.new.perform(
+      account_list: filter_account_list,
+      min_contacts: min_contacts
+    )
+  end
+  let(:filter_account_list) { nil }
+  let(:min_contacts) { 2 }
 
-  let(:older_than) { nil }
   let(:task) { create(:task) }
   let!(:contact_one) { create(:contact, tasks: [task]) }
   let!(:contact_two) { create(:contact, tasks: [task]) }
 
+  # These fog_ variables are just to mock out the AWS S3 service
   let(:fog_storage) do
     Fog.mock!
     Fog::Storage.new(provider: 'AWS',
@@ -31,7 +38,6 @@ RSpec.describe DuplicateTasksPerContact do
       end
     end
   end
-
   before do
     expect(Fog::Storage).to receive(:new).with(Hash).and_return(fog_storage)
     expect(fog_storage).to receive(:directories).and_return(fog_dirs)
@@ -42,21 +48,21 @@ RSpec.describe DuplicateTasksPerContact do
   end
 
   it 'creates a duplicate task' do
-    expect { subject.perform }.to change { Task.count }.from(1).to(2)
+    expect { subject }.to change { Task.count }.from(1).to(2)
   end
 
   it 'ensures all Tasks have unique UUIDs' do
-    subject.perform
+    subject
     expect(Task.all.pluck(:uuid).uniq.size).to eq Task.count
   end
 
   it 'results in all Tasks having exactly one Contact' do
-    subject.perform
+    subject
     expect(Task.all.reject { |t| t.contacts.size == 1 }).to be_empty
   end
 
   it 'resuses the existing Task for the first Comment' do
-    subject.perform
+    subject
     contact_one.reload
     contact_two.reload
 
@@ -69,7 +75,7 @@ RSpec.describe DuplicateTasksPerContact do
     RSpec::Mocks.space.proxy_for(fog_files).reset
 
     expect(fog_files).to receive(:new) do |args|
-      expect(args[:key]).to match(/duplicate_tasks_per_contact__.+\.log/)
+      expect(args[:key]).to match(%r{^worker_results/duplicate_tasks_per_contact__.+\.log$})
       expect(args[:body]).to match(%r{workers/duplicate_tasks_per_contact\.rb})
       expect(args[:body]).to match(/^#{task.id}(?:\s\d+)+$/)
       expect(args[:body].lines[2].split(/\s/).size).to eq Task.count
@@ -77,7 +83,7 @@ RSpec.describe DuplicateTasksPerContact do
       fog_file
     end
 
-    subject.perform
+    subject
   end
 
   context 'with comments' do
@@ -88,7 +94,7 @@ RSpec.describe DuplicateTasksPerContact do
     end
 
     it 'duplicates each comment' do
-      expect { subject.perform }.to change { ActivityComment.count }.from(2).to(4)
+      expect { subject }.to change { ActivityComment.count }.from(2).to(4)
 
       comments.each do |text|
         expect(ActivityComment.where(body: text).count).to eq 2
@@ -96,19 +102,73 @@ RSpec.describe DuplicateTasksPerContact do
     end
 
     it 'ensures each Task has unique comments' do
-      subject.perform
+      subject
       new_task = Task.last
       expect((task.comments.pluck(:id) - new_task.comments.pluck(:id)).size).to eq 2
     end
   end
 
-  context 'with a non-default time-span' do
-    let(:older_than) { 1.day.ago }
+  context 'filter by account_list with no tasks' do
+    let(:account_with_no_tasks) { create(:account_list) }
+    let(:filter_account_list) { account_with_no_tasks }
 
-    before { task.update!(created_at: 2.days.ago) }
+    it 'creates no duplicate tasks' do
+      expect { subject }.not_to change { Task.count }
+    end
 
-    it 'ignores Tasks which were created too long ago' do
-      expect { subject.perform(older_than) }.not_to change { Task.count }
+    it 'logs the created Task IDs to S3' do
+      # we will replace the default expectation for :new
+      RSpec::Mocks.space.proxy_for(fog_files).reset
+
+      expect(fog_files).to receive(:new) do |args|
+        expect(args[:key]).to match(/duplicate_tasks_per_contact__.+\.log/)
+        expect(args[:body]).to match(%r{workers/duplicate_tasks_per_contact\.rb})
+        expect(args[:body]).to match(/^$/)
+
+        fog_file
+      end
+
+      subject
+    end
+  end
+
+  context 'filter by another account_list with separate tasks' do
+    let(:another_task) { create(:task) }
+    let!(:another_contact_one) { create(:contact, tasks: [another_task]) }
+    let!(:another_contact_two) { create(:contact, tasks: [another_task]) }
+
+    let(:filter_account_list) { another_task.account_list }
+    before { another_task.reload }
+
+    it 'creates only one duplicate task' do
+      expect { subject }.to change { Task.count }.from(2).to(3)
+    end
+
+    it 'ensures all Tasks have unique UUIDs' do
+      subject
+      expect(Task.all.pluck(:uuid).uniq.size).to eq Task.count
+    end
+
+    it 'results in all Tasks having exactly one Contact' do
+      subject
+      expect(Task.all.reject { |t| t.contacts.size == 1 }.size).to eq 1
+      expect(Task.all.reject { |t| t.contacts.size == 1 }.first).to eq task
+    end
+
+    it 'logs the created Task IDs to S3' do
+      # we will replace the default expectation for :new
+      RSpec::Mocks.space.proxy_for(fog_files).reset
+
+      expect(fog_files).to receive(:new) do |args|
+        expect(args[:key]).to match(%r{^worker_results/account-list-#{another_task.account_list_id}/duplicate_tasks_per_contact__.+\.log$})
+        expect(args[:body]).to match(%r{workers/duplicate_tasks_per_contact\.rb})
+        expect(args[:body]).to match(/^#{another_task.id}(?:\s\d+)+$/)
+        expect(args[:body].lines[2].split(/\s/).size).to eq(Task.count - 1)
+
+        fog_file
+      end
+
+      subject
     end
   end
 end

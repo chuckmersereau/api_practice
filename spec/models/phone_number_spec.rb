@@ -43,6 +43,20 @@ describe PhoneNumber do
       end.to_not change(PhoneNumber, :count)
     end
 
+    it 'creates a duplicate phone number if it is from an TntImport' do
+      PhoneNumber.add_for_person(person, number: '213-345-2313')
+      expect do
+        PhoneNumber.add_for_person(person, number: '213-345-2313', source: 'TntImport')
+      end.to change(PhoneNumber, :count).from(1).to(2)
+    end
+
+    it "doesn't create a phone number if it exists and are both from TntImports" do
+      PhoneNumber.add_for_person(person, number: '213-345-2313', source: 'TntImport')
+      expect do
+        PhoneNumber.add_for_person(person, number: '213-345-2313', source: 'TntImport')
+      end.to_not change(PhoneNumber, :count)
+    end
+
     it "doesn't create a phone number if it exists in normalized form" do
       contact.account_list.update(home_country: 'United States')
       PhoneNumber.add_for_person(person, number: '+12133452313')

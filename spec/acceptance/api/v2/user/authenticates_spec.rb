@@ -11,8 +11,16 @@ resource 'User > Authenticate' do
 
   before do
     user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
-    stub_request(:get, 'https://thekey.me/cas/p3/serviceValidate?service=http://example.org/api/v2/user/authenticate&ticket=ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a')
-      .to_return(status: 200, body: File.open(Rails.root.join('spec', 'fixtures', 'cas', 'successful_ticket_validation_response_body.xml')).read)
+    stub_request(
+      :get,
+      "#{ENV['CAS_BASE_URL']}/p3/serviceValidate?"\
+      'service=http://example.org/api/v2/user/authenticate&ticket=ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a'
+    ).to_return(
+      status: 200,
+      body: File.open(
+        Rails.root.join('spec', 'fixtures', 'cas', 'successful_ticket_validation_response_body.xml')
+      ).read
+    )
 
     allow(SiebelDonations::Profile).to receive(:find).and_return(nil)
   end
@@ -27,7 +35,9 @@ resource 'User > Authenticate' do
       explanation 'Create a JSON Web Token from a provided valid CAS Ticket'
       do_request data: { type: 'authenticate', attributes: { cas_ticket: 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a' } }
       expect(response_status).to eq(200)
-      expect(JsonWebToken.decode(JSON.parse(response_body)['data']['attributes']['json_web_token'])['user_uuid']).to eq(user.uuid)
+      expect(
+        JsonWebToken.decode(JSON.parse(response_body)['data']['attributes']['json_web_token'])['user_uuid']
+      ).to eq(user.uuid)
     end
   end
 end

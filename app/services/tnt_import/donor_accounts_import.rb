@@ -63,7 +63,7 @@ class TntImport::DonorAccountsImport
         postal_code: row['PostalCode'],
         country: tnt_country(row['CountryID']),
         primary_mailing_address: true,
-        source: 'TntImport',
+        source: TntImport::SOURCE,
         start_date: Date.current
       }
     ]

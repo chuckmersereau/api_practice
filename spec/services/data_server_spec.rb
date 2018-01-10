@@ -536,8 +536,44 @@ describe DataServer do
       expect_bad_passsword_err("﻿ERROR\nThe user logging in is not registered with this system")
     end
 
+    it 'raises InvalidCredentialsError if the second line includes the phrase "not authorized"' do
+      expect_bad_passsword_err("﻿ERROR\nYou are not authorized to use that Profile.")
+    end
+
     it 'raises InvalidCredentialsError if the first line includes a byte order mark' do
       expect_bad_passsword_err("ERROR\r\nAuthentication failed.  Perhaps the username or password are incorrect.")
+    end
+
+    it 'raises InvalidCredentialsError if the server responds with HTTP 403' do
+      stub_request(:post, 'http://example.com').to_return(status: 403)
+
+      expect do
+        data_server.send(:get_response, 'http://example.com', {})
+      end.to raise_error(
+        Person::OrganizationAccount::InvalidCredentialsError,
+        'Your credentials for MyString are invalid.'
+      )
+    end
+
+    it 'raises MissingCredentialsError if the second line includes the phrase "not found"' do
+      stub_request(:post, 'http://example.com').to_return(body: "ERROR\nNot Found")
+      expect do
+        data_server.send(:get_response, 'http://example.com', {})
+      end.to raise_error(
+        Person::OrganizationAccount::MissingCredentialsError,
+        'Your credentials are missing for this account.'
+      )
+    end
+
+    it 'raises MissingCredentialsError if the server responds with HTTP 404' do
+      stub_request(:post, 'http://example.com').to_return(status: 404)
+
+      expect do
+        data_server.send(:get_response, 'http://example.com', {})
+      end.to raise_error(
+        Person::OrganizationAccount::MissingCredentialsError,
+        'Your credentials are missing for this account.'
+      )
     end
 
     it 'raises no error when the creds are encoded' do

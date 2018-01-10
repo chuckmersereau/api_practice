@@ -2,7 +2,7 @@ require 'sidekiq/pro/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  mount Auth::Engine, at: '/', constraints: {subdomain: 'auth'}
+  mount Auth::Engine, at: '/', constraints: { subdomain: 'auth' }
 
   authenticated :user, ->(u) { u.developer } do
     mount Sidekiq::Web => '/sidekiq'

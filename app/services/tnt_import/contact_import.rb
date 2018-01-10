@@ -77,8 +77,7 @@ class TntImport::ContactImport
     contact.direct_deposit = true?(row['DirectDeposit']) if @override || contact.direct_deposit.nil?
     contact.magazine = true?(row['Magazine']) if @override || contact.magazine.nil?
     contact.tnt_id = row['id']
-    contact.addresses_attributes =
-      TntImport::AddressesBuilder.build_address_array(row, contact, @override)
+    contact.addresses.build(TntImport::AddressesBuilder.build_address_array(row, contact, @override))
     contact.is_organization = true?(row['IsOrganization']) if @override || contact.is_organization.nil?
   end
 

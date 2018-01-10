@@ -25,6 +25,22 @@ describe EmailAddress do
       end.to_not change(EmailAddress, :count)
     end
 
+    it 'creates a duplicate email address if it is from an TntImport' do
+      EmailAddress.add_for_person(person, email: address)
+      expect do
+        EmailAddress.add_for_person(person, email: address, source: 'TntImport')
+        expect(person.email_addresses.first.email).to eq(address)
+      end.to change(EmailAddress, :count).from(1).to(2)
+    end
+
+    it "doesn't create an email address if it exists and are both from TntImports" do
+      EmailAddress.add_for_person(person,  email: address, source: 'TntImport')
+      expect do
+        EmailAddress.add_for_person(person, email: address, source: 'TntImport')
+        expect(person.email_addresses.first.email).to eq(address)
+      end.to_not change(EmailAddress, :count)
+    end
+
     it 'does nothing when adding itself to a person' do
       email = EmailAddress.add_for_person(person, email: address)
       expect do

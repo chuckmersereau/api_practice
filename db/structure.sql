@@ -5188,10 +5188,10 @@ CREATE UNIQUE INDEX index_duplicate_record_pairs_on_uuid ON duplicate_record_pai
 
 
 --
--- Name: index_email_addresses_on_email_and_person_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_email_addresses_on_email_and_person_id_and_source; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_email_addresses_on_email_and_person_id ON email_addresses USING btree (email, person_id);
+CREATE UNIQUE INDEX index_email_addresses_on_email_and_person_id_and_source ON email_addresses USING btree (email, person_id, source);
 
 
 --
@@ -7144,4 +7144,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171101004028');
 INSERT INTO schema_migrations (version) VALUES ('20171102140700');
 
 INSERT INTO schema_migrations (version) VALUES ('20171108032537');
+
+INSERT INTO schema_migrations (version) VALUES ('20171113062557');
 

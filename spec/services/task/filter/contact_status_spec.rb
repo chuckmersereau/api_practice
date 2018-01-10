@@ -31,5 +31,25 @@ RSpec.describe Task::Filter::ContactStatus do
         expect(described_class.query(tasks, { contact_status: 'null, hidden' }, account_list).to_a).not_to match_array([task_one, task_two, task_three])
       end
     end
+
+    context 'with reverse_FILTER' do
+      subject { described_class.query(tasks, query, account_list) }
+      let(:query) { { contact_status: contact_status, reverse_contact_status: true } }
+
+      context 'contact_status: "active"' do
+        let(:contact_status) { 'active' }
+        it('returns tasks owned by hidden contacts') { is_expected.to match_array([task_two]) }
+      end
+
+      context 'contact_status: "null"' do
+        let(:contact_status) { 'null' }
+        it('returns tasks owned by hidden contacts') { is_expected.to match_array([task_two]) }
+      end
+
+      context 'contact_status: "hidden"' do
+        let(:contact_status) { 'hidden' }
+        it('returnstasks owned by  null/blank contacts') { is_expected.to match_array([task_three]) }
+      end
+    end
   end
 end

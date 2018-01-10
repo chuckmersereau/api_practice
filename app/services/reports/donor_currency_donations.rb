@@ -20,7 +20,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
         grouped[currency] = {
           totals: {
             year: sum_donations(donations),
-            year_converted: sum_converted_donations(donations),
+            year_converted: sum_converted_donations(donations, account_list.salary_currency),
             months: sum_donations_by_month(donations, months)
           },
           donation_infos: contacts_donation_info(donations)

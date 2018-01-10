@@ -5,18 +5,28 @@ module Filtering
   DATE_TIME_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)(\.\.\.?)(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)/
   DEFAULT_PERMITTED_FILTERS = %i(updated_at).freeze
 
+  UNCASTED_FILTERS = %i(wildcard_seach).freeze
+
   def filter_params(filter_params = params[:filter])
     return {} unless filter_params
 
     filter_params
-      .each_with_object({}) { |(key, value), hash| hash[key.to_s.underscore.to_sym] = value }
+      .to_hash
+      .transform_keys { |key| key.to_s.underscore.to_sym }
       .keep_if { |key, _| permitted_filters_with_defaults.include?(key) }
-      .map { |key, value| { key => cast_filter_value(value) } }
+      .map { |key, value| cast_hash_entry(key, value) }
       .reduce({}, :merge)
       .each { |key, value| validate_casted_filter_value!(key, value) }
   end
 
   private
+
+  def cast_hash_entry(key, value)
+    casted = value
+    casted = cast_filter_value(value) unless UNCASTED_FILTERS.include?(key)
+
+    { key => casted }
+  end
 
   def cast_filter_value(value)
     case value
