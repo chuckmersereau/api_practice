@@ -72,19 +72,7 @@ class ContactMerge
         )
       end
 
-      @other.appeal_contacts.each do |appeal_contacts|
-        next if @winner.appeal_contacts.find { |ac| ac.appeal_id == appeal_contacts.appeal_id }
-        appeal_contacts.update_columns(contact_id: @winner.id)
-      end
-
-      @other.pledges.each do |other_pledge|
-        winner_match = @winner.pledges.find { |pledge| pledge.appeal_id == other_pledge.appeal_id }
-        if winner_match
-          winner_match.merge(other_pledge)
-        else
-          other_pledge.update_columns(contact_id: @winner.id)
-        end
-      end
+      merge_appeals_and_pledges
 
       @other.notifications.update_all(contact_id: @winner.id)
 
@@ -123,6 +111,22 @@ class ContactMerge
       @winner.tag_list += @other.tag_list
 
       @winner.save(validate: false)
+    end
+  end
+
+  def merge_appeals_and_pledges
+    @other.appeal_contacts.each do |appeal_contacts|
+      next if @winner.appeal_contacts.find { |ac| ac.appeal_id == appeal_contacts.appeal_id }
+      appeal_contacts.update_columns(contact_id: @winner.id)
+    end
+
+    @other.pledges.each do |other_pledge|
+      winner_match = @winner.pledges.find { |pledge| pledge.appeal_id == other_pledge.appeal_id }
+      if winner_match
+        winner_match.merge(other_pledge)
+      else
+        other_pledge.update_columns(contact_id: @winner.id)
+      end
     end
   end
 
