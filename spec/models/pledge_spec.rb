@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Pledge, type: :model do
-  subject { create(:pledge) }
+  subject! { create(:pledge) }
+  let(:appeal) { create(:appeal) }
 
   it { is_expected.to belong_to(:account_list) }
   it { is_expected.to belong_to(:appeal) }
@@ -33,7 +34,6 @@ RSpec.describe Pledge, type: :model do
   end
 
   context '#appeal' do
-    let(:appeal) { create(:appeal) }
     let(:contact) { create(:contact) }
 
     it 'restricted to a single entry per contact per appeal' do
@@ -41,6 +41,40 @@ RSpec.describe Pledge, type: :model do
 
       expect { subject.update!(appeal: appeal, contact: contact) }.to \
         raise_error ActiveRecord::RecordInvalid
+    end
+  end
+
+  context '#merge' do
+    let!(:loser_pledge) { create(:pledge, appeal: appeal) }
+
+    it 'moves donations' do
+      subject.update(appeal: appeal)
+      subject.donations << create(:donation)
+      loser_pledge.donations << create(:donation)
+
+      expect { subject.merge(loser_pledge) }.to change { subject.donations.count }.from(1).to(2)
+    end
+
+    it "won't merge if appeals don't match" do
+      expect { subject.merge(loser_pledge) }.to change(Pledge, :count).by(0)
+
+      subject.update(appeal: appeal)
+
+      expect { subject.merge(loser_pledge) }.to change(Pledge, :count).by(-1)
+    end
+
+    it 'combines pledge amount if loser has higher amount' do
+      subject.update(appeal: appeal)
+      loser_pledge.update(amount: 100)
+
+      expect { subject.merge(loser_pledge) }.to change { subject.reload.amount }
+    end
+
+    it "doesn't move attributes if loser has lower amount" do
+      subject.update(appeal: appeal)
+      loser_pledge.update(amount: 5)
+
+      expect { subject.merge(loser_pledge) }.to_not change { subject.reload.amount }
     end
   end
 end
