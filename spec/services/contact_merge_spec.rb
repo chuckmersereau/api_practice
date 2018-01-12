@@ -2,6 +2,8 @@ require 'rails_helper'
 
 # Note, the Contact spec has a number of cases for contact merging as well
 describe ContactMerge do
+  let(:account_list) { create(:account_list) }
+
   it 'combines the send_newsletter field' do
     winner = create(:contact, send_newsletter: 'Email')
     loser = create(:contact, send_newsletter: 'Physical')
@@ -27,6 +29,19 @@ describe ContactMerge do
     winner.merge(loser)
     winner.reload
     expect(winner.activities.count).to eq(2)
+  end
+
+  it 'transfers pledges' do
+    winner = create(:contact, account_list: account_list)
+    loser = create(:contact, account_list: account_list)
+    appeal = create(:appeal, account_list: account_list)
+    appeal.contacts << loser
+    pledge = create(:pledge, contact: loser, appeal: appeal)
+
+    winner.merge(loser)
+
+    expect(appeal.contacts.reload).to include winner
+    expect(pledge.reload.contact).to eq winner
   end
 
   it 'marks loser addresses as not primary' do
