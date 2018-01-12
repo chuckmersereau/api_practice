@@ -115,9 +115,9 @@ class ContactMerge
   end
 
   def merge_appeals_and_pledges
-    @other.appeal_contacts.each do |appeal_contacts|
-      next if @winner.appeal_contacts.find { |ac| ac.appeal_id == appeal_contacts.appeal_id }
-      appeal_contacts.update_columns(contact_id: @winner.id)
+    @other.appeal_contacts.each do |appeal_contact|
+      next if @winner.appeal_contacts.find { |ac| ac.appeal_id == appeal_contact.appeal_id }
+      appeal_contact.update_columns(contact_id: @winner.id)
     end
 
     @other.pledges.each do |other_pledge|
