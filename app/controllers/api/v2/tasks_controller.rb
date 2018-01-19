@@ -98,7 +98,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def task_scope
-    Task.where(account_list: account_lists)
+    Task.where(account_list: account_lists.collect(&:id))
   end
 
   def permitted_sorting_params
