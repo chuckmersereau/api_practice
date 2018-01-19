@@ -3,6 +3,8 @@ class DuplicateTasksPerContact
 
   LOG_DIR = 'worker_results'.freeze
 
+  sidekiq_options queue: :api_default, unique: :until_executed
+
   def initialize
     @new_ids = {}
   end
