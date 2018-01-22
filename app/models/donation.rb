@@ -44,7 +44,7 @@ class Donation < ApplicationRecord
   # Used by Contact::DonationsEagerLoader
   attr_accessor :loaded_contact
 
-  default_scope { order('donation_date desc') }
+  default_scope { order('donation_date desc, id') }
 
   scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
 
