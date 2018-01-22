@@ -4,6 +4,7 @@ describe DonorAccount do
   before(:each) do
     @donor_account = create(:donor_account)
   end
+
   it 'should have one primary_master_person' do
     @mp1 = create(:master_person)
     @donor_account.master_people << @mp1
@@ -45,6 +46,39 @@ describe DonorAccount do
       expect do
         @donor_account.link_to_contact_for(@account_list)
       end.to change(Contact, :count)
+    end
+
+    context 'with a blank name' do
+      before { @donor_account.update!(name: '') }
+
+      it 'does not raise an ActiveRecord::RecordInvalid error' do
+        expect do
+          @donor_account.link_to_contact_for(@account_list)
+        end.not_to raise_error
+      end
+
+      it 'creates a contact with a fallback name' do
+        contact = @donor_account.link_to_contact_for(@account_list)
+        expect(contact.name).to eq 'Donor'
+      end
+    end
+  end
+
+  describe '#name' do
+    context 'with a name present' do
+      before { @donor_account.update!(name: 'Bob') }
+
+      it 'creates a contact with a fallback name' do
+        expect(@donor_account.name).to eq 'Bob'
+      end
+    end
+
+    context 'with a blank name' do
+      before { @donor_account.update!(name: '') }
+
+      it 'creates a contact with a fallback name' do
+        expect(@donor_account.name).to eq 'Donor'
+      end
     end
   end
 

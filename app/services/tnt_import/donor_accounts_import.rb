@@ -35,7 +35,7 @@ class TntImport::DonorAccountsImport
     da = find_donor_account(org, account_number)
     if da
       # Donor accounts for non-Cru orgs could have nil names so update with the name from tnt
-      da.update(name: name) if da.name.blank?
+      da.update(name: name) unless da.name?
       da
     else
       create_donor_account(org, account_number, row, name)
