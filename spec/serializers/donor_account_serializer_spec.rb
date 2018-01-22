@@ -46,4 +46,22 @@ describe DonorAccountSerializer do
       end
     end
   end
+
+  describe '#name' do
+    context 'donor_account has name and number' do
+      let(:donor_account) { create(:donor_account, name: 'Name', account_number:  'Number') }
+
+      it 'returns donor_account name (number)' do
+        expect(serializer.send(:name)).to eq 'Name'
+      end
+    end
+
+    context 'donor_account has no name' do
+      let(:donor_account) { create(:donor_account, name: nil, account_number:  'Number') }
+
+      it 'returns nil' do
+        expect(serializer.send(:name)).to be_nil
+      end
+    end
+  end
 end

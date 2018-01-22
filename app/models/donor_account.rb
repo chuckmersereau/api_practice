@@ -62,7 +62,7 @@ class DonorAccount < ApplicationRecord
     self.donor_type = other.donor_type if donor_type.blank?
     self.master_company_id = other.master_company_id if master_company_id.blank?
     self.organization_id = other.organization_id if organization_id.blank?
-    self.name = other.name if name.blank?
+    self.name = other.name unless attribute_present?(:name)
     save
 
     other.master_person_donor_accounts.each do |mpda|
@@ -84,6 +84,10 @@ class DonorAccount < ApplicationRecord
   def addresses_attributes
     attrs = %w(street city state country postal_code start_date primary_mailing_address source source_donor_account_id remote_id)
     Hash[addresses.collect.with_index { |address, i| [i, address.attributes.slice(*attrs)] }]
+  end
+
+  def name
+    self[:name].present? ? self[:name] : _('Donor')
   end
 
   private
