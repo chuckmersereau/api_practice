@@ -5,6 +5,7 @@ class DonationSerializer < ApplicationSerializer
              :appeal_amount,
              :channel,
              :converted_amount,
+             :converted_appeal_amount,
              :converted_currency,
              :currency,
              :donation_date,

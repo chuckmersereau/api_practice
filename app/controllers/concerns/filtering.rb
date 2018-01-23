@@ -5,7 +5,7 @@ module Filtering
   DATE_TIME_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)(\.\.\.?)(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)/
   DEFAULT_PERMITTED_FILTERS = %i(updated_at).freeze
 
-  UNCASTED_FILTERS = %i(wildcard_seach).freeze
+  UNCASTED_FILTERS = %i(wildcard_seach tags).freeze
 
   def filter_params(filter_params = params[:filter])
     return {} unless filter_params

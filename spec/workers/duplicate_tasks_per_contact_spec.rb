@@ -1,12 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe DuplicateTasksPerContact do
-  subject do
-    described_class.new.perform(
-      account_list: filter_account_list,
-      min_contacts: min_contacts
-    )
-  end
+  subject { described_class.new.perform(filter_account_list, min_contacts) }
   let(:filter_account_list) { nil }
   let(:min_contacts) { 2 }
 

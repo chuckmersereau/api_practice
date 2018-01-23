@@ -11,6 +11,10 @@ class Contact::Filter::Newsletter < Contact::Filter::Base
                  contacts.where(send_newsletter: %w(Physical Both))
                when 'email'
                  contacts.where(send_newsletter: %w(Email Both))
+               when 'address_only'
+                 contacts.where(send_newsletter: 'Physical')
+               when 'email_only'
+                 contacts.where(send_newsletter: 'Email')
                when 'both'
                  contacts.where(send_newsletter: 'Both')
                else
@@ -37,6 +41,8 @@ class Contact::Filter::Newsletter < Contact::Filter::Base
      { name: _('All'), id: 'all' },
      { name: _('Physical'), id: 'address' },
      { name: _('Email'), id: 'email' },
+     { name: _('Physical Only'), id: 'address_only' },
+     { name: _('Email Only'), id: 'email_only' },
      { name: _('Both'), id: 'both' }]
   end
 end

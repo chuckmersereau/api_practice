@@ -24,9 +24,9 @@ class DonorAccountSerializer < ApplicationSerializer
 
   def name
     return @name if @name
-    @name = if scope && scope[:account_list] && object.name
+    @name = if scope && scope[:account_list] && object.name?
               object.link_to_contact_for(scope[:account_list]).name
-            elsif object.name
+            elsif object.name?
               object.name
             end
   end

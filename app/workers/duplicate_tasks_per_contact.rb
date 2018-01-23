@@ -3,6 +3,8 @@ class DuplicateTasksPerContact
 
   LOG_DIR = 'worker_results'.freeze
 
+  sidekiq_options queue: :api_default, unique: :until_executed
+
   def initialize
     @new_ids = {}
   end
@@ -12,7 +14,7 @@ class DuplicateTasksPerContact
   # @param min_contacts [Integer] Tasks with more than this number of Contacts
   #   will be duplicated
   # @param upload_log [Boolean] should a log file be uploaded to AWS S3?
-  def perform(account_list: nil, min_contacts: 100, upload_log: true)
+  def perform(account_list = nil, min_contacts = 100, upload_log = true)
     scope = task_scope(account_list)
 
     scope.group('activities.id')

@@ -44,7 +44,7 @@ class Donation < ApplicationRecord
   # Used by Contact::DonationsEagerLoader
   attr_accessor :loaded_contact
 
-  default_scope { order('donation_date desc') }
+  default_scope { order('donation_date desc, id') }
 
   scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
 
@@ -74,6 +74,13 @@ class Donation < ApplicationRecord
 
   def converted_amount
     CurrencyRate.convert_on_date(amount: amount,
+                                 from: currency,
+                                 to: converted_currency,
+                                 date: donation_date)
+  end
+
+  def converted_appeal_amount
+    CurrencyRate.convert_on_date(amount: pledge_amount,
                                  from: currency,
                                  to: converted_currency,
                                  date: donation_date)

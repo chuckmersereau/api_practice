@@ -23,6 +23,8 @@ RSpec.describe Contact::Filter::Newsletter do
                                                                           { name: _('All'), id: 'all' },
                                                                           { name: _('Physical'), id: 'address' },
                                                                           { name: _('Email'), id: 'email' },
+                                                                          { name: _('Physical Only'), id: 'address_only' },
+                                                                          { name: _('Email Only'), id: 'email_only' },
                                                                           { name: _('Both'), id: 'both' }],
                                                                 parent: nil,
                                                                 title: 'Newsletter Recipients',

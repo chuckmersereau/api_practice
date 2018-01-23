@@ -55,6 +55,7 @@ resource 'Donations' do
       channel
       converted_currency
       converted_amount
+      converted_appeal_amount
       created_at
       currency
       donation_date
@@ -104,26 +105,27 @@ resource 'Donations' do
 
     get '/api/v2/account_lists/:account_list_id/donations/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'amount',                 'Amount',                 type: 'Number'
-        response_field 'appeal_amount',          'Appeal Amount',          type: 'Number'
-        response_field 'appeal_id',              'Appeal ID',              type: 'Number'
-        response_field 'channel',                'Channel',                type: 'String'
-        response_field 'created_at',             'Created At',             type: 'String'
-        response_field 'converted_amount',       'Converted Amount',       type: 'Number'
-        response_field 'converted_currency',     'Converted Currency',     type: 'String'
-        response_field 'currency',               'Currency',               type: 'String'
-        response_field 'designation_account_id', 'Designation Account ID', type: 'Number'
-        response_field 'donation_date',          'Donation Date',          type: 'String'
-        response_field 'donor_account_id',       'Donor Account ID',       type: 'Number'
-        response_field 'memo',                   'Memo',                   type: 'String'
-        response_field 'motivation',             'Motivation',             type: 'String'
-        response_field 'payment_method',         'Payment Method',         type: 'String'
-        response_field 'payment_type',           'Payment Type',           type: 'String'
-        response_field 'remote_id',              'Remote ID',              type: 'Number'
-        response_field 'tendered_amount',        'Tendered Ammount',       type: 'Number'
-        response_field 'tendered_currency',      'Tendered Currency',      type: 'String'
-        response_field 'updated_at',             'Updated At',             type: 'String'
-        response_field 'updated_in_db_at',       'Updated In Db At',       type: 'String'
+        response_field 'amount',                  'Amount',                  type: 'Number'
+        response_field 'appeal_amount',           'Appeal Amount',           type: 'Number'
+        response_field 'appeal_id',               'Appeal ID',               type: 'Number'
+        response_field 'channel',                 'Channel',                 type: 'String'
+        response_field 'created_at',              'Created At',              type: 'String'
+        response_field 'converted_amount',        'Converted Amount',        type: 'Number'
+        response_field 'converted_appeal_amount', 'Converted Appeal Amount', type: 'Number'
+        response_field 'converted_currency',      'Converted Currency',      type: 'String'
+        response_field 'currency',                'Currency',                type: 'String'
+        response_field 'designation_account_id',  'Designation Account ID',  type: 'Number'
+        response_field 'donation_date',           'Donation Date',           type: 'String'
+        response_field 'donor_account_id',        'Donor Account ID',        type: 'Number'
+        response_field 'memo',                    'Memo',                    type: 'String'
+        response_field 'motivation',              'Motivation',              type: 'String'
+        response_field 'payment_method',          'Payment Method',          type: 'String'
+        response_field 'payment_type',            'Payment Type',            type: 'String'
+        response_field 'remote_id',               'Remote ID',               type: 'Number'
+        response_field 'tendered_amount',         'Tendered Ammount',        type: 'Number'
+        response_field 'tendered_currency',       'Tendered Currency',       type: 'String'
+        response_field 'updated_at',              'Updated At',              type: 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',        type: 'String'
       end
 
       example 'Donation [GET]', document: documentation_scope do
