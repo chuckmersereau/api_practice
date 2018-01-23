@@ -79,6 +79,13 @@ class Donation < ApplicationRecord
                                  date: donation_date)
   end
 
+  def converted_appeal_amount
+    CurrencyRate.convert_on_date(amount: pledge_amount,
+                                 from: currency,
+                                 to: converted_currency,
+                                 date: donation_date)
+  end
+
   def converted_currency
     designation_account.currency
   end
