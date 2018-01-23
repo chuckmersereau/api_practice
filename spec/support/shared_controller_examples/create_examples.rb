@@ -13,7 +13,7 @@ RSpec.shared_examples 'create_examples' do |options = {}|
 
       expect do
         post :create, full_correct_attributes
-      end.to change { resource.class.count }.by(1)
+      end.to change { resource.class.count }.by(options[:count] || 1)
 
       expect(response.status).to eq(201), invalid_status_detail
     end

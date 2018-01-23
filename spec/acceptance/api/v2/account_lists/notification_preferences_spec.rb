@@ -10,16 +10,28 @@ resource 'Account Lists > Notification Preferences' do
 
   let!(:account_list)              { user.account_lists.first }
   let(:account_list_id)            { account_list.uuid }
-  let!(:notification_preferences)  do
-    create_list(:notification_preference, 2,
-                account_list_id: account_list.id,
-                actions: 'email',
-                notification_type_id: notification_type.id)
+  let!(:notification_preferences) do
+    [
+      create(:notification_preference,
+             account_list_id: account_list.id,
+             email: true,
+             task: true,
+             notification_type_id: notification_type.id,
+             user_id: user.id),
+      create(:notification_preference,
+             account_list_id: account_list.id,
+             email: true,
+             task: true,
+             notification_type_id: notification_type_1.id,
+             user_id: user.id)
+    ]
   end
   let(:notification_preference)    { notification_preferences.first }
   let(:id)                         { notification_preference.uuid }
 
   let(:notification_type) { create(:notification_type) }
+  let(:notification_type_1) { create(:notification_type) }
+  let(:notification_type_2) { create(:notification_type) }
 
   let(:form_data) do
     build_data(attributes, relationships: relationships)
@@ -30,7 +42,7 @@ resource 'Account Lists > Notification Preferences' do
       notification_type: {
         data: {
           type: 'notification_types',
-          id: notification_type.uuid
+          id: notification_type_2.uuid
         }
       }
     }
@@ -43,7 +55,8 @@ resource 'Account Lists > Notification Preferences' do
   # List your expected resource keys vertically here (alphabetical please!)
   let(:resource_attributes) do
     %w(
-      actions
+      email
+      task
       created_at
       type
       updated_at
@@ -80,7 +93,8 @@ resource 'Account Lists > Notification Preferences' do
 
     get '/api/v2/account_lists/:account_list_id/notification_preferences/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'actions',              'Actions',              type: 'String'
+        response_field 'task',                 'Create Task',          type: 'Boolean'
+        response_field 'email',                'Send an Email',        type: 'Boolean'
         response_field 'created_at',           'Created At',           type: 'String'
         response_field 'type',                 'Notification Type',    type: 'String'
         response_field 'updated_at',           'Updated At',           type: 'String'
@@ -96,13 +110,15 @@ resource 'Account Lists > Notification Preferences' do
 
     post '/api/v2/account_lists/:account_list_id/notification_preferences' do
       with_options scope: [:data, :attributes] do
-        parameter 'actions',             'Actions',           type: 'String'
+        parameter 'task',                'Create Task',       type: 'String'
+        parameter 'email',               'Send an Email',     type: 'String'
         parameter 'updated_in_db_at',    'Updated In Db At',  type: 'String'
       end
 
       let(:attributes) do
         {
-          actions: 'email'
+          task: true,
+          email: true
         }
       end
 

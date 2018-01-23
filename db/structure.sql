@@ -2216,10 +2216,12 @@ CREATE TABLE notification_preferences (
     id integer NOT NULL,
     notification_type_id integer,
     account_list_id integer,
-    actions text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    user_id integer,
+    email boolean DEFAULT true,
+    task boolean DEFAULT true
 );
 
 
@@ -5671,6 +5673,13 @@ CREATE UNIQUE INDEX index_notification_preferences_on_uuid ON notification_prefe
 
 
 --
+-- Name: index_notification_preferences_unique; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_notification_preferences_unique ON notification_preferences USING btree (user_id, account_list_id, notification_type_id);
+
+
+--
 -- Name: index_notification_types_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6361,6 +6370,14 @@ ALTER TABLE ONLY donation_amount_recommendations
 
 ALTER TABLE ONLY master_person_sources
     ADD CONSTRAINT master_person_sources_master_person_id_fk FOREIGN KEY (master_person_id) REFERENCES master_people(id);
+
+
+--
+-- Name: notification_preferences notification_preferences_user_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notification_preferences
+    ADD CONSTRAINT notification_preferences_user_id_fk FOREIGN KEY (user_id) REFERENCES people(id) ON DELETE CASCADE;
 
 
 --
@@ -7147,3 +7164,8 @@ INSERT INTO schema_migrations (version) VALUES ('20171108032537');
 
 INSERT INTO schema_migrations (version) VALUES ('20171113062557');
 
+INSERT INTO schema_migrations (version) VALUES ('20171213024356');
+
+INSERT INTO schema_migrations (version) VALUES ('20171215011225');
+
+INSERT INTO schema_migrations (version) VALUES ('20171219033014');

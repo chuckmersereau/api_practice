@@ -137,6 +137,7 @@ group :test do
   gem 'mock_redis', '~> 0.17.0'
   gem 'rb-fsevent', require: false
   gem 'roo', '~> 1.13.2'
+  gem 'rspec-sidekiq', '~>3.0.3'
   gem 'rspec-retry', '~> 0.5.5'
   gem 'rubocop', '~> 0.49.0', require: false
   gem 'shoulda-matchers', '~> 3.1.1'

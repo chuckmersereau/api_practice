@@ -4,6 +4,10 @@ require 'sidekiq_unique_jobs/testing'
 Sidekiq::Logging.logger = nil
 
 RSpec.configure do |config|
+  config.define_derived_metadata do |metadata|
+    metadata[:stub_batches] = false
+  end
+
   config.before(:each) do |example|
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all

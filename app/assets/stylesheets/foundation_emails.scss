@@ -11,6 +11,14 @@
   border-top: 5px solid #F5BE19;
   > tbody > tr > td {
     padding: 20px;
+    ul {
+      margin: 0;
+      padding-left: 15px;
+      li {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+    }
   }
 }
 .reason {
