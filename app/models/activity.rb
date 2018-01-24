@@ -13,7 +13,6 @@ class Activity < ApplicationRecord
   has_many :google_email_activities, dependent: :delete_all
   has_many :google_emails, through: :google_email_activities
   has_many :google_events
-  has_many :users, through: :comments
   has_many :people, through: :contacts
   has_many :phone_numbers, through: :people
 

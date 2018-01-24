@@ -5,24 +5,25 @@ class DuplicateTasksPerContact
 
   sidekiq_options queue: :api_default, unique: :until_executed
 
-  def initialize
-    @new_ids = {}
-  end
-
   # @param account_list [AccountList, Integer, nil] an optional +AccountList+
   #  (or its ID) that owns the Tasks duplicate
   # @param min_contacts [Integer] Tasks with more than this number of Contacts
   #   will be duplicated
   # @param upload_log [Boolean] should a log file be uploaded to AWS S3?
   def perform(account_list = nil, min_contacts = 100, upload_log = true)
+    new_tasks = {}
     scope = task_scope(account_list)
 
-    scope.group('activities.id')
-         .having('count(activity_contacts.id) >= ?', min_contacts)
-         .find_each(&method(:duplicate_task!))
+    Task.transaction do
+      scope.group('activities.id')
+           .having('count(activity_contacts.id) >= ?', min_contacts)
+           .find_each { |t| new_tasks[t.id] = duplicate_task!(t) }
+
+      Task.import!(new_tasks.values.flatten, recursive: true)
+    end
 
     account_list_id = account_list.is_a?(Integer) ? account_list : account_list&.id
-    upload_log_to_s3(account_list_id, @new_ids, prefix: LOG_DIR) if upload_log
+    upload_log_to_s3(account_list_id, new_tasks, prefix: LOG_DIR) if upload_log
   end
 
   private
@@ -36,20 +37,18 @@ class DuplicateTasksPerContact
   def duplicate_task!(task)
     comment_attributes = task.comments.map { |c| c.attributes.slice('body') }
 
-    Task.transaction do
-      new_ids =
-        task.contacts[1..-1].map do |contact|
-          t = task.dup
+    new_tasks =
+      task.contacts[1..-1].map do |contact|
+        task.dup.tap do |t|
           t.assign_attributes(uuid: nil, contacts: [contact])
           comment_attributes.each { |attr| t.comments.build(attr) }
-          t.save!
-          t.id
         end
+      end
 
-      task.update!(contacts: [task.contacts.first])
+    # original task remains owned by the first contact
+    task.update!(contacts: [task.contacts.first])
 
-      @new_ids[task.id] = new_ids
-    end
+    new_tasks
   end
 
   def upload_log_to_s3(account_list_id, records, prefix: nil)
@@ -72,9 +71,10 @@ class DuplicateTasksPerContact
     ].compact.join(delimiter)
   end
 
+  # @param records [Hash<Integer, Array<Task>]
   def log_body(records, started_at)
     body = "workers/duplicate_tasks_per_contact.rb: #{started_at}"
-    rows = records.map { |id, ids| [id, ids.join(' ')].join("\t") }
+    rows = records.map { |id, tasks| [id, tasks.map(&:id).join(' ')].join("\t") }
     [body, ('=' * body.size), rows.join("\n"), 'Done!'].join("\n")
   end
 end
