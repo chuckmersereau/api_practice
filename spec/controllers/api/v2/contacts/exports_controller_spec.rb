@@ -11,11 +11,11 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
   let(:second_account_list) { create(:account_list, users: [user]) }
 
   let!(:contact) { create(:contact, account_list: account_list, name: 'Last Contact', primary_person: primary_person) }
-  let!(:second_contact) { create(:contact, account_list: account_list, name: 'First Contact') }
-  let!(:third_contact) { create(:contact, account_list: second_account_list, name: 'Missing Contact') }
+  let!(:second_contact) { create(:contact_with_person, account_list: account_list, name: 'First Contact') }
+  let!(:third_contact) { create(:contact_with_person, account_list: second_account_list, name: 'Missing Contact') }
 
-  let!(:primary_person) { create(:person) }
-  let!(:spouse_person) { create(:person, contacts: [contact]) }
+  let!(:primary_person) { create(:person, first_name: 'Bill') }
+  let!(:spouse_person) { create(:person, contacts: [contact], first_name: 'Vonette') }
 
   let!(:primary_email_address) { create(:email_address, primary: true, person: primary_person) }
   let!(:spouse_email_address) { create(:email_address, primary: true, person: spouse_person) }
@@ -24,6 +24,9 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
   let!(:primary_phone_number) { create(:phone_number, primary: true, person: primary_person) }
   let!(:spouse_phone_number) { create(:phone_number, primary: true, person: spouse_person) }
   let!(:spouse_other_phone_number) { create(:phone_number, primary: false, person: spouse_person) }
+
+  let(:expected_headers1) { '"Primary Email","Spouse Email","Other Email","Spouse Other Email"' }
+  let(:expected_headers2) { '"Primary Phone","Spouse Phone","Other Phone","Spouse Other Phone"' }
 
   let(:id) { contact.uuid }
 
@@ -83,8 +86,8 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
       api_login(user)
       get :index, format: :csv
       expect(response.status).to eq(200)
-      expect(response.body).to include('"Primary Email","Spouse Email","Other Email","Spouse Other Email"')
-      expect(response.body).to include('"Primary Phone","Spouse Phone","Other Phone","Spouse Other Phone"')
+      expect(response.body).to include(expected_headers1)
+      expect(response.body).to include(expected_headers2)
       expect(response.body).to include("#{primary_email_address.email},#{spouse_email_address.email},,#{spouse_other_email_address.email}")
       expect(response.body).to include("#{primary_phone_number.number},#{spouse_phone_number.number},,#{spouse_other_phone_number.number}")
     end
@@ -123,10 +126,70 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
       api_login(user)
       get :index, format: :xlsx
       expect(response.status).to eq(200)
-      expect(spreadsheet.to_csv).to include('"Primary Email","Spouse Email","Other Email","Spouse Other Email"')
-      expect(spreadsheet.to_csv).to include('"Primary Phone","Spouse Phone","Other Phone","Spouse Other Phone"')
+      expect(spreadsheet.to_csv).to include(expected_headers1)
+      expect(spreadsheet.to_csv).to include(expected_headers2)
       expect(spreadsheet.to_csv).to include("#{primary_email_address.email}\",\"#{spouse_email_address.email}\",,\"#{spouse_other_email_address.email}")
       expect(spreadsheet.to_csv).to include("#{primary_phone_number.number}\",\"#{spouse_phone_number.number}\",,\"#{spouse_other_phone_number.number}")
+    end
+  end
+
+  context 'Primary Person is deceased' do
+    before { primary_person.update!(deceased: true) }
+
+    it 'renders only the spouse as the primary person' do
+      api_login(user)
+      get :index, format: :csv
+      expect(response.status).to eq(200)
+
+      row = CSV.parse(response.body, headers: true).find { |r| r['Contact Name'] == contact.name }
+      expect(row).to_not be nil
+      expect(row.to_hash).to include('First Name' => 'Vonette',
+                                     'Last Name' => spouse_person.last_name,
+                                     'Primary Email' => spouse_email_address.email,
+                                     'Spouse Email' => nil,
+                                     'Other Email' => spouse_other_email_address.email,
+                                     'Spouse Other Email' => nil,
+                                     'Primary Phone' => spouse_phone_number.number,
+                                     'Spouse Phone' => nil,
+                                     'Other Phone' => spouse_other_phone_number.number,
+                                     'Spouse Other Phone' => nil)
+    end
+  end
+
+  context 'Spouse is deceased' do
+    before { spouse_person.update!(deceased: true) }
+
+    it 'renders only the primary person phone and email address' do
+      api_login(user)
+      get :index, format: :csv
+      expect(response.status).to eq(200)
+
+      row = CSV.parse(response.body, headers: true).find { |r| r['Contact Name'] == contact.name }
+      expect(row).to_not be nil
+      expect(row.to_hash).to include('First Name' => 'Bill',
+                                     'Last Name' => primary_person.last_name,
+                                     'Primary Email' => primary_email_address.email,
+                                     'Spouse Email' => nil,
+                                     'Other Email' => nil,
+                                     'Spouse Other Email' => nil,
+                                     'Primary Phone' => primary_phone_number.number,
+                                     'Spouse Phone' => nil,
+                                     'Other Phone' => nil,
+                                     'Spouse Other Phone' => nil)
+    end
+  end
+
+  context 'Both Primary Person and Spouse are deceased' do
+    before { primary_person.update!(deceased: true) }
+    before { spouse_person.update!(deceased: true) }
+
+    it 'does not render the row at all' do
+      api_login(user)
+      get :index, format: :csv
+      expect(response.status).to eq(200)
+
+      row = CSV.parse(response.body, headers: true).find { |r| r['Contact Name'] == contact.name }
+      expect(row).to be nil
     end
   end
 
