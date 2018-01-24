@@ -34,7 +34,11 @@ class ChangeActionsToBooleansOnNotificationPreferences < ActiveRecord::Migration
         notification_preference.dup.tap do |user_notification_preference|
           user_notification_preference.uuid = nil
           user_notification_preference.user = user
-          user_notification_preference.save!
+          begin
+            user_notification_preference.save!
+          rescue ActiveRecord::RecordNotUnique => e
+            Rollbar.error(e)
+          end
         end
       end
     end
