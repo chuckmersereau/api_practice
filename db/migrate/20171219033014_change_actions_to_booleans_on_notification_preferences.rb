@@ -3,13 +3,14 @@ class ChangeActionsToBooleansOnNotificationPreferences < ActiveRecord::Migration
     add_column :notification_preferences, :email, :boolean, default: true
     add_column :notification_preferences, :task, :boolean, default: true
     NotificationPreference.find_each(&:convert_actions_array_to_booleans)
-    AccountListUser.find_each(&:duplicate_notification_preferences)
+    AccountListUser.includes(:user).where.not(people: { id: nil }).find_each(&:duplicate_notification_preferences)
     remove_column :notification_preferences, :actions
   end
 
   class NotificationPreference < ActiveRecord::Base
     belongs_to :user
     belongs_to :account_list
+    belongs_to :notification_type
 
     serialize :actions, Array
 
@@ -34,11 +35,7 @@ class ChangeActionsToBooleansOnNotificationPreferences < ActiveRecord::Migration
         notification_preference.dup.tap do |user_notification_preference|
           user_notification_preference.uuid = nil
           user_notification_preference.user = user
-          begin
-            user_notification_preference.save!
-          rescue ActiveRecord::RecordNotUnique => e
-            Rollbar.error(e)
-          end
+          user_notification_preference.save!
         end
       end
     end
