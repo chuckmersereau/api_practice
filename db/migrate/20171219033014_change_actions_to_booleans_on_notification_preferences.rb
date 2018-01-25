@@ -22,7 +22,7 @@ class ChangeActionsToBooleansOnNotificationPreferences < ActiveRecord::Migration
       )
     end
 
-    def delete_duplicates
+    def self.delete_duplicates
       deleted = 0
 
       account_lists_with_prefs = AccountList.includes(:notification_preferences).where.not(notification_preferences: { id: nil })
