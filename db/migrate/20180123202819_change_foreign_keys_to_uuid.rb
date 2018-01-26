@@ -1,12 +1,41 @@
 class ChangeForeignKeysToUuid < ActiveRecord::Migration
   def up
-    remove_foreign_keys
+    remove_foreign_key_constrains
+
+    find_indexes
 
     migrate_foreign_keys
 
     convert_primary_keys_to_uuids
 
-    readd_foreign_keys
+    readd_indexes
+
+    readd_foreign_key_constraints
+  end
+
+  def find_indexes
+    @indexes = execute "select * from pg_indexes where schemaname = 'public'"
+  end
+
+  def migrate_foreign_keys
+    foreign_keys = CSV.read(Rails.root.join('db','foriegn_key_to_class_map.csv'))
+
+    keys_grouped_by_table = foreign_keys.group_by { |fk| fk[0] }
+
+    keys_grouped_by_table.each do |table_name, group|
+      drop_indexes_for(table_name)
+
+      group.each { |fk| id_to_uuid(*fk) }
+    end
+  end
+
+  def drop_indexes_for(table_name)
+    @indexes.each do |index_row|
+      next unless index_row['tablename'] == table_name
+      next if index_row['indexname'].ends_with?('_pkey')
+
+      execute "DROP INDEX IF EXISTS #{index_row['indexname']}"
+    end
   end
 
   def id_to_uuid(table_name, relation_name, relation_klass)
@@ -36,12 +65,10 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
 
   def execute_foreign_key_load(foreign_key, new_foreign_key, relation_klass, table_name)
     relation_table = table_name(relation_klass)
-    query = "UPDATE #{table_name}
-             SET #{new_foreign_key} = #{relation_table}.uuid
-             FROM #{relation_table}
-             WHERE #{table_name}.#{foreign_key} = #{relation_table}.id"
-    p 'Loading foreign keys with:'
-    p query.gsub('\n', '').gsub('  ', ' ')
+    query = "UPDATE #{table_name} "\
+            "SET #{new_foreign_key} = #{relation_table}.uuid "\
+            "FROM #{relation_table} "\
+            "WHERE #{table_name}.#{foreign_key} = #{relation_table}.id"
     execute query
   end
 
@@ -60,12 +87,6 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
 
   private
 
-  def migrate_foreign_keys
-    foreign_keys = CSV.read(Rails.root.join('db','foriegn_key_to_class_map.csv'))
-
-    foreign_keys.each { |fk| id_to_uuid(*fk) }
-  end
-
   def convert_primary_keys_to_uuids
     tables_sql = "SELECT DISTINCT table_name
                   FROM information_schema.columns
@@ -82,7 +103,7 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     end
   end
 
-  def remove_foreign_keys
+  def remove_foreign_key_constrains
     remove_foreign_key :appeal_excluded_appeal_contacts, :contacts
     remove_foreign_key :appeal_excluded_appeal_contacts, :appeals
     remove_foreign_key :background_batch_requests, :background_batches
@@ -94,7 +115,7 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     remove_foreign_key :people, :master_people
   end
 
-  def readd_foreign_keys
+  def readd_foreign_key_constraints
     add_foreign_key :appeal_excluded_appeal_contacts, :contacts, dependent: :delete
     add_foreign_key :appeal_excluded_appeal_contacts, :appeals, dependent: :delete
     add_foreign_key :background_batch_requests, :background_batches
@@ -104,5 +125,14 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     add_foreign_key :master_person_sources, :master_people
     add_foreign_key :notification_preferences, :people, dependent: :delete, column: :user_id
     add_foreign_key :people, :master_people, dependent: :restrict
+  end
+
+
+  def readd_indexes
+    @indexes.each do |index_row|
+      next if index_row['indexname'].ends_with?('_pkey')
+
+      execute index_row['indexdef']
+    end
   end
 end
