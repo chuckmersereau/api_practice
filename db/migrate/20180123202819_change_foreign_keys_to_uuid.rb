@@ -1,5 +1,7 @@
 class ChangeForeignKeysToUuid < ActiveRecord::Migration
   def up
+    fix_uuid_columns
+
     remove_foreign_key_constrains
 
     find_indexes
@@ -13,6 +15,15 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     readd_foreign_key_constraints
   end
 
+  def fix_uuid_columns
+    add_column :export_logs, :uuid, :uuid, null: false, default: 'uuid_generate_v4()'
+    add_index :export_logs, :uuid, unique: true
+    add_column :account_list_coaches, :uuid, :uuid, null: false, default: 'uuid_generate_v4()'
+    add_index :account_list_coaches, :uuid, unique: true
+    execute 'UPDATE appeal_contacts SET uuid = uuid_generate_v4() WHERE uuid IS NULL;'
+    execute 'UPDATE appeal_excluded_appeal_contacts SET uuid = uuid_generate_v4() WHERE uuid IS NULL;'
+  end
+
   def find_indexes
     @indexes = execute "select * from pg_indexes where schemaname = 'public'"
   end
@@ -22,11 +33,31 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
 
     keys_grouped_by_table = foreign_keys.group_by { |fk| fk[0] }
 
-    keys_grouped_by_table.each do |table_name, group|
-      drop_indexes_for(table_name)
+    create_temp_tables
 
-      group.each { |fk| id_to_uuid(*fk) }
+    # make sure tmp'ed table has it's rows copied over
+    query_duplicated_table_names.each { |table_name| keys_grouped_by_table[table_name] ||= [] }
+
+    keys_grouped_by_table.each do |table_name, group|
+      copy_rows(table_name, group)
     end
+  end
+
+  def create_temp_tables
+    source = File.open Rails.root.join('db','create_temp_tables.sql'), "r"
+    command = ''
+    source.readlines.each do |line|
+      line.strip!
+      if line == '-- Temp Table'
+        execute command unless command == ''
+        command = ''
+        next
+      end
+      next if line.empty? || line.starts_with?('--')
+      command += " #{line}"
+    end
+    execute command unless command == ''
+    source.close
   end
 
   def drop_indexes_for(table_name)
@@ -38,37 +69,61 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     end
   end
 
-  def id_to_uuid(table_name, relation_name, relation_klass)
-    relation_name = relation_name.sub(/_id$/, '')
-    foreign_key = "#{relation_name}_id".to_sym
-    new_foreign_key = "#{relation_name}_uuid".to_sym
-
-    add_column table_name, new_foreign_key, :uuid
-
+  def copy_rows(table_name, foreign_keys_list)
     # if foreign relation is polymorphic, we have to do some more complicated work.
-    if relation_klass == 'Poly'
-      poly_id_to_uuid(table_name, relation_name, foreign_key, new_foreign_key)
+    poly_relation = foreign_keys_list.find { |fk| fk[2] == 'Poly' }
+    if poly_relation
+      relation_name = poly_relation[1].sub(/_id$/, '')
+      poly_id_to_uuid(table_name, relation_name, foreign_keys_list)
     else
-      execute_foreign_key_load(foreign_key, new_foreign_key, relation_klass, table_name)
+      execute_row_load(table_name, foreign_keys_list)
     end
-
-    remove_column table_name, foreign_key
-    rename_column table_name, new_foreign_key, foreign_key
   end
 
-  def poly_id_to_uuid(table_name, relation_name, foreign_key, new_foreign_key)
-    foreign_tables = ActiveRecord::Base.connection.execute("SELECT DISTINCT #{relation_name}_type as type from #{table_name}")
+  def poly_id_to_uuid(table_name, relation_name, foreign_keys)
+    foreign_tables = quiet_execute("SELECT DISTINCT #{relation_name}_type as type from #{table_name}")
     foreign_tables.each do |foreign_table_row|
-      execute_foreign_key_load(foreign_key, new_foreign_key, foreign_table_row['type'], table_name)
+      poly_class = foreign_table_row['type']
+      execute_row_load(table_name, foreign_keys, poly_class)
     end
   end
 
-  def execute_foreign_key_load(foreign_key, new_foreign_key, relation_klass, table_name)
-    relation_table = table_name(relation_klass)
-    query = "UPDATE #{table_name} "\
-            "SET #{new_foreign_key} = #{relation_table}.uuid "\
-            "FROM #{relation_table} "\
-            "WHERE #{table_name}.#{foreign_key} = #{relation_table}.id"
+  def execute_row_load(table_name, foreign_keys, poly_class = nil)
+    join_list = {}
+    foreign_keys.each do |fk|
+      foreign_class = fk[2] == 'Poly' ? poly_class : fk[2]
+      join_list[fk[1]] = {
+        foreign_table_name: table_name(foreign_class),
+        alias: "#{fk[1]}_table",
+        join_type: fk[3] == 'drop' ? 'INNER' : 'LEFT OUTER'
+      }
+    end
+
+    columns_query = "SELECT column_name FROM information_schema.columns where table_name = '#{table_name}'"
+    columns = quiet_execute(columns_query).collect { |r| r['column_name'] } - ['uuid']
+
+    select_columns = columns.map do |col|
+      next "#{table_name}.uuid as id" if col == 'id'
+      next "#{table_name}.#{col}" unless join_list[col]
+      "#{join_list[col][:alias]}.uuid as #{col}"
+    end
+    select_columns = select_columns.join(', ')
+
+    where_clause = ''
+    if poly_class
+      poly_foreign_key = foreign_keys.find { |fk| fk[2] == 'Poly'}
+      where_clause = "WHERE #{table_name}.#{poly_foreign_key[1].sub(/_id$/, '_type')} = '#{poly_class}'"
+    end
+
+    joins_list = join_list.map do |col, info|
+      "#{info[:join_type]} JOIN #{info[:foreign_table_name]} #{info[:alias]} on #{table_name}.#{col} = #{info[:alias]}.id"
+    end.join(' ')
+
+    query = "INSERT INTO tmp_#{table_name}(\"#{columns.join('","')}\") ("\
+              "SELECT #{select_columns} FROM #{table_name} "\
+              "#{joins_list} "\
+              "#{where_clause}"\
+            ")"
     execute query
   end
 
@@ -88,18 +143,10 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
   private
 
   def convert_primary_keys_to_uuids
-    tables_sql = "SELECT DISTINCT table_name
-                  FROM information_schema.columns
-                  WHERE table_schema = 'public'
-                  and column_name = 'uuid'
-                  and data_type = 'uuid'"
-    tables = ActiveRecord::Base.connection.execute(tables_sql).collect { |row| row['table_name'] }
-
-    tables.each do |table|
-      remove_column table, :id
-      execute "UPDATE #{table} SET uuid = uuid_generate_v4() WHERE uuid IS NULL;"
-      rename_column table, :uuid, :id
-      execute "ALTER TABLE #{table} ADD PRIMARY KEY (id);"
+    query_duplicated_table_names.each do |table|
+      execute "DROP TABLE #{good_name};"
+      execute "ALTER TABLE #{table} RENAME TO #{good_name};"
+      execute "ALTER TABLE #{good_name} ADD PRIMARY KEY (id);"
     end
   end
 
@@ -130,9 +177,23 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
 
   def readd_indexes
     @indexes.each do |index_row|
-      next if index_row['indexname'].ends_with?('_pkey')
+      next if index_row['indexname'].ends_with?('_pkey') ||
+        index_row['indexdef'].ends_with?(' (uuid)') ||
+        %w(active_admin_comments admin_users schema_migrations versions).include?(index_row['tablename'])
 
       execute index_row['indexdef']
     end
+  end
+
+  def query_duplicated_table_names
+    tables_sql = "SELECT DISTINCT table_name
+                  FROM information_schema.columns
+                  WHERE table_schema = 'public'
+                  and table_name LIKE 'tmp_%'"
+    quiet_execute(tables_sql).collect { |row| row['table_name'].sub('tmp_', '') }
+  end
+
+  def quiet_execute(query)
+    ActiveRecord::Base.connection.execute(query)
   end
 end
