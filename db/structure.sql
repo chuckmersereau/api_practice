@@ -29,20 +29,6 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: btree_gin; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS btree_gin WITH SCHEMA public;
-
-
---
--- Name: EXTENSION btree_gin; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION btree_gin IS 'support for indexing common datatypes in GIN';
-
-
---
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -1209,43 +1195,6 @@ CREATE TABLE partner_status_logs (
 
 
 --
--- Name: partner_support_status_logs; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE partner_support_status_logs (
-    id integer NOT NULL,
-    log_date date,
-    status character varying(255),
-    pledge_amount numeric,
-    pledge_frequency double precision,
-    event character varying(255),
-    contact_id integer,
-    account_list_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: partner_support_status_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE partner_support_status_logs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: partner_support_status_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE partner_support_status_logs_id_seq OWNED BY partner_support_status_logs.id;
-
-
---
 -- Name: people; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1575,7 +1524,7 @@ CREATE TABLE prayer_letters_accounts (
 --
 
 CREATE TABLE schema_migrations (
-    version character varying(255) NOT NULL
+    version character varying NOT NULL
 );
 
 
@@ -1612,12 +1561,12 @@ CREATE TABLE tags (
 
 CREATE TABLE versions (
     id integer NOT NULL,
-    item_type character varying(255) NOT NULL,
+    item_type character varying NOT NULL,
     item_id integer NOT NULL,
-    event character varying(255) NOT NULL,
-    whodunnit character varying(255),
+    event character varying NOT NULL,
+    whodunnit character varying,
     object text,
-    related_object_type character varying(255),
+    related_object_type character varying,
     related_object_id integer,
     created_at timestamp without time zone
 );
@@ -1647,7 +1596,6 @@ ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 --
 
 CREATE TABLE wv_donation_amt_recommendation (
-    id integer NOT NULL,
     organization_id integer,
     donor_number character varying,
     designation_number character varying,
@@ -1667,43 +1615,10 @@ CREATE TABLE wv_donation_amt_recommendation (
 
 
 --
--- Name: wv_donation_amt_recommendation_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE wv_donation_amt_recommendation_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: wv_donation_amt_recommendation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE wv_donation_amt_recommendation_id_seq OWNED BY wv_donation_amt_recommendation.id;
-
-
---
--- Name: partner_support_status_logs id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY partner_support_status_logs ALTER COLUMN id SET DEFAULT nextval('partner_support_status_logs_id_seq'::regclass);
-
-
---
 -- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
-
-
---
--- Name: wv_donation_amt_recommendation id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY wv_donation_amt_recommendation ALTER COLUMN id SET DEFAULT nextval('wv_donation_amt_recommendation_id_seq'::regclass);
 
 
 --
@@ -2203,14 +2118,6 @@ ALTER TABLE ONLY partner_status_logs
 
 
 --
--- Name: partner_support_status_logs partner_support_status_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY partner_support_status_logs
-    ADD CONSTRAINT partner_support_status_logs_pkey PRIMARY KEY (id);
-
-
---
 -- Name: people people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2360,14 +2267,6 @@ ALTER TABLE ONLY tags
 
 ALTER TABLE ONLY versions
     ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
-
-
---
--- Name: wv_donation_amt_recommendation wv_donation_amt_recommendation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY wv_donation_amt_recommendation
-    ADD CONSTRAINT wv_donation_amt_recommendation_pkey PRIMARY KEY (id);
 
 
 --
@@ -3533,13 +3432,6 @@ CREATE INDEX index_taggings_on_tag_id ON taggings USING btree (tag_id);
 
 
 --
--- Name: index_taggings_on_taggable_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_taggings_on_taggable_id ON taggings USING btree (taggable_id);
-
-
---
 -- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4177,8 +4069,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151116162403');
 
 INSERT INTO schema_migrations (version) VALUES ('20151210152844');
 
-INSERT INTO schema_migrations (version) VALUES ('20151216142339');
-
 INSERT INTO schema_migrations (version) VALUES ('20151221004231');
 
 INSERT INTO schema_migrations (version) VALUES ('20151221154339');
@@ -4578,4 +4468,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171108032537');
 INSERT INTO schema_migrations (version) VALUES ('20171113062557');
 
 INSERT INTO schema_migrations (version) VALUES ('20180123202819');
+
+INSERT INTO schema_migrations (version) VALUES ('20180130143557');
 

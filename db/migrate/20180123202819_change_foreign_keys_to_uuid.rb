@@ -10,7 +10,7 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
 
     convert_primary_keys_to_uuids
 
-    readd_indexes
+    save_indexes
 
     readd_foreign_key_constraints
   end
@@ -25,7 +25,7 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
   end
 
   def find_indexes
-    @indexes = execute "select * from pg_indexes where schemaname = 'public'"
+    @indexes = quiet_execute "select * from pg_indexes where schemaname = 'public'"
   end
 
   def migrate_foreign_keys
@@ -143,7 +143,8 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
   private
 
   def convert_primary_keys_to_uuids
-    query_duplicated_table_names.each do |table|
+    query_duplicated_table_names.each do |good_name|
+      table = "tmp_#{good_name}"
       execute "DROP TABLE #{good_name};"
       execute "ALTER TABLE #{table} RENAME TO #{good_name};"
       execute "ALTER TABLE #{good_name} ADD PRIMARY KEY (id);"
@@ -175,13 +176,17 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
   end
 
 
-  def readd_indexes
-    @indexes.each do |index_row|
-      next if index_row['indexname'].ends_with?('_pkey') ||
-        index_row['indexdef'].ends_with?(' (uuid)') ||
-        %w(active_admin_comments admin_users schema_migrations versions).include?(index_row['tablename'])
+  def save_indexes
+    CSV.open(Rails.root.join('db','dropped_indexes.csv'), 'wb') do |csv|
+      csv << @indexes.fields
+      @indexes = @indexes.each do |index_row|
+        next if index_row['indexname'].ends_with?('_pkey') ||
+          index_row['indexdef'].ends_with?(' (uuid)') ||
+          %w(active_admin_comments admin_users schema_migrations versions).include?(index_row['tablename'])
 
-      execute index_row['indexdef']
+        # execute index_row['indexdef']
+        csv << index_row.values
+      end
     end
   end
 
