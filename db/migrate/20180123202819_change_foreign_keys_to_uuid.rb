@@ -20,8 +20,11 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     add_index :export_logs, :uuid, unique: true
     add_column :account_list_coaches, :uuid, :uuid, null: false, default: 'uuid_generate_v4()'
     add_index :account_list_coaches, :uuid, unique: true
-    execute 'UPDATE appeal_contacts SET uuid = uuid_generate_v4() WHERE uuid IS NULL;'
-    execute 'UPDATE appeal_excluded_appeal_contacts SET uuid = uuid_generate_v4() WHERE uuid IS NULL;'
+
+    tables_for_uuid_fill = %w(activities activity_comments activity_contacts appeal_contacts appeal_excluded_appeal_contacts)
+    tables_for_uuid_fill.each do |table_name|
+      execute "UPDATE #{table_name} SET uuid = uuid_generate_v4() WHERE uuid IS NULL;"
+    end
   end
 
   def find_indexes
@@ -41,6 +44,8 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     keys_grouped_by_table.each do |table_name, group|
       copy_rows(table_name, group)
     end
+
+    update_preference_foreign_keys
   end
 
   def create_temp_tables
@@ -81,9 +86,10 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
   end
 
   def poly_id_to_uuid(table_name, relation_name, foreign_keys)
-    foreign_tables = quiet_execute("SELECT DISTINCT #{relation_name}_type as type from #{table_name}")
+    foreign_tables = quiet_execute("SELECT DISTINCT #{relation_name}_type as type from #{table_name} where #{relation_name}_type is not null")
     foreign_tables.each do |foreign_table_row|
       poly_class = foreign_table_row['type']
+      next unless poly_class.present?
       execute_row_load(table_name, foreign_keys, poly_class)
     end
   end
@@ -125,6 +131,26 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
               "#{where_clause}"\
             ")"
     execute query
+  end
+
+  def update_preference_foreign_keys
+    p 'update user default_account_list reference'
+    p @i = TmpUser.where("preferences like '%default_account_list: %'").count
+    TmpUser.where("preferences like '%default_account_list: %'").order(:id).find_each do |user|
+      @i -= 1
+      p @i if @i % 500 == 0
+      user.default_account_list = AccountList.find_by(id: user.default_account_list)&.uuid
+      user.save!
+    end
+
+    p 'update account_list salary_organization_id reference'
+    p @i = TmpAccountList.where("settings like '%salary_organization_id: %'")
+    TmpAccountList.where("settings like '%salary_organization_id: %'").order(:id).find_each do |al|
+      @i -= 1
+      p @i if @i % 500 == 0
+      al.salary_organization_id = Organization.find_by(id: al.salary_organization_id)&.uuid
+      al.save!
+    end
   end
 
   def table_name(string)
@@ -200,5 +226,29 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
 
   def quiet_execute(query)
     ActiveRecord::Base.connection.execute(query)
+  end
+
+  class TmpUser < ActiveRecord::Base
+    self.table_name = 'tmp_people'
+    self.primary_key = 'id'
+
+    store :preferences, accessors: [:time_zone, :locale, :locale_display, :contacts_filter,
+                                    :tasks_filter, :default_account_list, :contacts_view_options,
+                                    :tab_orders, :developer, :admin]
+  end
+
+  class TmpAccountList < ActiveRecord::Base
+    self.table_name = 'tmp_account_lists'
+    self.primary_key = 'id'
+
+    store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :ministry_country,
+                                 :currency, :salary_currency, :log_debug_info,
+                                 :salary_organization_id]
+  end
+
+  class AccountList < ActiveRecord::Base
+  end
+
+  class Organization < ActiveRecord::Base
   end
 end
