@@ -4,6 +4,7 @@ describe EmailAddress do
   context '.add_for_person' do
     let(:person) { create(:person) }
     let(:address) { 'test@example.com' }
+    let(:address_changed_case) { 'Test@example.com' }
 
     include_examples 'updatable_only_when_source_is_mpdx_validation_examples',
                      attributes: [:email, :remote_id, :location], factory_type: :email_address
@@ -31,6 +32,12 @@ describe EmailAddress do
         EmailAddress.add_for_person(person, email: address, source: 'TntImport')
         expect(person.email_addresses.first.email).to eq(address)
       end.to change(EmailAddress, :count).from(1).to(2)
+    end
+
+    it 'should be invalid if email address with different case already exists' do
+      EmailAddress.add_for_person(person, email: address)
+      email = EmailAddress.create(person: person, email: address_changed_case)
+      expect(email.errors[:email]).to include('has already been taken')
     end
 
     it "doesn't create an email address if it exists and are both from TntImports" do

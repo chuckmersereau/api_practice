@@ -1181,7 +1181,7 @@ describe GoogleContactsIntegrator do
     def second_sync_expectations
       @person.reload
       expect(@person.email_addresses.count).to eq(1)
-      expect(@person.email_addresses.last.email).to eq('johnsmith_MODIFIED@example.com')
+      expect(@person.email_addresses.last.email).to eq('johnsmith_modified@example.com')
 
       expect(@person.phone_numbers.count).to eq(2)
       expect(@person.phone_numbers.first.number).to eq('+14077894444')
