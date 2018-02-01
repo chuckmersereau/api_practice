@@ -44,8 +44,6 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     keys_grouped_by_table.each do |table_name, group|
       copy_rows(table_name, group)
     end
-
-    update_preference_foreign_keys
   end
 
   def create_temp_tables
@@ -133,26 +131,6 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     execute query
   end
 
-  def update_preference_foreign_keys
-    p 'update user default_account_list reference'
-    p @i = TmpUser.where("preferences like '%default_account_list: %'").count
-    TmpUser.where("preferences like '%default_account_list: %'").order(:id).find_each do |user|
-      @i -= 1
-      p @i if @i % 500 == 0
-      user.default_account_list = AccountList.find_by(id: user.default_account_list)&.uuid
-      user.save!
-    end
-
-    p 'update account_list salary_organization_id reference'
-    p @i = TmpAccountList.where("settings like '%salary_organization_id: %'")
-    TmpAccountList.where("settings like '%salary_organization_id: %'").order(:id).find_each do |al|
-      @i -= 1
-      p @i if @i % 500 == 0
-      al.salary_organization_id = Organization.find_by(id: al.salary_organization_id)&.uuid
-      al.save!
-    end
-  end
-
   def table_name(string)
     return 'addresses' if string == 'Addressable'
     return Person.const_get(string).table_name if string.starts_with? 'Person::'
@@ -226,29 +204,5 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
 
   def quiet_execute(query)
     ActiveRecord::Base.connection.execute(query)
-  end
-
-  class TmpUser < ActiveRecord::Base
-    self.table_name = 'tmp_people'
-    self.primary_key = 'id'
-
-    store :preferences, accessors: [:time_zone, :locale, :locale_display, :contacts_filter,
-                                    :tasks_filter, :default_account_list, :contacts_view_options,
-                                    :tab_orders, :developer, :admin]
-  end
-
-  class TmpAccountList < ActiveRecord::Base
-    self.table_name = 'tmp_account_lists'
-    self.primary_key = 'id'
-
-    store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :ministry_country,
-                                 :currency, :salary_currency, :log_debug_info,
-                                 :salary_organization_id]
-  end
-
-  class AccountList < ActiveRecord::Base
-  end
-
-  class Organization < ActiveRecord::Base
   end
 end
