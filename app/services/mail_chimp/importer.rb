@@ -125,9 +125,8 @@ class MailChimp::Importer
   def create_person(member)
     first_name = member[:first_name] || email_to_name(member[:email])
 
-    person = Person.create(first_name: first_name, last_name: member[:last_name])
-
-    person.contacts << contact_from_member(member)
+    person = Person.create(first_name: first_name, last_name: member[:last_name], email: member[:email])
+    ContactPerson.create(person_id: person.id, contact_id: contact_from_member(member).id)
 
     person
   end
