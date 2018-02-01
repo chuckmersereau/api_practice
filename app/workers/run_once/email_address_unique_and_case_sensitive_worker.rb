@@ -3,7 +3,7 @@
 class RunOnce::EmailAddressUniqueAndCaseSensitiveWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: :run_once, unique: :until_executed
+  sidekiq_options queue: :api_run_once, unique: :until_executed
 
   def perform
     duplicates =
