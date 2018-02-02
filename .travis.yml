@@ -24,6 +24,7 @@ branches:
   only:
   - master
   - staging
+  - uuid-fk-migration
 env:
   global:
     - ENCRYPTION_LABEL: "badb2a42c21a"
