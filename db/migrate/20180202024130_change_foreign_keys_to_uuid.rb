@@ -2,7 +2,7 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
   def up
     fix_uuid_columns
 
-    remove_foreign_key_constrains
+    remove_foreign_key_constraints
 
     find_indexes
 
@@ -155,7 +155,7 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     end
   end
 
-  def remove_foreign_key_constrains
+  def remove_foreign_key_constraints
     remove_foreign_key :appeal_excluded_appeal_contacts, :contacts
     remove_foreign_key :appeal_excluded_appeal_contacts, :appeals
     remove_foreign_key :background_batch_requests, :background_batches
