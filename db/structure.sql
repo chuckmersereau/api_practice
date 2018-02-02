@@ -2370,7 +2370,8 @@ CREATE TABLE organizations (
     donations_oauth character varying,
     addresses_oauth character varying,
     addresses_by_personids_oauth character varying,
-    profiles_oauth character varying
+    profiles_oauth character varying,
+    organization_type character varying DEFAULT 'Non-Cru'::character varying
 );
 
 
@@ -7169,3 +7170,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171213024356');
 INSERT INTO schema_migrations (version) VALUES ('20171215011225');
 
 INSERT INTO schema_migrations (version) VALUES ('20171219033014');
+
+INSERT INTO schema_migrations (version) VALUES ('20180201214927');
+

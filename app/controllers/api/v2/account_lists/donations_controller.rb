@@ -41,6 +41,7 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   def load_donations
     @donations = donation_scope.where(filter_params)
                                .reorder(sorting_param)
+                               .order(:id)
                                .page(page_number_param)
                                .per(per_page_param)
   end
