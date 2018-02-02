@@ -3685,6 +3685,14 @@ ALTER TABLE ONLY master_person_sources
 
 
 --
+-- Name: notification_preferences notification_preferences_user_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notification_preferences
+    ADD CONSTRAINT notification_preferences_user_id_fk FOREIGN KEY (user_id) REFERENCES people(id) ON DELETE CASCADE;
+
+
+--
 -- Name: people people_master_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 

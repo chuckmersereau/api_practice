@@ -47,20 +47,9 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
   end
 
   def create_temp_tables
-    source = File.open Rails.root.join('db','create_temp_tables.sql'), "r"
-    command = ''
-    source.readlines.each do |line|
-      line.strip!
-      if line == '-- Temp Table'
-        execute command unless command == ''
-        command = ''
-        next
-      end
-      next if line.empty? || line.starts_with?('--')
-      command += " #{line}"
-    end
-    execute command unless command == ''
-    source.close
+    temp_table_file = Rails.root.join('db','create_temp_tables.sql')
+    sql = File.open(temp_table_file) { |file| file.read }
+    execute sql
   end
 
   def drop_indexes_for(table_name)
