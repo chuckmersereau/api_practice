@@ -1108,7 +1108,8 @@ CREATE TABLE tmp_organizations (
 	    donations_oauth character varying,
 	    addresses_oauth character varying,
 	    addresses_by_personids_oauth character varying,
-	    profiles_oauth character varying
+	    profiles_oauth character varying,
+	    organization_type character varying DEFAULT 'Non-Cru'::character varying
 );
 
 
