@@ -5,6 +5,6 @@ class NewUserTransferWorker
 
   def perform(user_id)
     user = User.find(user_id)
-    RowTransferRequest.new(User).transfer(user.uuid) if user
+    RowTransferRequest.transfer(User, user.uuid) if user
   end
 end
