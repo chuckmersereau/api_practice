@@ -59,7 +59,7 @@ RSpec.describe Contact::Filter::Newsletter do
 
     context 'filter by newsletter all' do
       it 'returns all contacts that have any newsletter option selected, but not blank' do
-        expect(described_class.query(contacts, { newsletter: 'all' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_five]
+        expect(described_class.query(contacts, { newsletter: 'all' }, nil).to_a).to match_array [contact_one, contact_two, contact_three]
       end
     end
 
