@@ -113,13 +113,19 @@ class MailChimp::Importer
   end
 
   def add_or_remove_contact_from_newsletter(contact, member_info)
-    return if contact.send_newsletter == 'None'
+    return if [nil, '', 'None'].include? contact.send_newsletter
 
     if member_info[:status].casecmp('unsubscribed').zero?
-      contact.update(send_newsletter: nil)
+      remove_from_newsletter_if_all_opt_out(contact)
     else
       contact.update(send_newsletter: (contact.send_newsletter == 'Physical' ? 'Both' : 'Email'))
     end
+  end
+
+  # it can be that only one of the people on a contact unsubscribes,
+  # you would still want to keep the contact set to send newsletters
+  def remove_from_newsletter_if_all_opt_out(contact)
+    contact.update(send_newsletter: nil) if contact.send_newsletter != 'Physical' && contact.people.all?(&:optout_enewsletter)
   end
 
   def create_person(member)
