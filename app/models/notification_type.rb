@@ -13,14 +13,18 @@ class NotificationType < ApplicationRecord
   def self.check_all(account_list)
     contacts = {}
     types.each do |type|
+      unless $rollout.active?(:partner_reminders, account_list)
+        next if type.in?(['NotificationType::RemindPartnerInAdvance'])
+      end
+      unless $rollout.active?(:missing_info_notifications, account_list)
+        next if type.in?(['NotificationType::MissingAddressInNewsletter',
+                          'NotificationType::MissingEmailInNewsletter'])
+      end
       type_instance = type.constantize.first
-      next unless account_list
-                  .notification_preferences
-                  .where(notification_type_id: type_instance.id)
-                  .where('"notification_preferences"."email" = true OR "notification_preferences"."task" = true')
-                  .exists?
+      actions = account_list.notification_preferences.find_by(notification_type_id: type_instance.id).try(:actions)
+      next unless (Array.wrap(actions) & NotificationPreference.default_actions).present?
       contacts[type] = type_instance.check(account_list)
-    end.compact
+    end
     contacts
   end
 

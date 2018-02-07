@@ -1,0 +1,14 @@
+<% @notifications_by_type.each do |type, notifications| %>
+  <p><%= type.description_for_email %></p>
+  <ul>
+  <% notifications.sort_by { |n| n.contact.name  }.each do |notification| %>
+    <li><%= type.task_description(notification) %></li>
+  <% end %>
+  </ul>
+  <br/>
+<% end %>
+<%=
+    (_('You are getting this notification from MPDX because you checked the email setting in ' +
+      'your preferences for this type of notification. You can change it <a href="%{preferences_url}">here</a>.')
+    .localize % { preferences_url: WebRouter.notifications_preferences_url }).html_safe
+%>

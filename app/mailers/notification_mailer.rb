@@ -1,9 +1,8 @@
 class NotificationMailer < ApplicationMailer
-  layout 'inky'
-
-  def notify(user, notifications_by_type)
+  def notify(account_list, notifications_by_type)
     @notifications_by_type = notifications_by_type
-    @user = user
-    mail to: user.email.email, subject: _('Notifications from MPDX')
+
+    mail to: account_list.users.map(&:email).compact.map(&:email),
+         subject: _('Notifications from MPDX')
   end
 end

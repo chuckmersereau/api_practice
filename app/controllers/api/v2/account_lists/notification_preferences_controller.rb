@@ -38,7 +38,7 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
   end
 
   def notification_preference_scope
-    current_user.notification_preferences.where(account_list: load_account_list)
+    load_account_list.notification_preferences
   end
 
   def authorize_notification_preference
