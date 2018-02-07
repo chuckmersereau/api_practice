@@ -67,31 +67,12 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE account_list_coaches (
-    id integer NOT NULL,
-    coach_id integer,
-    account_list_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    coach_id uuid,
+    account_list_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: account_list_coaches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE account_list_coaches_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: account_list_coaches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE account_list_coaches_id_seq OWNED BY account_list_coaches.id;
 
 
 --
@@ -99,32 +80,12 @@ ALTER SEQUENCE account_list_coaches_id_seq OWNED BY account_list_coaches.id;
 --
 
 CREATE TABLE account_list_entries (
-    id integer NOT NULL,
-    account_list_id integer,
-    designation_account_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    account_list_id uuid,
+    designation_account_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: account_list_entries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE account_list_entries_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: account_list_entries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE account_list_entries_id_seq OWNED BY account_list_entries.id;
 
 
 --
@@ -132,38 +93,18 @@ ALTER SEQUENCE account_list_entries_id_seq OWNED BY account_list_entries.id;
 --
 
 CREATE TABLE account_list_invites (
-    id integer NOT NULL,
-    account_list_id integer,
-    invited_by_user_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    account_list_id uuid,
+    invited_by_user_id uuid NOT NULL,
     code character varying NOT NULL,
     recipient_email character varying NOT NULL,
-    accepted_by_user_id integer,
+    accepted_by_user_id uuid,
     accepted_at timestamp without time zone,
-    cancelled_by_user_id integer,
+    cancelled_by_user_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4(),
     invite_user_as character varying DEFAULT 'user'::character varying
 );
-
-
---
--- Name: account_list_invites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE account_list_invites_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: account_list_invites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE account_list_invites_id_seq OWNED BY account_list_invites.id;
 
 
 --
@@ -171,32 +112,12 @@ ALTER SEQUENCE account_list_invites_id_seq OWNED BY account_list_invites.id;
 --
 
 CREATE TABLE account_list_users (
-    id integer NOT NULL,
-    user_id integer,
-    account_list_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    user_id uuid,
+    account_list_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: account_list_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE account_list_users_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: account_list_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE account_list_users_id_seq OWNED BY account_list_users.id;
 
 
 --
@@ -204,37 +125,17 @@ ALTER SEQUENCE account_list_users_id_seq OWNED BY account_list_users.id;
 --
 
 CREATE TABLE account_lists (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying,
-    creator_id integer,
+    creator_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     settings text,
-    uuid uuid DEFAULT uuid_generate_v4(),
     active_mpd_start_at date,
     active_mpd_finish_at date,
     active_mpd_monthly_goal numeric,
-    primary_appeal_id integer
+    primary_appeal_id uuid
 );
-
-
---
--- Name: account_lists_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE account_lists_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: account_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE account_lists_id_seq OWNED BY account_lists.id;
 
 
 --
@@ -242,8 +143,8 @@ ALTER SEQUENCE account_lists_id_seq OWNED BY account_lists.id;
 --
 
 CREATE TABLE activities (
-    id integer NOT NULL,
-    account_list_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    account_list_id uuid,
     starred boolean DEFAULT false NOT NULL,
     location character varying,
     subject character varying(2000),
@@ -257,7 +158,7 @@ CREATE TABLE activities (
     activity_type character varying,
     result character varying,
     completed_at timestamp without time zone,
-    notification_id integer,
+    notification_id uuid,
     remote_id character varying,
     source character varying,
     next_action character varying,
@@ -265,28 +166,8 @@ CREATE TABLE activities (
     notification_type integer,
     notification_time_before integer,
     notification_time_unit integer,
-    notification_scheduled boolean,
-    uuid uuid DEFAULT uuid_generate_v4()
+    notification_scheduled boolean
 );
-
-
---
--- Name: activities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE activities_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: activities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
 
 
 --
@@ -294,33 +175,13 @@ ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
 --
 
 CREATE TABLE activity_comments (
-    id integer NOT NULL,
-    activity_id integer,
-    person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    activity_id uuid,
+    person_id uuid,
     body text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: activity_comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE activity_comments_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: activity_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE activity_comments_id_seq OWNED BY activity_comments.id;
 
 
 --
@@ -328,32 +189,12 @@ ALTER SEQUENCE activity_comments_id_seq OWNED BY activity_comments.id;
 --
 
 CREATE TABLE activity_contacts (
-    id integer NOT NULL,
-    activity_id integer,
-    contact_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    activity_id uuid,
+    contact_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: activity_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE activity_contacts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: activity_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE activity_contacts_id_seq OWNED BY activity_contacts.id;
 
 
 --
@@ -361,8 +202,8 @@ ALTER SEQUENCE activity_contacts_id_seq OWNED BY activity_contacts.id;
 --
 
 CREATE TABLE addresses (
-    id integer NOT NULL,
-    addressable_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    addressable_id uuid,
     street text,
     city character varying,
     state character varying,
@@ -377,36 +218,16 @@ CREATE TABLE addresses (
     addressable_type character varying,
     remote_id character varying,
     seasonal boolean DEFAULT false,
-    master_address_id integer NOT NULL,
+    master_address_id uuid NOT NULL,
     verified boolean DEFAULT false NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
     region character varying,
     metro_area character varying,
     historic boolean DEFAULT false,
     source character varying DEFAULT 'MPDX'::character varying,
-    source_donor_account_id integer,
-    uuid uuid DEFAULT uuid_generate_v4(),
+    source_donor_account_id uuid,
     valid_values boolean DEFAULT false
 );
-
-
---
--- Name: addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE addresses_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
 
 
 --
@@ -414,33 +235,13 @@ ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
 --
 
 CREATE TABLE admin_impersonation_logs (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     reason text NOT NULL,
-    impersonator_id integer NOT NULL,
-    impersonated_id integer NOT NULL,
+    impersonator_id uuid NOT NULL,
+    impersonated_id uuid NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: admin_impersonation_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE admin_impersonation_logs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: admin_impersonation_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE admin_impersonation_logs_id_seq OWNED BY admin_impersonation_logs.id;
 
 
 --
@@ -448,34 +249,14 @@ ALTER SEQUENCE admin_impersonation_logs_id_seq OWNED BY admin_impersonation_logs
 --
 
 CREATE TABLE admin_reset_logs (
-    id integer NOT NULL,
-    admin_resetting_id integer,
-    resetted_user_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    admin_resetting_id uuid,
+    resetted_user_id uuid,
     reason character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4(),
     completed_at timestamp without time zone
 );
-
-
---
--- Name: admin_reset_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE admin_reset_logs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: admin_reset_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE admin_reset_logs_id_seq OWNED BY admin_reset_logs.id;
 
 
 --
@@ -483,32 +264,12 @@ ALTER SEQUENCE admin_reset_logs_id_seq OWNED BY admin_reset_logs.id;
 --
 
 CREATE TABLE appeal_contacts (
-    id integer NOT NULL,
-    appeal_id integer,
-    contact_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    appeal_id uuid,
+    contact_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: appeal_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE appeal_contacts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: appeal_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE appeal_contacts_id_seq OWNED BY appeal_contacts.id;
 
 
 --
@@ -516,33 +277,13 @@ ALTER SEQUENCE appeal_contacts_id_seq OWNED BY appeal_contacts.id;
 --
 
 CREATE TABLE appeal_excluded_appeal_contacts (
-    id integer NOT NULL,
-    appeal_id integer,
-    contact_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    appeal_id uuid,
+    contact_id uuid,
     reasons text[],
-    uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
-
-
---
--- Name: appeal_excluded_appeal_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE appeal_excluded_appeal_contacts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: appeal_excluded_appeal_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE appeal_excluded_appeal_contacts_id_seq OWNED BY appeal_excluded_appeal_contacts.id;
 
 
 --
@@ -550,38 +291,18 @@ ALTER SEQUENCE appeal_excluded_appeal_contacts_id_seq OWNED BY appeal_excluded_a
 --
 
 CREATE TABLE appeals (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying,
-    account_list_id integer,
+    account_list_id uuid,
     amount numeric(19,2),
     description text,
     end_date date,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     tnt_id integer,
-    uuid uuid DEFAULT uuid_generate_v4(),
     active boolean DEFAULT true,
     monthly_amount numeric
 );
-
-
---
--- Name: appeals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE appeals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: appeals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE appeals_id_seq OWNED BY appeals.id;
 
 
 --
@@ -589,8 +310,8 @@ ALTER SEQUENCE appeals_id_seq OWNED BY appeals.id;
 --
 
 CREATE TABLE background_batch_requests (
-    id integer NOT NULL,
-    background_batch_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    background_batch_id uuid,
     path character varying,
     request_params character varying,
     request_body character varying,
@@ -601,29 +322,9 @@ CREATE TABLE background_batch_requests (
     response_status character varying,
     status integer DEFAULT 0,
     default_account_list boolean DEFAULT false,
-    uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: background_batch_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE background_batch_requests_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: background_batch_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE background_batch_requests_id_seq OWNED BY background_batch_requests.id;
 
 
 --
@@ -631,32 +332,12 @@ ALTER SEQUENCE background_batch_requests_id_seq OWNED BY background_batch_reques
 --
 
 CREATE TABLE background_batches (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     batch_id character varying,
-    user_id integer,
-    uuid uuid DEFAULT uuid_generate_v4(),
+    user_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: background_batches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE background_batches_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: background_batches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE background_batches_id_seq OWNED BY background_batches.id;
 
 
 --
@@ -664,33 +345,13 @@ ALTER SEQUENCE background_batches_id_seq OWNED BY background_batches.id;
 --
 
 CREATE TABLE balances (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     balance numeric,
-    resource_id integer,
+    resource_id uuid,
     resource_type character varying,
-    uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: balances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE balances_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: balances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE balances_id_seq OWNED BY balances.id;
 
 
 --
@@ -698,7 +359,7 @@ ALTER SEQUENCE balances_id_seq OWNED BY balances.id;
 --
 
 CREATE TABLE companies (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -708,28 +369,8 @@ CREATE TABLE companies (
     postal_code character varying,
     country character varying,
     phone_number character varying,
-    master_company_id integer,
-    uuid uuid DEFAULT uuid_generate_v4()
+    master_company_id uuid
 );
-
-
---
--- Name: companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE companies_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 
 
 --
@@ -737,32 +378,12 @@ ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 --
 
 CREATE TABLE company_partnerships (
-    id integer NOT NULL,
-    account_list_id integer,
-    company_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    account_list_id uuid,
+    company_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: company_partnerships_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE company_partnerships_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: company_partnerships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE company_partnerships_id_seq OWNED BY company_partnerships.id;
 
 
 --
@@ -770,35 +391,15 @@ ALTER SEQUENCE company_partnerships_id_seq OWNED BY company_partnerships.id;
 --
 
 CREATE TABLE company_positions (
-    id integer NOT NULL,
-    person_id integer NOT NULL,
-    company_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid NOT NULL,
+    company_id uuid NOT NULL,
     start_date date,
     end_date date,
     "position" character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: company_positions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE company_positions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: company_positions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE company_positions_id_seq OWNED BY company_positions.id;
 
 
 --
@@ -806,32 +407,12 @@ ALTER SEQUENCE company_positions_id_seq OWNED BY company_positions.id;
 --
 
 CREATE TABLE contact_donor_accounts (
-    id integer NOT NULL,
-    contact_id integer,
-    donor_account_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    contact_id uuid,
+    donor_account_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: contact_donor_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE contact_donor_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: contact_donor_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE contact_donor_accounts_id_seq OWNED BY contact_donor_accounts.id;
 
 
 --
@@ -839,33 +420,13 @@ ALTER SEQUENCE contact_donor_accounts_id_seq OWNED BY contact_donor_accounts.id;
 --
 
 CREATE TABLE contact_notes_logs (
-    id integer NOT NULL,
-    contact_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    contact_id uuid,
     recorded_on date,
     notes text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: contact_notes_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE contact_notes_logs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: contact_notes_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE contact_notes_logs_id_seq OWNED BY contact_notes_logs.id;
 
 
 --
@@ -873,33 +434,13 @@ ALTER SEQUENCE contact_notes_logs_id_seq OWNED BY contact_notes_logs.id;
 --
 
 CREATE TABLE contact_people (
-    id integer NOT NULL,
-    contact_id integer,
-    person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    contact_id uuid,
+    person_id uuid,
     "primary" boolean,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: contact_people_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE contact_people_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: contact_people_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE contact_people_id_seq OWNED BY contact_people.id;
 
 
 --
@@ -907,32 +448,12 @@ ALTER SEQUENCE contact_people_id_seq OWNED BY contact_people.id;
 --
 
 CREATE TABLE contact_referrals (
-    id integer NOT NULL,
-    referred_by_id integer,
-    referred_to_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    referred_by_id uuid,
+    referred_to_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: contact_referrals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE contact_referrals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: contact_referrals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE contact_referrals_id_seq OWNED BY contact_referrals.id;
 
 
 --
@@ -940,9 +461,9 @@ ALTER SEQUENCE contact_referrals_id_seq OWNED BY contact_referrals.id;
 --
 
 CREATE TABLE contacts (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying,
-    account_list_id integer,
+    account_list_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     pledge_amount numeric(19,2),
@@ -979,10 +500,10 @@ CREATE TABLE contacts (
     no_appeals boolean,
     pls_id character varying,
     prayer_letters_params text,
+    pledge_currency_code character varying(4),
     pledge_currency character varying(4),
     locale character varying,
     late_at date,
-    uuid uuid DEFAULT uuid_generate_v4(),
     status_valid boolean,
     suggested_changes text,
     is_organization boolean DEFAULT false,
@@ -994,56 +515,17 @@ CREATE TABLE contacts (
 
 
 --
--- Name: contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE contacts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE contacts_id_seq OWNED BY contacts.id;
-
-
---
 -- Name: currency_aliases; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE currency_aliases (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     alias_code character varying NOT NULL,
     rate_api_code character varying NOT NULL,
     ratio numeric NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: currency_aliases_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE currency_aliases_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: currency_aliases_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE currency_aliases_id_seq OWNED BY currency_aliases.id;
 
 
 --
@@ -1051,32 +533,12 @@ ALTER SEQUENCE currency_aliases_id_seq OWNED BY currency_aliases.id;
 --
 
 CREATE TABLE currency_rates (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     exchanged_on date NOT NULL,
     code character varying NOT NULL,
     rate numeric(20,10) NOT NULL,
-    source character varying NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    source character varying NOT NULL
 );
-
-
---
--- Name: currency_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE currency_rates_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: currency_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE currency_rates_id_seq OWNED BY currency_rates.id;
 
 
 --
@@ -1084,38 +546,18 @@ ALTER SEQUENCE currency_rates_id_seq OWNED BY currency_rates.id;
 --
 
 CREATE TABLE designation_accounts (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     designation_number character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    organization_id integer,
+    organization_id uuid,
     balance numeric(19,2),
     balance_updated_at timestamp without time zone,
     name character varying,
     staff_account_id character varying,
     chartfield character varying,
-    active boolean DEFAULT true NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    active boolean DEFAULT true NOT NULL
 );
-
-
---
--- Name: designation_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE designation_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: designation_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE designation_accounts_id_seq OWNED BY designation_accounts.id;
 
 
 --
@@ -1123,32 +565,12 @@ ALTER SEQUENCE designation_accounts_id_seq OWNED BY designation_accounts.id;
 --
 
 CREATE TABLE designation_profile_accounts (
-    id integer NOT NULL,
-    designation_profile_id integer,
-    designation_account_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    designation_profile_id uuid,
+    designation_account_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: designation_profile_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE designation_profile_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: designation_profile_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE designation_profile_accounts_id_seq OWNED BY designation_profile_accounts.id;
 
 
 --
@@ -1156,38 +578,18 @@ ALTER SEQUENCE designation_profile_accounts_id_seq OWNED BY designation_profile_
 --
 
 CREATE TABLE designation_profiles (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     remote_id character varying,
-    user_id integer NOT NULL,
-    organization_id integer NOT NULL,
+    user_id uuid NOT NULL,
+    organization_id uuid NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     code character varying,
     balance numeric(19,2),
     balance_updated_at timestamp without time zone,
-    account_list_id integer,
-    uuid uuid DEFAULT uuid_generate_v4()
+    account_list_id uuid
 );
-
-
---
--- Name: designation_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE designation_profiles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: designation_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE designation_profiles_id_seq OWNED BY designation_profiles.id;
 
 
 --
@@ -1195,36 +597,16 @@ ALTER SEQUENCE designation_profiles_id_seq OWNED BY designation_profiles.id;
 --
 
 CREATE TABLE donation_amount_recommendations (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     started_at timestamp without time zone,
     suggested_pledge_amount numeric,
     suggested_special_amount numeric,
     ask_at timestamp without time zone,
-    uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    designation_account_id integer,
-    donor_account_id integer
+    designation_account_id uuid,
+    donor_account_id uuid
 );
-
-
---
--- Name: donation_amount_recommendations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE donation_amount_recommendations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: donation_amount_recommendations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE donation_amount_recommendations_id_seq OWNED BY donation_amount_recommendations.id;
 
 
 --
@@ -1232,10 +614,10 @@ ALTER SEQUENCE donation_amount_recommendations_id_seq OWNED BY donation_amount_r
 --
 
 CREATE TABLE donations (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     remote_id character varying,
-    donor_account_id integer,
-    designation_account_id integer,
+    donor_account_id uuid,
+    designation_account_id uuid,
     motivation character varying,
     payment_method character varying,
     tendered_currency character varying,
@@ -1248,30 +630,10 @@ CREATE TABLE donations (
     updated_at timestamp without time zone NOT NULL,
     payment_type character varying,
     channel character varying,
-    appeal_id integer,
+    appeal_id uuid,
     appeal_amount numeric(19,2),
-    uuid uuid DEFAULT uuid_generate_v4(),
     tnt_id character varying
 );
-
-
---
--- Name: donations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE donations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: donations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE donations_id_seq OWNED BY donations.id;
 
 
 --
@@ -1279,32 +641,12 @@ ALTER SEQUENCE donations_id_seq OWNED BY donations.id;
 --
 
 CREATE TABLE donor_account_people (
-    id integer NOT NULL,
-    donor_account_id integer,
-    person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    donor_account_id uuid,
+    person_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: donor_account_people_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE donor_account_people_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: donor_account_people_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE donor_account_people_id_seq OWNED BY donor_account_people.id;
 
 
 --
@@ -1312,38 +654,18 @@ ALTER SEQUENCE donor_account_people_id_seq OWNED BY donor_account_people.id;
 --
 
 CREATE TABLE donor_accounts (
-    id integer NOT NULL,
-    organization_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    organization_id uuid,
     account_number character varying,
     name character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    master_company_id integer,
+    master_company_id uuid,
     total_donations numeric(19,2),
     last_donation_date date,
     first_donation_date date,
-    donor_type character varying(20),
-    uuid uuid DEFAULT uuid_generate_v4()
+    donor_type character varying(20)
 );
-
-
---
--- Name: donor_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE donor_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: donor_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE donor_accounts_id_seq OWNED BY donor_accounts.id;
 
 
 --
@@ -1351,12 +673,11 @@ ALTER SEQUENCE donor_accounts_id_seq OWNED BY donor_accounts.id;
 --
 
 CREATE TABLE duplicate_record_pairs (
-    id integer NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4(),
-    account_list_id integer NOT NULL,
-    record_one_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    account_list_id uuid NOT NULL,
+    record_one_id uuid NOT NULL,
     record_one_type character varying NOT NULL,
-    record_two_id integer NOT NULL,
+    record_two_id uuid NOT NULL,
     record_two_type character varying NOT NULL,
     reason character varying NOT NULL,
     ignore boolean DEFAULT false NOT NULL,
@@ -1366,31 +687,12 @@ CREATE TABLE duplicate_record_pairs (
 
 
 --
--- Name: duplicate_record_pairs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE duplicate_record_pairs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: duplicate_record_pairs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE duplicate_record_pairs_id_seq OWNED BY duplicate_record_pairs.id;
-
-
---
 -- Name: email_addresses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE email_addresses (
-    id integer NOT NULL,
-    person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid,
     email character varying NOT NULL,
     "primary" boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
@@ -1399,7 +701,6 @@ CREATE TABLE email_addresses (
     location character varying(50),
     historic boolean DEFAULT false,
     deleted boolean DEFAULT false,
-    uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT true,
     source character varying DEFAULT 'MPDX'::character varying,
     checked_for_google_plus_account boolean DEFAULT false NOT NULL,
@@ -1408,33 +709,14 @@ CREATE TABLE email_addresses (
 
 
 --
--- Name: email_addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE email_addresses_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: email_addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE email_addresses_id_seq OWNED BY email_addresses.id;
-
-
---
 -- Name: export_logs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE export_logs (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     type character varying,
     params text,
-    user_id integer,
+    user_id uuid,
     export_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1442,56 +724,17 @@ CREATE TABLE export_logs (
 
 
 --
--- Name: export_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE export_logs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: export_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE export_logs_id_seq OWNED BY export_logs.id;
-
-
---
 -- Name: family_relationships; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE family_relationships (
-    id integer NOT NULL,
-    person_id integer,
-    related_person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid,
+    related_person_id uuid,
     relationship character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: family_relationships_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE family_relationships_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: family_relationships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE family_relationships_id_seq OWNED BY family_relationships.id;
 
 
 --
@@ -1499,39 +742,19 @@ ALTER SEQUENCE family_relationships_id_seq OWNED BY family_relationships.id;
 --
 
 CREATE TABLE google_contacts (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     remote_id character varying,
-    person_id integer,
+    person_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     picture_etag character varying,
-    picture_id integer,
-    google_account_id integer,
+    picture_id uuid,
+    google_account_id uuid,
     last_synced timestamp without time zone,
     last_etag character varying,
     last_data text,
-    contact_id integer,
-    uuid uuid DEFAULT uuid_generate_v4()
+    contact_id uuid
 );
-
-
---
--- Name: google_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE google_contacts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: google_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE google_contacts_id_seq OWNED BY google_contacts.id;
 
 
 --
@@ -1539,32 +762,12 @@ ALTER SEQUENCE google_contacts_id_seq OWNED BY google_contacts.id;
 --
 
 CREATE TABLE google_email_activities (
-    id integer NOT NULL,
-    google_email_id integer,
-    activity_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    google_email_id uuid,
+    activity_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: google_email_activities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE google_email_activities_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: google_email_activities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE google_email_activities_id_seq OWNED BY google_email_activities.id;
 
 
 --
@@ -1572,32 +775,12 @@ ALTER SEQUENCE google_email_activities_id_seq OWNED BY google_email_activities.i
 --
 
 CREATE TABLE google_emails (
-    id integer NOT NULL,
-    google_account_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    google_account_id uuid,
     google_email_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: google_emails_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE google_emails_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: google_emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE google_emails_id_seq OWNED BY google_emails.id;
 
 
 --
@@ -1605,34 +788,14 @@ ALTER SEQUENCE google_emails_id_seq OWNED BY google_emails.id;
 --
 
 CREATE TABLE google_events (
-    id integer NOT NULL,
-    activity_id integer,
-    google_integration_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    activity_id uuid,
+    google_integration_id uuid,
     google_event_id character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    calendar_id character varying,
-    uuid uuid DEFAULT uuid_generate_v4()
+    calendar_id character varying
 );
-
-
---
--- Name: google_events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE google_events_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: google_events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE google_events_id_seq OWNED BY google_events.id;
 
 
 --
@@ -1640,9 +803,9 @@ ALTER SEQUENCE google_events_id_seq OWNED BY google_events.id;
 --
 
 CREATE TABLE google_integrations (
-    id integer NOT NULL,
-    account_list_id integer,
-    google_account_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    account_list_id uuid,
+    google_account_id uuid,
     calendar_integration boolean DEFAULT false NOT NULL,
     calendar_integrations text,
     calendar_id character varying,
@@ -1652,28 +815,8 @@ CREATE TABLE google_integrations (
     contacts_last_synced timestamp without time zone,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4(),
     email_blacklist text
 );
-
-
---
--- Name: google_integrations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE google_integrations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: google_integrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE google_integrations_id_seq OWNED BY google_integrations.id;
 
 
 --
@@ -1681,33 +824,13 @@ ALTER SEQUENCE google_integrations_id_seq OWNED BY google_integrations.id;
 --
 
 CREATE TABLE google_plus_accounts (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     account_id character varying,
     profile_picture_link character varying,
-    uuid uuid DEFAULT uuid_generate_v4(),
-    email_address_id integer,
+    email_address_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: google_plus_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE google_plus_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: google_plus_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE google_plus_accounts_id_seq OWNED BY google_plus_accounts.id;
 
 
 --
@@ -1715,41 +838,21 @@ ALTER SEQUENCE google_plus_accounts_id_seq OWNED BY google_plus_accounts.id;
 --
 
 CREATE TABLE help_requests (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying,
     browser text,
     problem text,
     email character varying,
     file character varying,
-    user_id integer,
-    account_list_id integer,
+    user_id uuid,
+    account_list_id uuid,
     session text,
     user_preferences text,
     account_list_settings text,
     request_type character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: help_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE help_requests_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: help_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE help_requests_id_seq OWNED BY help_requests.id;
 
 
 --
@@ -1757,8 +860,8 @@ ALTER SEQUENCE help_requests_id_seq OWNED BY help_requests.id;
 --
 
 CREATE TABLE imports (
-    id integer NOT NULL,
-    account_list_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    account_list_id uuid,
     source character varying,
     file character varying,
     importing boolean,
@@ -1766,13 +869,12 @@ CREATE TABLE imports (
     updated_at timestamp without time zone NOT NULL,
     tags text,
     override boolean DEFAULT false NOT NULL,
-    user_id integer,
+    user_id uuid,
     source_account_id integer,
     import_by_group boolean DEFAULT false,
     groups text,
     group_tags text,
     in_preview boolean DEFAULT false NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4(),
     file_headers text,
     file_constants text,
     file_headers_mappings text,
@@ -1787,35 +889,16 @@ CREATE TABLE imports (
 
 
 --
--- Name: imports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE imports_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: imports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE imports_id_seq OWNED BY imports.id;
-
-
---
 -- Name: mail_chimp_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE mail_chimp_accounts (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     api_key character varying,
     active boolean DEFAULT false,
     status_grouping_id character varying,
     primary_list_id character varying,
-    account_list_id integer,
+    account_list_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     webhook_token character varying,
@@ -1826,29 +909,9 @@ CREATE TABLE mail_chimp_accounts (
     tags_interest_ids text,
     sync_all_active_contacts boolean,
     prayer_letter_last_sent timestamp without time zone,
-    uuid uuid DEFAULT uuid_generate_v4(),
     tags_details text,
     statuses_details text
 );
-
-
---
--- Name: mail_chimp_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE mail_chimp_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: mail_chimp_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE mail_chimp_accounts_id_seq OWNED BY mail_chimp_accounts.id;
 
 
 --
@@ -1856,33 +919,13 @@ ALTER SEQUENCE mail_chimp_accounts_id_seq OWNED BY mail_chimp_accounts.id;
 --
 
 CREATE TABLE mail_chimp_appeal_lists (
-    id integer NOT NULL,
-    mail_chimp_account_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    mail_chimp_account_id uuid NOT NULL,
     appeal_list_id character varying NOT NULL,
-    appeal_id integer NOT NULL,
+    appeal_id uuid NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: mail_chimp_appeal_lists_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE mail_chimp_appeal_lists_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: mail_chimp_appeal_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE mail_chimp_appeal_lists_id_seq OWNED BY mail_chimp_appeal_lists.id;
 
 
 --
@@ -1890,8 +933,8 @@ ALTER SEQUENCE mail_chimp_appeal_lists_id_seq OWNED BY mail_chimp_appeal_lists.i
 --
 
 CREATE TABLE mail_chimp_members (
-    id integer NOT NULL,
-    mail_chimp_account_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    mail_chimp_account_id uuid NOT NULL,
     list_id character varying NOT NULL,
     email character varying NOT NULL,
     status character varying,
@@ -1901,28 +944,8 @@ CREATE TABLE mail_chimp_members (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     contact_locale character varying,
-    tags character varying[],
-    uuid uuid DEFAULT uuid_generate_v4()
+    tags character varying[]
 );
-
-
---
--- Name: mail_chimp_members_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE mail_chimp_members_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: mail_chimp_members_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE mail_chimp_members_id_seq OWNED BY mail_chimp_members.id;
 
 
 --
@@ -1930,7 +953,7 @@ ALTER SEQUENCE mail_chimp_members_id_seq OWNED BY mail_chimp_members.id;
 --
 
 CREATE TABLE master_addresses (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     street text,
     city character varying,
     state character varying,
@@ -1942,28 +965,8 @@ CREATE TABLE master_addresses (
     updated_at timestamp without time zone NOT NULL,
     latitude character varying,
     longitude character varying,
-    uuid uuid DEFAULT uuid_generate_v4(),
     last_geocoded_at timestamp without time zone
 );
-
-
---
--- Name: master_addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE master_addresses_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: master_addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE master_addresses_id_seq OWNED BY master_addresses.id;
 
 
 --
@@ -1971,31 +974,11 @@ ALTER SEQUENCE master_addresses_id_seq OWNED BY master_addresses.id;
 --
 
 CREATE TABLE master_companies (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: master_companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE master_companies_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: master_companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE master_companies_id_seq OWNED BY master_companies.id;
 
 
 --
@@ -2003,30 +986,10 @@ ALTER SEQUENCE master_companies_id_seq OWNED BY master_companies.id;
 --
 
 CREATE TABLE master_people (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: master_people_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE master_people_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: master_people_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE master_people_id_seq OWNED BY master_people.id;
 
 
 --
@@ -2034,33 +997,13 @@ ALTER SEQUENCE master_people_id_seq OWNED BY master_people.id;
 --
 
 CREATE TABLE master_person_donor_accounts (
-    id integer NOT NULL,
-    master_person_id integer,
-    donor_account_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    master_person_id uuid,
+    donor_account_id uuid,
     "primary" boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: master_person_donor_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE master_person_donor_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: master_person_donor_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE master_person_donor_accounts_id_seq OWNED BY master_person_donor_accounts.id;
 
 
 --
@@ -2068,33 +1011,13 @@ ALTER SEQUENCE master_person_donor_accounts_id_seq OWNED BY master_person_donor_
 --
 
 CREATE TABLE master_person_sources (
-    id integer NOT NULL,
-    master_person_id integer,
-    organization_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    master_person_id uuid,
+    organization_id uuid,
     remote_id character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: master_person_sources_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE master_person_sources_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: master_person_sources_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE master_person_sources_id_seq OWNED BY master_person_sources.id;
 
 
 --
@@ -2102,39 +1025,19 @@ ALTER SEQUENCE master_person_sources_id_seq OWNED BY master_person_sources.id;
 --
 
 CREATE TABLE messages (
-    id integer NOT NULL,
-    from_id integer,
-    to_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    from_id uuid,
+    to_id uuid,
     subject character varying,
     body text,
     sent_at timestamp without time zone,
     source character varying,
     remote_id character varying,
-    contact_id integer,
-    account_list_id integer,
+    contact_id uuid,
+    account_list_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE messages_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 
 
 --
@@ -2142,32 +1045,12 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 --
 
 CREATE TABLE name_male_ratios (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying NOT NULL,
     male_ratio double precision NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: name_male_ratios_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE name_male_ratios_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: name_male_ratios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE name_male_ratios_id_seq OWNED BY name_male_ratios.id;
 
 
 --
@@ -2175,7 +1058,7 @@ ALTER SEQUENCE name_male_ratios_id_seq OWNED BY name_male_ratios.id;
 --
 
 CREATE TABLE nicknames (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying NOT NULL,
     nickname character varying NOT NULL,
     source character varying,
@@ -2184,28 +1067,8 @@ CREATE TABLE nicknames (
     num_times_offered integer DEFAULT 0 NOT NULL,
     suggest_duplicates boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: nicknames_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE nicknames_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: nicknames_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE nicknames_id_seq OWNED BY nicknames.id;
 
 
 --
@@ -2213,33 +1076,15 @@ ALTER SEQUENCE nicknames_id_seq OWNED BY nicknames.id;
 --
 
 CREATE TABLE notification_preferences (
-    id integer NOT NULL,
-    notification_type_id integer,
-    account_list_id integer,
-    actions text,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    notification_type_id uuid,
+    account_list_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    user_id uuid,
+    email boolean DEFAULT true,
+    task boolean DEFAULT true
 );
-
-
---
--- Name: notification_preferences_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE notification_preferences_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: notification_preferences_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE notification_preferences_id_seq OWNED BY notification_preferences.id;
 
 
 --
@@ -2247,33 +1092,13 @@ ALTER SEQUENCE notification_preferences_id_seq OWNED BY notification_preferences
 --
 
 CREATE TABLE notification_types (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     type character varying,
     description text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    description_for_email text,
-    uuid uuid DEFAULT uuid_generate_v4()
+    description_for_email text
 );
-
-
---
--- Name: notification_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE notification_types_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: notification_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE notification_types_id_seq OWNED BY notification_types.id;
 
 
 --
@@ -2281,35 +1106,15 @@ ALTER SEQUENCE notification_types_id_seq OWNED BY notification_types.id;
 --
 
 CREATE TABLE notifications (
-    id integer NOT NULL,
-    contact_id integer,
-    notification_type_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    contact_id uuid,
+    notification_type_id uuid,
     event_date timestamp without time zone,
     cleared boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    donation_id integer,
-    uuid uuid DEFAULT uuid_generate_v4()
+    donation_id uuid
 );
-
-
---
--- Name: notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE notifications_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 
 
 --
@@ -2317,7 +1122,7 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 --
 
 CREATE TABLE organizations (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying,
     query_ini_url character varying,
     iso3166 character varying,
@@ -2353,7 +1158,6 @@ CREATE TABLE organizations (
     uses_key_auth boolean DEFAULT false,
     locale character varying DEFAULT 'en'::character varying NOT NULL,
     gift_aid_percentage numeric,
-    uuid uuid DEFAULT uuid_generate_v4(),
     oauth_url character varying,
     oauth_get_challenge_start_num_url character varying,
     oauth_get_challenge_start_num_params character varying,
@@ -2374,31 +1178,12 @@ CREATE TABLE organizations (
 
 
 --
--- Name: organizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE organizations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: organizations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE organizations_id_seq OWNED BY organizations.id;
-
-
---
 -- Name: partner_status_logs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE partner_status_logs (
-    id integer NOT NULL,
-    contact_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    contact_id uuid NOT NULL,
     recorded_on date NOT NULL,
     status character varying,
     pledge_amount numeric,
@@ -2406,28 +1191,8 @@ CREATE TABLE partner_status_logs (
     pledge_received boolean,
     pledge_start_date date,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: partner_status_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE partner_status_logs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: partner_status_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE partner_status_logs_id_seq OWNED BY partner_status_logs.id;
 
 
 --
@@ -2435,7 +1200,7 @@ ALTER SEQUENCE partner_status_logs_id_seq OWNED BY partner_status_logs.id;
 --
 
 CREATE TABLE people (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     first_name character varying NOT NULL,
     legal_first_name character varying,
     last_name character varying,
@@ -2457,7 +1222,7 @@ CREATE TABLE people (
     last_sign_in_ip character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    master_person_id integer NOT NULL,
+    master_person_id uuid NOT NULL,
     middle_name character varying,
     access_token character varying(32),
     profession text,
@@ -2467,29 +1232,9 @@ CREATE TABLE people (
     occupation character varying,
     employer character varying,
     deprecated_not_duplicated_with character varying(2000),
-    uuid uuid DEFAULT uuid_generate_v4(),
     global_registry_id uuid,
     global_registry_mdm_id uuid
 );
-
-
---
--- Name: people_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE people_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: people_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE people_id_seq OWNED BY people.id;
 
 
 --
@@ -2497,8 +1242,8 @@ ALTER SEQUENCE people_id_seq OWNED BY people.id;
 --
 
 CREATE TABLE person_facebook_accounts (
-    id integer NOT NULL,
-    person_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid NOT NULL,
     remote_id bigint,
     token character varying,
     token_expires_at timestamp without time zone,
@@ -2510,28 +1255,8 @@ CREATE TABLE person_facebook_accounts (
     authenticated boolean DEFAULT false NOT NULL,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    username character varying,
-    uuid uuid DEFAULT uuid_generate_v4()
+    username character varying
 );
-
-
---
--- Name: person_facebook_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_facebook_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_facebook_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_facebook_accounts_id_seq OWNED BY person_facebook_accounts.id;
 
 
 --
@@ -2539,9 +1264,9 @@ ALTER SEQUENCE person_facebook_accounts_id_seq OWNED BY person_facebook_accounts
 --
 
 CREATE TABLE person_google_accounts (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     remote_id text,
-    person_id integer,
+    person_id uuid,
     token character varying,
     refresh_token character varying,
     expires_at timestamp without time zone,
@@ -2554,28 +1279,8 @@ CREATE TABLE person_google_accounts (
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
     last_email_sync timestamp without time zone,
-    notified_failure boolean,
-    uuid uuid DEFAULT uuid_generate_v4()
+    notified_failure boolean
 );
-
-
---
--- Name: person_google_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_google_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_google_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_google_accounts_id_seq OWNED BY person_google_accounts.id;
 
 
 --
@@ -2583,8 +1288,8 @@ ALTER SEQUENCE person_google_accounts_id_seq OWNED BY person_google_accounts.id;
 --
 
 CREATE TABLE person_key_accounts (
-    id integer NOT NULL,
-    person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid,
     remote_id character varying,
     first_name character varying,
     last_name character varying,
@@ -2594,28 +1299,8 @@ CREATE TABLE person_key_accounts (
     updated_at timestamp without time zone NOT NULL,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
-    last_download timestamp without time zone,
-    uuid uuid DEFAULT uuid_generate_v4()
+    last_download timestamp without time zone
 );
-
-
---
--- Name: person_key_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_key_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_key_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_key_accounts_id_seq OWNED BY person_key_accounts.id;
 
 
 --
@@ -2623,8 +1308,8 @@ ALTER SEQUENCE person_key_accounts_id_seq OWNED BY person_key_accounts.id;
 --
 
 CREATE TABLE person_linkedin_accounts (
-    id integer NOT NULL,
-    person_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid NOT NULL,
     remote_id character varying,
     token character varying,
     secret character varying,
@@ -2637,28 +1322,8 @@ CREATE TABLE person_linkedin_accounts (
     authenticated boolean DEFAULT false NOT NULL,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    public_url text,
-    uuid uuid DEFAULT uuid_generate_v4()
+    public_url text
 );
-
-
---
--- Name: person_linkedin_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_linkedin_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_linkedin_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_linkedin_accounts_id_seq OWNED BY person_linkedin_accounts.id;
 
 
 --
@@ -2666,33 +1331,13 @@ ALTER SEQUENCE person_linkedin_accounts_id_seq OWNED BY person_linkedin_accounts
 --
 
 CREATE TABLE person_options (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     key character varying NOT NULL,
     value character varying,
-    user_id integer,
-    uuid uuid DEFAULT uuid_generate_v4(),
+    user_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: person_options_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_options_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_options_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_options_id_seq OWNED BY person_options.id;
 
 
 --
@@ -2700,9 +1345,9 @@ ALTER SEQUENCE person_options_id_seq OWNED BY person_options.id;
 --
 
 CREATE TABLE person_organization_accounts (
-    id integer NOT NULL,
-    person_id integer,
-    organization_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid,
+    organization_id uuid,
     username character varying,
     password character varying,
     created_at timestamp without time zone NOT NULL,
@@ -2715,28 +1360,8 @@ CREATE TABLE person_organization_accounts (
     token character varying,
     locked_at timestamp without time zone,
     disable_downloads boolean DEFAULT false NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4(),
     last_download_attempt_at timestamp without time zone
 );
-
-
---
--- Name: person_organization_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_organization_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_organization_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_organization_accounts_id_seq OWNED BY person_organization_accounts.id;
 
 
 --
@@ -2744,8 +1369,8 @@ ALTER SEQUENCE person_organization_accounts_id_seq OWNED BY person_organization_
 --
 
 CREATE TABLE person_relay_accounts (
-    id integer NOT NULL,
-    person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid,
     relay_remote_id character varying,
     first_name character varying,
     last_name character varying,
@@ -2759,28 +1384,8 @@ CREATE TABLE person_relay_accounts (
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    remote_id character varying NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    remote_id character varying NOT NULL
 );
-
-
---
--- Name: person_relay_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_relay_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_relay_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_relay_accounts_id_seq OWNED BY person_relay_accounts.id;
 
 
 --
@@ -2788,8 +1393,8 @@ ALTER SEQUENCE person_relay_accounts_id_seq OWNED BY person_relay_accounts.id;
 --
 
 CREATE TABLE person_twitter_accounts (
-    id integer NOT NULL,
-    person_id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid NOT NULL,
     remote_id bigint,
     screen_name character varying,
     token character varying,
@@ -2800,28 +1405,8 @@ CREATE TABLE person_twitter_accounts (
     authenticated boolean DEFAULT false NOT NULL,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
-    last_download timestamp without time zone,
-    uuid uuid DEFAULT uuid_generate_v4()
+    last_download timestamp without time zone
 );
-
-
---
--- Name: person_twitter_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_twitter_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_twitter_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_twitter_accounts_id_seq OWNED BY person_twitter_accounts.id;
 
 
 --
@@ -2829,33 +1414,13 @@ ALTER SEQUENCE person_twitter_accounts_id_seq OWNED BY person_twitter_accounts.i
 --
 
 CREATE TABLE person_websites (
-    id integer NOT NULL,
-    person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid,
     url text,
     "primary" boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: person_websites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE person_websites_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: person_websites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE person_websites_id_seq OWNED BY person_websites.id;
 
 
 --
@@ -2863,8 +1428,8 @@ ALTER SEQUENCE person_websites_id_seq OWNED BY person_websites.id;
 --
 
 CREATE TABLE phone_numbers (
-    id integer NOT NULL,
-    person_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    person_id uuid,
     number character varying,
     country_code character varying,
     location character varying,
@@ -2873,7 +1438,6 @@ CREATE TABLE phone_numbers (
     updated_at timestamp without time zone NOT NULL,
     remote_id character varying,
     historic boolean DEFAULT false,
-    uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT true,
     source character varying DEFAULT 'MPDX'::character varying,
     global_registry_id uuid
@@ -2881,57 +1445,18 @@ CREATE TABLE phone_numbers (
 
 
 --
--- Name: phone_numbers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE phone_numbers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: phone_numbers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE phone_numbers_id_seq OWNED BY phone_numbers.id;
-
-
---
 -- Name: pictures; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE pictures (
-    id integer NOT NULL,
-    picture_of_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    picture_of_id uuid,
     picture_of_type character varying,
     image character varying,
     "primary" boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: pictures_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE pictures_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pictures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE pictures_id_seq OWNED BY pictures.id;
 
 
 --
@@ -2939,32 +1464,12 @@ ALTER SEQUENCE pictures_id_seq OWNED BY pictures.id;
 --
 
 CREATE TABLE pledge_donations (
-    id integer NOT NULL,
-    pledge_id integer,
-    donation_id integer,
-    uuid uuid DEFAULT uuid_generate_v4(),
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    pledge_id uuid,
+    donation_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: pledge_donations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE pledge_donations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pledge_donations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE pledge_donations_id_seq OWNED BY pledge_donations.id;
 
 
 --
@@ -2972,37 +1477,17 @@ ALTER SEQUENCE pledge_donations_id_seq OWNED BY pledge_donations.id;
 --
 
 CREATE TABLE pledges (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     amount numeric,
     expected_date date,
-    account_list_id integer,
-    contact_id integer,
-    uuid uuid DEFAULT uuid_generate_v4(),
+    account_list_id uuid,
+    contact_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     amount_currency character varying,
-    appeal_id integer,
+    appeal_id uuid,
     status character varying DEFAULT 'not_received'::character varying
 );
-
-
---
--- Name: pledges_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE pledges_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pledges_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE pledges_id_seq OWNED BY pledges.id;
 
 
 --
@@ -3010,33 +1495,13 @@ ALTER SEQUENCE pledges_id_seq OWNED BY pledges.id;
 --
 
 CREATE TABLE pls_accounts (
-    id integer NOT NULL,
-    account_list_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    account_list_id uuid,
     oauth2_token character varying,
     valid_token boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: pls_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE pls_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pls_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE pls_accounts_id_seq OWNED BY pls_accounts.id;
 
 
 --
@@ -3044,35 +1509,15 @@ ALTER SEQUENCE pls_accounts_id_seq OWNED BY pls_accounts.id;
 --
 
 CREATE TABLE prayer_letters_accounts (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     token character varying,
     secret character varying,
     valid_token boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    account_list_id integer,
-    oauth2_token character varying,
-    uuid uuid DEFAULT uuid_generate_v4()
+    account_list_id uuid,
+    oauth2_token character varying
 );
-
-
---
--- Name: prayer_letters_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE prayer_letters_accounts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: prayer_letters_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE prayer_letters_accounts_id_seq OWNED BY prayer_letters_accounts.id;
 
 
 --
@@ -3089,35 +1534,15 @@ CREATE TABLE schema_migrations (
 --
 
 CREATE TABLE taggings (
-    id integer NOT NULL,
-    tag_id integer,
-    taggable_id integer,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    tag_id uuid,
+    taggable_id uuid,
     taggable_type character varying,
     tagger_id integer,
     tagger_type character varying,
     context character varying(128),
-    created_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    created_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: taggings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE taggings_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: taggings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
 
 
 --
@@ -3125,30 +1550,10 @@ ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
 --
 
 CREATE TABLE tags (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name character varying,
-    uuid uuid DEFAULT uuid_generate_v4(),
     taggings_count integer DEFAULT 0
 );
-
-
---
--- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE tags_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
 
 
 --
@@ -3208,566 +1613,6 @@ CREATE TABLE wv_donation_amt_recommendation (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: account_list_coaches id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY account_list_coaches ALTER COLUMN id SET DEFAULT nextval('account_list_coaches_id_seq'::regclass);
-
-
---
--- Name: account_list_entries id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY account_list_entries ALTER COLUMN id SET DEFAULT nextval('account_list_entries_id_seq'::regclass);
-
-
---
--- Name: account_list_invites id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY account_list_invites ALTER COLUMN id SET DEFAULT nextval('account_list_invites_id_seq'::regclass);
-
-
---
--- Name: account_list_users id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY account_list_users ALTER COLUMN id SET DEFAULT nextval('account_list_users_id_seq'::regclass);
-
-
---
--- Name: account_lists id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY account_lists ALTER COLUMN id SET DEFAULT nextval('account_lists_id_seq'::regclass);
-
-
---
--- Name: activities id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
-
-
---
--- Name: activity_comments id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY activity_comments ALTER COLUMN id SET DEFAULT nextval('activity_comments_id_seq'::regclass);
-
-
---
--- Name: activity_contacts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY activity_contacts ALTER COLUMN id SET DEFAULT nextval('activity_contacts_id_seq'::regclass);
-
-
---
--- Name: addresses id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY addresses ALTER COLUMN id SET DEFAULT nextval('addresses_id_seq'::regclass);
-
-
---
--- Name: admin_impersonation_logs id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admin_impersonation_logs ALTER COLUMN id SET DEFAULT nextval('admin_impersonation_logs_id_seq'::regclass);
-
-
---
--- Name: admin_reset_logs id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admin_reset_logs ALTER COLUMN id SET DEFAULT nextval('admin_reset_logs_id_seq'::regclass);
-
-
---
--- Name: appeal_contacts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY appeal_contacts ALTER COLUMN id SET DEFAULT nextval('appeal_contacts_id_seq'::regclass);
-
-
---
--- Name: appeal_excluded_appeal_contacts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY appeal_excluded_appeal_contacts ALTER COLUMN id SET DEFAULT nextval('appeal_excluded_appeal_contacts_id_seq'::regclass);
-
-
---
--- Name: appeals id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY appeals ALTER COLUMN id SET DEFAULT nextval('appeals_id_seq'::regclass);
-
-
---
--- Name: background_batch_requests id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY background_batch_requests ALTER COLUMN id SET DEFAULT nextval('background_batch_requests_id_seq'::regclass);
-
-
---
--- Name: background_batches id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY background_batches ALTER COLUMN id SET DEFAULT nextval('background_batches_id_seq'::regclass);
-
-
---
--- Name: balances id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY balances ALTER COLUMN id SET DEFAULT nextval('balances_id_seq'::regclass);
-
-
---
--- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq'::regclass);
-
-
---
--- Name: company_partnerships id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY company_partnerships ALTER COLUMN id SET DEFAULT nextval('company_partnerships_id_seq'::regclass);
-
-
---
--- Name: company_positions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY company_positions ALTER COLUMN id SET DEFAULT nextval('company_positions_id_seq'::regclass);
-
-
---
--- Name: contact_donor_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY contact_donor_accounts ALTER COLUMN id SET DEFAULT nextval('contact_donor_accounts_id_seq'::regclass);
-
-
---
--- Name: contact_notes_logs id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY contact_notes_logs ALTER COLUMN id SET DEFAULT nextval('contact_notes_logs_id_seq'::regclass);
-
-
---
--- Name: contact_people id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY contact_people ALTER COLUMN id SET DEFAULT nextval('contact_people_id_seq'::regclass);
-
-
---
--- Name: contact_referrals id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY contact_referrals ALTER COLUMN id SET DEFAULT nextval('contact_referrals_id_seq'::regclass);
-
-
---
--- Name: contacts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY contacts ALTER COLUMN id SET DEFAULT nextval('contacts_id_seq'::regclass);
-
-
---
--- Name: currency_aliases id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY currency_aliases ALTER COLUMN id SET DEFAULT nextval('currency_aliases_id_seq'::regclass);
-
-
---
--- Name: currency_rates id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY currency_rates ALTER COLUMN id SET DEFAULT nextval('currency_rates_id_seq'::regclass);
-
-
---
--- Name: designation_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY designation_accounts ALTER COLUMN id SET DEFAULT nextval('designation_accounts_id_seq'::regclass);
-
-
---
--- Name: designation_profile_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY designation_profile_accounts ALTER COLUMN id SET DEFAULT nextval('designation_profile_accounts_id_seq'::regclass);
-
-
---
--- Name: designation_profiles id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY designation_profiles ALTER COLUMN id SET DEFAULT nextval('designation_profiles_id_seq'::regclass);
-
-
---
--- Name: donation_amount_recommendations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY donation_amount_recommendations ALTER COLUMN id SET DEFAULT nextval('donation_amount_recommendations_id_seq'::regclass);
-
-
---
--- Name: donations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY donations ALTER COLUMN id SET DEFAULT nextval('donations_id_seq'::regclass);
-
-
---
--- Name: donor_account_people id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY donor_account_people ALTER COLUMN id SET DEFAULT nextval('donor_account_people_id_seq'::regclass);
-
-
---
--- Name: donor_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY donor_accounts ALTER COLUMN id SET DEFAULT nextval('donor_accounts_id_seq'::regclass);
-
-
---
--- Name: duplicate_record_pairs id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY duplicate_record_pairs ALTER COLUMN id SET DEFAULT nextval('duplicate_record_pairs_id_seq'::regclass);
-
-
---
--- Name: email_addresses id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY email_addresses ALTER COLUMN id SET DEFAULT nextval('email_addresses_id_seq'::regclass);
-
-
---
--- Name: export_logs id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY export_logs ALTER COLUMN id SET DEFAULT nextval('export_logs_id_seq'::regclass);
-
-
---
--- Name: family_relationships id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY family_relationships ALTER COLUMN id SET DEFAULT nextval('family_relationships_id_seq'::regclass);
-
-
---
--- Name: google_contacts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY google_contacts ALTER COLUMN id SET DEFAULT nextval('google_contacts_id_seq'::regclass);
-
-
---
--- Name: google_email_activities id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY google_email_activities ALTER COLUMN id SET DEFAULT nextval('google_email_activities_id_seq'::regclass);
-
-
---
--- Name: google_emails id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY google_emails ALTER COLUMN id SET DEFAULT nextval('google_emails_id_seq'::regclass);
-
-
---
--- Name: google_events id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY google_events ALTER COLUMN id SET DEFAULT nextval('google_events_id_seq'::regclass);
-
-
---
--- Name: google_integrations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY google_integrations ALTER COLUMN id SET DEFAULT nextval('google_integrations_id_seq'::regclass);
-
-
---
--- Name: google_plus_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY google_plus_accounts ALTER COLUMN id SET DEFAULT nextval('google_plus_accounts_id_seq'::regclass);
-
-
---
--- Name: help_requests id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY help_requests ALTER COLUMN id SET DEFAULT nextval('help_requests_id_seq'::regclass);
-
-
---
--- Name: imports id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY imports ALTER COLUMN id SET DEFAULT nextval('imports_id_seq'::regclass);
-
-
---
--- Name: mail_chimp_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY mail_chimp_accounts ALTER COLUMN id SET DEFAULT nextval('mail_chimp_accounts_id_seq'::regclass);
-
-
---
--- Name: mail_chimp_appeal_lists id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY mail_chimp_appeal_lists ALTER COLUMN id SET DEFAULT nextval('mail_chimp_appeal_lists_id_seq'::regclass);
-
-
---
--- Name: mail_chimp_members id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY mail_chimp_members ALTER COLUMN id SET DEFAULT nextval('mail_chimp_members_id_seq'::regclass);
-
-
---
--- Name: master_addresses id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY master_addresses ALTER COLUMN id SET DEFAULT nextval('master_addresses_id_seq'::regclass);
-
-
---
--- Name: master_companies id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY master_companies ALTER COLUMN id SET DEFAULT nextval('master_companies_id_seq'::regclass);
-
-
---
--- Name: master_people id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY master_people ALTER COLUMN id SET DEFAULT nextval('master_people_id_seq'::regclass);
-
-
---
--- Name: master_person_donor_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY master_person_donor_accounts ALTER COLUMN id SET DEFAULT nextval('master_person_donor_accounts_id_seq'::regclass);
-
-
---
--- Name: master_person_sources id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY master_person_sources ALTER COLUMN id SET DEFAULT nextval('master_person_sources_id_seq'::regclass);
-
-
---
--- Name: messages id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY messages ALTER COLUMN id SET DEFAULT nextval('messages_id_seq'::regclass);
-
-
---
--- Name: name_male_ratios id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY name_male_ratios ALTER COLUMN id SET DEFAULT nextval('name_male_ratios_id_seq'::regclass);
-
-
---
--- Name: nicknames id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY nicknames ALTER COLUMN id SET DEFAULT nextval('nicknames_id_seq'::regclass);
-
-
---
--- Name: notification_preferences id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY notification_preferences ALTER COLUMN id SET DEFAULT nextval('notification_preferences_id_seq'::regclass);
-
-
---
--- Name: notification_types id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY notification_types ALTER COLUMN id SET DEFAULT nextval('notification_types_id_seq'::regclass);
-
-
---
--- Name: notifications id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
-
-
---
--- Name: organizations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY organizations ALTER COLUMN id SET DEFAULT nextval('organizations_id_seq'::regclass);
-
-
---
--- Name: partner_status_logs id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY partner_status_logs ALTER COLUMN id SET DEFAULT nextval('partner_status_logs_id_seq'::regclass);
-
-
---
--- Name: people id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY people ALTER COLUMN id SET DEFAULT nextval('people_id_seq'::regclass);
-
-
---
--- Name: person_facebook_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_facebook_accounts ALTER COLUMN id SET DEFAULT nextval('person_facebook_accounts_id_seq'::regclass);
-
-
---
--- Name: person_google_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_google_accounts ALTER COLUMN id SET DEFAULT nextval('person_google_accounts_id_seq'::regclass);
-
-
---
--- Name: person_key_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_key_accounts ALTER COLUMN id SET DEFAULT nextval('person_key_accounts_id_seq'::regclass);
-
-
---
--- Name: person_linkedin_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_linkedin_accounts ALTER COLUMN id SET DEFAULT nextval('person_linkedin_accounts_id_seq'::regclass);
-
-
---
--- Name: person_options id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_options ALTER COLUMN id SET DEFAULT nextval('person_options_id_seq'::regclass);
-
-
---
--- Name: person_organization_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_organization_accounts ALTER COLUMN id SET DEFAULT nextval('person_organization_accounts_id_seq'::regclass);
-
-
---
--- Name: person_relay_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_relay_accounts ALTER COLUMN id SET DEFAULT nextval('person_relay_accounts_id_seq'::regclass);
-
-
---
--- Name: person_twitter_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_twitter_accounts ALTER COLUMN id SET DEFAULT nextval('person_twitter_accounts_id_seq'::regclass);
-
-
---
--- Name: person_websites id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY person_websites ALTER COLUMN id SET DEFAULT nextval('person_websites_id_seq'::regclass);
-
-
---
--- Name: phone_numbers id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY phone_numbers ALTER COLUMN id SET DEFAULT nextval('phone_numbers_id_seq'::regclass);
-
-
---
--- Name: pictures id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pictures ALTER COLUMN id SET DEFAULT nextval('pictures_id_seq'::regclass);
-
-
---
--- Name: pledge_donations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pledge_donations ALTER COLUMN id SET DEFAULT nextval('pledge_donations_id_seq'::regclass);
-
-
---
--- Name: pledges id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pledges ALTER COLUMN id SET DEFAULT nextval('pledges_id_seq'::regclass);
-
-
---
--- Name: pls_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pls_accounts ALTER COLUMN id SET DEFAULT nextval('pls_accounts_id_seq'::regclass);
-
-
---
--- Name: prayer_letters_accounts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY prayer_letters_accounts ALTER COLUMN id SET DEFAULT nextval('prayer_letters_accounts_id_seq'::regclass);
-
-
---
--- Name: taggings id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY taggings ALTER COLUMN id SET DEFAULT nextval('taggings_id_seq'::regclass);
-
-
---
--- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
@@ -4482,20 +2327,6 @@ CREATE INDEX index_account_list_entries_on_designation_account_id ON account_lis
 
 
 --
--- Name: index_account_list_entries_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_account_list_entries_on_uuid ON account_list_entries USING btree (uuid);
-
-
---
--- Name: index_account_list_invites_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_account_list_invites_on_uuid ON account_list_invites USING btree (uuid);
-
-
---
 -- Name: index_account_list_users_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4510,24 +2341,10 @@ CREATE UNIQUE INDEX index_account_list_users_on_user_id_and_account_list_id ON a
 
 
 --
--- Name: index_account_list_users_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_account_list_users_on_uuid ON account_list_users USING btree (uuid);
-
-
---
 -- Name: index_account_lists_on_creator_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_account_lists_on_creator_id ON account_lists USING btree (creator_id);
-
-
---
--- Name: index_account_lists_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_account_lists_on_uuid ON account_lists USING btree (uuid);
 
 
 --
@@ -4573,13 +2390,6 @@ CREATE INDEX index_activities_on_start_at ON activities USING btree (start_at);
 
 
 --
--- Name: index_activities_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_activities_on_uuid ON activities USING btree (uuid);
-
-
---
 -- Name: index_activity_comments_on_activity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4591,13 +2401,6 @@ CREATE INDEX index_activity_comments_on_activity_id ON activity_comments USING b
 --
 
 CREATE INDEX index_activity_comments_on_person_id ON activity_comments USING btree (person_id);
-
-
---
--- Name: index_activity_comments_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_activity_comments_on_uuid ON activity_comments USING btree (uuid);
 
 
 --
@@ -4619,13 +2422,6 @@ CREATE INDEX index_activity_contacts_on_contact_id ON activity_contacts USING bt
 --
 
 CREATE UNIQUE INDEX index_activity_contacts_on_contact_id_and_activity_id ON activity_contacts USING btree (contact_id, activity_id);
-
-
---
--- Name: index_activity_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_activity_contacts_on_uuid ON activity_contacts USING btree (uuid);
 
 
 --
@@ -4671,31 +2467,10 @@ CREATE INDEX index_addresses_on_source ON addresses USING btree (source);
 
 
 --
--- Name: index_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_addresses_on_uuid ON addresses USING btree (uuid);
-
-
---
 -- Name: index_addresses_on_valid_values; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_addresses_on_valid_values ON addresses USING btree (valid_values);
-
-
---
--- Name: index_admin_impersonation_logs_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_admin_impersonation_logs_on_uuid ON admin_impersonation_logs USING btree (uuid);
-
-
---
--- Name: index_admin_reset_logs_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_admin_reset_logs_on_uuid ON admin_reset_logs USING btree (uuid);
 
 
 --
@@ -4720,31 +2495,10 @@ CREATE INDEX index_appeal_contacts_on_contact_id ON appeal_contacts USING btree 
 
 
 --
--- Name: index_appeal_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_appeal_contacts_on_uuid ON appeal_contacts USING btree (uuid);
-
-
---
--- Name: index_appeal_excluded_appeal_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_appeal_excluded_appeal_contacts_on_uuid ON appeal_excluded_appeal_contacts USING btree (uuid);
-
-
---
 -- Name: index_appeals_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_appeals_on_account_list_id ON appeals USING btree (account_list_id);
-
-
---
--- Name: index_appeals_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_appeals_on_uuid ON appeals USING btree (uuid);
 
 
 --
@@ -4755,24 +2509,10 @@ CREATE INDEX index_background_batch_requests_on_background_batch_id ON backgroun
 
 
 --
--- Name: index_background_batch_requests_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_background_batch_requests_on_uuid ON background_batch_requests USING btree (uuid);
-
-
---
 -- Name: index_background_batches_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_background_batches_on_user_id ON background_batches USING btree (user_id);
-
-
---
--- Name: index_background_batches_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_background_batches_on_uuid ON background_batches USING btree (uuid);
 
 
 --
@@ -4783,24 +2523,10 @@ CREATE INDEX index_balances_on_resource_id_and_resource_type ON balances USING b
 
 
 --
--- Name: index_companies_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_on_uuid ON companies USING btree (uuid);
-
-
---
 -- Name: index_company_partnerships_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_company_partnerships_on_company_id ON company_partnerships USING btree (company_id);
-
-
---
--- Name: index_company_partnerships_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_company_partnerships_on_uuid ON company_partnerships USING btree (uuid);
 
 
 --
@@ -4825,13 +2551,6 @@ CREATE INDEX index_company_positions_on_start_date ON company_positions USING bt
 
 
 --
--- Name: index_company_positions_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_company_positions_on_uuid ON company_positions USING btree (uuid);
-
-
---
 -- Name: index_contact_donor_accounts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4843,13 +2562,6 @@ CREATE INDEX index_contact_donor_accounts_on_contact_id ON contact_donor_account
 --
 
 CREATE INDEX index_contact_donor_accounts_on_donor_account_id ON contact_donor_accounts USING btree (donor_account_id);
-
-
---
--- Name: index_contact_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_contact_donor_accounts_on_uuid ON contact_donor_accounts USING btree (uuid);
 
 
 --
@@ -4867,13 +2579,6 @@ CREATE INDEX index_contact_notes_logs_on_recorded_on ON contact_notes_logs USING
 
 
 --
--- Name: index_contact_notes_logs_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_contact_notes_logs_on_uuid ON contact_notes_logs USING btree (uuid);
-
-
---
 -- Name: index_contact_people_on_contact_id_and_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4888,24 +2593,10 @@ CREATE INDEX index_contact_people_on_person_id ON contact_people USING btree (pe
 
 
 --
--- Name: index_contact_people_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_contact_people_on_uuid ON contact_people USING btree (uuid);
-
-
---
 -- Name: index_contact_referrals_on_referred_to_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contact_referrals_on_referred_to_id ON contact_referrals USING btree (referred_to_id);
-
-
---
--- Name: index_contact_referrals_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_contact_referrals_on_uuid ON contact_referrals USING btree (uuid);
 
 
 --
@@ -4951,20 +2642,6 @@ CREATE INDEX index_contacts_on_total_donations ON contacts USING btree (total_do
 
 
 --
--- Name: index_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_contacts_on_uuid ON contacts USING btree (uuid);
-
-
---
--- Name: index_currency_aliases_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_currency_aliases_on_uuid ON currency_aliases USING btree (uuid);
-
-
---
 -- Name: index_currency_rates_on_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4986,27 +2663,6 @@ CREATE INDEX index_currency_rates_on_exchanged_on ON currency_rates USING btree 
 
 
 --
--- Name: index_currency_rates_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_currency_rates_on_uuid ON currency_rates USING btree (uuid);
-
-
---
--- Name: index_designation_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_designation_accounts_on_uuid ON designation_accounts USING btree (uuid);
-
-
---
--- Name: index_designation_profile_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_designation_profile_accounts_on_uuid ON designation_profile_accounts USING btree (uuid);
-
-
---
 -- Name: index_designation_profiles_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5018,20 +2674,6 @@ CREATE INDEX index_designation_profiles_on_account_list_id ON designation_profil
 --
 
 CREATE INDEX index_designation_profiles_on_organization_id ON designation_profiles USING btree (organization_id);
-
-
---
--- Name: index_designation_profiles_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_designation_profiles_on_uuid ON designation_profiles USING btree (uuid);
-
-
---
--- Name: index_donation_amount_recommendations_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_donation_amount_recommendations_on_uuid ON donation_amount_recommendations USING btree (uuid);
 
 
 --
@@ -5077,13 +2719,6 @@ CREATE INDEX index_donations_on_tnt_id ON donations USING btree (tnt_id);
 
 
 --
--- Name: index_donations_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_donations_on_uuid ON donations USING btree (uuid);
-
-
---
 -- Name: index_donor_account_people_on_donor_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5095,13 +2730,6 @@ CREATE INDEX index_donor_account_people_on_donor_account_id ON donor_account_peo
 --
 
 CREATE INDEX index_donor_account_people_on_person_id ON donor_account_people USING btree (person_id);
-
-
---
--- Name: index_donor_account_people_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_donor_account_people_on_uuid ON donor_account_people USING btree (uuid);
 
 
 --
@@ -5147,13 +2775,6 @@ CREATE INDEX index_donor_accounts_on_total_donations ON donor_accounts USING btr
 
 
 --
--- Name: index_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_donor_accounts_on_uuid ON donor_accounts USING btree (uuid);
-
-
---
 -- Name: index_dup_record_pairs_on_record_one_type_and_record_one_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5179,13 +2800,6 @@ CREATE UNIQUE INDEX index_dup_record_pairs_on_record_types_and_ids ON duplicate_
 --
 
 CREATE INDEX index_duplicate_record_pairs_on_account_list_id ON duplicate_record_pairs USING btree (account_list_id);
-
-
---
--- Name: index_duplicate_record_pairs_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_duplicate_record_pairs_on_uuid ON duplicate_record_pairs USING btree (uuid);
 
 
 --
@@ -5217,13 +2831,6 @@ CREATE INDEX index_email_addresses_on_source ON email_addresses USING btree (sou
 
 
 --
--- Name: index_email_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_email_addresses_on_uuid ON email_addresses USING btree (uuid);
-
-
---
 -- Name: index_email_addresses_on_valid_values; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5249,13 +2856,6 @@ CREATE UNIQUE INDEX index_family_relationships_on_person_id_and_related_person_i
 --
 
 CREATE INDEX index_family_relationships_on_related_person_id ON family_relationships USING btree (related_person_id);
-
-
---
--- Name: index_family_relationships_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_family_relationships_on_uuid ON family_relationships USING btree (uuid);
 
 
 --
@@ -5294,13 +2894,6 @@ CREATE INDEX index_google_contacts_on_remote_id ON google_contacts USING btree (
 
 
 --
--- Name: index_google_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_google_contacts_on_uuid ON google_contacts USING btree (uuid);
-
-
---
 -- Name: index_google_email_activities_on_activity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5315,24 +2908,10 @@ CREATE INDEX index_google_email_activities_on_google_email_id ON google_email_ac
 
 
 --
--- Name: index_google_email_activities_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_google_email_activities_on_uuid ON google_email_activities USING btree (uuid);
-
-
---
 -- Name: index_google_emails_on_google_account_id_and_google_email_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_emails_on_google_account_id_and_google_email_id ON google_emails USING btree (google_account_id, google_email_id);
-
-
---
--- Name: index_google_emails_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_google_emails_on_uuid ON google_emails USING btree (uuid);
 
 
 --
@@ -5350,13 +2929,6 @@ CREATE INDEX index_google_events_on_google_integration_id ON google_events USING
 
 
 --
--- Name: index_google_events_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_google_events_on_uuid ON google_events USING btree (uuid);
-
-
---
 -- Name: index_google_integrations_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5371,24 +2943,10 @@ CREATE INDEX index_google_integrations_on_google_account_id ON google_integratio
 
 
 --
--- Name: index_google_integrations_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_google_integrations_on_uuid ON google_integrations USING btree (uuid);
-
-
---
 -- Name: index_google_plus_accounts_on_email_address_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_plus_accounts_on_email_address_id ON google_plus_accounts USING btree (email_address_id);
-
-
---
--- Name: index_help_requests_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_help_requests_on_uuid ON help_requests USING btree (uuid);
 
 
 --
@@ -5406,24 +2964,10 @@ CREATE INDEX index_imports_on_user_id ON imports USING btree (user_id);
 
 
 --
--- Name: index_imports_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_imports_on_uuid ON imports USING btree (uuid);
-
-
---
 -- Name: index_mail_chimp_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_mail_chimp_accounts_on_account_list_id ON mail_chimp_accounts USING btree (account_list_id);
-
-
---
--- Name: index_mail_chimp_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_mail_chimp_accounts_on_uuid ON mail_chimp_accounts USING btree (uuid);
 
 
 --
@@ -5438,13 +2982,6 @@ CREATE INDEX index_mail_chimp_appeal_lists_on_appeal_list_id ON mail_chimp_appea
 --
 
 CREATE INDEX index_mail_chimp_appeal_lists_on_mail_chimp_account_id ON mail_chimp_appeal_lists USING btree (mail_chimp_account_id);
-
-
---
--- Name: index_mail_chimp_appeal_lists_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_mail_chimp_appeal_lists_on_uuid ON mail_chimp_appeal_lists USING btree (uuid);
 
 
 --
@@ -5466,13 +3003,6 @@ CREATE INDEX index_mail_chimp_members_on_list_id ON mail_chimp_members USING btr
 --
 
 CREATE INDEX index_mail_chimp_members_on_mail_chimp_account_id ON mail_chimp_members USING btree (mail_chimp_account_id);
-
-
---
--- Name: index_mail_chimp_members_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_mail_chimp_members_on_uuid ON mail_chimp_members USING btree (uuid);
 
 
 --
@@ -5518,31 +3048,10 @@ CREATE INDEX index_master_addresses_on_street ON master_addresses USING btree (s
 
 
 --
--- Name: index_master_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_master_addresses_on_uuid ON master_addresses USING btree (uuid);
-
-
---
 -- Name: index_master_companies_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_companies_on_name ON master_companies USING btree (name);
-
-
---
--- Name: index_master_companies_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_master_companies_on_uuid ON master_companies USING btree (uuid);
-
-
---
--- Name: index_master_people_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_master_people_on_uuid ON master_people USING btree (uuid);
 
 
 --
@@ -5553,24 +3062,10 @@ CREATE INDEX index_master_person_donor_accounts_on_donor_account_id ON master_pe
 
 
 --
--- Name: index_master_person_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_master_person_donor_accounts_on_uuid ON master_person_donor_accounts USING btree (uuid);
-
-
---
 -- Name: index_master_person_sources_on_master_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_person_sources_on_master_person_id ON master_person_sources USING btree (master_person_id);
-
-
---
--- Name: index_master_person_sources_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_master_person_sources_on_uuid ON master_person_sources USING btree (uuid);
 
 
 --
@@ -5602,24 +3097,10 @@ CREATE INDEX index_messages_on_to_id ON messages USING btree (to_id);
 
 
 --
--- Name: index_messages_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_messages_on_uuid ON messages USING btree (uuid);
-
-
---
 -- Name: index_name_male_ratios_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_name_male_ratios_on_name ON name_male_ratios USING btree (name);
-
-
---
--- Name: index_name_male_ratios_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_name_male_ratios_on_uuid ON name_male_ratios USING btree (uuid);
 
 
 --
@@ -5644,13 +3125,6 @@ CREATE INDEX index_nicknames_on_nickname ON nicknames USING btree (nickname);
 
 
 --
--- Name: index_nicknames_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_nicknames_on_uuid ON nicknames USING btree (uuid);
-
-
---
 -- Name: index_notification_preferences_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5665,17 +3139,10 @@ CREATE INDEX index_notification_preferences_on_notification_type_id ON notificat
 
 
 --
--- Name: index_notification_preferences_on_uuid; Type: INDEX; Schema: public; Owner: -
+-- Name: index_notification_preferences_unique; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_notification_preferences_on_uuid ON notification_preferences USING btree (uuid);
-
-
---
--- Name: index_notification_types_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_notification_types_on_uuid ON notification_types USING btree (uuid);
+CREATE UNIQUE INDEX index_notification_preferences_unique ON notification_preferences USING btree (user_id, account_list_id, notification_type_id);
 
 
 --
@@ -5700,24 +3167,10 @@ CREATE INDEX index_notifications_on_notification_type_id ON notifications USING 
 
 
 --
--- Name: index_notifications_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_notifications_on_uuid ON notifications USING btree (uuid);
-
-
---
 -- Name: index_organizations_on_query_ini_url; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_organizations_on_query_ini_url ON organizations USING btree (query_ini_url);
-
-
---
--- Name: index_organizations_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_organizations_on_uuid ON organizations USING btree (uuid);
 
 
 --
@@ -5732,13 +3185,6 @@ CREATE INDEX index_partner_status_logs_on_contact_id ON partner_status_logs USIN
 --
 
 CREATE INDEX index_partner_status_logs_on_recorded_on ON partner_status_logs USING btree (recorded_on);
-
-
---
--- Name: index_partner_status_logs_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_partner_status_logs_on_uuid ON partner_status_logs USING btree (uuid);
 
 
 --
@@ -5784,13 +3230,6 @@ CREATE INDEX index_people_on_master_person_id ON people USING btree (master_pers
 
 
 --
--- Name: index_people_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_people_on_uuid ON people USING btree (uuid);
-
-
---
 -- Name: index_person_facebook_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5812,13 +3251,6 @@ CREATE INDEX index_person_facebook_accounts_on_remote_id ON person_facebook_acco
 
 
 --
--- Name: index_person_facebook_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_facebook_accounts_on_uuid ON person_facebook_accounts USING btree (uuid);
-
-
---
 -- Name: index_person_google_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5830,13 +3262,6 @@ CREATE INDEX index_person_google_accounts_on_person_id ON person_google_accounts
 --
 
 CREATE INDEX index_person_google_accounts_on_remote_id ON person_google_accounts USING btree (remote_id);
-
-
---
--- Name: index_person_google_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_google_accounts_on_uuid ON person_google_accounts USING btree (uuid);
 
 
 --
@@ -5854,13 +3279,6 @@ CREATE INDEX index_person_key_accounts_on_remote_id ON person_key_accounts USING
 
 
 --
--- Name: index_person_key_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_key_accounts_on_uuid ON person_key_accounts USING btree (uuid);
-
-
---
 -- Name: index_person_linkedin_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5875,13 +3293,6 @@ CREATE INDEX index_person_linkedin_accounts_on_remote_id ON person_linkedin_acco
 
 
 --
--- Name: index_person_linkedin_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_linkedin_accounts_on_uuid ON person_linkedin_accounts USING btree (uuid);
-
-
---
 -- Name: index_person_options_on_key_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5889,24 +3300,10 @@ CREATE UNIQUE INDEX index_person_options_on_key_and_user_id ON person_options US
 
 
 --
--- Name: index_person_options_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_options_on_uuid ON person_options USING btree (uuid);
-
-
---
 -- Name: index_person_organization_accounts_on_last_download_attempt_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_organization_accounts_on_last_download_attempt_at ON person_organization_accounts USING btree (last_download_attempt_at);
-
-
---
--- Name: index_person_organization_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_organization_accounts_on_uuid ON person_organization_accounts USING btree (uuid);
 
 
 --
@@ -5924,13 +3321,6 @@ CREATE INDEX index_person_relay_accounts_on_relay_remote_id ON person_relay_acco
 
 
 --
--- Name: index_person_relay_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_relay_accounts_on_uuid ON person_relay_accounts USING btree (uuid);
-
-
---
 -- Name: index_person_twitter_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5945,24 +3335,10 @@ CREATE INDEX index_person_twitter_accounts_on_remote_id ON person_twitter_accoun
 
 
 --
--- Name: index_person_twitter_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_twitter_accounts_on_uuid ON person_twitter_accounts USING btree (uuid);
-
-
---
 -- Name: index_person_websites_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_websites_on_person_id ON person_websites USING btree (person_id);
-
-
---
--- Name: index_person_websites_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_person_websites_on_uuid ON person_websites USING btree (uuid);
 
 
 --
@@ -5987,24 +3363,10 @@ CREATE INDEX index_phone_numbers_on_source ON phone_numbers USING btree (source)
 
 
 --
--- Name: index_phone_numbers_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_phone_numbers_on_uuid ON phone_numbers USING btree (uuid);
-
-
---
 -- Name: index_phone_numbers_on_valid_values; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_phone_numbers_on_valid_values ON phone_numbers USING btree (valid_values);
-
-
---
--- Name: index_pictures_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_pictures_on_uuid ON pictures USING btree (uuid);
 
 
 --
@@ -6022,13 +3384,6 @@ CREATE INDEX index_pledge_donations_on_pledge_id ON pledge_donations USING btree
 
 
 --
--- Name: index_pledge_donations_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pledge_donations_on_uuid ON pledge_donations USING btree (uuid);
-
-
---
 -- Name: index_pledges_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6043,13 +3398,6 @@ CREATE INDEX index_pledges_on_appeal_id ON pledges USING btree (appeal_id);
 
 
 --
--- Name: index_pledges_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pledges_on_uuid ON pledges USING btree (uuid);
-
-
---
 -- Name: index_pls_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6057,24 +3405,10 @@ CREATE INDEX index_pls_accounts_on_account_list_id ON pls_accounts USING btree (
 
 
 --
--- Name: index_pls_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_pls_accounts_on_uuid ON pls_accounts USING btree (uuid);
-
-
---
 -- Name: index_prayer_letters_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_prayer_letters_accounts_on_account_list_id ON prayer_letters_accounts USING btree (account_list_id);
-
-
---
--- Name: index_prayer_letters_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_prayer_letters_accounts_on_uuid ON prayer_letters_accounts USING btree (uuid);
 
 
 --
@@ -6127,24 +3461,10 @@ CREATE INDEX index_taggings_on_tagger_id_and_tagger_type ON taggings USING btree
 
 
 --
--- Name: index_taggings_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_taggings_on_uuid ON taggings USING btree (uuid);
-
-
---
 -- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
-
-
---
--- Name: index_tags_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_tags_on_uuid ON tags USING btree (uuid);
 
 
 --
@@ -6362,6 +3682,14 @@ ALTER TABLE ONLY donation_amount_recommendations
 
 ALTER TABLE ONLY master_person_sources
     ADD CONSTRAINT master_person_sources_master_person_id_fk FOREIGN KEY (master_person_id) REFERENCES master_people(id);
+
+
+--
+-- Name: notification_preferences notification_preferences_user_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notification_preferences
+    ADD CONSTRAINT notification_preferences_user_id_fk FOREIGN KEY (user_id) REFERENCES people(id) ON DELETE CASCADE;
 
 
 --
@@ -7149,4 +4477,8 @@ INSERT INTO schema_migrations (version) VALUES ('20171108032537');
 INSERT INTO schema_migrations (version) VALUES ('20171113062557');
 
 INSERT INTO schema_migrations (version) VALUES ('20180201214927');
+
+INSERT INTO schema_migrations (version) VALUES ('20180202024130');
+
+INSERT INTO schema_migrations (version) VALUES ('20180202024131');
 
