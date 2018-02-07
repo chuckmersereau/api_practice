@@ -45,7 +45,9 @@ module Person::Account
 
     def create_user_from_auth(attributes)
       attributes ||= {}
-      User.create!(attributes)
+      new_user = User.create!(attributes)
+      notifiy_eu_of_new_user(new_user)
+      new_user
     end
 
     def find_authenticated_user(auth_hash)
@@ -61,6 +63,10 @@ module Person::Account
     end
 
     private
+
+    def notifiy_eu_of_new_user(user)
+      NewUserTransferWorker.perform_async(user.id)
+    end
 
     def find_or_create_person_account(person:, attributes:, relation_scope:)
       attributes[:authenticated] = true

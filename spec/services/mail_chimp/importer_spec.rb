@@ -177,7 +177,7 @@ describe MailChimp::Importer do
           subject.import_all_members!
         end.to change { Person.count }.by(4)
 
-        expect(second_person.primary_email_address).to be_nil
+        expect(second_person.reload.primary_email_address.email).to eq('random@gmail.com')
 
         expect(new_contacts.first.send_newsletter).to eq('Email')
         expect(new_contacts.first.primary_person.primary_email_address.email).to eq('second_email@gmail.com')

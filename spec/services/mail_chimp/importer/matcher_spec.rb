@@ -7,7 +7,7 @@ RSpec.describe MailChimp::Importer::Matcher do
   subject { described_class.new(mail_chimp_account) }
 
   context '#find_matching_people' do
-    let(:first_email) { 'email@gmail.com' }
+    let(:first_email) { 'EMAIL@gmail.com' }
     let(:formatted_member_infos) do
       [
         {
@@ -33,13 +33,13 @@ RSpec.describe MailChimp::Importer::Matcher do
 
     let!(:person) do
       create(:person, contacts: [contact],
-                      primary_email_address: build(:email_address, email: first_email))
+                      primary_email_address: build(:email_address, email: first_email.downcase))
     end
 
     it 'returns a hash of people matching mail chimp member_infos' do
       expect(subject.find_matching_people(formatted_member_infos)).to eq(
         person.id => {
-          'email' => 'email@gmail.com',
+          'email' => 'EMAIL@gmail.com',
           'first_name' => 'First Name',
           'last_name' => 'Last Name',
           'greeting' => 'Greeting',

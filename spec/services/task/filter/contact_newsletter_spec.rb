@@ -44,7 +44,7 @@ RSpec.describe Task::Filter::ContactNewsletter do
     end
     context 'filter by contact newsletter all' do
       it 'returns all tasks with contacts that have the all newsletter option selected, but not blank' do
-        expect(described_class.query(tasks, { contact_newsletter: 'all' }, account_list).to_a).to match_array [task_one, task_two, task_three, task_four]
+        expect(described_class.query(tasks, { contact_newsletter: 'all' }, account_list).to_a).to match_array [task_one, task_two, task_three]
       end
     end
     context 'filter by contact newsletter physical' do

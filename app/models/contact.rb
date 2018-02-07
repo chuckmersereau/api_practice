@@ -491,12 +491,9 @@ class Contact < ApplicationRecord
   end
 
   def deceased
-    people.all?(&:deceased)
+    people.any? && people.all?(&:deceased)
   end
-
-  def deceased?
-    deceased
-  end
+  alias deceased? deceased
 
   def self.pledge_frequencies
     {

@@ -33,7 +33,7 @@ class MailChimp::Importer
 
     def person_by_email(email)
       account_list.people.joins(:primary_email_address)
-                  .find_by(email_addresses: { email: email })
+                  .find_by(email_addresses: { email: email&.downcase })
     end
 
     def reject_extra_subscribe_causers(people_matching_member_infos)

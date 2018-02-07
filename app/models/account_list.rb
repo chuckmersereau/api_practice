@@ -71,7 +71,6 @@ class AccountList < ApplicationRecord
   has_one :pls_account, dependent: :destroy, autosave: true
 
   accepts_nested_attributes_for :contacts, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :notification_preferences, reject_if: :all_blank, allow_destroy: true
 
   scope :with_linked_org_accounts, lambda {
     joins(:organization_accounts).where('locked_at IS NULL').order('last_download ASC')
@@ -96,8 +95,7 @@ class AccountList < ApplicationRecord
     :active_mpd_monthly_goal,
     :updated_at,
     :updated_in_db_at,
-    :uuid,
-    notification_preferences_attributes: NotificationPreference::PERMITTED_ATTRIBUTES
+    :uuid
   ].freeze
 
   audited

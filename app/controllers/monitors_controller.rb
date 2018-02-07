@@ -1,7 +1,10 @@
 class MonitorsController < ActionController::API
   def lb
+    ActiveRecord::Migration.check_pending!
     ActiveRecord::Base.connection.select_values('select id from people limit 1')
     render text: File.read(Rails.public_path.join('lb.txt'))
+  rescue ActiveRecord::PendingMigrationError
+    render text: 'PENDING MIGRATIONS', status: :service_unavailable
   end
 
   def sidekiq

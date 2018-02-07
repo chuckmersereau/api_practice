@@ -7,7 +7,7 @@ class ApplicationFilterer
 
   def initialize(filters = nil)
     @first_filter_queried = false
-    @filters = filters || {}
+    @filters = filters&.with_indifferent_access || {}
     @filters.map { |k, v| @filters[k] = v.strip if v.is_a?(String) }
   end
 
