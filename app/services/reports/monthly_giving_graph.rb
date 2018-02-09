@@ -46,9 +46,7 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
 
   def filter_params=(filter_params)
     filter_params.delete(:account_list_id)
-    unless filter_params[:donation_date]
-      filter_params[:donation_date] = 11.months.ago.beginning_of_month.to_date..Date.today.end_of_month
-    end
+    filter_params[:donation_date] = 11.months.ago.beginning_of_month.to_date..Date.today.end_of_month unless filter_params[:donation_date]
     @filter_params = filter_params
   end
 

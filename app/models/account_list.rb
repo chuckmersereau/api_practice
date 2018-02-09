@@ -94,8 +94,7 @@ class AccountList < ApplicationRecord
     :active_mpd_finish_at,
     :active_mpd_monthly_goal,
     :updated_at,
-    :updated_in_db_at,
-    :uuid
+    :updated_in_db_at
   ].freeze
 
   audited
@@ -108,12 +107,12 @@ class AccountList < ApplicationRecord
   alias destroy! destroy
 
   def salary_organization=(value)
-    value = Organization.where(uuid: value).limit(1).ids.first unless value.is_a?(Integer)
+    value = Organization.where(id: value).limit(1).ids.first unless value.is_a?(Integer)
     self.salary_organization_id = value
   end
 
   def salary_organization_id=(value)
-    settings[:salary_organization_id] = value if value.is_a?(Integer)
+    settings[:salary_organization_id] = value if value.is_a?(String) && UUID_REGEX.match?(value)
     settings[:salary_organization_id] ||= value.id
     settings[:salary_currency] = Organization.find(settings[:salary_organization_id]).default_currency_code
   end
@@ -156,7 +155,7 @@ class AccountList < ApplicationRecord
   end
 
   def multiple_designations
-    designation_accounts.length > 1 ? true : false
+    designation_accounts.length > 1
   end
 
   def cities

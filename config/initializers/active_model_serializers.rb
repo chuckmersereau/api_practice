@@ -10,7 +10,7 @@ class ActiveModelSerializers::Adapter::JsonApi
       if serializer.respond_to?(:each)
         serializer.map { |s| ResourceIdentifier.new(s, serializable_resource_options).as_json }
       elsif (virtual_value = association.options[:virtual_value])
-        { id: virtual_value.uuid, type: virtual_value.class.to_s.underscore }.as_json
+        { id: virtual_value.id, type: virtual_value.class.to_s.underscore }.as_json
       elsif serializer && serializer.object
         ResourceIdentifier.new(serializer, serializable_resource_options).as_json
       end
@@ -24,9 +24,6 @@ module ActiveModelSerializers
       class ResourceIdentifier
         private
         def id_for(serializer)
-          # New behaviour, read the uuid:
-          serializer.read_attribute_for_serialization(:uuid).to_s
-        rescue NoMethodError # Rescue error and fallback to original behaviour, read the id:
           serializer.read_attribute_for_serialization(:id).to_s
         end
       end

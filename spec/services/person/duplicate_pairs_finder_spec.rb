@@ -37,7 +37,7 @@ describe Person::DuplicatePairsFinder do
     pair_missing_record_one = DuplicateRecordPair.new(
       account_list: account_list,
       reason: 'Test',
-      record_one_id: person.id + 1,
+      record_one_id: SecureRandom.uuid,
       record_one_type: 'Person',
       record_two_id: person.id,
       record_two_type: 'Person'
@@ -49,7 +49,7 @@ describe Person::DuplicatePairsFinder do
       reason: 'Test',
       record_one_id: person.id,
       record_one_type: 'Person',
-      record_two_id: person.id + 2,
+      record_two_id: SecureRandom.uuid,
       record_two_type: 'Person'
     )
     pair_missing_record_two.save(validate: false)

@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe LowerRetryWorker do
   it 'calls the specified method on the given class' do
-    account = build_stubbed(:account_list)
-    expect(AccountList).to receive(:find).with(account.id) { account }
+    account = build_stubbed(:account_list, id: SecureRandom.uuid)
+    expect(AccountList).to receive(:find_by!).with(id: account.id) { account }
     expect(account).to receive(:import_data)
     LowerRetryWorker.new.perform('AccountList', account.id, 'import_data')
   end

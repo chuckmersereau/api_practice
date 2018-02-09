@@ -28,7 +28,7 @@ RSpec.describe Pledge, type: :model do
         :status,
         :updated_at,
         :updated_in_db_at,
-        :uuid
+        :id
       ]
     )
   end

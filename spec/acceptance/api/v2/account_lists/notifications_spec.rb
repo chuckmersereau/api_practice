@@ -9,11 +9,11 @@ resource 'Account Lists > Notifications' do
   let!(:user)         { create(:user_with_full_account) }
 
   let!(:account_list)   { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
   let!(:contact)        { create(:contact, account_list: account_list) }
   let!(:notifications)  { create_list(:notification, 2, contact: contact) }
   let(:notification)    { notifications.first }
-  let(:id)              { notification.uuid }
+  let(:id)              { notification.id }
   let(:donation)        { create(:donation) }
 
   let(:new_notification) do
@@ -31,19 +31,19 @@ resource 'Account Lists > Notifications' do
       contact: {
         data: {
           type: 'contacts',
-          id: contact.uuid
+          id: contact.id
         }
       },
       donation: {
         data: {
           type: 'donations',
-          id: donation.uuid
+          id: donation.id
         }
       },
       notification_type: {
         data: {
           type: 'notification_types',
-          id: notification.notification_type.uuid
+          id: notification.notification_type.id
         }
       }
     }

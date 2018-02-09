@@ -7,8 +7,8 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   let(:contact) { create(:contact, account_list: user.account_lists.first) }
   let!(:resource) { create(:address, addressable: contact, source_donor_account: build(:donor_account)) }
   let!(:second_resource) { create(:address, addressable: contact) }
-  let(:id) { resource.uuid }
-  let(:parent_param) { { contact_id: contact.uuid } }
+  let(:id) { resource.id }
+  let(:parent_param) { { contact_id: contact.id } }
   let(:parent_association) { :addressable }
   let(:correct_attributes) { { street: '123 Street' } }
   let(:incorrect_attributes) { nil }
@@ -33,7 +33,7 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
     it 'does not show resources for contact that user does not own' do
       api_login(user)
       contact = create(:contact, account_list: create(:user_with_account).account_lists.first)
-      get :index, contact_id: contact.uuid
+      get :index, contact_id: contact.id
       expect(response.status).to eq(403)
     end
   end

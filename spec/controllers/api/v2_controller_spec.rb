@@ -18,7 +18,7 @@ describe Api::V2Controller do
 
         render json: {
           filter_params: filter_params,
-          filter_params_with_uuid: permitted_filter_params_with_uuids,
+          filter_params_with_id: permitted_filter_params_with_ids,
           include_params: include_params,
           current_time_zone: current_time_zone.name,
           current_locale: I18n.locale
@@ -92,12 +92,12 @@ describe Api::V2Controller do
     describe 'Filters' do
       let(:contact) { create(:contact) }
 
-      it 'allows a user to filter by id using a uuid' do
+      it 'allows a user to filter by id using a id' do
         api_login(user)
-        get :index, filter: { contact_id: contact.uuid }
+        get :index, filter: { contact_id: contact.id }
         expect(response.status).to eq(200), invalid_status_detail
         expect(response_json[:filter_params][:contact_id]).to eq(contact.id)
-        expect(response_json[:filter_params_with_uuid][:contact_id]).to eq(contact.uuid)
+        expect(response_json[:filter_params_with_id][:contact_id]).to eq(contact.id)
       end
 
       it 'returns a 404 when a user tries to filter with the id of a resource' do

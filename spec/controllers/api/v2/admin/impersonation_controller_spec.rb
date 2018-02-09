@@ -23,7 +23,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
       expect(response.status).to eq(403)
     end
 
-    it 'returns a 404 when the user uuid does not exist' do
+    it 'returns a 404 when the user id does not exist' do
       full_correct_attributes[:data][:attributes][:user] = SecureRandom.uuid
       api_login(user)
       post :create, full_correct_attributes
@@ -38,7 +38,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
     end
 
     it 'returns a 200 when an admin is logged in and searches the user by ID' do
-      expect_admin_user_to_be_able_to_impersonate_with_id(user_to_impersonate.uuid)
+      expect_admin_user_to_be_able_to_impersonate_with_id(user_to_impersonate.id)
     end
 
     it 'returns a 200 when an admin is logged in and searches the user by email' do
@@ -55,7 +55,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
       expect(response.status).to eq(200)
       expect(response_data['attributes']['json_web_token']).to eq(
         JsonWebToken.encode(
-          user_uuid: user_to_impersonate.uuid,
+          user_id: user_to_impersonate.id,
           exp: 1.hour.from_now.utc.to_i
         )
       )

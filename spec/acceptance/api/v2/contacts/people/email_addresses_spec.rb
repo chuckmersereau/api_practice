@@ -14,13 +14,13 @@ resource 'Contacts > People > Email Addresses' do
   let(:account_list)  { user.account_lists.first }
 
   let(:contact)       { create(:contact, account_list: account_list) }
-  let(:contact_id)    { contact.uuid }
+  let(:contact_id)    { contact.id }
 
   let(:person)        { create(:person, contacts: [contact]) }
-  let(:person_id)     { person.uuid }
+  let(:person_id)     { person.id }
 
   let!(:email_address) { create(:email_address, person: person) }
-  let(:id)             { email_address.uuid }
+  let(:id)             { email_address.id }
 
   let(:form_data) do
     build_data(
@@ -84,7 +84,7 @@ resource 'Contacts > People > Email Addresses' do
     post '/api/v2/contacts/:contact_id/people/:person_id/email_addresses' do
       doc_helper.insert_documentation_for(action: :create, context: self)
 
-      let(:attributes) { attributes_for(:email_address).merge(person_id: person.uuid) }
+      let(:attributes) { attributes_for(:email_address).merge(person_id: person.id) }
 
       example doc_helper.title_for(:create), document: doc_helper.document_scope do
         explanation doc_helper.description_for(:create)
@@ -101,7 +101,7 @@ resource 'Contacts > People > Email Addresses' do
     put '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
       doc_helper.insert_documentation_for(action: :update, context: self)
 
-      let(:attributes) { email_address.attributes.merge(person_id: person.uuid) }
+      let(:attributes) { email_address.attributes.merge(person_id: person.id) }
 
       before { attributes.merge!(email: 'new-email@example.com') }
 

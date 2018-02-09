@@ -4,7 +4,7 @@ module AddressMethods
   # Used by the copy_address below to know which attributes to exclude
   FIELDS_TO_NOT_COPY = [
     :id, :addressable_id, :created_at, :updated_at, :primary_mailing_address,
-    :addressable_type, :remote_id, :source, :source_donor_account_id, :uuid
+    :addressable_type, :remote_id, :source, :source_donor_account_id
   ].freeze
 
   included do

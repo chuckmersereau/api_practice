@@ -16,7 +16,7 @@ RSpec.describe Task::Filter::ContactIds do
                                                                 name: :contact_ids,
                                                                 options: [{ name: '-- Any --', id: '', placeholder: 'None' }] +
                                                                            account_list.contacts.order('name ASC').collect do |contact|
-                                                                             { name: contact.to_s, id: contact.uuid, account_list_id: account_list.uuid }
+                                                                             { name: contact.to_s, id: contact.id, account_list_id: account_list.id }
                                                                            end,
                                                                 parent: nil,
                                                                 priority: 1,
@@ -39,11 +39,11 @@ RSpec.describe Task::Filter::ContactIds do
 
     context 'filter by activity_type' do
       it 'filters single contact' do
-        expect(described_class.query(tasks, { contact_ids: contact_one.uuid }, nil).to_a).to include(task_one)
+        expect(described_class.query(tasks, { contact_ids: contact_one.id }, nil).to_a).to include(task_one)
       end
 
       it 'filters multiple contacts' do
-        expect(described_class.query(tasks, { contact_ids: "#{contact_one.uuid}, #{contact_two.uuid}" }, nil).to_a).to include(task_two)
+        expect(described_class.query(tasks, { contact_ids: "#{contact_one.id}, #{contact_two.id}" }, nil).to_a).to include(task_two)
       end
     end
   end

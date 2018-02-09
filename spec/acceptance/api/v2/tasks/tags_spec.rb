@@ -10,7 +10,7 @@ resource 'Tasks > Tags' do
   let!(:account_list) { user.account_lists.first }
 
   let!(:task)   { create(:task, account_list: account_list) }
-  let(:task_id) { task.uuid }
+  let(:task_id) { task.id }
 
   let(:tag_name) { 'new_tag' }
 

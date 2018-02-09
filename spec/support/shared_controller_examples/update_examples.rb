@@ -4,13 +4,9 @@ RSpec.shared_examples 'update_examples' do |options = {}|
   include_context 'common_variables'
 
   describe '#update' do
-    unless options[:except].include?(:includes)
-      include_examples 'including related resources examples', action: :update
-    end
+    include_examples 'including related resources examples', action: :update unless options[:except].include?(:includes)
 
-    unless options[:except].include?(:sparse_fieldsets)
-      include_examples 'sparse fieldsets examples', action: :update
-    end
+    include_examples 'sparse fieldsets examples', action: :update unless options[:except].include?(:sparse_fieldsets)
 
     it 'updates resource for users that are signed in' do
       api_login(user)
@@ -78,15 +74,15 @@ RSpec.shared_examples 'update_examples' do |options = {}|
       if resource.respond_to?(:account_list_id) && parent_param_if_needed[:account_list_id].present?
         api_login(user)
         expect do
-          put :update, account_list_id: account_list.uuid,
-                       id: resource.uuid,
+          put :update, account_list_id: account_list.id,
+                       id: resource.id,
                        data: { type: resource_type,
-                               id: resource.uuid,
+                               id: resource.id,
                                relationships: {
                                  account_list: {
                                    data: {
                                      type: 'account_lists',
-                                     id: create(:account_list).uuid
+                                     id: create(:account_list).id
                                    }
                                  }
                                },

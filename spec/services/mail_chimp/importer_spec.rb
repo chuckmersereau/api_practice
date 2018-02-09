@@ -158,7 +158,7 @@ describe MailChimp::Importer do
     let!(:contact) { create(:contact, primary_person: person, send_newsletter: 'None') }
     let!(:second_person) { create(:person, primary_email_address: nil, first_name: 'Second First Name', last_name: 'Second Last Name') }
     let!(:second_contact) { create(:contact, primary_person: second_person, send_newsletter: 'None') }
-    let(:new_contacts) { Contact.last(4) }
+    let(:new_contacts) { Contact.order(:created_at).last(4) }
 
     before do
       allow(MailChimp::GibbonWrapper).to receive(:new).and_return(mock_gibbon_wrapper)

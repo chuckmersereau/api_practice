@@ -44,7 +44,7 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   end
 
   def load_organization_account
-    @organization_account ||= Person::OrganizationAccount.find_by_uuid_or_raise!(params[:id])
+    @organization_account ||= Person::OrganizationAccount.find_by!(id: params[:id])
   end
 
   def render_organization_account

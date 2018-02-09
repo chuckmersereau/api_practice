@@ -73,7 +73,7 @@ RSpec.describe DonationImports::Siebel::ProfileImporter do
         .and change { designation_profile.reload.balance_updated_at }
 
       expect(designation_account.balance).to eq(2000.00)
-      expect(DesignationProfile.last.balance).to eq(2000.00)
+      expect(DesignationProfile.order(:created_at).last.balance).to eq(2000.00)
     end
   end
 end

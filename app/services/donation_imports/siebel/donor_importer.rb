@@ -65,9 +65,7 @@ class DonationImports::Siebel
         postal_code: address.zip
       )
 
-      if company.persisted? && donor_account.master_company == company.master_company
-        donor_account.update!(master_company: company.master_company)
-      end
+      donor_account.update!(master_company: company.master_company) if company.persisted? && donor_account.master_company == company.master_company
 
       company
     end

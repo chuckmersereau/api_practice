@@ -15,7 +15,7 @@ describe Api::V2::Coaching::PledgesController, type: :controller do
   let!(:pledge_2) { create_pledge amount: 30, expected_date: 3.days.from_now }
   let!(:pledge_3) { create_pledge amount: 40, expected_date: 4.days.from_now }
 
-  let(:id) { pledge_1.uuid }
+  let(:id) { pledge_1.id }
 
   let!(:coaches) { create_list(:user_coach, 2) }
   before do

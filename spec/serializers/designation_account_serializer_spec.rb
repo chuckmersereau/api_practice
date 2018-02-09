@@ -9,7 +9,7 @@ describe DesignationAccountSerializer do
 
   it 'balances list' do
     expect(serializer.as_json).to include :balances
-    expect(serializer.as_json[:balances][0][:id]).to eq(designation_account.balances[0].uuid)
+    expect(serializer.as_json[:balances][0][:id]).to eq(designation_account.balances[0].id)
   end
 
   describe '#currency_symbol' do

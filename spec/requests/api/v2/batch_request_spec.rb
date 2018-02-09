@@ -19,7 +19,7 @@ RSpec.describe 'Batch Requests', type: :request do
           account_list: {
             data: {
               type: 'account_lists',
-              id: account_list.uuid
+              id: account_list.id
             }
           }
         }
@@ -39,7 +39,7 @@ RSpec.describe 'Batch Requests', type: :request do
           account_list: {
             data: {
               type: 'account_lists',
-              id: create(:account_list).uuid
+              id: create(:account_list).id
             }
           }
         }

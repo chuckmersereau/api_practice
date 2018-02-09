@@ -28,7 +28,7 @@ class PersonWithParentContact < ActiveModelSerializers::Model
            :twitter_accounts,
            :updated_at,
            :updated_in_db_at,
-           :uuid,
+           :id,
            :websites,
            to: :person
 

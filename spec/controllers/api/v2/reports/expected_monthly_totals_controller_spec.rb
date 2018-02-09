@@ -11,7 +11,7 @@ RSpec.describe Api::V2::Reports::ExpectedMonthlyTotalsController, type: :control
   let(:parent_param) do
     {
       filter: {
-        account_list_id: account_list.uuid
+        account_list_id: account_list.id
       }
     }
   end

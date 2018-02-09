@@ -25,9 +25,17 @@ RSpec.describe 'Post Requests', type: :request do
             relationships: {
               account_list: {
                 data: {
-                  id: 'non-existant-UUID',
+                  id: account_list.id,
                   type: 'account_lists'
                 }
+              },
+              comments: {
+                data: [
+                  {
+                    type: 'comments',
+                    id: SecureRandom.uuid
+                  }
+                ]
               }
             }
           }
@@ -42,8 +50,8 @@ RSpec.describe 'Post Requests', type: :request do
   end
 
   describe 'with a Client Generated UUID' do
-    let(:desired_uuid)       { SecureRandom.uuid }
-    let(:contact_attributes) { attributes_for(:contact, name: 'Steve Rogers') }
+    let(:desired_id) { SecureRandom.uuid }
+    let(:contact_attributes) { attributes_for(:contact, name: 'Steve Rogers').except!(:id) }
 
     before { api_login(user) }
 
@@ -52,13 +60,13 @@ RSpec.describe 'Post Requests', type: :request do
         {
           data: {
             type: :contacts,
-            id: desired_uuid,
+            id: desired_id,
             attributes: contact_attributes,
             relationships: {
               account_list: {
                 data: {
                   type: 'account_lists',
-                  id: account_list.uuid
+                  id: account_list.id
                 }
               }
             }
@@ -70,23 +78,23 @@ RSpec.describe 'Post Requests', type: :request do
         post api_v2_contacts_path, post_attributes, headers
 
         expect(response.status).to eq(201), invalid_status_detail
-        expect(json_response['data']['id']).to eq desired_uuid
+        expect(json_response['data']['id']).to eq desired_id
       end
     end
 
-    context 'with the UUID in: /data/attributes' do
+    context 'with the id in: /data/attributes' do
       let(:post_attributes) do
         {
           data: {
             type: :contacts,
             attributes: contact_attributes.merge!(
-              id: desired_uuid
+              id: desired_id
             ),
             relationships: {
               account_list: {
                 data: {
                   type: 'account_lists',
-                  id: account_list.uuid
+                  id: account_list.id
                 }
               }
             }
@@ -109,21 +117,21 @@ RSpec.describe 'Post Requests', type: :request do
       end
     end
 
-    context 'with a UUID that already exists' do
+    context 'with a id that already exists' do
       let!(:pre_existing_task)   { create(:task, account_list: account_list) }
       let!(:new_task_attributes) { attributes_for(:task) }
 
       let!(:data) do
         {
           data: {
-            id: pre_existing_task.uuid,
+            id: pre_existing_task.id,
             type: :tasks,
             attributes: new_task_attributes,
             relationships: {
               account_list: {
                 data: {
                   type: 'account_lists',
-                  id: account_list.uuid
+                  id: account_list.id
                 }
               }
             }
@@ -154,7 +162,7 @@ RSpec.describe 'Post Requests', type: :request do
               account_list: {
                 data: {
                   type: 'account_lists',
-                  id: account_list.uuid
+                  id: account_list.id
                 }
               }
             }
@@ -179,7 +187,7 @@ RSpec.describe 'Post Requests', type: :request do
           data: {
             type: invalid_type,
             attributes: new_task_attributes.merge!(
-              account_list_id: account_list.uuid
+              account_list_id: account_list.id
             )
           }
         }.to_json
@@ -210,7 +218,7 @@ RSpec.describe 'Post Requests', type: :request do
               account_list: {
                 data: {
                   type: 'account_lists',
-                  id: account_list.uuid
+                  id: account_list.id
                 }
               }
             }

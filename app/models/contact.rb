@@ -94,7 +94,7 @@ class Contact < ApplicationRecord
     :timezone,
     :updated_at,
     :updated_in_db_at,
-    :uuid,
+    :id,
     :website,
     {
       addresses_attributes: [
@@ -156,7 +156,7 @@ class Contact < ApplicationRecord
         :spouse_first_name,
         :spouse_last_name,
         :spouse_phone,
-        :uuid
+        :id
       ],
       tag_list: []
     }
@@ -258,7 +258,7 @@ class Contact < ApplicationRecord
     unless new_person
       new_person = Person.clone(person)
       people << new_person
-      donor_account.people << new_person if donor_account
+      donor_account&.donor_account_people&.create(person: new_person)
     end
 
     new_person
@@ -362,9 +362,7 @@ class Contact < ApplicationRecord
                                else
                                  people.alive.find_by(gender: 'male') || people.alive.order('created_at').first
                                end
-    if @primary_or_first_person && @primary_or_first_person.new_record? && !new_record?
-      self.primary_person_id = @primary_or_first_person.id
-    end
+    self.primary_person_id = @primary_or_first_person.id if @primary_or_first_person&.new_record? && !new_record?
     @primary_or_first_person || Person.new
   end
 
@@ -387,7 +385,7 @@ class Contact < ApplicationRecord
   end
 
   def greeting
-    self[:greeting].present? ? self[:greeting] : generated_greeting
+    self[:greeting].presence || generated_greeting
   end
 
   def generated_greeting
@@ -398,7 +396,7 @@ class Contact < ApplicationRecord
   end
 
   def envelope_greeting
-    self[:envelope_greeting].present? ? self[:envelope_greeting] : generated_envelope_greeting
+    self[:envelope_greeting].presence || generated_envelope_greeting
   end
 
   def generated_envelope_greeting
@@ -465,7 +463,7 @@ class Contact < ApplicationRecord
   end
 
   def pledge_currency
-    self[:pledge_currency].present? ? self[:pledge_currency] : account_list.try(:default_currency)
+    self[:pledge_currency].presence || account_list.try(:default_currency)
   end
 
   def pledge_currency_symbol
@@ -557,12 +555,12 @@ class Contact < ApplicationRecord
   def find_timezone
     return unless primary_or_first_address
     primary_or_first_address.master_address.find_timezone
-  rescue
+  rescue StandardError
   end
 
   def primary_or_first_address
     @primary_or_first_address ||=
-      addresses.find(&:primary_mailing_address?) || addresses.first
+      addresses.order(:created_at).find(&:primary_mailing_address?) || addresses.first
   end
 
   def set_timezone
@@ -771,7 +769,7 @@ class Contact < ApplicationRecord
   def delete_people
     people.each do |person|
       # If this person isn't linked to any other contact, delete them
-      next if account_list.people.where("people.id = #{person.id} AND contact_people.contact_id <> #{id}").any?
+      next if account_list.people.where('people.id = ? AND contact_people.contact_id <> ?', person.id, id).any?
       person.destroy
     end
 

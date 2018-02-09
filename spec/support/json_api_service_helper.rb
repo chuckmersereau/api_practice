@@ -1,30 +1,30 @@
 require 'action_controller'
 
 module JsonApiServiceHelpers
-  def mock_uuid_reference(from:, to:, resource:)
-    uuids = Array[from].flatten
-    ids   = Array[to].flatten
+  def mock_id_reference(from:, to:, resource:)
+    ids = Array[from].flatten
+    ids = Array[to].flatten
 
-    return_values = uuids.map.with_index do |uuid, index|
+    return_values = ids.map.with_index do |id, index|
       id = ids[index]
 
-      [id, uuid]
+      [id, id]
     end
 
     return_collection = MockCollection.new(return_values)
 
     allow(resource)
       .to receive(:where)
-      .with(uuid: uuids)
+      .with(id: ids)
       .and_return(return_collection)
   end
 
-  def mock_empty_uuid_reference(from:, resource:)
-    uuids = Array[from].flatten
+  def mock_empty_id_reference(from:, resource:)
+    ids = Array[from].flatten
     return_collection = MockCollection.new([])
     allow(resource)
       .to receive(:where)
-      .with(uuid: uuids)
+      .with(id: ids)
       .and_return(return_collection)
   end
 
@@ -58,4 +58,5 @@ class MockContact < MockResource; end
 class MockEmail < MockResource; end
 class MockPerson < MockResource; end
 class MockPerson::FacebookAccount < MockResource; end
-class MockTask < MockResource; end
+class MockTask < MockResource
+  end

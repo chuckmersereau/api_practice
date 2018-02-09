@@ -52,7 +52,7 @@ class Api::V2::User::GoogleAccounts::GoogleIntegrationsController < Api::V2Contr
   end
 
   def load_google_integration
-    @google_integration ||= GoogleIntegration.find_by_uuid_or_raise!(params[:id])
+    @google_integration ||= GoogleIntegration.find_by!(id: params[:id])
   end
 
   def render_google_integration
@@ -102,7 +102,7 @@ class Api::V2::User::GoogleAccounts::GoogleIntegrationsController < Api::V2Contr
   end
 
   def load_google_account
-    @google_account ||= Person::GoogleAccount.find_by_uuid_or_raise!(params[:google_account_id])
+    @google_account ||= Person::GoogleAccount.find_by!(id: params[:google_account_id])
   end
 
   def permitted_filters

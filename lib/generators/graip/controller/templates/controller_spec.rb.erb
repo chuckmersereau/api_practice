@@ -27,7 +27,7 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
   end
 
   # If needed, keep this ;)
-  let(:id) { resource.uuid }
+  let(:id) { resource.id }
 
   # If needed, keep this ;)
   let(:parent_param) do
@@ -36,7 +36,7 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
     # Ex: /api/v2/:account_list_id/contacts/:contact_id/addresses/:id
     # --
     # Note: Don't include :id
-    # Example: { account_list_id: account_list.uuid }
+    # Example: { account_list_id: account_list.id }
   end
 
   # This is required!

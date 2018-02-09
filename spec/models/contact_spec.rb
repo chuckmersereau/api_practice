@@ -72,24 +72,28 @@ describe Contact do
   end
 
   describe 'saving email addresses' do
-    it 'should change which email address is primary' do
-      person = create(:person)
+    let!(:person) { create(:person) }
+    let!(:email_1) { create(:email_address, primary: true, person: person) }
+    let!(:email_2) { create(:email_address, primary: false, person: person) }
+    before do
       contact.people << person
-      email1 = create(:email_address, primary: true, person: person)
-      email2 = create(:email_address, primary: false, person: person)
+    end
 
-      people_attributes =
-        { 'people_attributes' =>
-          { '0' =>
-            { 'email_addresses_attributes' =>
-              {
-                '0' => { 'email' => email1.email, 'primary' => '0', '_destroy' => 'false', 'id' => email1.id },
-                '1' => { 'email' => email2.email, 'primary' => '1', '_destroy' => 'false', 'id' => email2.id }
-              },
-              'id' => person.id } } }
-      contact.update_attributes(people_attributes)
-      expect(email1.reload.primary?).to be false
-      expect(email2.reload.primary?).to be true
+    it 'should change which email address is primary' do
+      contact_attributes = {
+        'people_attributes' => {
+          '0' => {
+            'email_addresses_attributes' => {
+              '0' => { 'email' => email_1.email, 'primary' => '0', '_destroy' => 'false', 'id' => email_1.id },
+              '1' => { 'email' => email_2.email, 'primary' => '1', '_destroy' => 'false', 'id' => email_2.id }
+            },
+            'id' => person.id
+          }
+        }
+      }
+      contact.update_attributes(contact_attributes)
+      expect(email_1.reload.primary?).to be false
+      expect(email_2.reload.primary?).to be true
     end
   end
 
@@ -1084,7 +1088,7 @@ describe Contact do
         .and change { Person.count }.by(4)
         .and change { Address.count }.by(2)
 
-      referred_contact = Contact.find(contact.id).contacts_referred_by_me.first
+      referred_contact = Contact.find(contact.id).contacts_referred_by_me.order(:created_at).first
       expect(referred_contact.name).to eq 'First Referral Name'
       expect(referred_contact.primary_person.first_name).to eq 'Primary Person First Name'
       expect(referred_contact.primary_person.last_name).to eq 'Primary Person Last Name'

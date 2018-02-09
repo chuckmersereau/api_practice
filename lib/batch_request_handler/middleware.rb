@@ -39,7 +39,7 @@ module BatchRequestHandler
       batch_request.process(@app)
     rescue ::BatchRequestHandler::BatchRequest::InvalidBatchRequestError
       render_invalid_batch_request_response
-    rescue => e
+    rescue StandardError => e
       Rollbar.error(e)
       render_unknown_error_response
     end

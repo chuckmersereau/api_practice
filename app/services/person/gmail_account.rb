@@ -83,7 +83,7 @@ class Person::GmailAccount
     google_email.save!
 
     task
-  rescue => error # Rescue all errors so that the sync can continue (otherwise it would repeat and get stuck at the same spot logging the same email).
+  rescue StandardError => error # Rescue all errors so that the sync can continue (otherwise it would repeat and get stuck at the same spot logging the same email).
     Rollbar.error(error) # Report the error so that we still know about it.
   end
 

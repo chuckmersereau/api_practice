@@ -26,7 +26,7 @@ class SidekiqMemNotifier
 
     def check_memory_loop
       loop { check_memory_iteration }
-    rescue
+    rescue StandardError
       Sidekiq.logger.error "#{self}: #{$ERROR_INFO.class} exception: #{$ERROR_INFO}"
     end
 

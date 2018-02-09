@@ -40,7 +40,7 @@ class DuplicateTasksPerContact
     new_tasks =
       task.contacts[1..-1].map do |contact|
         task.dup.tap do |t|
-          t.assign_attributes(uuid: nil, contacts: [contact])
+          t.assign_attributes(id: nil, contacts: [contact])
           comment_attributes.each { |attr| t.comments.build(attr) }
         end
       end

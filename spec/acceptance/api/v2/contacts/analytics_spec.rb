@@ -115,7 +115,7 @@ resource 'Contacts > Analytics' do
 
         example doc_helper.title_for(:show), document: doc_helper.document_scope do
           explanation doc_helper.description_for(:show)
-          do_request filter: { account_list_id: alternate_account_list.uuid }
+          do_request filter: { account_list_id: alternate_account_list.id }
 
           check_resource(additional_attribute_keys)
           expect(resource_object.keys).to match_array expected_attribute_keys

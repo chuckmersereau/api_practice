@@ -494,16 +494,16 @@ module JsonApiService
             included: [
               {
                 type: 'comments',
-                id: 'uuid-comments-1'
+                id: 'id-comments-1'
               },
               {
                 type: nil, # missing
-                id: 'uuid-missing-type'
+                id: 'id-missing-type'
               }
             ],
             data: {
               type: 'contacts',
-              id: 'uuid-contacts-1'
+              id: 'id-contacts-1'
             },
             action: 'create'
           }
@@ -526,19 +526,19 @@ module JsonApiService
             included: [
               {
                 type: 'comments',
-                id: 'uuid-comments-1'
+                id: 'id-comments-1'
               },
               {
                 type: 'addresses',
-                id: 'uuid-addresses-1',
+                id: 'id-addresses-1',
                 attributes: {
-                  contact_id: 'uuid-contacts-1'
+                  contact_id: 'id-contacts-1'
                 }
               }
             ],
             data: {
               type: 'contacts',
-              id: 'uuid-contacts-1'
+              id: 'id-contacts-1'
             },
             action: 'create'
           }

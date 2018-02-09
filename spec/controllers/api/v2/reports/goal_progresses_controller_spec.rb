@@ -17,7 +17,7 @@ RSpec.describe Api::V2::Reports::GoalProgressesController, type: :controller do
   let(:parent_param) do
     {
       filter: {
-        account_list_id: account_list.uuid
+        account_list_id: account_list.id
       }
     }
   end

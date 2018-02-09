@@ -79,7 +79,7 @@ relationships: &rels
       id:
         description:
           The `id` of the Account List that the Task belongs to
-        type: UUID string
+        type: id string
         required: true
   comments:
     data:
@@ -127,7 +127,7 @@ parameters:
       account_list_id:
         description:
           Filter by Account List; accepts an Account List `id`
-        type: UUID string
+        type: id string
       activity_type:
         description:
           Filter by Action; Accepts multiple parameters, with values "Call",

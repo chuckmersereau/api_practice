@@ -186,7 +186,7 @@ describe Appeal do
              send_newsletter: 'Both')
     end
 
-    it 'adds appeal_contacts (with a uuid) for contacts within inclusion filter' do
+    it 'adds appeal_contacts (with a id) for contacts within inclusion filter' do
       subject.inclusion_filter = {
         status: 'Partner - Financial',
         newsletter: 'Both'
@@ -194,10 +194,10 @@ describe Appeal do
 
       subject.save
       expect(subject.contacts).to eq([contact1, contact4])
-      expect(subject.appeal_contacts.first.uuid).to be_present
+      expect(subject.appeal_contacts.first.id).to be_present
     end
 
-    it 'adds excluded_appeal_contacts (with a uuid) for all contacts in the exclusion filters' do
+    it 'adds excluded_appeal_contacts (with a id) for all contacts in the exclusion filters' do
       subject.inclusion_filter = {
         newsletter: 'Both'
       }
@@ -210,7 +210,7 @@ describe Appeal do
       subject.save
       expect(subject.contacts).to eq([contact2])
       expect(subject.excluded_contacts).to match_array([contact1, contact3, contact4])
-      expect(subject.excluded_appeal_contacts.first.uuid).to be_present
+      expect(subject.excluded_appeal_contacts.first.id).to be_present
     end
 
     it 'adds filter name as reason for exclusion' do
@@ -272,7 +272,7 @@ describe Appeal do
       contact1.update(tag_list: %w(cru))
 
       subject.inclusion_filter = {
-        'account_list_id' => account_list.uuid,
+        'account_list_id' => account_list.id,
         'tags' => 'asdf',
         'any_tags' => true
       }

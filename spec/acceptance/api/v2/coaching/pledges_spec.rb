@@ -24,7 +24,7 @@ resource 'Coaching Pledges' do
   let!(:pledge_2) { create :pledge, appeal: appeal, account_list: account_list }
   let!(:pledge_3) { create :pledge, appeal: appeal, account_list: account_list }
 
-  let(:id) { pledge_1.uuid }
+  let(:id) { pledge_1.id }
 
   let(:resource_attributes) do
     %w(

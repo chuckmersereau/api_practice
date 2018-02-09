@@ -6,21 +6,13 @@ RSpec.shared_examples 'index_examples' do |options = {}|
   let(:active_record_association) { ActiveRecord::Relation }
 
   describe '#index' do
-    unless options[:except].include?(:includes)
-      include_examples 'including related resources examples', action: :index
-    end
+    include_examples 'including related resources examples', action: :index unless options[:except].include?(:includes)
 
-    unless options[:except].include?(:sparse_fieldsets)
-      include_examples 'sparse fieldsets examples', action: :index
-    end
+    include_examples 'sparse fieldsets examples', action: :index unless options[:except].include?(:sparse_fieldsets)
 
-    unless options[:except].include?(:sorting)
-      include_examples 'sorting examples', action: :index
-    end
+    include_examples 'sorting examples', action: :index unless options[:except].include?(:sorting)
 
-    unless options[:except].include?(:filtering)
-      include_examples 'filtering examples', action: :index
-    end
+    include_examples 'filtering examples', action: :index unless options[:except].include?(:filtering)
 
     it 'shows resources to users that are signed in' do
       api_login(user)

@@ -4,12 +4,12 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
   let(:factory_type) { :donor_account }
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
   let!(:contact) { create(:contact, account_list: account_list) }
   let!(:contact2) { create(:contact, account_list: account_list) }
   let!(:donor_accounts) { create_list(:donor_account, 3) }
   let(:donor_account) { donor_accounts.first }
-  let(:id) { donor_account.uuid }
+  let(:id) { donor_account.id }
 
   before do
     contact.donor_accounts << donor_accounts[0]
@@ -42,7 +42,7 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
       create(factory_type, contacts: [contact_one, contact_two])
       get :index, account_list_id: account_list_id, include: '*'
       expect(response.status).to eq(200)
-      expect(included_array_in_response.any? { |resource| resource['id'] == contact_two.uuid }).to eq(false)
+      expect(included_array_in_response.any? { |resource| resource['id'] == contact_two.id }).to eq(false)
     end
 
     describe 'filter[wildcard_search]' do
@@ -51,7 +51,7 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
         before { contact.donor_accounts << donor_account }
         it 'returns donor_account' do
           get :index, account_list_id: account_list_id, filter: { wildcard_search: '12' }
-          expect(JSON.parse(response.body)['data'][0]['id']).to eq(donor_account.uuid)
+          expect(JSON.parse(response.body)['data'][0]['id']).to eq(donor_account.id)
         end
       end
       context 'account_number does not start with' do
@@ -67,7 +67,7 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
         before { contact.donor_accounts << donor_account }
         it 'returns dnor_account' do
           get :index, account_list_id: account_list_id, filter: { wildcard_search: 'bc' }
-          expect(JSON.parse(response.body)['data'][0]['id']).to eq(donor_account.uuid)
+          expect(JSON.parse(response.body)['data'][0]['id']).to eq(donor_account.id)
         end
       end
       context 'name does not contain' do

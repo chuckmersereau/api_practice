@@ -58,7 +58,7 @@ RSpec.describe Api::V2::Tasks::Tags::BulkController, type: :controller do
       let(:filter_params) do
         {
           filter: {
-            task_ids: task_two.uuid
+            task_ids: task_two.id
           }
         }
       end

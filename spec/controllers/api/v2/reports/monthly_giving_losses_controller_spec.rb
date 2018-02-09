@@ -10,7 +10,7 @@ RSpec.describe Api::V2::Reports::MonthlyLossesGraphsController, type: :controlle
   end
 
   let(:correct_attributes) { {} }
-  let(:id) { account_list.uuid }
+  let(:id) { account_list.id }
 
   include_examples 'show_examples', except: [:sparse_fieldsets]
 
@@ -31,7 +31,7 @@ RSpec.describe Api::V2::Reports::MonthlyLossesGraphsController, type: :controlle
 
       expect(response.status).to eq(200), invalid_status_detail
       expect(response_json[:data][:relationships][:account_list][:data][:id])
-        .to eq account_list.uuid
+        .to eq account_list.id
       expect(response.body)
         .to include(resource.send(reference_key).to_json) if reference_key
     end

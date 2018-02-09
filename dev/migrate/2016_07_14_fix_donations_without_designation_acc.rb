@@ -7,7 +7,7 @@ class AddAccountsToDonations
     donor_accounts(last_donor_id).limit(800).each do |donor_account|
       last_id = donor_account.id
 
-      if donor_account.contacts && donor_account.contacts.map(&:account_list_id).uniq.count == 1
+      if donor_account.contacts&.map(&:account_list_id)&.uniq&.count == 1
         account_list = donor_account.contacts.first.account_list
       else
         log_action_for_donor(donor_account, 1)

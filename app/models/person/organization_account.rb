@@ -28,7 +28,7 @@ class Person::OrganizationAccount < ApplicationRecord
                           :updated_at,
                           :updated_in_db_at,
                           :username,
-                          :uuid].freeze
+                          :id].freeze
 
   def self.find_or_create_from_auth(token, oauth_url, user)
     organization = Organization.find_by!(oauth_url: oauth_url)

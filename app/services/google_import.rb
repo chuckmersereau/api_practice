@@ -7,8 +7,7 @@ class GoogleImport
 
   def import
     return false unless @import.source_account_id
-
-    google_account = @user.google_accounts.find(@import.source_account_id)
+    google_account = @user.google_accounts.find_by(id: @import.source_account_id)
     begin
       google_account.update_column(:downloading, true)
       import_contacts(google_account)
@@ -38,7 +37,7 @@ class GoogleImport
     google_contacts.each do |g_contact|
       begin
         import_contact(g_contact, tags)
-      rescue => e
+      rescue StandardError => e
         Rollbar.raise_or_notify(e)
         next
       end

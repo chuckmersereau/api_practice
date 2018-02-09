@@ -9,7 +9,7 @@ resource 'Donations' do
   let!(:user)         { create(:user_with_full_account) }
 
   let!(:account_list)   { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
 
   let!(:contact)             { create(:contact, account_list: account_list) }
   let!(:donor_account)       { create(:donor_account) }
@@ -21,7 +21,7 @@ resource 'Donations' do
   end
 
   let(:donation) { donations.first }
-  let(:id)       { donation.uuid }
+  let(:id)       { donation.id }
 
   let(:new_donation) do
     attributes_for(:donation, amount: 10.00)
@@ -34,13 +34,13 @@ resource 'Donations' do
       donor_account: {
         data: {
           type: 'donor_accounts',
-          id: donor_account.uuid
+          id: donor_account.id
         }
       },
       designation_account: {
         data: {
           type: 'designation_accounts',
-          id: designation_account.uuid
+          id: designation_account.id
         }
       }
     }

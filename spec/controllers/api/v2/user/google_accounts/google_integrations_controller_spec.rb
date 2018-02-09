@@ -21,8 +21,8 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
     create(:google_integration, account_list: account_list, google_account: google_account, created_at: 1.hour.ago)
   end
 
-  let(:id) { resource.uuid }
-  let(:parent_param) { { google_account_id: google_account.uuid } }
+  let(:id) { resource.id }
+  let(:parent_param) { { google_account_id: google_account.id } }
 
   before do
     allow_any_instance_of(Person::GoogleAccount).to receive(:contact_groups).and_return(
@@ -30,7 +30,6 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
         Person::GoogleAccount::ContactGroup.new(
           id: 'contact_group_id_0',
           title: 'System Group: My Family',
-          uuid: 'contact_group_id_0',
           created_at: Date.today,
           updated_at: Date.today
         )
@@ -78,14 +77,14 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
 
     it 'filters by account_list_id' do
       api_login(user)
-      get :index, parent_param_if_needed.merge(filter: { account_list_id: account_list_two.uuid })
-      expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq([google_integration_two.uuid])
+      get :index, parent_param_if_needed.merge(filter: { account_list_id: account_list_two.id })
+      expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq([google_integration_two.id])
     end
 
     it 'does not filter by account_list_id' do
       api_login(user)
       get :index, parent_param_if_needed.except(:filter)
-      expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq(user.google_integrations.pluck(:uuid))
+      expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq(user.google_integrations.pluck(:id))
     end
   end
 end

@@ -8,7 +8,7 @@ module JsonApiService
     include JsonApiServiceHelpers
 
     before do
-      allow(UUID_REGEX).to receive(:match).and_return(true)
+      allow(id_REGEX).to receive(:match).and_return(true)
     end
 
     describe '.transform' do
@@ -174,7 +174,7 @@ module JsonApiService
           let(:transformer) { build_transformer(params: params) }
 
           before do
-            mock_uuid_reference(
+            mock_id_reference(
               from: 'qwe123',
               to: 10,
               resource: MockAccountList
@@ -210,7 +210,7 @@ module JsonApiService
           let(:transformer) { build_transformer(params: params) }
 
           before do
-            mock_uuid_reference(
+            mock_id_reference(
               from: %w(qwe123 rty890),
               to: [10, 15],
               resource: MockAccountList
@@ -234,7 +234,7 @@ module JsonApiService
         end
       end
 
-      describe 'with a uuid as the primary id' do
+      describe 'with a id as the primary id' do
         context 'during a POST' do
           let(:params) do
             params = {
@@ -255,17 +255,17 @@ module JsonApiService
           let(:transformer) { build_transformer(params: params) }
 
           before do
-            mock_empty_uuid_reference(
+            mock_empty_id_reference(
               from: ['abc123'],
               resource: MockContact
             )
           end
 
-          it "moves the UUID into the resource's attributes" do
+          it "moves the id into the resource's attributes" do
             expected_hash = {
               mock_contact: {
                 name: 'Steve Rogers',
-                uuid: 'abc123'
+                id: 'abc123'
               },
               action: 'create',
               controller: 'mock_contacts'
@@ -294,14 +294,13 @@ module JsonApiService
 
           let(:transformer) { build_transformer(params: params) }
 
-          before { mock_uuid_reference(from: 'abc123', to: 55, resource: MockContact) }
+          before { mock_id_reference(from: 'abc123', to: 55, resource: MockContact) }
 
-          it "moves the UUID into the resource's attributes and finds the ID" do
+          it "moves the id into the resource's attributes and finds the ID" do
             expected_hash = {
               mock_contact: {
-                id: 55,
-                name: 'Steve Rogers',
-                uuid: 'abc123'
+                id: 'abc123',
+                name: 'Steve Rogers'
               },
               action: 'update',
               controller: 'mock_contacts'
@@ -342,7 +341,7 @@ module JsonApiService
           let(:transformer) { build_transformer(params: params) }
 
           before do
-            mock_uuid_reference(
+            mock_id_reference(
               from: %w(abc123 none),
               to: [10, nil],
               resource: MockContact
@@ -387,7 +386,7 @@ module JsonApiService
 
           let(:transformer) { build_transformer(params: params) }
 
-          before { mock_uuid_reference(from: 'abc123', to: 5, resource: MockAccountList) }
+          before { mock_id_reference(from: 'abc123', to: 5, resource: MockAccountList) }
 
           it 'correctly transforms the values' do
             expected_hash = {
@@ -415,7 +414,7 @@ module JsonApiService
                 mock_addresses: {
                   data: [
                     {
-                      id: 'addresses-uuid-abc123',
+                      id: 'addresses-id-abc123',
                       type: 'mock_addresses', attributes: {
                         location: 'Home',
                         city: 'Fremont',
@@ -425,7 +424,7 @@ module JsonApiService
                       }
                     },
                     {
-                      id: 'addresses-uuid-def456',
+                      id: 'addresses-id-def456',
                       type: 'mock_addresses',
                       attributes: {
                         location: 'Work',
@@ -448,8 +447,8 @@ module JsonApiService
         let(:transformer) { build_transformer(params: params) }
 
         before do
-          mock_empty_uuid_reference(
-            from: ['addresses-uuid-abc123', 'addresses-uuid-def456'],
+          mock_empty_id_reference(
+            from: ['addresses-id-abc123', 'addresses-id-def456'],
             resource: MockAddress
           )
         end
@@ -465,7 +464,7 @@ module JsonApiService
                   street: '123 Somewhere St',
                   state: 'CA',
                   country: 'United States',
-                  uuid: 'addresses-uuid-abc123',
+                  id: 'addresses-id-abc123',
                   overwrite: true
                 },
                 {
@@ -474,7 +473,7 @@ module JsonApiService
                   street: '100 Lake Hart Drive',
                   state: 'FL',
                   country: 'United States',
-                  uuid: 'addresses-uuid-def456',
+                  id: 'addresses-id-def456',
                   overwrite: true
                 }
               ]
@@ -615,19 +614,19 @@ module JsonApiService
       let(:transformer) { build_transformer(params: params) }
 
       before do
-        mock_uuid_reference(
+        mock_id_reference(
           from: '10e9f7f5-b027-4e04-8192-b9b698ac0b18',
           to: 20,
           resource: MockPerson
         )
 
-        mock_uuid_reference(
+        mock_id_reference(
           from: '144b83e8-b7f6-48c8-9c0e-688785bf6164',
           to: 25,
           resource: MockAccountList
         )
 
-        mock_uuid_reference(
+        mock_id_reference(
           from: '91374910-ef15-11e6-8787-ef17a057947e',
           to: 30,
           resource: MockComment
@@ -644,9 +643,8 @@ module JsonApiService
             mock_account_list_id: 25,
             mock_comments_attributes: [
               {
-                id: 30,
+                id: '91374910-ef15-11e6-8787-ef17a057947e',
                 body: 'I love Orange Soda',
-                uuid: '91374910-ef15-11e6-8787-ef17a057947e',
                 mock_person_id: 20,
                 overwrite: true
               }

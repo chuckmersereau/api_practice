@@ -7,7 +7,7 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
 
   let!(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
   let(:second_account_list) { create(:account_list, users: [user]) }
 
   let!(:contact) { create(:contact, account_list: account_list, name: 'Last Contact', primary_person: primary_person) }
@@ -28,7 +28,7 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
   let(:expected_headers1) { '"Primary Email","Spouse Email","Other Email","Spouse Other Email"' }
   let(:expected_headers2) { '"Primary Phone","Spouse Phone","Other Phone","Spouse Other Phone"' }
 
-  let(:id) { contact.uuid }
+  let(:id) { contact.id }
 
   render_views
 
@@ -68,7 +68,7 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
 
     it 'renders the export with right contacts when contact_ids is provided' do
       api_login(user)
-      get :index, format: :csv, filter: { ids: contact.uuid }
+      get :index, format: :csv, filter: { ids: contact.id }
       expect(response.status).to eq(200)
       expect(contact_index).to be_present
       expect(response.body).to be_present
@@ -76,7 +76,7 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
 
     it 'allows filtering by account_list_id' do
       api_login(user)
-      get :index, format: :csv, filter: { account_list_id: second_account_list.uuid }
+      get :index, format: :csv, filter: { account_list_id: second_account_list.id }
       expect(response.status).to eq(200)
       expect(response.body).to include(third_contact.name)
       expect(response.body).to_not include(contact.name)
@@ -108,7 +108,7 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
 
     it 'renders the export with right contacts when contact_ids is provided' do
       api_login(user)
-      get :index, format: :xlsx, filter: { ids: contact.uuid }
+      get :index, format: :xlsx, filter: { ids: contact.id }
       expect(response.status).to eq(200)
       expect(contact_index).to be_present
       expect(second_contact_index).to be_blank
@@ -116,7 +116,7 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
 
     it 'allows filtering by account_list_id' do
       api_login(user)
-      get :index, format: :xlsx, filter: { account_list_id: second_account_list.uuid }
+      get :index, format: :xlsx, filter: { account_list_id: second_account_list.id }
       expect(response.status).to eq(200)
       expect(contact_index).to be_blank
       expect(third_contact_index).to be_present

@@ -7,7 +7,7 @@ RSpec.describe BalanceSerializer do
   let(:balance) { create(:balance, resource: designation_account) }
   subject { described_class.new(balance, scope: user).as_json }
 
-  it { expect(subject[:id]).to eq(balance.uuid) }
+  it { expect(subject[:id]).to eq(balance.id) }
   it { expect(subject[:balance]).to eq(balance.balance) }
-  it { expect(subject[:resource][:id]).to eq(designation_account.uuid) }
+  it { expect(subject[:resource][:id]).to eq(designation_account.id) }
 end

@@ -1,5 +1,4 @@
 require 'action_controller'
-require 'json_api_service/uuid_to_id_reference_fetcher'
 require 'json_api_service/params_object'
 
 module JsonApiService
@@ -9,17 +8,12 @@ module JsonApiService
     end
 
     attr_reader :configuration,
-                :params,
-                :uuid_references
+                :params
 
     def initialize(params:, configuration:)
       @orig_params     = params
       @params          = convert_params(params)
       @configuration   = configuration
-      @uuid_references = UuidToIdReferenceFetcher.new(
-        params: @params.dup,
-        configuration: configuration
-      )
 
       after_initialize
     end
@@ -43,9 +37,7 @@ module JsonApiService
     private
 
     def after_initialize
-      unless @orig_params.is_a? ActionController::Parameters
-        raise ArgumentError, argument_error_message
-      end
+      raise ArgumentError, argument_error_message unless @orig_params.is_a? ActionController::Parameters
     end
 
     def argument_error_message
@@ -54,31 +46,13 @@ module JsonApiService
 
     def attributes_for_object(object)
       (object.dig(:attributes) || {}).tap do |attributes|
-        uuid = object.dig(:id)
-
-        if (create? || update?) && uuid.present? && uuid.to_sym != :undefined
-          attributes[:uuid] = uuid
-        end
+        id = object.dig(:id)
+        attributes[:id] = id if (create? || update?) && id.present? && id.to_sym != :undefined
       end
     end
 
     def convert_params(params_object)
       ParamsObject.new(params: params_object).to_h
-    end
-
-    def fetch_id_from_resource_type_and_uuid(resource_type, uuid)
-      id = uuid.to_s
-               .split(',')
-               .uniq
-               .map(&:strip)
-               .select(&:presence)
-               .map { |single_uuid| uuid_references[resource_type][single_uuid] }
-
-      if id.one?
-        id.first
-      else
-        id
-      end
     end
 
     def foreign_keys_for_object(object)
@@ -93,26 +67,14 @@ module JsonApiService
 
     def generate_foreign_key_from_relationship(key, value)
       foreign_key = "#{key}_id"
-      uuid        = value.dig(:data, :id)
-      type        = value.dig(:data, :type)
-
-      id = if uuid == 'none'
-             nil
-           else
-             uuid_references[type][uuid]
-           end
-
+      id          = value.dig(:data, :id)
+      id = id == 'none' ? nil : id
       { foreign_key => id }
     end
 
     def id_data_for_object(object)
-      uuid = object.dig(:id)
-      return {} unless uuid && uuid.to_sym != :undefined
-
-      type = object.dig(:type)
-      id   = uuid_references[type][uuid]
-
-      id ? { id: id } : {}
+      id = object.dig(:id)
+      id && id.to_sym != :undefined ? { id: id } : {}
     end
 
     def nested_attributes_for_object(object)
@@ -162,13 +124,10 @@ module JsonApiService
     end
 
     def transform_filter_object(filter_object)
-      transformed_object = filter_object.each_with_object({}) do |(foreign_key, uuid), hash|
+      transformed_object = filter_object.each_with_object({}) do |(foreign_key, id), hash|
         next unless foreign_key.to_s.end_with?('_id')
-
-        resource_type = foreign_key.to_s.sub('_id', '').pluralize
-        id            = fetch_id_from_resource_type_and_uuid(resource_type, uuid)
-
-        hash[foreign_key] = id
+        id                = id.to_s.split(',').uniq.map(&:strip).select(&:presence)
+        hash[foreign_key] = id.one? ? id.first : id
       end
 
       filter_object.merge!(transformed_object)

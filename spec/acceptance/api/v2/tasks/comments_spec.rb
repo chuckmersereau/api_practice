@@ -11,10 +11,10 @@ resource 'Tasks > Comments' do
   let(:account_list) { user.account_lists.first }
   let(:person) { create(:contact_with_person, account_list: account_list).reload.people.first }
   let(:task)    { create(:task, account_list: user.account_lists.first) }
-  let(:task_id) { task.uuid }
+  let(:task_id) { task.id }
 
   let!(:comment) { create(:activity_comment, activity: task) }
-  let(:id) { comment.uuid }
+  let(:id) { comment.id }
 
   let(:new_comment) do
     attributes_for(:activity_comment, activity: task)
@@ -27,7 +27,7 @@ resource 'Tasks > Comments' do
                  person: {
                    data: {
                      type: 'people',
-                     id: user.uuid
+                     id: user.id
                    }
                  }
                })

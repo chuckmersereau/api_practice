@@ -21,7 +21,7 @@ RSpec.describe Api::V2::Tasks::AnalyticsController, type: :controller do
     # Ex: /api/v2/:account_list_id/contacts/:contact_id/addresses/:id
     # --
     # Note: Don't include :id
-    # Example: { account_list_id: account_list.uuid }
+    # Example: { account_list_id: account_list.id }
     {}
   end
 

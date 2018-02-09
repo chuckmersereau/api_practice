@@ -5,7 +5,7 @@ class PunditHelpersTestController < Api::V2Controller
 
   private
 
-  def contact_uuid_params
+  def contact_id_params
     params.require(:data).collect { |hash| hash[:id] }
   end
 
@@ -23,7 +23,7 @@ describe Api::V2Controller do
   describe '#bulk_authorize' do
     controller PunditHelpersTestController do
       def show
-        @resources = Contact.where(uuid: contact_uuid_params)
+        @resources = Contact.where(id: contact_id_params)
         render text: bulk_authorize(@resources)
       end
     end
@@ -34,26 +34,26 @@ describe Api::V2Controller do
     end
 
     it 'authorizes when current user owns all resources' do
-      get :show, data: [{ id: contact_one.uuid }, { id: contact_two.uuid }]
+      get :show, data: [{ id: contact_one.id }, { id: contact_two.id }]
       expect(response.status).to eq(200)
       expect(response.body).to eq('true')
     end
 
     it 'does not authorize when current user owns some of resources' do
-      get :show, data: [{ id: contact_one.uuid }, { id: create(:contact).uuid }]
+      get :show, data: [{ id: contact_one.id }, { id: create(:contact).id }]
       expect(response.status).to eq(403)
       expect(response.body).to_not eq('true')
     end
 
     it 'does not authorize when current user owns none of resources' do
-      get :show, data: [{ id: create(:contact).uuid }, { id: create(:contact).uuid }]
+      get :show, data: [{ id: create(:contact).id }, { id: create(:contact).id }]
       expect(response.status).to eq(403)
       expect(response.body).to_not eq('true')
     end
 
     it 'does not perform authorization if resources do not exist' do
       expect do
-        get :show, data: [{ id: create(:task).uuid }, { id: create(:task).uuid }]
+        get :show, data: [{ id: create(:task).id }, { id: create(:task).id }]
       end.to raise_error Pundit::AuthorizationNotPerformedError
     end
   end

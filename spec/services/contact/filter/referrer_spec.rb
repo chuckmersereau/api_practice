@@ -20,7 +20,7 @@ RSpec.describe Contact::Filter::Referrer do
                                                                 options: [{ name: '-- Any --', id: '', placeholder: 'None' },
                                                                           { name: '-- None --', id: 'none' },
                                                                           { name: '-- Has referrer --', id: 'any' },
-                                                                          { name: contact_one.name, id: contact_one.uuid }],
+                                                                          { name: contact_one.name, id: contact_one.id }],
                                                                 parent: nil,
                                                                 title: 'Referrer',
                                                                 type: 'multiselect',
@@ -53,16 +53,16 @@ RSpec.describe Contact::Filter::Referrer do
 
     context 'filter by referrer' do
       it 'filters multiple referrers' do
-        expect(described_class.query(contacts, { referrer: "#{contact_one.uuid}, #{contact_one.uuid}" }, nil).to_a).to eq [contact_two]
+        expect(described_class.query(contacts, { referrer: "#{contact_one.id}, #{contact_one.id}" }, nil).to_a).to eq [contact_two]
       end
       it 'filters a single referrer' do
-        expect(described_class.query(contacts, { referrer: contact_one.uuid.to_s }, nil).to_a).to eq [contact_two]
+        expect(described_class.query(contacts, { referrer: contact_one.id.to_s }, nil).to_a).to eq [contact_two]
       end
     end
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { referrer: "#{contact_one.uuid}, none" }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        expect(described_class.query(contacts, { referrer: "#{contact_one.id}, none" }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
   end

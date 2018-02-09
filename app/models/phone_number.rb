@@ -17,7 +17,7 @@ class PhoneNumber < ApplicationRecord
                           :source,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid,
+                          :id,
                           :valid_values].freeze
 
   belongs_to :person, touch: true
@@ -76,7 +76,7 @@ class PhoneNumber < ApplicationRecord
 
   def user_country
     return @user_country if @user_country
-    return nil unless person && person.contacts.first && person.contacts.first.account_list &&
+    return nil unless person&.contacts&.first && person.contacts.first.account_list &&
                       person.contacts.first.account_list.home_country
     code = Address.find_country_iso(person.contacts.first.account_list.home_country)
     return nil unless code

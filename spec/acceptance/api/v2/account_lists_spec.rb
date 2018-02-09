@@ -14,7 +14,7 @@ resource 'Account Lists' do
     end
   end
 
-  let(:id) { account_list.uuid }
+  let(:id) { account_list.id }
 
   let(:new_account_list) do
     attributes_for(:account_list)

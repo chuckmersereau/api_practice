@@ -47,7 +47,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   end
 
   def current_contact
-    @contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
+    @contact ||= Contact.find_by!(id: params[:contact_id])
   end
 
   def authorize_index
@@ -69,7 +69,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   end
 
   def load_address
-    @address ||= address_scope.find_by_uuid_or_raise!(params[:id])
+    @address ||= address_scope.find_by!(id: params[:id])
   end
 
   def load_addresses

@@ -48,9 +48,7 @@ class DocumentationHelper
     data_for(type: :parameters, action: action).deep_dup.sort.each do |name, attributes|
       next if attributes.key?(:ignore)
 
-      if action == :update && !name.to_s.include?('updated_in_db_at')
-        attributes.delete(:required)
-      end
+      attributes.delete(:required) if action == :update && !name.to_s.include?('updated_in_db_at')
 
       description = attributes.delete(:description)
 

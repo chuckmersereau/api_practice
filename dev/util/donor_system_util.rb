@@ -10,9 +10,7 @@ end
 
 def org_account(user)
   org_accounts = user.organization_accounts
-  if org_accounts.count > 1
-    puts "User #{user} has #{org_accounts.count} org accounts"
-  end
+  puts "User #{user} has #{org_accounts.count} org accounts" if org_accounts.count > 1
   org_accounts.first
 end
 

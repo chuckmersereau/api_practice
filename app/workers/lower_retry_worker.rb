@@ -10,7 +10,7 @@ class LowerRetryWorker
   def perform(klass_str, id, method, *args)
     if id
       begin
-        klass_str.constantize.find(id).send(method, *args)
+        klass_str.constantize.find_by!(id: id).send(method, *args)
       rescue ActiveRecord::RecordNotFound
         # If this instance has been deleted, oh well.
       end

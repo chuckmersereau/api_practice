@@ -9,13 +9,13 @@ resource 'Contacts > People > Phones' do
   let!(:user)         { create(:user_with_full_account) }
 
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id) { contact.uuid }
+  let(:contact_id) { contact.id }
 
   let(:person)    { create(:person, contacts: [contact]) }
-  let(:person_id) { person.uuid }
+  let(:person_id) { person.id }
 
   let!(:phone) { create(:phone_number, person: person) }
-  let(:id)     { phone.uuid }
+  let(:id)     { phone.id }
 
   let(:new_phone) do
     attributes_for(:phone_number, number: '3561987123')

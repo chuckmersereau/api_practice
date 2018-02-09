@@ -8,13 +8,13 @@ RSpec.shared_examples 'bulk_destroy_examples' do
           {
             data: {
               type: resource_type,
-              id: resource.uuid
+              id: resource.id
             }
           },
           {
             data: {
               type: resource_type,
-              id: second_resource.uuid
+              id: second_resource.id
             }
           }
         ]
@@ -48,7 +48,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
 
       expect(response.status).to eq(200), invalid_status_detail
       expect(response_body.size).to eq(2)
-      expect(response_body.collect { |hash| hash.dig('data', 'id') }).to match_array([resource.uuid, second_resource.uuid])
+      expect(response_body.collect { |hash| hash.dig('data', 'id') }).to match_array([resource.id, second_resource.id])
     end
 
     context 'resources forbidden' do
@@ -95,8 +95,8 @@ RSpec.shared_examples 'bulk_destroy_examples' do
       let!(:bulk_destroy_attributes) do
         {
           data: [
-            { data: { id: resource.uuid, type: resource_type } },
-            { data: { id: create(factory_type).uuid, type: resource_type } }
+            { data: { id: resource.id, type: resource_type } },
+            { data: { id: create(factory_type).id, type: resource_type } }
           ]
         }
       end

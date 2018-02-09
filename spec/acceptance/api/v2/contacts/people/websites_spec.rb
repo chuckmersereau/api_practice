@@ -11,14 +11,14 @@ resource 'Contacts > People > Websites' do
   let(:account_list_id) { account_list.id }
 
   let!(:contact)   { create(:contact, account_list: account_list) }
-  let(:contact_id) { contact.uuid }
+  let(:contact_id) { contact.id }
 
   let!(:person)   { create(:person) }
-  let(:person_id) { person.uuid }
+  let(:person_id) { person.id }
 
   let!(:websites) { create_list(:website, 2, person: person) }
   let(:website)   { websites.first }
-  let(:id)        { website.uuid }
+  let(:id)        { website.id }
 
   let(:new_website) do
     attributes_for(:website)

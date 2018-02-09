@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'rails_helper'
 
 describe Address do
@@ -217,18 +216,21 @@ describe Address do
   end
 
   context '#equal_to?' do
+    let(:master_address_id_1) { SecureRandom.uuid }
+    let(:master_address_id_2) { SecureRandom.uuid }
+
     it 'matches addresses that share a master_address_id' do
-      a1 = build(:address, street: '1 Rd', master_address_id: 1)
-      a2 = build(:address, street: '1 Road', master_address_id: 1)
+      a1 = build(:address, street: '1 Rd', master_address_id: master_address_id_1)
+      a2 = build(:address, street: '1 Road', master_address_id: master_address_id_1)
 
       expect(a1).to be_equal_to a2
     end
 
     it 'matches addresses that match on address attributes' do
-      a1 = build(:address, master_address_id: 1, street: '1  way',
+      a1 = build(:address, master_address_id: master_address_id_1, street: '1  way',
                            city: 'Some Where', state: 'MA', country: 'USA',
                            postal_code: '02472')
-      a2 = build(:address, master_address_id: 2, street: '1 Way',
+      a2 = build(:address, master_address_id: master_address_id_2, street: '1 Way',
                            city: 'somewhere', state: 'ma', country: 'united states',
                            postal_code: '02472-3061')
 
@@ -236,10 +238,10 @@ describe Address do
     end
 
     it 'matches if one country is blank and other fields match' do
-      a1 = build(:address, master_address_id: 1, street: '1 way',
+      a1 = build(:address, master_address_id: master_address_id_1, street: '1 way',
                            city: 'Somewhere ', state: 'MA  ', country: '',
                            postal_code: '02 472')
-      a2 = build(:address, master_address_id: 2, street: '1 Way',
+      a2 = build(:address, master_address_id: master_address_id_2, street: '1 Way',
                            city: 'somewhere', state: 'ma', country: 'Canada',
                            postal_code: '02472-3061')
 
@@ -247,10 +249,10 @@ describe Address do
     end
 
     it 'does not match if address fields differ' do
-      a1 = build(:address, master_address_id: 1, street: '2 way',
+      a1 = build(:address, master_address_id: master_address_id_1, street: '2 way',
                            city: 'Nowhere', state: 'IL', country: 'USA',
                            postal_code: '60201')
-      a2 = build(:address, master_address_id: 2, street: '1 Way',
+      a2 = build(:address, master_address_id: master_address_id_2, street: '1 Way',
                            city: 'somewhere', state: 'ma', country: 'Canada',
                            postal_code: '02472-3061')
 
@@ -263,10 +265,10 @@ describe Address do
       state = 'état'
       country = 'Rhône-Alpes'
       postal_code = '35220'
-      a1 = build(:address, master_address_id: 1, street: street,
+      a1 = build(:address, master_address_id: master_address_id_1, street: street,
                            city: city, state: state, country: country,
                            postal_code: postal_code)
-      a2 = build(:address, master_address_id: 2, street: old_encoding(street),
+      a2 = build(:address, master_address_id: master_address_id_2, street: old_encoding(street),
                            city: old_encoding(city), state: old_encoding(state),
                            country: old_encoding(country),
                            postal_code: old_encoding(postal_code))

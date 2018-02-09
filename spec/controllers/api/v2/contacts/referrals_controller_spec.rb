@@ -43,7 +43,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
   end
 
   # If needed, keep this ;)
-  let(:id) { resource.uuid }
+  let(:id) { resource.id }
 
   # If needed, keep this ;)
   let(:parent_param) do
@@ -54,7 +54,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # Note: Don't include :id
     # Example: { account_list_id: account_list_id }
     {
-      contact_id: contact.uuid
+      contact_id: contact.id
     }
   end
   let!(:parent_association) { :referred_by }
@@ -71,13 +71,13 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
       referred_by: {
         data: {
           type: 'contacts',
-          id: contact.uuid
+          id: contact.id
         }
       },
       referred_to: {
         data: {
           type: 'contacts',
-          id: contact_referred.uuid
+          id: contact_referred.id
         }
       }
     }
@@ -92,7 +92,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
       referred_to: {
         data: {
           type: 'contacts',
-          id: alternate.uuid
+          id: alternate.id
         }
       }
     }

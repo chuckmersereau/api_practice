@@ -7,7 +7,7 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
 
   let!(:resource) { create(:appeal, account_list: account_list) }
   let!(:second_resource) { create(:appeal, account_list: account_list) }
-  let(:id) { resource.uuid }
+  let(:id) { resource.id }
 
   let(:correct_attributes) { attributes_for(:appeal, name: 'Appeal 2') }
   let(:unpermitted_attributes) { attributes_for(:appeal, name: 'Appeal 3') }
@@ -21,7 +21,7 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
       account_list: {
         data: {
           type: 'account_lists',
-          id: account_list.uuid
+          id: account_list.id
         }
       }
     }
@@ -32,7 +32,7 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
       account_list: {
         data: {
           type: 'account_lists',
-          id: create(:account_list).uuid
+          id: create(:account_list).id
         }
       }
     }
@@ -69,18 +69,18 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
         data = JSON.parse(response.body)['data']
         expect(data.size).to eq(3)
         ids = data.map { |d| d['id'] }
-        expect(ids).to contain_exactly(resource.uuid,
-                                       second_resource.uuid,
-                                       appeal_for_second_account_list.uuid)
+        expect(ids).to contain_exactly(resource.id,
+                                       second_resource.id,
+                                       appeal_for_second_account_list.id)
       end
 
       it 'returns appeals from one account list when filtering' do
-        get :index, filter: { account_list_id: first_account_list.uuid }
+        get :index, filter: { account_list_id: first_account_list.id }
         data = JSON.parse(response.body)['data']
         expect(data.size).to eq(2)
         ids = data.map { |d| d['id'] }
-        expect(ids).to contain_exactly(resource.uuid,
-                                       second_resource.uuid)
+        expect(ids).to contain_exactly(resource.id,
+                                       second_resource.id)
       end
 
       it "includes the donation's contact when filtering" do
@@ -90,15 +90,15 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
         donation = create(:donation, donor_account: donor_account)
         resource.donations << donation
 
-        get :index, include: 'donations.contacts', filter: { account_list_id: first_account_list.uuid }
+        get :index, include: 'donations.contacts', filter: { account_list_id: first_account_list.id }
         body = JSON.parse(response.body)
-        expect(body['included'].first['id']).to eq(donation.uuid)
-        expect(body['included'].first['relationships']['contact']['data']['id']).to eq(contact.uuid)
+        expect(body['included'].first['id']).to eq(donation.id)
+        expect(body['included'].first['relationships']['contact']['data']['id']).to eq(contact.id)
       end
 
       it "does not permit filtering by an account list that's not owned by current user" do
         not_my_account_list = create(:account_list)
-        get :index, filter: { account_list_id: not_my_account_list.uuid }
+        get :index, filter: { account_list_id: not_my_account_list.id }
         expect(response.code).to eq('403')
       end
     end
@@ -109,7 +109,7 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
 
         it 'returns appeal' do
           get :index, filter: { wildcard_search: 'bc' }
-          expect(JSON.parse(response.body)['data'][0]['id']).to eq(appeal.uuid)
+          expect(JSON.parse(response.body)['data'][0]['id']).to eq(appeal.id)
         end
       end
 

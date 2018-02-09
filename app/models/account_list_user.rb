@@ -13,7 +13,7 @@ class AccountListUser < ApplicationRecord
   def duplicate_notification_preferences
     account_list.notification_preferences.where(user_id: nil).find_each do |notification_preference|
       notification_preference.dup.tap do |user_notification_preference|
-        user_notification_preference.uuid = nil
+        user_notification_preference.id = nil
         user_notification_preference.user = user
         user_notification_preference.email = true
         user_notification_preference.save!

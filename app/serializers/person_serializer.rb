@@ -39,6 +39,6 @@ class PersonSerializer < ApplicationSerializer
   end
 
   def parent_contacts
-    object.contacts.map(&:uuid)
+    object.contacts.map(&:id)
   end
 end

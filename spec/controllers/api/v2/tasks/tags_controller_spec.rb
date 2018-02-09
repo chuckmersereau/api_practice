@@ -14,7 +14,7 @@ RSpec.describe Api::V2::Tasks::TagsController, type: :controller do
 
   let(:full_correct_attributes) do
     {
-      task_id: task.uuid,
+      task_id: task.id,
       data: {
         type: resource_type,
         attributes: correct_attributes
@@ -24,7 +24,7 @@ RSpec.describe Api::V2::Tasks::TagsController, type: :controller do
 
   let(:full_incorrect_attributes) do
     {
-      task_id: task.uuid,
+      task_id: task.id,
       data: {
         type: resource_type,
         attributes: incorrect_attributes
@@ -83,7 +83,7 @@ RSpec.describe Api::V2::Tasks::TagsController, type: :controller do
     it 'deletes the resource object for users that have that access' do
       api_login(user)
       expect do
-        delete :destroy, task_id: task.uuid, tag_name: first_tag
+        delete :destroy, task_id: task.id, tag_name: first_tag
       end.to change { task.reload.tag_list.length }.by(-1)
       expect(response.status).to eq(204)
     end
@@ -91,14 +91,14 @@ RSpec.describe Api::V2::Tasks::TagsController, type: :controller do
     it 'does not destroy the resource for users that do not own the resource' do
       api_login(create(:user))
       expect do
-        delete :destroy, task_id: task.uuid, tag_name: second_tag
+        delete :destroy, task_id: task.id, tag_name: second_tag
       end.not_to change { task.tag_list.length }
       expect(response.status).to eq(403)
     end
 
     it 'does not delete the resource object for users that are not signed in' do
       expect do
-        delete :destroy, task_id: task.uuid, tag_name: second_tag
+        delete :destroy, task_id: task.id, tag_name: second_tag
       end.not_to change { task.tag_list.length }
       expect(response.status).to eq(401)
     end

@@ -49,7 +49,7 @@ class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
   end
 
   def load_duplicate
-    @duplicate = DuplicateRecordPair.type('Person').find_by_uuid_or_raise!(params[:id])
+    @duplicate = DuplicateRecordPair.type('Person').find_by!(id: params[:id])
   end
 
   def build_duplicate

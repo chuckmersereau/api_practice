@@ -5,10 +5,13 @@ describe AddressMethods do
   let(:donor_account) { create(:donor_account) }
 
   context '#merge_addresses' do
+    let(:master_address_id_1) { SecureRandom.uuid }
+    let(:master_address_id_2) { SecureRandom.uuid }
+
     def expect_merge_addresses_works(addressable)
-      address1 = create(:address, street: '1 Way', master_address_id: 1)
-      address2 = create(:address, street: '1 Way', master_address_id: 1)
-      address3 = create(:address, street: '2 Way', master_address_id: 2)
+      address1 = create(:address, street: '1 Way', master_address_id: master_address_id_1)
+      address2 = create(:address, street: '1 Way', master_address_id: master_address_id_1)
+      address3 = create(:address, street: '2 Way', master_address_id: master_address_id_2)
       addressable.addresses << address1
       addressable.addresses << address2
       addressable.addresses << address3
@@ -90,9 +93,9 @@ describe AddressMethods do
 
       # Check that we get the same address even if db record order changes
       Address.connection.execute('CLUSTER addresses USING index_addresses_on_lower_city')
-      expect(contact.addresses.first).to eq addr1
+      expect(contact.addresses.order(:created_at).first).to eq addr1
       Address.connection.execute('CLUSTER addresses USING addresses_pkey')
-      expect(contact.addresses.first).to eq addr1
+      expect(contact.addresses.order(:created_at).first).to eq addr1
     end
   end
 

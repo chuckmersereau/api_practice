@@ -40,7 +40,7 @@ class Api::V2::Appeals::AppealContactsController < Api::V2Controller
   end
 
   def load_appeal_contact
-    @appeal_contact ||= appeal_contact_scope.find_by_uuid_or_raise!(params[:id])
+    @appeal_contact ||= appeal_contact_scope.find_by!(id: params[:id])
   end
 
   def persist_appeal_contact
@@ -85,7 +85,7 @@ class Api::V2::Appeals::AppealContactsController < Api::V2Controller
   end
 
   def load_appeal
-    @appeal ||= Appeal.find_by_uuid_or_raise!(params[:appeal_id])
+    @appeal ||= Appeal.find_by!(id: params[:appeal_id])
   end
 
   def pundit_user

@@ -39,7 +39,7 @@ class Task < Activity
     :tag_list,
     :updated_at,
     :updated_in_db_at,
-    :uuid,
+    :id,
     {
       comment: [
         :body,
@@ -49,8 +49,7 @@ class Task < Activity
         :body,
         :id,
         :person_id,
-        :overwrite,
-        :uuid
+        :overwrite
       ],
       activity_contacts_attributes: [
         :_destroy,
@@ -236,7 +235,7 @@ class Task < Activity
     case activity_type
     when 'Call'
       numbers = contacts.map(&:people).flatten.map do |person|
-        next unless person.phone_number && person.phone_number.present?
+        next unless person.phone_number&.present?
         "#{person} #{PhoneNumberExhibit.new(person.phone_number, nil)}"
       end
       numbers.compact.join("\n")

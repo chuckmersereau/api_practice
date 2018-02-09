@@ -8,8 +8,8 @@ RSpec.describe AccountListSerializer do
   let(:parsed_json_response) { JSON.parse(serializer.to_json) }
 
   context 'salary_organization' do
-    it 'returns the uuid of the salary_organization_id' do
-      expect(parsed_json_response['salary_organization']).to eq(organization.uuid)
+    it 'returns the id of the salary_organization_id' do
+      expect(parsed_json_response['salary_organization']).to eq(organization.id)
     end
   end
 end

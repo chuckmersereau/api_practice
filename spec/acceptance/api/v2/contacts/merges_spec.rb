@@ -121,13 +121,13 @@ resource 'Contacts > Merges' do
           loser: {
             data: {
               type: 'contacts',
-              id: loser.uuid
+              id: loser.id
             }
           },
           winner: {
             data: {
               type: 'contacts',
-              id: winner.uuid
+              id: winner.id
             }
           }
         }

@@ -20,11 +20,11 @@ RSpec.describe BackgroundBatch::Request do
       expect(subject.formatted_path).to eq('https://api.mpdx.org/api/v2/user')
     end
 
-    it 'should replace %{default_account_list_id} with default account list uuid' do
+    it 'should replace %{default_account_list_id} with default account list id' do
       subject.path = 'api/v2/account_lists/%{default_account_list_id}/donations'
       account_list = create(:account_list)
       subject.background_batch.user.update(default_account_list: account_list.id)
-      expect(subject.formatted_path).to eq("https://api.mpdx.org/api/v2/account_lists/#{account_list.uuid}/donations")
+      expect(subject.formatted_path).to eq("https://api.mpdx.org/api/v2/account_lists/#{account_list.id}/donations")
     end
   end
 
@@ -59,7 +59,7 @@ RSpec.describe BackgroundBatch::Request do
     it 'should add default_account_list as filter' do
       subject.default_account_list = true
       subject.background_batch.user.update(default_account_list: account_list.id)
-      expect(subject.formatted_request_params).to eq('filter' => { 'account_list_id' => account_list.uuid })
+      expect(subject.formatted_request_params).to eq('filter' => { 'account_list_id' => account_list.id })
     end
 
     it 'should merge request_params and override defaults' do

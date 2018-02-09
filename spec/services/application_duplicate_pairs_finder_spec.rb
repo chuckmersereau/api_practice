@@ -33,7 +33,7 @@ describe ApplicationDuplicatePairsFinder do
       error = nil
       begin
         ApplicationDuplicatePairsFinder.new(account_list)
-      rescue => e
+      rescue StandardError => e
         error = e
       end
       expect(error).to be_present

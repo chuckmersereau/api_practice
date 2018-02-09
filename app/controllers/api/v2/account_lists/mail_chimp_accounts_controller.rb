@@ -77,6 +77,6 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+    @account_list ||= AccountList.find_by!(id: params[:account_list_id])
   end
 end

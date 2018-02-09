@@ -23,8 +23,8 @@ RSpec.describe Api::V2::Contacts::DonationAmountRecommendationsController, type:
       donor_account: donor_account2
     )
   end
-  let(:id) { resource.uuid }
-  let(:parent_param) { { contact_id: contact.uuid } }
+  let(:id) { resource.id }
+  let(:parent_param) { { contact_id: contact.id } }
   let(:parent_association) { :donation_amount_recommendations }
   let(:factory_type) { :donation_amount_recommendation }
   let(:correct_attributes) do
@@ -50,7 +50,7 @@ RSpec.describe Api::V2::Contacts::DonationAmountRecommendationsController, type:
     it 'does not show resources for contact that user does not own' do
       api_login(user)
       contact = create(:contact, account_list: create(:user_with_account).account_lists.first)
-      get :index, contact_id: contact.uuid
+      get :index, contact_id: contact.id
       expect(response.status).to eq(403)
     end
   end

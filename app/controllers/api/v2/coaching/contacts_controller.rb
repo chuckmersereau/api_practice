@@ -33,7 +33,7 @@ class Api::V2::Coaching::ContactsController < Api::V2Controller
   end
 
   def load_contact
-    @contact ||= Contact.find_by_uuid_or_raise!(params[:id])
+    @contact ||= Contact.find_by!(id: params[:id])
   end
 
   def authorize_contact

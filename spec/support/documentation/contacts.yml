@@ -186,7 +186,7 @@ relationships: &rels
       id:
         description:
           The `id` of the Account List that the Appeal belongs to
-        type: UUID string
+        type: id string
         required: true
   addresses:
     data:

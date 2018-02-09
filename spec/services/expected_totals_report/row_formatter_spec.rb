@@ -15,7 +15,7 @@ module ExpectedTotalsReport
       formatted = RowFormatter.new(account_list).format(row)
 
       expect(formatted[:type]).to eq 'likely'
-      expect(formatted[:contact_id]).to eq contact.uuid
+      expect(formatted[:contact_id]).to eq contact.id
       expect(formatted[:contact_name]).to eq 'Joe'
       expect(formatted[:contact_status]).to eq 'Partner - Special'
       expect(formatted[:pledge_amount]).to eq 2

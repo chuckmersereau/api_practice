@@ -14,7 +14,7 @@ class EmailAddress < ApplicationRecord
                           :source,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid,
+                          :id,
                           :valid_values].freeze
 
   belongs_to :person, touch: true
@@ -86,7 +86,7 @@ class EmailAddress < ApplicationRecord
 
     def replace_existing_email(person, attributes)
       existing_email = person.email_addresses.find(attributes['id'])
-      email = person.email_addresses.find { |e| e.email == attributes['email'] && e.id != attributes['id'].to_i }
+      email = person.email_addresses.find { |e| e.email == attributes['email'] && e.id != attributes['id'] }
 
       # make sure we're not updating this record to another email that already exists
       if email

@@ -58,7 +58,7 @@ RSpec.describe Api::V2::Contacts::Tags::BulkController, type: :controller do
       let(:filter_params) do
         {
           filter: {
-            contact_ids: contact_two.uuid
+            contact_ids: contact_two.id
           }
         }
       end

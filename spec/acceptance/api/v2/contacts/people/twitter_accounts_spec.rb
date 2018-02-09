@@ -11,14 +11,14 @@ resource 'Contacts > People > Twitter Accounts' do
   let(:account_list_id) { account_list.id }
 
   let!(:contact)   { create(:contact, account_list: account_list) }
-  let(:contact_id) { contact.uuid }
+  let(:contact_id) { contact.id }
 
   let!(:person)   { create(:person) }
-  let(:person_id) { person.uuid }
+  let(:person_id) { person.id }
 
   let!(:twitter_accounts) { create_list(:twitter_account, 2, person: person) }
   let(:twitter_account)   { twitter_accounts.first }
-  let(:id)                { twitter_account.uuid }
+  let(:id)                { twitter_account.id }
 
   let(:new_twitter_account) do
     attributes_for(:twitter_account)

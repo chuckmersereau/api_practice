@@ -6,5 +6,5 @@ class ActivityComment < ApplicationRecord
 
   validates :body, presence: true
 
-  PERMITTED_ATTRIBUTES = [:body, :created_at, :overwrite, :person_id, :updated_at, :updated_in_db_at, :uuid].freeze
+  PERMITTED_ATTRIBUTES = [:body, :created_at, :overwrite, :person_id, :updated_at, :updated_in_db_at, :id].freeze
 end

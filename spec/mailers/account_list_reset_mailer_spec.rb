@@ -13,7 +13,9 @@ describe AccountListResetMailer do
         expect(mail.subject).to eq('You must log in to MPDX again')
         expect(mail.to).to eq([email.email])
         expect(mail.from).to eq(['support@mpdx.org'])
-        expect(mail.body.raw_source).to include('You are getting this email because an MPDX administrator has reset your Account.')
+        expect(mail.body.raw_source).to include(
+          'You are getting this email because an MPDX administrator has reset your Account.'
+        )
       end
     end
   end

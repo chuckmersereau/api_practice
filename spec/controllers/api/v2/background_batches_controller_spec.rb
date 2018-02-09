@@ -6,7 +6,7 @@ RSpec.describe Api::V2::BackgroundBatchesController, type: :controller do
   let(:factory_type)     { :background_batch }
   let!(:resource)        { create(:background_batch, user: user) }
   let!(:second_resource) { create(:background_batch, user: user) }
-  let(:id)               { resource.uuid }
+  let(:id)               { resource.id }
   let(:correct_attributes)   { {} }
   let(:incorrect_attributes) { nil }
   let(:correct_relationships) do

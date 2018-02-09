@@ -205,9 +205,7 @@ class DataServer
 
   def check_credentials!
     return unless requires_credentials?
-    unless org_account.username && org_account.password || org_account.token
-      raise_missing_credentials
-    end
+    raise_missing_credentials unless org_account.username && org_account.password || org_account.token
     unless org_account.valid_credentials?
       raise Person::OrganizationAccount::InvalidCredentialsError,
             _('Your credentials for %{org} are invalid.').localize % { org: org }
@@ -235,11 +233,9 @@ class DataServer
   end
 
   def profiles_with_designation_numbers
-    unless @profiles_with_designation_numbers
-      @profiles_with_designation_numbers = profiles.map do |profile|
-        { designation_numbers: designation_numbers(profile[:code]) }
-          .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
-      end
+    @profiles_with_designation_numbers ||= profiles.map do |profile|
+      { designation_numbers: designation_numbers(profile[:code]) }
+        .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
     end
     @profiles_with_designation_numbers
   end
@@ -370,17 +366,13 @@ class DataServer
     end
 
     # look for a redirect
-    if lines[1] && lines[1].include?('RedirectQueryIni')
-      raise Errors::UrlChanged, lines[1].split('=')[1]
-    end
+    raise Errors::UrlChanged, lines[1].split('=')[1] if lines[1]&.include?('RedirectQueryIni')
 
     response
   end
 
   def raise_invalid_credentials
-    if org_account.valid_credentials? && !org_account.new_record?
-      org_account.update_column(:valid_credentials, false)
-    end
+    org_account.update_column(:valid_credentials, false) if org_account.valid_credentials? && !org_account.new_record?
 
     raise Person::OrganizationAccount::InvalidCredentialsError,
           _('Your credentials for %{org} are invalid.').localize % { org: org }
@@ -428,12 +420,8 @@ class DataServer
     person.last_name = line['LAST_NAME'] if person.last_name.blank?
 
     # Phone numbers
-    if line[prefix + 'PHONE'].present? && line[prefix + 'PHONE'] != line[prefix + 'MOBILE_PHONE']
-      person.phone_number = { 'number' => line[prefix + 'PHONE'] }
-    end
-    if line[prefix + 'MOBILE_PHONE'].present?
-      person.phone_number = { 'number' => line[prefix + 'MOBILE_PHONE'], 'location' => 'mobile' }
-    end
+    person.phone_number = { 'number' => line[prefix + 'PHONE'] } if line[prefix + 'PHONE'].present? && line[prefix + 'PHONE'] != line[prefix + 'MOBILE_PHONE']
+    person.phone_number = { 'number' => line[prefix + 'MOBILE_PHONE'], 'location' => 'mobile' } if line[prefix + 'MOBILE_PHONE'].present?
 
     # email address
     person.email = line[prefix + 'EMAIL'] if line[prefix + 'EMAIL'] && line[prefix + 'EMAIL_VALID'] != 'FALSE'
@@ -441,9 +429,7 @@ class DataServer
     person.save(validate: false)
 
     donor_account.people << person unless donor_account.people.include?(person)
-    unless donor_account.master_people.include?(person.master_person)
-      donor_account.master_people << person.master_person
-    end
+    donor_account.master_people << person.master_person unless donor_account.master_people.include?(person.master_person)
 
     contact = account_list.contacts.for_donor_account(donor_account).first
     contact_person = contact.add_person(person, donor_account)
@@ -475,9 +461,7 @@ class DataServer
       country: line['CNTRY_DESCR']
     )
     company.save!
-    unless donor_account.master_company_id == company.master_company.id
-      donor_account.update_attributes(master_company_id: company.master_company_id)
-    end
+    donor_account.update_attributes(master_company_id: company.master_company_id) unless donor_account.master_company_id == company.master_company.id
     company
   end
 

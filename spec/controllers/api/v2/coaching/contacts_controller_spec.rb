@@ -8,12 +8,12 @@ describe Api::V2::Coaching::ContactsController, type: :controller do
 
   let!(:owner) { create(:user_with_account) }
   let!(:account_list) { owner.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
 
   let!(:contact_1) { create :contact, account_list_id: account_list.id }
   let!(:contact_2) { create :contact, account_list_id: account_list.id }
   let!(:contact_3) { create :contact }
-  let(:id) { contact_1.uuid }
+  let(:id) { contact_1.id }
 
   let!(:coaches) { create_list(:user_coach, 2) }
   before do

@@ -23,7 +23,7 @@ resource 'Contacts > Duplicates' do
   let(:resource) { duplicate_record_pair }
   let(:account_list) { resource.account_list }
   let(:user) { create(:user).tap { |user| account_list.users << user } }
-  let(:id) { resource.uuid }
+  let(:id) { resource.id }
 
   # List your expected resource keys vertically here (alphabetical please!)
   let(:expected_attribute_keys) do
@@ -58,7 +58,7 @@ resource 'Contacts > Duplicates' do
       account_list: {
         data: {
           type: 'account_lists',
-          id: account_list.uuid
+          id: account_list.id
         }
       }
     }

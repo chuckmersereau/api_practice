@@ -112,7 +112,7 @@ class User < Person
     guid = JSON.parse(response.to_s)['guid']
     return unless guid.present?
     relay_account = Person::RelayAccount.find_by('lower(relay_remote_id) = ?', guid.downcase)
-    return unless relay_account && relay_account.person
+    return unless relay_account&.person
     relay_account.person.to_user
   end
 
@@ -136,7 +136,7 @@ class User < Person
   end
 
   def to_person
-    Person.find(id)
+    Person.find_by!(id: id)
   end
 
   def assign_time_zone(timezone_object)

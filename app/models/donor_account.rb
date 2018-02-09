@@ -87,7 +87,7 @@ class DonorAccount < ApplicationRecord
   end
 
   def name
-    self[:name].present? ? self[:name] : _('Donor')
+    self[:name].presence || _('Donor')
   end
 
   private

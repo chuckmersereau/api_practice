@@ -48,7 +48,7 @@ relationships: &rels
       id:
         description:
           The `id` of the User that the Bulk Background belongs to
-        type: UUID string
+        type: id string
   requests:
     data:
       description:

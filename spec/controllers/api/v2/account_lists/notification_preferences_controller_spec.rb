@@ -35,13 +35,13 @@ RSpec.describe Api::V2::AccountLists::NotificationPreferencesController, type: :
       account_list: {
         data: {
           type: 'account_lists',
-          id: account_list.uuid
+          id: account_list.id
         }
       },
       notification_type: {
         data: {
           type: 'notification_types',
-          id: notification_type_2.uuid
+          id: notification_type_2.id
         }
       }
     }
@@ -49,8 +49,8 @@ RSpec.describe Api::V2::AccountLists::NotificationPreferencesController, type: :
   let(:resource)                { notification_preferences.first }
   let(:second_resource)         { notification_preferences.second }
   let!(:given_reference_key)    { :task }
-  let(:id)                      { resource.uuid }
-  let(:parent_param)            { { account_list_id: account_list.uuid } }
+  let(:id)                      { resource.id }
+  let(:parent_param)            { { account_list_id: account_list.id } }
   let(:unpermitted_attributes)  { nil }
   let(:incorrect_attributes)    { nil }
 

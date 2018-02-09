@@ -3,7 +3,7 @@ module Async
   def perform(id, method, *args)
     if id
       begin
-        self.class.find(id).send(method, *args)
+        self.class.find_by!(id: id).send(method, *args)
       rescue ActiveRecord::RecordNotFound
         # If this instance has been deleted, oh well.
       end

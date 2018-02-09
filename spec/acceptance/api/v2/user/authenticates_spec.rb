@@ -36,8 +36,8 @@ resource 'User > Authenticate' do
       do_request data: { type: 'authenticate', attributes: { cas_ticket: 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a' } }
       expect(response_status).to eq(200)
       expect(
-        JsonWebToken.decode(JSON.parse(response_body)['data']['attributes']['json_web_token'])['user_uuid']
-      ).to eq(user.uuid)
+        JsonWebToken.decode(JSON.parse(response_body)['data']['attributes']['json_web_token'])['user_id']
+      ).to eq(user.id)
     end
   end
 end

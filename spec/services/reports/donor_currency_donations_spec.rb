@@ -83,7 +83,7 @@ RSpec.describe Reports::DonorCurrencyDonations, type: :model do
 
     it 'should include each donation record' do
       all_donations = donation_months.flat_map { |m| m[:donations] }
-      match = all_donations.find { |d| d.donation_id == cad_donation.uuid }
+      match = all_donations.find { |d| d.donation_id == cad_donation.id }
 
       expect(match).to be_present
       expect(match).to be_a DonationReports::DonationInfo
@@ -92,7 +92,7 @@ RSpec.describe Reports::DonorCurrencyDonations, type: :model do
     it 'does not return donations made more than 12 months ago' do
       subject.each do |_, report|
         report[:donation_infos].flat_map { |d| d[:months] }.each do |month|
-          expect(month[:donations].find { |d| d.donation_id == donation_last_year.uuid }).to be_nil
+          expect(month[:donations].find { |d| d.donation_id == donation_last_year.id }).to be_nil
         end
       end
     end

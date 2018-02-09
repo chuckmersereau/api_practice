@@ -38,7 +38,7 @@ describe Auth::UserAccountsController, :auth, type: :controller do
       end
       it 'should redirect the user to the requested provider' do
         auth_login(user)
-        get :create, provider: provider, organization_id: organization.uuid
+        get :create, provider: provider, organization_id: organization.id
         expect(response.status).to be(302)
         expect(response.location).to include("#{provider}?oauth_url=#{URI.encode(organization.oauth_url)}")
       end

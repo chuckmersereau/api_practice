@@ -39,7 +39,7 @@ resource 'Coaching Contacts' do
                      pledge_start_date: 2.days.from_now
   end
 
-  let(:id) { contact.uuid }
+  let(:id) { contact.id }
 
   let(:resource_attributes) do
     %w(

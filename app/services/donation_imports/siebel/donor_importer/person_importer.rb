@@ -62,9 +62,7 @@ class DonationImports::Siebel
         remote_id = @siebel_person.primary ? "#{@donor_account.account_number}-1" : "#{@donor_account.account_number}-2"
 
         @master_person_from_source = organization.master_people.find_by('master_person_sources.remote_id' => remote_id)
-        if @master_person_from_source
-          MasterPersonSource.where(organization_id: organization.id, remote_id: remote_id).update_all(remote_id: siebel_person.id)
-        end
+        MasterPersonSource.where(organization_id: organization.id, remote_id: remote_id).update_all(remote_id: siebel_person.id) if @master_person_from_source
       end
 
       def find_mpdx_person_from_siebel_person
@@ -148,7 +146,7 @@ class DonationImports::Siebel
         if existing_email
           begin
             existing_email.update_attributes(attributes)
-          rescue
+          rescue StandardError
             ActiveRecord::RecordNotUnique
           end
           # If they already have the email address we're trying to update to, don't do anything

@@ -5,7 +5,7 @@ describe Api::V2::AccountListsController, type: :controller do
   let!(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
   let!(:second_account_list) { create(:account_list, users: [user]) }
-  let(:id) { account_list.uuid }
+  let(:id) { account_list.id }
 
   let(:resource) { account_list }
   let(:unpermitted_attributes) { nil }
@@ -19,7 +19,7 @@ describe Api::V2::AccountListsController, type: :controller do
       notification_preferences: {
         data: {
           type: 'notification_preferences',
-          id: create(:notification_preference).uuid
+          id: create(:notification_preference).id
         }
       }
     }

@@ -13,6 +13,6 @@ describe Reports::GoalProgressSerializer do
   end
 
   it 'serializes salary_organization_id' do
-    expect(subject[:salary_organization_id]).to eq organization.uuid
+    expect(subject[:salary_organization_id]).to eq organization.id
   end
 end

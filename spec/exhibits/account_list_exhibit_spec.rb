@@ -1,4 +1,3 @@
-# encoding: UTF-8
 require 'rails_helper'
 
 describe AccountListExhibit do
@@ -83,13 +82,13 @@ describe AccountListExhibit do
 
     it "is the sum of each active account's balance" do
       account_list.update! designation_accounts: [act_1, act_2, inact_1],
-                           salary_organization: org.uuid
+                           salary_organization: org.id
       expect(subject.formatted_balance).to eq '$109'
     end
 
     it 'accepts an optional locale' do
       account_list.update! designation_accounts: [act_1, act_2, inact_1],
-                           salary_organization: org.uuid
+                           salary_organization: org.id
       expect(subject.formatted_balance(locale: :fr)).to eq '109 $'
     end
   end

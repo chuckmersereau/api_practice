@@ -10,8 +10,6 @@ class ApplicationRecord < ActiveRecord::Base
   attr_reader :updated_in_db_at
   attr_accessor :overwrite
 
-  before_save :generate_uuid, on: :create
-
   validate :presence_of_updated_in_db_at,
            :value_of_updated_in_db_at,
            on: :update_from_controller,
@@ -19,15 +17,6 @@ class ApplicationRecord < ActiveRecord::Base
 
   def updated_in_db_at=(value)
     @updated_in_db_at = value&.is_a?(Time) ? value : Time.parse(value.to_s)
-  end
-
-  # for better error messages when finding a resource by UUID
-  def self.find_by_uuid_or_raise!(uuid)
-    if uuid && !uuid.empty?
-      find_by(uuid: uuid) || record_from_uuid_not_found_error(uuid)
-    else
-      record_from_uuid_not_found_error(uuid)
-    end
   end
 
   # Some resource relationships exposed on the api are not actually Rails associations in our backend (they might just be custom methods).
@@ -48,11 +37,11 @@ class ApplicationRecord < ActiveRecord::Base
     end.compact
   end
 
-  private
-
-  def generate_uuid
-    self.uuid ||= SecureRandom.uuid
+  def self.find(id)
+    find_by!(id: id)
   end
+
+  private
 
   def presence_of_updated_in_db_at
     return if updated_at_was.nil? || updated_in_db_at
@@ -74,12 +63,6 @@ class ApplicationRecord < ActiveRecord::Base
     overwrite.to_s.to_sym == :true
   end
 
-  def self.record_from_uuid_not_found_error(uuid)
-    message = "Couldn't find #{name} with 'uuid'=#{uuid}"
-
-    raise ActiveRecord::RecordNotFound, message
-  end
-
   def self.fetch_hash_association(association)
     association_key = association.keys.first
 
@@ -91,5 +74,5 @@ class ApplicationRecord < ActiveRecord::Base
     { association_key => child_model.fetch_valid_associations(association.values.first) }
   end
 
-  private_class_method :record_from_uuid_not_found_error, :fetch_hash_association
+  private_class_method :fetch_hash_association
 end

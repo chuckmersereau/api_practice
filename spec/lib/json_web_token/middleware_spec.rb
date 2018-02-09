@@ -52,7 +52,7 @@ describe JsonWebToken::Middleware do
       end
 
       context 'and it contains a valid JWT token' do
-        let(:jwt_payload) { { user_uuid: 'abc-123' } }
+        let(:jwt_payload) { { user_id: 'abc-123' } }
         let(:jwt_token) { JsonWebToken.encode(jwt_payload) }
         let(:request_env) { Rack::MockRequest.env_for('/api/v2/users', 'HTTP_AUTHORIZATION' => "Bearer #{jwt_token}") }
 

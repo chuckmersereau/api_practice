@@ -9,7 +9,7 @@ class Person::TwitterAccount < ApplicationRecord
                           :screen_name,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   validates :screen_name, presence: true
 

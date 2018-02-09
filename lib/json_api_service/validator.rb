@@ -95,9 +95,7 @@ module JsonApiService
     end
 
     def verify_resource_type!
-      if (resource_type_from_params.to_s != context.resource_type.to_s) && resource_type_from_params?
-        raise InvalidTypeError, invalid_resource_type_detail
-      end
+      raise InvalidTypeError, invalid_resource_type_detail if (resource_type_from_params.to_s != context.resource_type.to_s) && resource_type_from_params?
     end
 
     def verify_absence_of_invalid_keys_in_attributes!

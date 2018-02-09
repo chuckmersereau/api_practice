@@ -46,39 +46,188 @@ describe DuplicateRecordPair, type: :model do
   it 'validates that both records belong to the same AccountList' do
     other_account_list = create(:account_list)
     other_contact = create(:contact).tap { |c| other_account_list.contacts << c }
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing') }.to_not raise_error
-    expect { DuplicateRecordPair.create!(account_list: other_account_list, record_one: record_one, record_two: record_two, reason: 'Testing') }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: other_contact, record_two: record_two, reason: 'Testing') }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: other_contact, reason: 'Testing') }.to raise_error
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing'
+      )
+    end.to_not raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: other_account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing'
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: other_contact,
+        record_two: record_two,
+        reason: 'Testing'
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: other_contact,
+        reason: 'Testing'
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it 'validates that the pair is unique' do
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing 1', ignore: true) }.to_not raise_error
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing 1',
+        ignore: true
+      )
+    end.to_not raise_error(ActiveRecord::RecordInvalid)
 
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing 2', ignore: true) }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_two, record_two: record_one, reason: 'Testing 3', ignore: true) }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing 4', ignore: false) }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_two, record_two: record_one, reason: 'Testing 5', ignore: false) }.to raise_error
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing 2',
+        ignore: true
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_two,
+        record_two: record_one,
+        reason: 'Testing 3',
+        ignore: true
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing 4',
+        ignore: false
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_two,
+        record_two: record_one,
+        reason: 'Testing 5',
+        ignore: false
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
 
     expect(DuplicateRecordPair.count).to eq(1)
     DuplicateRecordPair.first.update!(ignore: false)
 
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing 2', ignore: true) }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_two, record_two: record_one, reason: 'Testing 3', ignore: true) }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing 4', ignore: false) }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_two, record_two: record_one, reason: 'Testing 5', ignore: false) }.to raise_error
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing 2',
+        ignore: true
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_two,
+        record_two: record_one,
+        reason: 'Testing 3',
+        ignore: true
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing 4',
+        ignore: false
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_two,
+        record_two: record_one,
+        reason: 'Testing 5',
+        ignore: false
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it 'validates that a record cannot be in multiple pairs' do
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing') }.to_not raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing') }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_two, record_two: record_one, reason: 'Testing') }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_two, record_two: record_three, reason: 'Testing') }.to raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_three, record_two: record_two, reason: 'Testing') }.to raise_error
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing'
+      )
+    end.to_not raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_two,
+        reason: 'Testing'
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_two,
+        record_two: record_one,
+        reason: 'Testing'
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_two,
+        record_two: record_three,
+        reason: 'Testing'
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_three,
+        record_two: record_two,
+        reason: 'Testing'
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
 
     DuplicateRecordPair.first.update!(ignore: true)
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_three, reason: 'Testing') }.to_not raise_error
-    expect { DuplicateRecordPair.create!(account_list: account_list, record_one: record_three, record_two: record_two, reason: 'Testing') }.to raise_error
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_one,
+        record_two: record_three,
+        reason: 'Testing'
+      )
+    end.to_not raise_error(ActiveRecord::RecordInvalid)
+    expect do
+      DuplicateRecordPair.create!(
+        account_list: account_list,
+        record_one: record_three,
+        record_two: record_two,
+        reason: 'Testing'
+      )
+    end.to raise_error(ActiveRecord::RecordInvalid)
 
     expect(DuplicateRecordPair.count).to eq(2)
   end

@@ -10,8 +10,8 @@ RSpec.describe Api::V2::Contacts::People::LinkedinAccountsController, type: :con
   let!(:linkedin_accounts) { create_list(:linkedin_account, 2, person: person) }
   let(:linkedin_account) { linkedin_accounts.first }
   let(:resource) { linkedin_account }
-  let(:id) { linkedin_account.uuid }
-  let(:parent_param) { { contact_id: contact.uuid, person_id: person.uuid } }
+  let(:id) { linkedin_account.id }
+  let(:parent_param) { { contact_id: contact.id, person_id: person.id } }
   let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:linkedin_account, first_name: 'Albert').except(:person_id) }
   let(:incorrect_attributes) { { public_url: nil } }

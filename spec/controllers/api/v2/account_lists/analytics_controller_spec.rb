@@ -22,7 +22,7 @@ RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
 
   let(:given_reference_key) { 'appointments' }
 
-  let(:parent_param) { { account_list_id: account_list.uuid } }
+  let(:parent_param) { { account_list_id: account_list.id } }
 
   include_examples 'show_examples', except: [:sparse_fieldsets]
 
@@ -34,7 +34,7 @@ RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
         filter: {
           date_range: range
         },
-        account_list_id: account_list.uuid
+        account_list_id: account_list.id
       }
     end
 

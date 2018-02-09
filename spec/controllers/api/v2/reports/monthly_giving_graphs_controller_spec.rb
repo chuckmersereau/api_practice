@@ -12,7 +12,7 @@ RSpec.describe Api::V2::Reports::MonthlyGivingGraphsController, type: :controlle
   let(:parent_param) do
     {
       filter: {
-        account_list_id: account_list.uuid,
+        account_list_id: account_list.id,
         month_range: "#{DateTime.new(2017, 1, 3).utc.iso8601}...#{DateTime.new(2017, 3, 3).utc.iso8601}"
       }
     }
@@ -36,7 +36,7 @@ RSpec.describe Api::V2::Reports::MonthlyGivingGraphsController, type: :controlle
       get :show, full_params
       expect(response.status).to eq(200), invalid_status_detail
       expect(response_json[:data][:relationships][:account_list][:data][:id])
-        .to eq account_list.uuid
+        .to eq account_list.id
       expect(response.body)
         .to include(resource.send(reference_key).to_json) if reference_key
     end

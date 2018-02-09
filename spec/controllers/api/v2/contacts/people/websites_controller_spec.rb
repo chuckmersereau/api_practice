@@ -9,10 +9,10 @@ describe Api::V2::Contacts::People::WebsitesController, type: :controller do
   let!(:person2) { create(:person) }
   let!(:websites) { create_list(:website, 2, person: person) }
   let(:website) { websites.first }
-  let(:id) { website.uuid }
+  let(:id) { website.id }
 
   let(:resource) { website }
-  let(:parent_param) { { contact_id: contact.uuid, person_id: person.uuid } }
+  let(:parent_param) { { contact_id: contact.id, person_id: person.id } }
   let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:website, person: person2, website: 'http://www.example192.com') }
   let(:incorrect_attributes) { attributes_for(:website, person: nil, url: nil) }

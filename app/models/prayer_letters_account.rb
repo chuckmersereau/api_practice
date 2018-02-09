@@ -18,7 +18,7 @@ class PrayerLettersAccount < ApplicationRecord
                           :overwrite,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid,
+                          :id,
                           :valid_token].freeze
 
   def queue_subscribe_contacts

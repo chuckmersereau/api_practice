@@ -4,7 +4,7 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
   let(:factory_type) { :donation }
   let!(:user) { create(:user_with_full_account) }
   let!(:account_list) { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
   let!(:contact) { create(:contact, account_list: account_list) }
   let!(:donor_account) { create(:donor_account) }
   let!(:designation_account) { create(:designation_account) }
@@ -15,7 +15,7 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
                               donation_date: Date.today)
   end
   let(:donation) { donations.first }
-  let(:id) { donation.uuid }
+  let(:id) { donation.id }
 
   before do
     donation.update(donation_date: 2.days.ago, amount: 12.00)

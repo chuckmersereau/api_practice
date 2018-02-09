@@ -12,17 +12,11 @@ class ContactFilter
     @contacts = filtered_contacts = contacts
 
     if filters.present?
-      if @filters[:ids].present?
-        filtered_contacts = filtered_contacts.where('contacts.id' => @filters[:ids].split(','))
-      end
+      filtered_contacts = filtered_contacts.where('contacts.id' => @filters[:ids].split(',')) if @filters[:ids].present?
 
-      if @filters[:not_ids]
-        filtered_contacts = filtered_contacts.where('contacts.id not in (?)', @filters[:not_ids])
-      end
+      filtered_contacts = filtered_contacts.where('contacts.id not in (?)', @filters[:not_ids]) if @filters[:not_ids]
 
-      if @filters[:tags].present? && @filters[:tags].first != ''
-        filtered_contacts = filtered_contacts.tagged_with(@filters[:tags].split(','))
-      end
+      filtered_contacts = filtered_contacts.tagged_with(@filters[:tags].split(',')) if @filters[:tags].present? && @filters[:tags].first != ''
 
       if @filters[:name_like]
         # See if they've typed a first and last name
@@ -73,9 +67,7 @@ class ContactFilter
   end
 
   def church(filtered_contacts)
-    if @filters[:church].present? && @filters[:church].first != ''
-      filtered_contacts = filtered_contacts.where('contacts.church_name' => @filters[:church])
-    end
+    filtered_contacts = filtered_contacts.where('contacts.church_name' => @filters[:church]) if @filters[:church].present? && @filters[:church].first != ''
     filtered_contacts
   end
 
@@ -117,22 +109,16 @@ class ContactFilter
   end
 
   def likely(filtered_contacts)
-    if @filters[:likely].present? && @filters[:likely].first != ''
-      filtered_contacts = filtered_contacts.where(likely_to_give: @filters[:likely])
-    end
+    filtered_contacts = filtered_contacts.where(likely_to_give: @filters[:likely]) if @filters[:likely].present? && @filters[:likely].first != ''
     filtered_contacts
   end
 
   def status(filtered_contacts)
     if @filters[:status].present? && @filters[:status].first != ''
       unless @filters[:status].include? '*'
-        if (@filters[:status].include? '') && !@filters[:status].include?('null')
-          @filters[:status] << 'null'
-        end
+        @filters[:status] << 'null' if (@filters[:status].include? '') && !@filters[:status].include?('null')
 
-        if (@filters[:status].include? 'null') && !@filters[:status].include?('')
-          @filters[:status] << ''
-        end
+        @filters[:status] << '' if (@filters[:status].include? 'null') && !@filters[:status].include?('')
 
         filtered_contacts = if @filters[:status].include? 'null'
                               filtered_contacts.where('status is null OR status in (?)', @filters[:status])
@@ -175,16 +161,12 @@ class ContactFilter
   end
 
   def contact_name(filtered_contacts)
-    if @filters[:name].present?
-      filtered_contacts = filtered_contacts.where('lower(contacts.name) like ?', "%#{@filters[:name].downcase}%")
-    end
+    filtered_contacts = filtered_contacts.where('lower(contacts.name) like ?', "%#{@filters[:name].downcase}%") if @filters[:name].present?
     filtered_contacts
   end
 
   def timezone(filtered_contacts)
-    if @filters[:timezone].present? && @filters[:timezone].first != ''
-      filtered_contacts = filtered_contacts.where('contacts.timezone' => @filters[:timezone])
-    end
+    filtered_contacts = filtered_contacts.where('contacts.timezone' => @filters[:timezone]) if @filters[:timezone].present? && @filters[:timezone].first != ''
     filtered_contacts
   end
 
@@ -224,9 +206,7 @@ class ContactFilter
   end
 
   def appeal(filtered_contacts)
-    if @filters[:appeal].present? && @filters[:appeal].first != ''
-      filtered_contacts = filtered_contacts.where('appeal_contacts.appeal_id' => @filters[:appeal]).includes(:appeals).uniq
-    end
+    filtered_contacts = filtered_contacts.where('appeal_contacts.appeal_id' => @filters[:appeal]).includes(:appeals).uniq if @filters[:appeal].present? && @filters[:appeal].first != ''
     filtered_contacts
   end
 
@@ -284,9 +264,7 @@ class ContactFilter
   end
 
   def pledge_received(filtered_contacts)
-    if @filters[:pledge_received].present?
-      filtered_contacts = filtered_contacts.where(pledge_received: @filters[:pledge_received])
-    end
+    filtered_contacts = filtered_contacts.where(pledge_received: @filters[:pledge_received]) if @filters[:pledge_received].present?
     filtered_contacts
   end
 
@@ -351,12 +329,8 @@ class ContactFilter
       # & is intersection
       return filtered_contacts.where(id: contacts_with_mobile_phone_ids & contacts_with_home_phone_ids)
     end
-    if filter_home_phone == 'Yes' && filter_mobile_phone == 'No'
-      return filtered_contacts.where(id: contacts_with_home_phone_ids - contacts_with_mobile_phone_ids)
-    end
-    if filter_home_phone == 'No' && filter_mobile_phone == 'Yes'
-      return filtered_contacts.where(id: contacts_with_mobile_phone_ids - contacts_with_home_phone_ids)
-    end
+    return filtered_contacts.where(id: contacts_with_home_phone_ids - contacts_with_mobile_phone_ids) if filter_home_phone == 'Yes' && filter_mobile_phone == 'No'
+    return filtered_contacts.where(id: contacts_with_mobile_phone_ids - contacts_with_home_phone_ids) if filter_home_phone == 'No' && filter_mobile_phone == 'Yes'
     if filter_home_phone == 'No' && filter_mobile_phone == 'No'
       # | is union
       return filtered_contacts.where.not(id: contacts_with_mobile_phone_ids | contacts_with_home_phone_ids)

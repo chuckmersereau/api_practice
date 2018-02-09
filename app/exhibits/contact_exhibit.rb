@@ -102,7 +102,7 @@ class ContactExhibit < DisplayCase::Exhibit
   def get_facebook_picture_url_if_available(size)
     fb_account = primary_or_first_person.facebook_account
 
-    if fb_account && fb_account.remote_id.present?
+    if fb_account&.remote_id.present?
       return "https://graph.facebook.com/#{fb_account.remote_id}/picture?height=120&width=120" if size == :large_square
       "https://graph.facebook.com/#{fb_account.remote_id}/picture?type=#{size}"
     end

@@ -57,7 +57,7 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
   end
 
   def load_task
-    @task ||= Task.find_by_uuid_or_raise!(params[:task_id])
+    @task ||= Task.find_by!(id: params[:task_id])
   end
 
   def authorize_task

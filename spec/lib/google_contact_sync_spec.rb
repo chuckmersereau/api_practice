@@ -152,8 +152,15 @@ describe GoogleContactSync do
     end
 
     it 'syncs changes between mpdx and google, but prefers mpdx if both changed' do
-      g_contact_link = build(:google_contact, last_data: { name_prefix: 'Mr', given_name: 'John', additional_name: 'Henry',
-                                                           family_name: 'Doe', name_suffix: 'III' })
+      g_contact_link =
+        build(:google_contact,
+              last_data: {
+                name_prefix: 'Mr',
+                given_name: 'John',
+                additional_name: 'Henry',
+                family_name: 'Doe',
+                name_suffix: 'III'
+              })
 
       g_contact['gd$name'] = {
         'gd$namePrefix' => { '$t' => 'Mr-Google' },
@@ -162,7 +169,13 @@ describe GoogleContactSync do
         'gd$familyName' => { '$t' => 'Doe-Google' },
         'gd$nameSuffix' => { '$t' => 'III' }
       }
-      person.update(title: 'Mr', first_name: 'John-MPDX', middle_name: 'Henry-MPDX', last_name: 'Doe-MPDX', suffix: 'III')
+      person.update(
+        title: 'Mr',
+        first_name: 'John-MPDX',
+        middle_name: 'Henry-MPDX',
+        last_name: 'Doe-MPDX',
+        suffix: 'III'
+      )
 
       sync.sync_basic_person_fields(person, g_contact, g_contact_link)
 
@@ -178,7 +191,8 @@ describe GoogleContactSync do
       it 'sets blank mpdx employer and occupation from google' do
         person.employer = ''
         person.occupation = nil
-        g_contact['gd$organization'] = [{ 'gd$orgName' => { '$t' => 'Company' }, 'gd$orgTitle' => { '$t' => 'Worker' } }]
+        g_contact['gd$organization'] =
+          [{ 'gd$orgName' => { '$t' => 'Company' }, 'gd$orgTitle' => { '$t' => 'Worker' } }]
 
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
@@ -203,7 +217,8 @@ describe GoogleContactSync do
       it 'prefers mpdx if both are present' do
         person.employer = 'Company'
         person.occupation = 'Worker'
-        g_contact['gd$organization'] = [{ 'gd$orgName' => { '$t' => 'Not-Company' }, 'gd$orgTitle' => { '$t' => 'Not-Worker' } }]
+        g_contact['gd$organization'] =
+          [{ 'gd$orgName' => { '$t' => 'Not-Company' }, 'gd$orgTitle' => { '$t' => 'Not-Worker' } }]
 
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
@@ -216,13 +231,17 @@ describe GoogleContactSync do
 
     describe 'subsequent syncs' do
       let(:g_contact_link) do
-        build(:google_contact, last_data: { organizations: [{ org_name: 'Old Company', org_title: 'Old Title' }] })
+        build(:google_contact,
+              last_data: {
+                organizations: [{ org_name: 'Old Company', org_title: 'Old Title' }]
+              })
       end
 
       it 'syncs changes from mpdx to google' do
         person.employer = 'MPDX Company'
         person.occupation = 'MPDX Title'
-        g_contact['gd$organization'] = [{ 'gd$orgName' => { '$t' => 'Old Company' }, 'gd$orgTitle' => { '$t' => 'Old Title' } }]
+        g_contact['gd$organization'] =
+          [{ 'gd$orgName' => { '$t' => 'Old Company' }, 'gd$orgTitle' => { '$t' => 'Old Title' } }]
 
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
@@ -235,7 +254,8 @@ describe GoogleContactSync do
       it 'syncs changes from google to mpdx' do
         person.employer = 'Old Company'
         person.occupation = 'Old Title'
-        g_contact['gd$organization'] = [{ 'gd$orgName' => { '$t' => 'Google Company' }, 'gd$orgTitle' => { '$t' => 'Google Title' } }]
+        g_contact['gd$organization'] =
+          [{ 'gd$orgName' => { '$t' => 'Google Company' }, 'gd$orgTitle' => { '$t' => 'Google Title' } }]
 
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
@@ -247,7 +267,8 @@ describe GoogleContactSync do
       it 'prefers mpdx if both changed' do
         person.employer = 'MPDX Company'
         person.occupation = 'MPDX Title'
-        g_contact['gd$organization'] = [{ 'gd$orgName' => { '$t' => 'Gogle Company' }, 'gd$orgTitle' => { '$t' => 'Google Title' } }]
+        g_contact['gd$organization'] =
+          [{ 'gd$orgName' => { '$t' => 'Gogle Company' }, 'gd$orgTitle' => { '$t' => 'Google Title' } }]
 
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
@@ -264,9 +285,11 @@ describe GoogleContactSync do
       person.phone_number = { number: '+12123334444', location: 'mobile', primary: true }
       person.save
 
-      g_contact.update('gd$phoneNumber' => [
-                         { '$t' => '(717) 888-9999', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
-                       ])
+      g_contact.update('gd$phoneNumber' => [{
+                         '$t' => '(717) 888-9999',
+                         'primary' => 'true',
+                         'rel' => 'http://schemas.google.com/g/2005#other'
+                       }])
 
       sync.sync_numbers(g_contact, person, g_contact_link)
 
@@ -291,9 +314,11 @@ describe GoogleContactSync do
       person.save
       person.phone_numbers.first.update_column(:number, '2123334444')
 
-      g_contact.update('gd$phoneNumber' => [
-                         { '$t' => '(212) 333-4444', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
-                       ])
+      g_contact.update('gd$phoneNumber' => [{
+                         '$t' => '(212) 333-4444',
+                         'primary' => 'true',
+                         'rel' => 'http://schemas.google.com/g/2005#other'
+                       }])
 
       sync.sync_numbers(g_contact, person, g_contact_link)
 
@@ -502,10 +527,14 @@ describe GoogleContactSync do
   end
 
   describe 'compare_address_records' do
+    let(:master_address_id) { SecureRandom.uuid }
     it 'uses historic list for comparision' do
-      contact.addresses << build(:address, master_address_id: 1, historic: true)
+      contact.addresses << build(:address, master_address_id: master_address_id, historic: true)
       contact.save
-      expect(sync).to receive(:compare_considering_historic).with([], [], [], [1]).and_return([[], [], [], [1], [1]])
+      expect(sync).to(
+        receive(:compare_considering_historic).with([], [], [], [master_address_id])
+                                              .and_return([[], [], [], [1], [1]])
+      )
 
       mpdx_adds, mpdx_dels, g_contact_adds, g_contact_dels, g_contact_address_records =
         sync.compare_address_records([], contact, [])

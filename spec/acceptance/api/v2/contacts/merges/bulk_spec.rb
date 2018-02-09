@@ -22,10 +22,10 @@ resource 'Contacts > Merges > Bulk' do
 
       example 'Merge Contacts [BULK POST]', document: documentation_scope do
         explanation 'Bulk merge Contacts with the given IDs'
-        do_request data: [{ data: { attributes: { winner_id: contact_one.uuid, loser_id: contact_two.uuid } } }]
+        do_request data: [{ data: { attributes: { winner_id: contact_one.id, loser_id: contact_two.id } } }]
         expect(response_status).to eq(200)
         expect(json_response.size).to eq(1)
-        expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([contact_one.uuid])
+        expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([contact_one.id])
       end
     end
   end

@@ -4,15 +4,15 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
   let(:factory_type) { :appeal_contact }
   let!(:user) { create(:user_with_full_account) }
   let!(:account_list) { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
   let!(:appeal) { create(:appeal, account_list: account_list) }
-  let(:appeal_id) { appeal.uuid }
+  let(:appeal_id) { appeal.id }
   let!(:contact) { create(:contact, account_list: account_list) }
   let!(:appeal_contact) { create(:appeal_contact, appeal: appeal, contact: contact) }
   let!(:second_contact) { create(:contact, account_list: account_list) }
   let!(:second_appeal_contact) { create(:appeal_contact, appeal: appeal, contact: second_contact) }
   let(:unassociated_contact) { create(:contact, account_list: account_list) }
-  let(:id) { appeal_contact.uuid }
+  let(:id) { appeal_contact.id }
 
   let(:resource) { appeal_contact }
   let(:parent_param) { { appeal_id: appeal_id } }
@@ -22,7 +22,7 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
       contact: {
         data: {
           type: 'contacts',
-          id: unassociated_contact.uuid
+          id: unassociated_contact.id
         }
       }
     }
@@ -68,7 +68,7 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
 
       it 'sorts results desc' do
         get :index,
-            appeal_id: sorting_appeal.uuid,
+            appeal_id: sorting_appeal.id,
             sort: 'contact.name',
             fields: {
               contact: 'name,pledge_amount,pledge_currency,pledge_frequency'
@@ -80,17 +80,17 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
         expect(response.status).to eq(200)
         data = JSON.parse(response.body)['data']
         expect(data.length).to eq(2)
-        expect(data[0]['id']).to eq(appeal_contact1.uuid)
-        expect(data[1]['id']).to eq(appeal_contact2.uuid)
+        expect(data[0]['id']).to eq(appeal_contact1.id)
+        expect(data[1]['id']).to eq(appeal_contact2.id)
       end
 
       it 'sorts results asc' do
-        get :index, appeal_id: sorting_appeal.uuid, sort: '-contact.name'
+        get :index, appeal_id: sorting_appeal.id, sort: '-contact.name'
         expect(response.status).to eq(200)
         data = JSON.parse(response.body)['data']
         expect(data.length).to eq(2)
-        expect(data[0]['id']).to eq(appeal_contact2.uuid)
-        expect(data[1]['id']).to eq(appeal_contact1.uuid)
+        expect(data[0]['id']).to eq(appeal_contact2.id)
+        expect(data[1]['id']).to eq(appeal_contact1.id)
       end
     end
   end

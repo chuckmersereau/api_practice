@@ -9,10 +9,10 @@ resource 'Contact > DonationAmountRecommendations' do
   let!(:user)          { create(:user_with_full_account) }
 
   let!(:account_list)   { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
 
   let!(:contact)        { create(:contact, account_list: account_list) }
-  let(:contact_id)      { contact.uuid }
+  let(:contact_id)      { contact.id }
 
   let!(:organization) { create :organization }
   let!(:designation_account) { create :designation_account, organization: organization }
@@ -24,7 +24,7 @@ resource 'Contact > DonationAmountRecommendations' do
       donor_account: donor_account
     )
   end
-  let(:id) { donation_amount_recommendation.uuid }
+  let(:id) { donation_amount_recommendation.id }
 
   before do
     contact.donor_accounts << donor_account

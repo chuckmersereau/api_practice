@@ -54,7 +54,7 @@ module JsonApiHelper
 
   def build_data(params, account_list_id: nil, relationships: {})
     attributes = params.deep_symbolize_keys
-                       .except(:id, :uuid)
+                       .except(:id, :id)
                        .sort
                        .each_with_object({}) { |(key, value), hash| hash[key] = value }
 

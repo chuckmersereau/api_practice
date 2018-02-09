@@ -22,7 +22,7 @@ RSpec.describe Api::V2::Tools::AnalyticsController, type: :controller do
     let(:full_params) do
       {
         filter: {
-          account_list_id: second_account_list.uuid
+          account_list_id: second_account_list.id
         }
       }
     end
@@ -31,7 +31,7 @@ RSpec.describe Api::V2::Tools::AnalyticsController, type: :controller do
       api_login(user)
       get :show, full_params
       expect(response.status).to eq(200)
-      expect(response.body).to_not include(account_list.uuid)
+      expect(response.body).to_not include(account_list.id)
     end
   end
 end

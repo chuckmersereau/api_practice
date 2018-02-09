@@ -46,9 +46,9 @@ RSpec.describe DuplicateTasksPerContact do
     expect { subject }.to change { Task.count }.from(1).to(2)
   end
 
-  it 'ensures all Tasks have unique UUIDs' do
+  it 'ensures all Tasks have unique ids' do
     subject
-    expect(Task.all.pluck(:uuid).uniq.size).to eq Task.count
+    expect(Task.all.pluck(:id).uniq.size).to eq Task.count
   end
 
   it 'results in all Tasks having exactly one Contact' do
@@ -72,7 +72,7 @@ RSpec.describe DuplicateTasksPerContact do
     expect(fog_files).to receive(:new) do |args|
       expect(args[:key]).to match(%r{^worker_results/duplicate_tasks_per_contact__.+\.log$})
       expect(args[:body]).to match(%r{workers/duplicate_tasks_per_contact\.rb})
-      expect(args[:body]).to match(/^#{task.id}(?:\s\d+)+$/)
+      expect(args[:body]).to match(/^#{task.id}(?:\s[^\s]+)+$/)
       expect(args[:body].lines[2].split(/\s/).size).to eq Task.count
 
       fog_file
@@ -139,9 +139,9 @@ RSpec.describe DuplicateTasksPerContact do
       expect { subject }.to change { Task.count }.from(2).to(3)
     end
 
-    it 'ensures all Tasks have unique UUIDs' do
+    it 'ensures all Tasks have unique ids' do
       subject
-      expect(Task.all.pluck(:uuid).uniq.size).to eq Task.count
+      expect(Task.all.pluck(:id).uniq.size).to eq Task.count
     end
 
     it 'results in all Tasks having exactly one Contact' do
@@ -155,9 +155,11 @@ RSpec.describe DuplicateTasksPerContact do
       RSpec::Mocks.space.proxy_for(fog_files).reset
 
       expect(fog_files).to receive(:new) do |args|
-        expect(args[:key]).to match(%r{^worker_results/account-list-#{another_task.account_list_id}/duplicate_tasks_per_contact__.+\.log$})
+        expect(args[:key]).to match(
+          %r{^worker_results/account-list-#{another_task.account_list_id}/duplicate_tasks_per_contact__.+\.log$}
+        )
         expect(args[:body]).to match(%r{workers/duplicate_tasks_per_contact\.rb})
-        expect(args[:body]).to match(/^#{another_task.id}(?:\s\d+)+$/)
+        expect(args[:body]).to match(/^#{another_task.id}(?:\s[^\s]+)+$/)
         expect(args[:body].lines[2].split(/\s/).size).to eq(Task.count - 1)
 
         fog_file

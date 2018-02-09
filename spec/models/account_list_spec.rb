@@ -44,8 +44,8 @@ describe AccountList do
   describe '#salary_organization=()' do
     let(:organization) { create(:organization) }
 
-    it 'finds the id when given a uuid' do
-      subject.salary_organization = organization.uuid
+    it 'finds the id when given a id' do
+      subject.salary_organization = organization.id
       expect(subject.salary_organization_id).to eq(organization.id)
     end
   end
@@ -127,7 +127,7 @@ describe AccountList do
         account_list.contacts << create(:contact, total_donations: i)
       end
 
-      expect(account_list.top_partners).to eq(account_list.contacts.order(:id)[1..-1].reverse)
+      expect(account_list.top_partners).to eq(account_list.contacts.order(:created_at)[1..-1].reverse)
     end
   end
 

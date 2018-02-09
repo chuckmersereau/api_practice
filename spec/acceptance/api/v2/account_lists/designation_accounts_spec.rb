@@ -9,10 +9,10 @@ resource 'Designation Accounts' do
   let(:user)          { create(:user_with_account) }
 
   let(:account_list)    { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
 
   let(:designation_account) { create(:designation_account) }
-  let(:id)                  { designation_account.uuid }
+  let(:id)                  { designation_account.id }
 
   let(:expected_attribute_keys) do
     %w(

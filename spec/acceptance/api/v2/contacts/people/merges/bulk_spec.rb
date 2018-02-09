@@ -23,10 +23,10 @@ resource 'People > Merges > Bulk' do
 
       example 'Merge People [BULK POST]', document: documentation_scope do
         explanation 'Bulk merge People with the given IDs'
-        do_request data: [{ data: { attributes: { winner_id: person_one.uuid, loser_id: person_two.uuid } } }]
+        do_request data: [{ data: { attributes: { winner_id: person_one.id, loser_id: person_two.id } } }]
         expect(response_status).to eq(200)
         expect(json_response.size).to eq(1)
-        expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([person_one.uuid])
+        expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([person_one.id])
       end
     end
   end

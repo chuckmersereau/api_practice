@@ -35,13 +35,13 @@ RSpec.describe Api::V2::Contacts::MergesController, type: :controller do
       winner: {
         data: {
           type: 'contacts',
-          id: winner.uuid
+          id: winner.id
         }
       },
       loser: {
         data: {
           type: 'contacts',
-          id: loser.uuid
+          id: loser.id
         }
       }
     }

@@ -24,7 +24,7 @@ resource 'People Bulk' do
       contacts: {
         data: [
           type: 'contacts',
-          id: contact.uuid
+          id: contact.id
         ]
       }
     }
@@ -48,7 +48,7 @@ resource 'People Bulk' do
       {
         data: {
           type: resource_type,
-          id: person_one.uuid,
+          id: person_one.id,
           attributes: new_person_attributes
         }
       }
@@ -88,13 +88,13 @@ resource 'People Bulk' do
       example doc_helper.title_for(:bulk_delete), document: doc_helper.document_scope do
         explanation doc_helper.description_for(:bulk_delete)
         do_request data: [
-          { data: { type: resource_type, id: person_one.uuid } },
-          { data: { type: resource_type, id: person_two.uuid } }
+          { data: { type: resource_type, id: person_one.id } },
+          { data: { type: resource_type, id: person_two.id } }
         ]
 
         expect(response_status).to eq(200)
         expect(json_response.size).to eq(2)
-        expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([person_one.uuid, person_two.uuid])
+        expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([person_one.id, person_two.id])
       end
     end
   end

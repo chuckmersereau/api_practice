@@ -6,10 +6,10 @@ describe Api::V2::AccountLists::CoachesController, type: :controller do
   let!(:user) { create(:user_with_account) }
   let!(:coaches) { create_list(:user_coach, 2) }
   let!(:account_list) { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list_id) { account_list.id }
   let(:coach2) { coaches.last }
-  let(:id) { coach2.uuid }
-  let(:original_user_id) { user.uuid }
+  let(:id) { coach2.id }
+  let(:original_user_id) { user.id }
 
   before do
     account_list.coaches += coaches

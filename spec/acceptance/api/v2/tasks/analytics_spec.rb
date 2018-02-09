@@ -140,7 +140,7 @@ resource 'Tasks > Analytics' do
 
         example 'Analytics [GET]', document: documentation_scope do
           explanation "Viewing Analytical information for a specific Account Lists' Tasks"
-          do_request filter: { account_list_id: alternate_account_list.uuid }
+          do_request filter: { account_list_id: alternate_account_list.id }
 
           check_resource
           expect(resource_object.keys).to match_array expected_attribute_keys

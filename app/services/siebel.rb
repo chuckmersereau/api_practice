@@ -145,12 +145,10 @@ class Siebel < DataServer
   end
 
   def profiles_with_designation_numbers
-    unless @profiles_with_designation_numbers
-      @profiles_with_designation_numbers = profiles.map do |profile|
-        { designation_numbers: profile.designations.map(&:number),
-          name: profile.name,
-          code: profile.id }
-      end
+    @profiles_with_designation_numbers ||= profiles.map do |profile|
+      { designation_numbers: profile.designations.map(&:number),
+        name: profile.name,
+        code: profile.id }
     end
     @profiles_with_designation_numbers
   end
@@ -292,9 +290,7 @@ class Siebel < DataServer
     unless master_person_from_source
       remote_id = siebel_person.primary ? "#{donor_account.account_number}-1" : "#{donor_account.account_number}-2"
       master_person_from_source = @org.master_people.find_by('master_person_sources.remote_id' => remote_id)
-      if master_person_from_source
-        MasterPersonSource.where(organization_id: @org.id, remote_id: remote_id).update_all(remote_id: siebel_person.id)
-      end
+      MasterPersonSource.where(organization_id: @org.id, remote_id: remote_id).update_all(remote_id: siebel_person.id) if master_person_from_source
     end
 
     person = contact.people.find_by(first_name: siebel_person.first_name, last_name: siebel_person.last_name)
@@ -374,9 +370,7 @@ class Siebel < DataServer
       new_or_updated_address = object.addresses.create!(new_address.attributes)
     end
 
-    if new_or_updated_address.primary_mailing_address?
-      object.addresses.where.not(id: new_or_updated_address.id).update_all(primary_mailing_address: false)
-    end
+    object.addresses.where.not(id: new_or_updated_address.id).update_all(primary_mailing_address: false) if new_or_updated_address.primary_mailing_address?
   rescue ActiveRecord::RecordInvalid => e
     raise e.message + " - #{address.inspect}"
   end

@@ -11,7 +11,7 @@ class FamilyRelationship < ApplicationRecord
                           :related_person_id,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   def self.add_for_person(person, attributes)
     fr = person.family_relationships.find_by(related_person_id: attributes[:related_person_id])

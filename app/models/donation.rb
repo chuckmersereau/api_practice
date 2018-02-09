@@ -39,7 +39,7 @@ class Donation < ApplicationRecord
                           :tendered_currency,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   # Used by Contact::DonationsEagerLoader
   attr_accessor :loaded_contact
