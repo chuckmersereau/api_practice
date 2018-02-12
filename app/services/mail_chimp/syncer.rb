@@ -19,7 +19,7 @@ class MailChimp::Syncer
 
   def two_way_sync_with_primary_list!
     setup_webhooks
-    import_mail_chimp_subscribers
+    # import_mail_chimp_subscribers
     export_mpdx_contacts_to_mail_chimp
   end
 

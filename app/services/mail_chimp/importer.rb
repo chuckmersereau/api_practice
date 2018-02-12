@@ -18,17 +18,17 @@ class MailChimp::Importer
   end
 
   def import_all_members!
-    all_emails_to_import = fetch_all_emails_to_import
+    # all_emails_to_import = fetch_all_emails_to_import
 
-    import_members_by_email(all_emails_to_import)
+    # import_members_by_email(all_emails_to_import)
   end
 
   def import_members_by_email!(member_emails)
-    subscribed_members = list_of_members_info(member_emails)
+    # subscribed_members = list_of_members_info(member_emails)
 
-    formatted_subscribed_members = subscribed_members.map(&method(:format_member_info))
+    # formatted_subscribed_members = subscribed_members.map(&method(:format_member_info))
 
-    import_members(formatted_subscribed_members)
+    # import_members(formatted_subscribed_members)
   end
 
   private
