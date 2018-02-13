@@ -102,14 +102,6 @@ class MailChimp::GibbonWrapper
     list(mail_chimp_appeal_list.try(:appeal_list_id)).try(:open_rate)
   end
 
-  def relevant_emails
-    if sync_all_active_contacts
-      active_contacts_emails
-    else
-      newsletter_emails
-    end
-  end
-
   def primary_list_name
     primary_list.try(:name)
   end
