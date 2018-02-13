@@ -9,7 +9,6 @@ class MailChimpAccountSerializer < ApplicationSerializer
              :lists_present,
              :primary_list_id,
              :primary_list_name,
-             :sync_all_active_contacts,
              :valid,
              :validate_key,
              :validation_error

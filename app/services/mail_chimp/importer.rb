@@ -64,7 +64,7 @@ class MailChimp::Importer
 
   def fetch_all_emails_to_import
     gibbon_wrapper.list_emails(mail_chimp_account.primary_list_id) -
-      mail_chimp_account.relevant_emails
+      mail_chimp_account.newsletter_emails
   end
 
   def import_members(member_infos)
@@ -93,8 +93,6 @@ class MailChimp::Importer
   end
 
   def add_or_remove_person_from_newsletter(person, member_info)
-    return if mail_chimp_account.sync_all_active_contacts?
-
     person.optout_enewsletter = true if person_should_be_opted_out?(person, member_info)
     person.email = member_info[:email]
     person.save(validate: false)

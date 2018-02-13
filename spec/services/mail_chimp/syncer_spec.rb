@@ -36,16 +36,16 @@ RSpec.describe MailChimp::Syncer do
         subject.two_way_sync_with_primary_list
       end
 
-      it 'calls the importer and exporter classes' do
-        expect(MailChimp::Importer).to receive(:new).and_return(mock_importer)
-        expect(mock_importer).to receive(:import_all_members)
-
-        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(mail_chimp_account.id, list_id, nil)
-
-        expect do
-          subject.two_way_sync_with_primary_list!
-        end.to change { mail_chimp_account.mail_chimp_members.reload.count }.from(2).to(1)
-      end
+      # it 'calls the importer and exporter classes' do
+      #   expect(MailChimp::Importer).to receive(:new).and_return(mock_importer)
+      #   expect(mock_importer).to receive(:import_all_members)
+      #
+      #   expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(mail_chimp_account.id, list_id, nil)
+      #
+      #   expect do
+      #     subject.two_way_sync_with_primary_list!
+      #   end.to change { mail_chimp_account.mail_chimp_members.reload.count }.from(2).to(1)
+      # end
     end
 
     context 'webhooks' do
