@@ -83,7 +83,8 @@ describe MailChimp::Importer do
             'GROUPINGS' => 'Fifth Random Grouping'
           },
           'email_address' => 'fifth_email@gmail.com',
-          'status' => 'unsubscribed'
+          'status' => 'unsubscribed',
+          'unsubscribe_reason' => 'Not Interested'
         }
       ]
     end
@@ -96,7 +97,8 @@ describe MailChimp::Importer do
           last_name: 'Last Name',
           greeting: 'Greeting',
           groupings: 'Random Grouping',
-          status: 'subscribed'
+          status: 'subscribed',
+          unsubscribe_reason: nil
         },
         {
           email: 'second_email@gmail.com',
@@ -104,7 +106,8 @@ describe MailChimp::Importer do
           last_name: 'Second Last Name',
           greeting: 'Second Greeting',
           groupings: 'Second Random Grouping',
-          status: 'subscribed'
+          status: 'subscribed',
+          unsubscribe_reason: nil
         },
         {
           email: 'third_email@gmail.com',
@@ -112,7 +115,8 @@ describe MailChimp::Importer do
           last_name: nil,
           greeting: 'Third Greeting',
           groupings: 'Third Random Grouping',
-          status: 'subscribed'
+          status: 'subscribed',
+          unsubscribe_reason: nil
         },
         {
           email: 'fourth_email@gmail.com',
@@ -120,7 +124,8 @@ describe MailChimp::Importer do
           last_name: 'Fourth Last Name',
           greeting: 'Fourth Greeting',
           groupings: 'Fourth Random Grouping',
-          status: 'cleaned'
+          status: 'cleaned',
+          unsubscribe_reason: nil
         },
         {
           email: 'fifth_email@gmail.com',
@@ -128,7 +133,8 @@ describe MailChimp::Importer do
           last_name: 'Fifth Last Name',
           greeting: 'Fifth Greeting',
           groupings: 'Fifth Random Grouping',
-          status: 'unsubscribed'
+          status: 'unsubscribed',
+          unsubscribe_reason: 'Not Interested'
         }
       ]
     end
@@ -141,7 +147,8 @@ describe MailChimp::Importer do
           last_name: 'Last Name',
           greeting: 'Greeting',
           groupings: 'Random Grouping',
-          status: 'subscribed'
+          status: 'subscribed',
+          unsubscribe_reason: nil
         },
         second_person.id => {
           email: 'random@gmail.com',
@@ -149,7 +156,8 @@ describe MailChimp::Importer do
           last_name: 'Second Last Name',
           greeting: 'Greeting',
           groupings: 'Random Grouping',
-          status: 'subscribed'
+          status: 'subscribed',
+          unsubscribe_reason: nil
         }
       }.with_indifferent_access
     end

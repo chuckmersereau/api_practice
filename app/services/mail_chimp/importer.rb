@@ -1,6 +1,10 @@
 class MailChimp::Importer
   attr_reader :mail_chimp_account, :account_list, :gibbon_wrapper
 
+  # this is currently the reason that Mailchimp lists if MPDX removed the contact from the list
+  # We do not want to mark someone as opt-out if they were unsubscibed by the user or our system somehow.
+  ADMIN_UNSUBSCRIBE_REASON = 'N/A (Unsubscribed by an admin)'.freeze
+
   def initialize(mail_chimp_account)
     @mail_chimp_account = mail_chimp_account
     @account_list = mail_chimp_account.account_list
@@ -49,7 +53,8 @@ class MailChimp::Importer
       last_name: nil_if_hex_chars(member_info['merge_fields']['LNAME']),
       greeting: nil_if_hex_chars(member_info['merge_fields']['GREETING']),
       groupings: member_info['merge_fields']['GROUPINGS'],
-      status: member_info['status']
+      status: member_info['status'].downcase,
+      unsubscribe_reason: member_info['unsubscribe_reason']
     }
   end
 
@@ -93,7 +98,7 @@ class MailChimp::Importer
   end
 
   def add_or_remove_person_from_newsletter(person, member_info)
-    person.optout_enewsletter = true if person_should_be_opted_out?(person, member_info)
+    person.optout_enewsletter = person_opt_out_value(person, member_info)
     person.email = member_info[:email]
     person.save(validate: false)
 
@@ -103,17 +108,19 @@ class MailChimp::Importer
   end
 
   def primary_email_address_should_be_made_historic?(member_info)
-    member_info[:status].casecmp('cleaned').zero?
+    member_info[:status] == 'cleaned'
   end
 
-  def person_should_be_opted_out?(person, member_info)
-    %w(cleaned unsubscribed).include?(member_info[:status].downcase) || person.contact&.send_newsletter == 'None'
+  def person_opt_out_value(person, member_info)
+    return person.optout_enewsletter if member_info[:unsubscribe_reason] == ADMIN_UNSUBSCRIBE_REASON
+
+    member_info[:status] == 'unsubscribed'
   end
 
   def add_or_remove_contact_from_newsletter(contact, member_info)
     return if [nil, '', 'None'].include? contact.send_newsletter
 
-    if member_info[:status].casecmp('unsubscribed').zero?
+    if member_info[:status] == 'unsubscribed'
       remove_from_newsletter_if_all_opt_out(contact)
     else
       contact.update(send_newsletter: (contact.send_newsletter == 'Physical' ? 'Both' : 'Email'))
