@@ -36,6 +36,19 @@ RSpec.describe MailChimp::ConnectionHandler do
           end.to change { mail_chimp_account.reload.active }
         end
       end
+
+      context 'Deactivated account' do
+        let(:error_message) { 'This account has been deactivated.' }
+
+        it 'sets the mail chimp account to inactive and sends an email' do
+          raise_error_on_two_way_sync
+          expect_invalid_mailchimp_key_email
+
+          expect do
+            subject.call_mail_chimp(mail_chimp_syncer, :two_way_sync_with_primary_list)
+          end.to change { mail_chimp_account.reload.active }
+        end
+      end
     end
 
     context 'Invalid merge fields' do
