@@ -76,7 +76,7 @@ class MailChimp::Exporter
     def find_interests(interest_category_id)
       gibbon_list.interest_categories(interest_category_id)
                  .interests
-                 .retrieve['interests']
+                 .retrieve(params: { fields: 'interests.id,interests.name', count: 60 })['interests']
                  .map { |interest| { interest['name'] => interest['id'] } }
                  .reduce({}, :merge) || {}
     end
