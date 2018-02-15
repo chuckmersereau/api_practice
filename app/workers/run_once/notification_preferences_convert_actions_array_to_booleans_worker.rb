@@ -12,8 +12,8 @@ class RunOnce::NotificationPreferencesConvertActionsArrayToBooleansWorker
 
   def convert_actions_array_to_booleans(notification_preference)
     notification_preference.update_attributes(
-      email: actions.include?('email'),
-      task: actions.include?('task')
+      email: notification_preference.actions.include?('email'),
+      task: notification_preference.actions.include?('task')
     )
   end
 end
