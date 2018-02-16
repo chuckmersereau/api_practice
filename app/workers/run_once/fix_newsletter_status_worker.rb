@@ -95,8 +95,15 @@ class RunOnce::FixNewsletterStatusWorker
       # if the email isn't a primary, it doesn't belong on the list anyway
       next unless primary_email_exists?(member['email_address'])
 
-      # if the member is not currently unsubscribed and not unsubscribed by MPDX, leave them off
-      next unless mpdx_unsubscribe
+      unless mpdx_unsubscribe
+        # if they have an unsubscribe reason other than via admin and are unsubscribed, ensure
+        # optout_enewsletter is true
+        ensure_optout(member['email_address']) if member['status'] == 'unsubscribed'
+
+        # if the member is not currently unsubscribed and not unsubscribed by MPDX, leave them off
+        # the new list
+        next
+      end
 
       activity_search_params = { params: {
         action: 'sent', fields: 'activity.timestamp'
@@ -120,6 +127,14 @@ class RunOnce::FixNewsletterStatusWorker
 
   def emails_to_resubscribe(members_to_resubscribe)
     members_to_resubscribe.collect { |member| member['email_address'] }
+  end
+
+  def ensure_optout(email)
+    people = @account.account_list
+                     .people
+                     .joins(:email_addresses)
+                     .where(email_addresses: { email: email, primary: true })
+    people.each { |person| person.update(optout_enewsletter: true) }
   end
 
   # resets the optout_newsletter and send_newsletter fields based on the fact that people are getting the letter
