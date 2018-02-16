@@ -55,10 +55,10 @@ class RunOnce::FixNewsletterStatusWorker
     return unless emails.any?
     log("-- emailing #{emails}")
     mail = if @new_list
-             RunOnceMailer.create_new_mailchimp_list(emails,
-                                                     fix_count.contacts_tagged,
-                                                     @account.account_list.name,
-                                                     link_for_list)
+             RunOnceMailer.new_mailchimp_list(emails,
+                                              fix_count.contacts_tagged,
+                                              @account.account_list.name,
+                                              link_for_list)
            elsif fix_count.contacts_tagged.positive?
              RunOnceMailer.fix_newsletter_status(emails, fix_count.contacts_tagged, @account.account_list.name)
            end
