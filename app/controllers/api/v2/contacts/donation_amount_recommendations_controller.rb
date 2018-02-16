@@ -36,7 +36,8 @@ class Api::V2::Contacts::DonationAmountRecommendationsController < Api::V2Contro
 
   def load_donation_amount_recommendations
     @donation_amount_recommendations = donation_amount_recommendation_scope.where(filter_params)
-                                                                           .reorder(sorting_param)
+                                                                           .reorder(:created_at)
+                                                                           .order(sorting_param)
                                                                            .page(page_number_param)
                                                                            .per(per_page_param)
   end

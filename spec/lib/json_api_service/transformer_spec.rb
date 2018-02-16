@@ -6,9 +6,10 @@ require 'support/json_api_service_helper'
 module JsonApiService
   RSpec.describe Transformer, type: :service do
     include JsonApiServiceHelpers
+    UUID_REGEX = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i unless defined? UUID_REGEX
 
     before do
-      allow(id_REGEX).to receive(:match).and_return(true)
+      allow(UUID_REGEX).to receive(:match).and_return(true)
     end
 
     describe '.transform' do
@@ -176,7 +177,7 @@ module JsonApiService
           before do
             mock_id_reference(
               from: 'qwe123',
-              to: 10,
+              to: 'qwe123',
               resource: MockAccountList
             )
           end
@@ -186,7 +187,7 @@ module JsonApiService
               action: 'index',
               controller: 'mock_contacts',
               filter: {
-                mock_account_list_id: 10
+                mock_account_list_id: 'qwe123'
               }
             }
 
@@ -212,7 +213,7 @@ module JsonApiService
           before do
             mock_id_reference(
               from: %w(qwe123 rty890),
-              to: [10, 15],
+              to: %w(qwe123 rty890),
               resource: MockAccountList
             )
           end
@@ -222,10 +223,7 @@ module JsonApiService
               action: 'index',
               controller: 'mock_contacts',
               filter: {
-                mock_account_list_id: [
-                  10,
-                  15
-                ]
+                mock_account_list_id: %w(qwe123 rty890)
               }
             }
 
@@ -343,7 +341,7 @@ module JsonApiService
           before do
             mock_id_reference(
               from: %w(abc123 none),
-              to: [10, nil],
+              to: ['abc123', nil],
               resource: MockContact
             )
           end
@@ -351,7 +349,7 @@ module JsonApiService
           it 'correctly transforms the values' do
             expected_hash = {
               mock_contact_referral: {
-                referred_by_id: 10,
+                referred_by_id: 'abc123',
                 referred_to_id: nil
               },
               action: 'create'
@@ -386,12 +384,12 @@ module JsonApiService
 
           let(:transformer) { build_transformer(params: params) }
 
-          before { mock_id_reference(from: 'abc123', to: 5, resource: MockAccountList) }
+          before { mock_id_reference(from: 'abc123', to: 'abc123', resource: MockAccountList) }
 
           it 'correctly transforms the values' do
             expected_hash = {
               mock_contact: {
-                mock_account_list_id: 5,
+                mock_account_list_id: 'abc123',
                 name: 'Steve Rogers'
               },
               action: 'create'
@@ -616,19 +614,19 @@ module JsonApiService
       before do
         mock_id_reference(
           from: '10e9f7f5-b027-4e04-8192-b9b698ac0b18',
-          to: 20,
+          to: '10e9f7f5-b027-4e04-8192-b9b698ac0b18',
           resource: MockPerson
         )
 
         mock_id_reference(
           from: '144b83e8-b7f6-48c8-9c0e-688785bf6164',
-          to: 25,
+          to: '144b83e8-b7f6-48c8-9c0e-688785bf6164',
           resource: MockAccountList
         )
 
         mock_id_reference(
           from: '91374910-ef15-11e6-8787-ef17a057947e',
-          to: 30,
+          to: '91374910-ef15-11e6-8787-ef17a057947e',
           resource: MockComment
         )
       end
@@ -640,12 +638,12 @@ module JsonApiService
             start_at: '2017-02-09T22:17:28.854Z',
             no_date: true,
             subject: 'An appointment to talk about Orange Soda',
-            mock_account_list_id: 25,
+            mock_account_list_id: '144b83e8-b7f6-48c8-9c0e-688785bf6164',
             mock_comments_attributes: [
               {
                 id: '91374910-ef15-11e6-8787-ef17a057947e',
                 body: 'I love Orange Soda',
-                mock_person_id: 20,
+                mock_person_id: '10e9f7f5-b027-4e04-8192-b9b698ac0b18',
                 overwrite: true
               }
             ]
