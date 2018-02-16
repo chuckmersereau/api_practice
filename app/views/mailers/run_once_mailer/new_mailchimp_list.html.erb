@@ -1,0 +1,90 @@
+<p>
+  We wanted to update you on the progress of the MailChimp issues. We have made some progress on
+  helping fix your newsletter list in your following account:
+</p>
+<p>
+  <span style='font-weight: bold'><%= @account_list_name %></span>
+</p>
+<p>
+  Since we last communicated with you our top priority has been restoring your newsletter list as
+  accurately as possible. As of today, we have worked up a couple of solutions to help accomplish this.
+</p>
+<p>
+  We have made some changes to your MailChimp account and MPDX account to help you recover your newsletter list.
+  <span style='font-weight: bold'>These changes will most likely require review on your part, so please read this entire email.</span>
+</p>
+<p>Here is a quick explanation of what we have done:</p>
+<ol>
+  <li>
+    We used your old campaigns in MailChimp to create
+    <%= link_to 'a new MailChimp list', @mc_list_url %>.
+  </li>
+  <li>We used that new list in MailChimp to update <%= @fixed_count %> MPDX contacts.</li>
+  <li>We made that new list in MailChimp your primary list that MPDX syncs to.</li>
+</ol>
+<p>
+  First, and most important, we highly encourage you to make sure all of your financial partners are
+  receiving a newsletter right now. We suggest before doing anything else that in MPDX you go to
+  <a href="https://mpdx.org/contacts">Contacts</a> and filter your Status by Partner-Financial.
+</p>
+<%= image_tag 'https://s3.amazonaws.com/mpdx/mailer_images/media-20180215.png' %>
+<p>
+  Check this list and make sure that every one of them are on your newsletter list. We also suggest
+  you do this with everybody marked as Partner-Special, or who has given you a gift in the last two years.
+</p>
+<a href="https://s3.amazonaws.com/mpdx/mailer_images/given_in_last_two_years.png">
+  <%= image_tag 'https://s3.amazonaws.com/mpdx/mailer_images/given_in_last_two_years.png', height: 200 %>
+</a>
+<br />
+<p>
+  To help resolve the problems caused by the bug, we have created a new list for you in MailChimp.
+  <%= link_to 'Click here to see that new list.', @mc_list_url, style: 'font-weight: bold' %>.
+</p>
+<p>
+  This list is a combination of everybody that received a MailChimp campaign from you over the last
+  7 months. We chose this timeframe because we believe the major MPDX issues with MailChimp started
+  6 months ago.
+</p>
+<p>
+  Next, we used this new list in MailChimp to update your MPDX contacts. If we found someone in your
+  MailChimp list that was opted out in MPDX, we opted them back in
+  (<a href="http://mpdx.helpscoutdocs.com/article/170-mailchimp-sync">find out more about what
+  Opted Out means and where to find it here</a>). Also, we checked that persons newsletter status in
+  MPDX. If they were not marked as receiving your newsletter, we set their Newsletter status to
+  Email. If they were already set as receiving your Physical newsletter, we updated them to receive Both.
+</p>
+<h4>This affected <%= @fixed_count %> contacts.</h4>
+<p>
+  We know that you may have made some changes in MailChimp or MPDX to a contact on purpose. So to
+  make sure you know who we have updated, we have added the tag “MailChimp Updated” to every contact
+  we’ve updated. You can filter your contacts by this tag to see everybody that MPDX has updated
+  based on this fix.
+</p>
+<a href="https://s3.amazonaws.com/mpdx/mailer_images/contacts_filter_example.png">
+  <%= image_tag 'https://s3.amazonaws.com/mpdx/mailer_images/contacts_filter_example.png', height: 200 %>
+</a>
+<p>
+  Finally, we have updated your connection to MailChimp. The new list we created is now set as your
+  primary list. If after looking through the list you do not want to use this list anymore, feel
+  free to change your settings in MPDX
+  (<a href="https://mpdx.org/preferences/integrations">Connect Services</a>) back to your previous list.
+</p>
+<a href="https://s3.amazonaws.com/mpdx/mailer_images/mailchimp_connection_settings.png">
+  <%= image_tag 'https://s3.amazonaws.com/mpdx/mailer_images/mailchimp_connection_settings.png', height: 200 %>
+</a>
+<p>
+  While we have not restored full functionality to our MailChimp sync, we are working on fixing the
+  bugs in the process and increasing the stability of the integration. For now, the sync will be
+  only one-way to MailChimp.
+</p>
+<p>
+  We want to reiterate how grieved we are by this. Like, you, we with MPDX are supported staff and
+  many of us were impacted by this, as well. We feel the pain of having to check our list to make
+  sure our partners are getting the communication from us they deserve. The integrity of your data
+  is our primary concern.
+</p>
+<p>Thank you for your patience,</p>
+<p>
+  Your MPDX Team<br>
+  support@mpdx.org
+</p>

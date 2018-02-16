@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.5
--- Dumped by pg_dump version 9.6.5
+-- Dumped from database version 9.6.6
+-- Dumped by pg_dump version 10.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1492,6 +1492,42 @@ CREATE SEQUENCE family_relationships_id_seq
 --
 
 ALTER SEQUENCE family_relationships_id_seq OWNED BY family_relationships.id;
+
+
+--
+-- Name: fix_counts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE fix_counts (
+    id integer NOT NULL,
+    account_list_id integer,
+    old_members integer DEFAULT 0,
+    new_members integer DEFAULT 0,
+    people_changed integer DEFAULT 0,
+    contacts_changed integer DEFAULT 0,
+    contacts_tagged integer DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: fix_counts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE fix_counts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: fix_counts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE fix_counts_id_seq OWNED BY fix_counts.id;
 
 
 --
@@ -3480,6 +3516,13 @@ ALTER TABLE ONLY family_relationships ALTER COLUMN id SET DEFAULT nextval('famil
 
 
 --
+-- Name: fix_counts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY fix_counts ALTER COLUMN id SET DEFAULT nextval('fix_counts_id_seq'::regclass);
+
+
+--
 -- Name: google_contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -4082,6 +4125,14 @@ ALTER TABLE ONLY export_logs
 
 ALTER TABLE ONLY family_relationships
     ADD CONSTRAINT family_relationships_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: fix_counts fix_counts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY fix_counts
+    ADD CONSTRAINT fix_counts_pkey PRIMARY KEY (id);
 
 
 --
@@ -5259,6 +5310,13 @@ CREATE INDEX index_family_relationships_on_related_person_id ON family_relations
 --
 
 CREATE UNIQUE INDEX index_family_relationships_on_uuid ON family_relationships USING btree (uuid);
+
+
+--
+-- Name: index_fix_counts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_fix_counts_on_account_list_id ON fix_counts USING btree (account_list_id);
 
 
 --
@@ -7173,3 +7231,6 @@ INSERT INTO schema_migrations (version) VALUES ('20171215011225');
 INSERT INTO schema_migrations (version) VALUES ('20171219033014');
 
 INSERT INTO schema_migrations (version) VALUES ('20180201214927');
+
+INSERT INTO schema_migrations (version) VALUES ('20180214193958');
+
