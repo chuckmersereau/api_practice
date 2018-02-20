@@ -17,7 +17,11 @@ class NotificationPreferencesCopyUserSpecificVersionsWorker
       notification_preference.dup.tap do |user_notification_preference|
         user_notification_preference.uuid = nil
         user_notification_preference.user_id = account_list_user.user_id
-        user_notification_preference.save!
+        begin
+          user_notification_preference.save
+        rescue ActiveRecord::RecordNotUnique
+          next
+        end
       end
     end
   end
