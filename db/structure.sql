@@ -2252,7 +2252,6 @@ CREATE TABLE notification_preferences (
     id integer NOT NULL,
     notification_type_id integer,
     account_list_id integer,
-    actions text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4(),
@@ -7231,6 +7230,8 @@ INSERT INTO schema_migrations (version) VALUES ('20171215011225');
 INSERT INTO schema_migrations (version) VALUES ('20171219033014');
 
 INSERT INTO schema_migrations (version) VALUES ('20180201214927');
+
+INSERT INTO schema_migrations (version) VALUES ('20180202024129');
 
 INSERT INTO schema_migrations (version) VALUES ('20180214193958');
 

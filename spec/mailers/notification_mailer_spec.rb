@@ -1,15 +1,13 @@
 require 'rails_helper'
 
 describe NotificationMailer do
+  let!(:user) { create(:user) }
+  let!(:email_address) { create(:email_address, person: user) }
+  let(:notifications_by_type) { {} }
   describe 'notify' do
     it 'renders the email correctly' do
-      notifications_by_type = {}
-      email = build(:email_address)
-      account_list = double(users: [double(email: email)])
-
-      email = NotificationMailer.notify(account_list, notifications_by_type)
-
-      expect(email.to)
+      email = NotificationMailer.notify(user.reload, notifications_by_type)
+      expect(email.to).to eq [email_address.email]
     end
   end
 end
