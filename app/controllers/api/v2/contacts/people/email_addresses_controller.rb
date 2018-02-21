@@ -76,6 +76,7 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   def load_email_addresses
     @email_addresses = email_address_scope.where(filter_params)
                                           .reorder(sorting_param)
+                                          .order(:created_at)
                                           .page(page_number_param)
                                           .per(per_page_param)
   end

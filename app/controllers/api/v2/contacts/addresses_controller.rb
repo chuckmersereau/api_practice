@@ -75,6 +75,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   def load_addresses
     @addresses = address_scope.where(filter_params)
                               .reorder(sorting_param)
+                              .order(:created_at)
                               .page(page_number_param)
                               .per(per_page_param)
   end

@@ -22,6 +22,7 @@ class Api::V2::Contacts::ReferrersController < Api::V2Controller
   def load_referrers
     @referrers = referrer_scope.where(filter_params)
                                .reorder(sorting_param)
+                               .order(:created_at)
                                .page(page_number_param)
                                .per(per_page_param)
   end

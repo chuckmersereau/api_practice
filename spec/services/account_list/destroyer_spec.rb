@@ -2,7 +2,7 @@ require 'rails_helper'
 require Rails.root.join('db/seeders/application_seeder')
 
 RSpec.describe AccountList::Destroyer do
-  let(:user) { User.first }
+  let(:user) { User.order(:created_at).first }
   let(:account_list) { user.account_lists.first }
   let(:destroyer) { AccountList::Destroyer.new(account_list.id) }
 
@@ -52,7 +52,10 @@ RSpec.describe AccountList::Destroyer do
         account_list.contacts.collect(&:contact_referrals_by_me).flatten,
         account_list.contacts.collect(&:addresses).flatten,
         account_list.designation_accounts,
+        account_list.designation_accounts.collect(&:account_list_entries).flatten,
+        account_list.designation_accounts.collect(&:balances).flatten,
         account_list.designation_accounts.collect(&:designation_profile_accounts).flatten,
+        account_list.designation_accounts.collect(&:donations).flatten,
         account_list.designation_profiles,
         account_list.donations,
         account_list.google_integrations,
@@ -84,7 +87,7 @@ RSpec.describe AccountList::Destroyer do
     end
 
     let(:records_to_leave_alone) do
-      (ApplicationRecord.descendants - [User, User::Coach]).collect do |klass|
+      (ApplicationRecord.descendants - [User, User::Coach, DonationAmountRecommendation::Remote]).collect do |klass|
         klass.all.to_a.presence
       end.flatten - records_to_delete
     end

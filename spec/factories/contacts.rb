@@ -10,7 +10,6 @@ FactoryGirl.define do
     pledge_frequency 1
     pledge_start_date { 35.days.ago }
     status 'Partner - Financial'
-    id { SecureRandom.uuid }
     website { Faker::Internet.url }
 
     factory :contact_with_person do

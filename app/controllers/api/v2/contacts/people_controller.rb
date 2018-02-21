@@ -86,6 +86,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
     @people = Person::Filterer.new(filter_params)
                               .filter(scope: person_scope, account_lists: account_lists)
                               .reorder(sorting_param)
+                              .order(:created_at)
                               .page(page_number_param)
                               .per(per_page_param)
   end

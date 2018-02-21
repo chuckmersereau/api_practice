@@ -45,6 +45,7 @@ class Api::V2::TasksController < Api::V2Controller
     @tasks = Task::Filterer.new(filter_params)
                            .filter(scope: task_scope, account_lists: account_lists)
                            .reorder(sorting_param || default_sorting)
+                           .order(:created_at)
                            .page(page_number_param)
                            .per(per_page_param)
   end
@@ -106,7 +107,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def default_sorting
-    'activities.completed ASC,activities.completed_at DESC,activities.start_at ASC NULLS LAST,activities.created_at ASC'
+    'activities.completed ASC,activities.completed_at DESC,activities.start_at ASC NULLS LAST'
   end
 
   def permitted_filters

@@ -40,8 +40,8 @@ class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
   end
 
   def load_imports
-    @imports = import_scope.reorder(:created_at)
-                           .order(sorting_param)
+    @imports = import_scope.reorder(sorting_param)
+                           .order(:created_at)
                            .page(page_number_param)
                            .per(per_page_param)
   end

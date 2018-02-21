@@ -15,7 +15,7 @@ RSpec.describe Api::V2::Contacts::People::EmailAddressesController, type: :contr
     :email_address
   end
 
-  # This is required!
+  # This is required!spec/workers/duplicate_tasks_per_contact_spec.rb
   let!(:resource) do
     # Creates the Singular Resource for this spec - change as needed
     # Example: create(:contact, account_list: account_list)

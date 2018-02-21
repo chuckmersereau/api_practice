@@ -11,14 +11,14 @@ module AddressMethods
     has_many :addresses, (lambda do
       where(deleted: false)
         .order('addresses.primary_mailing_address::int desc')
-        .order(:master_address_id).order(:street).order(:id)
+        .order(:master_address_id).order(:street).order(:created_at)
     end), as: :addressable
 
     has_many :addresses_including_deleted, class_name: 'Address', as: :addressable
 
     has_one :primary_address, (lambda do
       where(primary_mailing_address: true, deleted: false).where.not(historic: true)
-        .order(:master_address_id).order(:street).order(:id)
+        .order(:master_address_id).order(:street).order(:created_at)
     end), class_name: 'Address', as: :addressable, autosave: true
 
     accepts_nested_attributes_for :addresses, reject_if: :blank_or_duplicate_address?, allow_destroy: true

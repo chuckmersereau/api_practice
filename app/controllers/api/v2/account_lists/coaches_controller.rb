@@ -33,6 +33,7 @@ class Api::V2::AccountLists::CoachesController < Api::V2Controller
   def load_coaches
     @coaches = coach_scope.where(filter_params)
                           .reorder(sorting_param)
+                          .order(:created_at)
                           .page(page_number_param)
                           .per(per_page_param)
   end

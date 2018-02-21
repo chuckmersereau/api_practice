@@ -98,7 +98,7 @@ RSpec.describe DuplicateTasksPerContact do
 
     it 'ensures each Task has unique comments' do
       subject
-      new_task = Task.last
+      new_task = Task.order(:created_at).last
       expect((task.comments.pluck(:id) - new_task.comments.pluck(:id)).size).to eq 2
     end
   end

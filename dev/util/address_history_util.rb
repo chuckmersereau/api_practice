@@ -1,7 +1,7 @@
 def address_versions(contact)
   Version.where(related_object_type: 'Contact',
                 related_object_id: contact.id,
-                item_type: 'Address').order(:id)
+                item_type: 'Address').order(:created_at)
 end
 
 def print_address_versions(contact)
@@ -15,7 +15,7 @@ end
 def pl_param_history(contact, detail = false)
   address_change_versions = []
   last_pl_params = nil
-  contact.versions.order(:id).each do |version|
+  contact.versions.order(:created_at).each do |version|
     object = YAML.load(version.object)
     pl_params = object['prayer_letters_params']
     if pl_params != last_pl_params

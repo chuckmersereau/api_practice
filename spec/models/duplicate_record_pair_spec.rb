@@ -10,7 +10,7 @@ describe DuplicateRecordPair, type: :model do
     duplicate_record_pair = DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing')
     expect(duplicate_record_pair.record_one_id).to eq(record_one.id)
     expect(duplicate_record_pair.record_two_id).to eq(record_two.id)
-    expect(duplicate_record_pair.record_two_id > duplicate_record_pair.record_one_id).to eq(true)
+    expect(duplicate_record_pair.record_two.created_at > duplicate_record_pair.record_one.created_at).to eq(true)
 
     duplicate_record_pair.update!(record_one_id: record_two.id, record_two_id: record_one.id)
     expect(duplicate_record_pair.record_one_id).to eq(record_one.id)
@@ -53,7 +53,7 @@ describe DuplicateRecordPair, type: :model do
         record_two: record_two,
         reason: 'Testing'
       )
-    end.to_not raise_error(ActiveRecord::RecordInvalid)
+    end.to_not raise_error
     expect do
       DuplicateRecordPair.create!(
         account_list: other_account_list,
@@ -89,7 +89,7 @@ describe DuplicateRecordPair, type: :model do
         reason: 'Testing 1',
         ignore: true
       )
-    end.to_not raise_error(ActiveRecord::RecordInvalid)
+    end.to_not raise_error
 
     expect do
       DuplicateRecordPair.create!(
@@ -185,7 +185,7 @@ describe DuplicateRecordPair, type: :model do
         record_two: record_two,
         reason: 'Testing'
       )
-    end.to raise_error(ActiveRecord::RecordInvalid)
+    end.to raise_error
     expect do
       DuplicateRecordPair.create!(
         account_list: account_list,
@@ -219,7 +219,7 @@ describe DuplicateRecordPair, type: :model do
         record_two: record_three,
         reason: 'Testing'
       )
-    end.to_not raise_error(ActiveRecord::RecordInvalid)
+    end.to_not raise_error
     expect do
       DuplicateRecordPair.create!(
         account_list: account_list,
@@ -240,7 +240,7 @@ describe DuplicateRecordPair, type: :model do
     end
 
     it "returns DuplicateRecordPair's with the expected type" do
-      expect(DuplicateRecordPair.type('Contact').to_a).to eq([duplicate_record_pair_one, duplicate_record_pair_two])
+      expect(DuplicateRecordPair.type('Contact').to_a).to contain_exactly(duplicate_record_pair_one, duplicate_record_pair_two)
       expect(DuplicateRecordPair.type('Person').to_a).to eq([])
     end
   end

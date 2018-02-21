@@ -420,7 +420,6 @@ resource 'People' do
         expect(resource.family_relationships).to be_empty
 
         do_request nested_family_relationship_data
-
         expect(response_status).to eq(200), invalid_status_detail
         expect(resource.reload.family_relationships).not_to be_empty
       end

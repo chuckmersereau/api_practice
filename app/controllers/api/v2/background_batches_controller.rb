@@ -14,6 +14,7 @@ class Api::V2::BackgroundBatchesController < Api::V2Controller
   end
 
   def create
+    binding.pry
     persist_background_batch
   end
 

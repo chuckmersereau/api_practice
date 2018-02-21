@@ -1013,14 +1013,14 @@ describe GoogleContactsIntegrator do
         address.attributes.symbolize_keys.slice(:street, :city, :state, :postal_code, :country, :location,
                                                 :primary_mailing_address)
       end
-      expect(addresses).to eq([
-                                { street: '100 Lake Hart Dr.', city: 'Orlando', state: 'FL', postal_code: '32832',
-                                  country: 'United States', location: 'Business', primary_mailing_address: true },
-                                { street: '2345 Long Dr. #232', city: 'Somewhere', state: 'IL', postal_code: '12345',
-                                  country: 'United States', location: 'Home', primary_mailing_address: false },
-                                { street: '123 Big Rd', city: 'Anywhere', state: 'MO', postal_code: '56789',
-                                  country: 'United States', location: 'Business', primary_mailing_address: false }
-                              ])
+      expect(addresses).to contain_exactly(
+        { street: '100 Lake Hart Dr.', city: 'Orlando', state: 'FL', postal_code: '32832',
+          country: 'United States', location: 'Business', primary_mailing_address: true },
+        { street: '2345 Long Dr. #232', city: 'Somewhere', state: 'IL', postal_code: '12345',
+          country: 'United States', location: 'Home', primary_mailing_address: false },
+        { street: '123 Big Rd', city: 'Anywhere', state: 'MO', postal_code: '56789',
+          country: 'United States', location: 'Business', primary_mailing_address: false }
+      )
 
       last_data = {
         name_prefix: 'Mr', given_name: 'John', additional_name: 'Henry', family_name: 'Google', name_suffix: 'III',
