@@ -629,6 +629,17 @@ describe DataServer do
       data_server.import_profile_balance(profile)
       expect(designation_account.reload.balance).to eq(123.45)
     end
+    it 'should not update a designation account balance when there is more than one designation number' do
+      stub_request(:post, /.*accounts/).to_return(
+        body: '"EMPLID","EFFDT","BALANCE","ACCT_NAME"'\
+              "\n"\
+              '"0000000,0000001","2012-03-23 16:01:39.0","123.45","Test Account"'\
+              "\n"
+      )
+      designation_account = create(:designation_account, organization: organization, designation_number: '0000000', balance: 0)
+      data_server.import_profile_balance(profile)
+      expect(designation_account.reload.balance).to eq(0)
+    end
   end
 
   describe 'import donations' do
