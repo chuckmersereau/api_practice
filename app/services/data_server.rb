@@ -226,7 +226,8 @@ class DataServer
         end
       end
     rescue DataServerError => e
-      return false if e.message =~ /password/
+      # provid?ed is necessary because there is a typo in the error message
+      return false if e.message =~ /password/ || e.message =~ /No client_id was provid?ed/
       raise e
     rescue Errno::ETIMEDOUT
       return false

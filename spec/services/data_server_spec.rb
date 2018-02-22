@@ -496,6 +496,12 @@ describe DataServer do
         data_server.validate_credentials
       end.to raise_error(DataServerError)
     end
+    it 'returns false if the error message says oauth is required' do
+      expect(data_server).to receive(:get_response).and_raise(
+        DataServerError.new('ERROR\nNo client_id was provied.  This application must use OAUTH to download data.')
+      )
+      expect(data_server.validate_credentials).to eq(false)
+    end
   end
 
   describe 'get_response' do
