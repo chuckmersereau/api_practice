@@ -2,8 +2,12 @@
 require 'elasticsearch/persistence/model'
 require 'audited'
 
-Elasticsearch::Persistence.client = Elasticsearch::Client.new host: ENV['ELASTICSEARCH_URL'],
-                                                              port: ENV['ELASTICSEARCH_PORT']
+Elasticsearch::Persistence.client = if Rails.env.test?
+                                      Elasticsearch::Client.new host: 'example.com'
+                                    else
+                                      Elasticsearch::Client.new host: ENV['ELASTICSEARCH_URL'],
+                                                                port: ENV['ELASTICSEARCH_PORT']
+                                    end
 
 module Audited
   class Audit
@@ -12,25 +16,7 @@ module Audited
     end
   end
 
-  class AuditElastic
-    include Elasticsearch::Persistence::Model
-
-    index_name ['mpdx', Rails.env, Date.today.to_s.tr('-', '.')].join('-')
-
-    attribute :auditable_id, Integer
-    attribute :auditable_type, String
-    attribute :associated_id, Integer
-    attribute :associated_type, String
-    attribute :user_id, String
-    attribute :user_type, String
-    attribute :action, String
-    attribute :audited_changes, String # Hash, mapping: { type: 'object' }
-    attribute :comment, String
-    attribute :remote_address, String
-    attribute :request_uuid, String
-    attribute :created_at, DateTime
-  end
-
+  # monkey-patch gem module
   module Auditor
     module AuditedInstanceMethods
       def write_audit(attrs)
@@ -51,18 +37,7 @@ module Audited
       end
 
       def audits
-        Audited::AuditElastic.search(
-          query: {
-            bool: {
-              must: [
-                { match: { auditable_type: self.class.to_s } },
-                { match: { auditable_id: id } }
-              ]
-            }
-          },
-          sort: 'created_at',
-          size: 100
-        )
+        Audited::AuditSearch.search_by(auditable_type: self.class.to_s, auditable_id: id)
       end
 
       private
@@ -81,7 +56,7 @@ module Audited
 
       def set_audit_user(attrs)
         return if attrs[:user_id]
-        user = ::Audited.store[:audited_user] || ::Audited.store[:current_user].try!(:call)
+        user = ::Audited.store[:audited_user] || ::Audited.store[:current_user]&.call
         set_model_field(attrs, :user, user)
       end
 
