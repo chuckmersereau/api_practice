@@ -3,6 +3,8 @@ require 'async'
 class MailChimpAccount < ApplicationRecord
   COUNT_PER_PAGE = 100
 
+  audited associated_with: :account_list
+
   belongs_to :account_list
   has_one :mail_chimp_appeal_list, dependent: :destroy
   has_many :mail_chimp_members, dependent: :destroy
