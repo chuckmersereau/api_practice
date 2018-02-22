@@ -48,17 +48,20 @@ class Task < Activity
       comments_attributes: [
         :body,
         :id,
+        :_client_id,
         :person_id,
         :overwrite
       ],
       activity_contacts_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite
       ],
       contacts_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite
       ]
     }

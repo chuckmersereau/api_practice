@@ -12,7 +12,7 @@ resource 'Account Lists > Imports > from TNT XML' do
   let!(:user)         { create(:user_with_account) }
 
   let!(:fb_account)     { create(:facebook_account, person_id: user.id) }
-  let!(:account_list)   { user.account_lists.first }
+  let!(:account_list)   { user.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
 
   let(:import) do

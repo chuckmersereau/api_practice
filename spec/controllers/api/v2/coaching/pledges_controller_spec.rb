@@ -6,7 +6,7 @@ describe Api::V2::Coaching::PledgesController, type: :controller do
   let(:user) { create(:user, locale: :en) }
 
   let(:owner) { create(:user_with_account) }
-  let(:account_list) { owner.account_lists.first }
+  let(:account_list) { owner.account_lists.order(:created_at).first }
 
   let(:contact) { create :contact, account_list: account_list }
   let(:appeal) { create :appeal, account_list: account_list }

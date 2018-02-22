@@ -10,9 +10,9 @@ RSpec.describe NorthStarReport, type: :model do
       u1 = create(:user_with_account)
       u2 = create(:user_with_account)
 
-      u1.account_lists.first.tasks << create(:task, completed_at: 1.week.ago)
-      u1.account_lists.first.tasks << create(:task, completed_at: 2.weeks.ago)
-      u2.account_lists.first.tasks << create(:task, completed_at: 1.week.ago)
+      u1.account_lists.order(:created_at).first.tasks << create(:task, completed_at: 1.week.ago)
+      u1.account_lists.order(:created_at).first.tasks << create(:task, completed_at: 2.weeks.ago)
+      u2.account_lists.order(:created_at).first.tasks << create(:task, completed_at: 1.week.ago)
     end
 
     it 'loads counts' do
@@ -31,9 +31,9 @@ RSpec.describe NorthStarReport, type: :model do
       u1 = create(:user_with_account)
       u2 = create(:user_with_account)
 
-      u1.account_lists.first.tasks << create(:task, completed_at: 1.month.ago)
-      u1.account_lists.first.tasks << create(:task, completed_at: 2.months.ago)
-      u2.account_lists.first.tasks << create(:task, completed_at: 1.month.ago)
+      u1.account_lists.order(:created_at).first.tasks << create(:task, completed_at: 1.month.ago)
+      u1.account_lists.order(:created_at).first.tasks << create(:task, completed_at: 2.months.ago)
+      u2.account_lists.order(:created_at).first.tasks << create(:task, completed_at: 1.month.ago)
     end
 
     it 'loads counts' do

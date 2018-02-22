@@ -91,8 +91,9 @@ describe Api::V2Controller do
 
     describe 'Filters' do
       let(:contact) { create(:contact) }
+      let(:fake_contact_id) { SecureRandom.uuid }
 
-      it 'allows a user to filter by id using a id' do
+      it 'allows a user to filter by id' do
         api_login(user)
         get :index, filter: { contact_id: contact.id }
         expect(response.status).to eq(200), invalid_status_detail
@@ -100,26 +101,14 @@ describe Api::V2Controller do
         expect(response_json[:filter_params_with_id][:contact_id]).to eq(contact.id)
       end
 
-      it 'returns a 404 when a user tries to filter with the id of a resource' do
-        api_login(user)
-        get :index, filter: { contact_id: contact.id }
-        expect(response.status).to eq(404), invalid_status_detail
-        expect(response.body).to include("Resource 'contact' with id '#{contact.id}' does not exist")
-      end
-
-      it 'returns a 404 when a user tries to filter with a resource that does not exist' do
-        api_login(user)
-        get :index, filter: { contact_id: 'AXXSAASA222Random' }
-        expect(response.status).to eq(404), invalid_status_detail
-        expect(response.body).to include("Resource 'contact' with id 'AXXSAASA222Random' does not exist")
-      end
-
       context '#date range' do
         it 'returns a 400 when a user tries to filter with an invalid date range' do
           api_login(user)
           get :index, filter: { time_at: '2016-20-12...2016-23-12' }
           expect(response.status).to eq(400), invalid_status_detail
-          expect(response.body).to include("Wrong format of date range for filter 'time_at', should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates")
+          expect(response.body).to include(
+            "Wrong format of date range for filter 'time_at', should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates"
+          )
         end
       end
     end

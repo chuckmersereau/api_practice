@@ -14,7 +14,7 @@ RSpec.describe BulkResourceSerializer, type: :serializer do
       contact
     end
 
-    let(:contact) { build(:contact) }
+    let(:contact) { build(:contact, id: SecureRandom.uuid) }
     let(:resources) { [contact, create(:contact), contact_with_error, contact_with_conflict_error] }
 
     let(:serializer) { BulkResourceSerializer.new(resources: resources) }

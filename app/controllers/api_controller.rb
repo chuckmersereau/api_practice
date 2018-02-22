@@ -98,7 +98,7 @@ class ApiController < ActionController::API
 
   def render_403_from_exception(exception)
     type = JsonApiService.configuration.resource_lookup.find_type_by_class(exception&.record&.class)
-    detail = exception&.record&.id ? "Not allowed to perform that action on the resource with ID #{exception.record.id} of type #{type}" : nil
+    detail = exception&.record.try(:id) ? "Not allowed to perform that action on the resource with ID #{exception.record.id} of type #{type}" : nil
     render_403(detail: detail)
   end
 

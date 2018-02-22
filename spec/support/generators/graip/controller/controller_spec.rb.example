@@ -5,7 +5,7 @@ RSpec.describe Api::V2::EmailAddressesController, type: :controller do
   let(:user) { create(:user_with_account) }
 
   # This MAY be required!
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   # This is required!
   let(:factory_type) do

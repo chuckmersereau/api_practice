@@ -30,15 +30,20 @@ class DonationImports::Siebel
         @mpdx_person = find_mpdx_person_from_siebel_person
 
         @mpdx_person.attributes = generate_new_mpdx_person_attributes if @mpdx_person.new_record?
-        @mpdx_person.master_person_id ||= MasterPerson.find_or_create_for_person(@mpdx_person, donor_account: @donor_account).try(:id)
+        @mpdx_person.master_person_id ||=
+          MasterPerson.find_or_create_for_person(@mpdx_person, donor_account: @donor_account).try(:id)
 
         @mpdx_person.save
 
-        @donor_account.people << @mpdx_person unless @donor_account.people.exists?(@mpdx_person)
+        unless @donor_account.people.exists?(@mpdx_person&.id)
+          @donor_account.people << @mpdx_person
+        end
 
-        @donor_account.master_people << @mpdx_person.master_person unless @donor_account.master_people.exists?(@mpdx_person.master_person)
+        unless @donor_account.master_people.exists?(@mpdx_person&.master_person)
+          @donor_account.master_people << @mpdx_person.master_person
+        end
 
-        @contact.people << @mpdx_person unless @contact.people.exists?(@mpdx_person)
+        @contact.people << @mpdx_person unless @contact.people.exists?(@mpdx_person&.id)
         create_master_person_if_needed
       end
 
@@ -55,19 +60,25 @@ class DonationImports::Siebel
       end
 
       def find_and_set_master_person_from_siebel_person
-        @master_person_from_source = organization.master_people.find_by('master_person_sources.remote_id' => @siebel_person.id)
+        @master_person_from_source =
+          organization.master_people.find_by('master_person_sources.remote_id' => @siebel_person.id)
 
         return if @master_person_from_source
 
         remote_id = @siebel_person.primary ? "#{@donor_account.account_number}-1" : "#{@donor_account.account_number}-2"
 
         @master_person_from_source = organization.master_people.find_by('master_person_sources.remote_id' => remote_id)
-        MasterPersonSource.where(organization_id: organization.id, remote_id: remote_id).update_all(remote_id: siebel_person.id) if @master_person_from_source
+        if @master_person_from_source
+          MasterPersonSource.where(organization_id: organization.id, remote_id: remote_id)
+                            .update_all(remote_id: siebel_person.id)
+        end
       end
 
       def find_mpdx_person_from_siebel_person
-        @mpdx_person = @contact.people.find_by(first_name: @siebel_person.first_name, last_name: @siebel_person.last_name)
-        @mpdx_person ||= @contact.people.find_by(master_person_id: @master_person_from_source.id) if @master_person_from_source
+        @mpdx_person =
+          @contact.people.find_by(first_name: @siebel_person.first_name, last_name: @siebel_person.last_name)
+        @mpdx_person ||=
+          @contact.people.find_by(master_person_id: @master_person_from_source.id) if @master_person_from_source
         @mpdx_person || Person.new(master_person: @master_person_from_source)
       end
 
@@ -124,7 +135,9 @@ class DonationImports::Siebel
           remote_id: siebel_phone_number.id
         }
 
-        existing_phone = @mpdx_person.phone_numbers.find { |person_phone_number| person_phone_number.remote_id == siebel_phone_number.id }
+        existing_phone = @mpdx_person.phone_numbers.find do |person_phone_number|
+          person_phone_number.remote_id == siebel_phone_number.id
+        end
 
         if existing_phone
           existing_phone.update_attributes(attributes)
@@ -141,7 +154,9 @@ class DonationImports::Siebel
           remote_id: siebel_email_address.id
         }
 
-        existing_email = @mpdx_person.email_addresses.find { |person_email_address| person_email_address.remote_id == siebel_email_address.id }
+        existing_email = @mpdx_person.email_addresses.find do |person_email_address|
+          person_email_address.remote_id == siebel_email_address.id
+        end
 
         if existing_email
           begin

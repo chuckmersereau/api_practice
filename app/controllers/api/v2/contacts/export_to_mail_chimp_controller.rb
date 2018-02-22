@@ -42,7 +42,7 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
   end
 
   def mail_chimp_scope
-    account_lists.first
+    account_lists.order(:created_at).first
   end
 
   def load_appeal
@@ -50,12 +50,12 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
   end
 
   def fetch_appeal
-    return account_list.appeals.first unless filter_params[:appeal_id]
+    return account_list.appeals.order(:created_at).first unless filter_params[:appeal_id]
     account_list.appeals.find_by!(id: filter_params[:appeal_id])
   end
 
   def account_list
-    account_lists.first
+    account_lists.order(:created_at).first
   end
 
   def account_lists

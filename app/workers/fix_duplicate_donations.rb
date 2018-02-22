@@ -80,7 +80,7 @@ class FixDuplicateDonations
   end
 
   def account_list
-    @account_list ||= @designation_account.account_lists.first
+    @account_list ||= @designation_account.account_lists.order(:created_at).first
   end
 
   def find_contact(donation)

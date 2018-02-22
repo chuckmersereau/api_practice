@@ -3,10 +3,10 @@ require 'rails_helper'
 describe PhoneNumber do
   let(:user) do
     u = create(:user_with_account)
-    u.account_lists.first.update(home_country: 'Australia')
+    u.account_lists.order(:created_at).first.update(home_country: 'Australia')
     u
   end
-  let(:contact) { create(:contact, account_list: user.account_lists.first) }
+  let(:contact) { create(:contact, account_list: user.account_lists.order(:created_at).first) }
   let(:person) { contact.people.create(first_name: 'test').reload }
 
   include_examples 'updatable_only_when_source_is_mpdx_validation_examples', attributes: [:number, :country_code, :location, :remote_id], factory_type: :phone_number
@@ -113,7 +113,7 @@ describe PhoneNumber do
     end
 
     it 'defaults to United States normalizating when user home country unset' do
-      user.account_lists.first.update(home_country: '')
+      user.account_lists.order(:created_at).first.update(home_country: '')
       phone = PhoneNumber.add_for_person(person, number: '213-345-2313;23')
       phone.clean_up_number
       expect(phone.number).to eq('+12133452313;23')
@@ -149,7 +149,7 @@ describe PhoneNumber do
 
   describe 'comparing numbers' do
     it 'returns true for two numbers that are the same except for formatting' do
-      user.account_lists.first.update(home_country: 'United States')
+      user.account_lists.order(:created_at).first.update(home_country: 'United States')
       pn = PhoneNumber.add_for_person(person, number: '+16173194567')
       pn2 = PhoneNumber.add_for_person(person, number: '(617) 319-4567')
       expect(pn.reload).to eq(pn2.reload)

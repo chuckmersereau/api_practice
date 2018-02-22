@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AccountList::Analytics, type: :model do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:analytics) { AccountList::Analytics.new(account_list: account_list, start_date: 1.week.ago, end_date: Time.current) }
 
   def create_task(activity_type:, result: nil, next_action: nil)

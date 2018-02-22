@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Contact::Filter::UpdatedAt do
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:contact_one) { create(:contact, account_list: account_list, updated_at: 1.day.ago) }
   let!(:contact_two) { create(:contact, account_list: account_list, updated_at: 2.days.ago) }

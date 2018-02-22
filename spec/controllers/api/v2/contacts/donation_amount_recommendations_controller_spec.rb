@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::DonationAmountRecommendationsController, type: :controller do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:resource_type) { :donation_amount_recommendation }
-  let(:contact) { create(:contact, account_list: user.account_lists.first) }
+  let(:contact) { create(:contact, account_list: user.account_lists.order(:created_at).first) }
   let!(:organization) { create :organization }
   let!(:designation_account) { create :designation_account, organization: organization }
   let!(:donor_account1) { create :donor_account, organization: organization, account_number: '123' }
@@ -49,7 +49,7 @@ RSpec.describe Api::V2::Contacts::DonationAmountRecommendationsController, type:
   describe '#index authorization' do
     it 'does not show resources for contact that user does not own' do
       api_login(user)
-      contact = create(:contact, account_list: create(:user_with_account).account_lists.first)
+      contact = create(:contact, account_list: create(:user_with_account).account_lists.order(:created_at).first)
       get :index, contact_id: contact.id
       expect(response.status).to eq(403)
     end

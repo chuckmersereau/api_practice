@@ -49,6 +49,7 @@ end
 
 class MockResource
   def self.where(_args); end
+  def self.find_by(_args); end
 end
 
 class MockAccountList < MockResource; end

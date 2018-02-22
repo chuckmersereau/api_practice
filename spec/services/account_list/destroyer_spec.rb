@@ -3,7 +3,7 @@ require Rails.root.join('db/seeders/application_seeder')
 
 RSpec.describe AccountList::Destroyer do
   let(:user) { User.order(:created_at).first }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:destroyer) { AccountList::Destroyer.new(account_list.id) }
 
   before do

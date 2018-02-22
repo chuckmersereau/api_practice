@@ -8,7 +8,7 @@ resource 'Contacts > People > Phones' do
   let(:resource_type) { 'phone_numbers' }
   let!(:user)         { create(:user_with_full_account) }
 
-  let(:contact)    { create(:contact, account_list: user.account_lists.first) }
+  let(:contact)    { create(:contact, account_list: user.account_lists.order(:created_at).first) }
   let(:contact_id) { contact.id }
 
   let(:person)    { create(:person, contacts: [contact]) }

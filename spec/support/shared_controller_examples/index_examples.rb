@@ -44,7 +44,6 @@ RSpec.shared_examples 'index_examples' do |options = {}|
 
     it 'paginates differently when specified in params' do
       api_login(user)
-
       get :index, parent_param_if_needed.merge(per_page: 1, page: 2)
       expect(response.status).to eq(200), invalid_status_detail
       expect(JSON.parse(response.body)['data'].length).to eq(1)

@@ -39,7 +39,7 @@ RSpec.describe 'Patch Requests', type: :request do
     end
 
     context 'with unsupported/forbidden parameters (403)' do
-      let(:account_list) { user.account_lists.first }
+      let(:account_list) { user.account_lists.order(:created_at).first }
       let(:id) { account_list.id }
       let(:update_attributes) { attributes_for(:account_list) }
       let(:full_update_attributes) do
@@ -103,7 +103,7 @@ RSpec.describe 'Patch Requests', type: :request do
     end
 
     context 'in which the resource object’s type does not match the server’s endpoint (409)' do
-      let(:account_list) { user.account_lists.first }
+      let(:account_list) { user.account_lists.order(:created_at).first }
       let(:task) { create(:task, account_list: account_list) }
       let(:constrained_attributes) do
         {
@@ -124,7 +124,7 @@ RSpec.describe 'Patch Requests', type: :request do
 
     context 'in which the resource object’s id does not match the server’s endpoint (409)' do
       let(:mock_id) { SecureRandom.uuid }
-      let(:account_list) { user.account_lists.first }
+      let(:account_list) { user.account_lists.order(:created_at).first }
       let(:task) { create(:task, account_list: account_list) }
       let(:constrained_attributes) do
         {
@@ -145,7 +145,7 @@ RSpec.describe 'Patch Requests', type: :request do
   end
 
   context 'in which the resource is expired (409)' do
-    let(:account_list) { user.account_lists.first }
+    let(:account_list) { user.account_lists.order(:created_at).first }
     let(:task) { create(:task, account_list: account_list) }
     let(:expired_attributes) do
       {

@@ -5,7 +5,7 @@ RSpec.describe Api::V2::Contacts::AnalyticsController, type: :controller do
   let(:user) { create(:user_with_account) }
 
   # This MAY be required!
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:contact_with_anniversary_with_week) do
     person = create(:person, anniversary_month: Date.current.month,

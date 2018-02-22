@@ -15,7 +15,7 @@ FactoryGirl.define do
     sequence(:access_token) { |n| "243857230498572349898798#{n}" }
     after :create do |u|
       create(:organization_account, person: u)
-      account_list = u.reload.account_lists.first
+      account_list = u.reload.account_lists.order(:created_at).first
       create(:relay_account, person: u)
       create(:designation_profile, user: u, account_list: account_list)
     end
@@ -28,7 +28,7 @@ FactoryGirl.define do
     locale { 'en' }
     after :create do |u|
       create(:organization_account, person: u)
-      account_list = u.reload.account_lists.first
+      account_list = u.reload.account_lists.order(:created_at).first
       create(:relay_account, person: u)
       create(:designation_profile, user: u, account_list: account_list)
     end

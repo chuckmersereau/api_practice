@@ -2,14 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:resource_type) { :person }
-  let(:contact) { create(:contact, account_list: user.account_lists.first) }
+  let(:contact) { create(:contact, account_list: user.account_lists.order(:created_at).first) }
   let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
   let!(:second_resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
   let(:id) { resource.id }
   let(:parent_param) { { contact_id: contact.id } }
-  let(:correct_attributes) { { first_name: 'Billy', email_address: { email: 'billy@internet.com' }, updated_at: Time.now + 1.day } }
+  let(:correct_attributes) do
+    { first_name: 'Billy', email_address: { email: 'billy@internet.com' }, updated_at: Time.now + 1.day }
+  end
   let(:incorrect_attributes) { nil }
   let(:factory_type) { :person }
 

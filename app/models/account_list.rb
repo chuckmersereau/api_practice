@@ -107,7 +107,7 @@ class AccountList < ApplicationRecord
   alias destroy! destroy
 
   def salary_organization=(value)
-    value = Organization.where(id: value).limit(1).ids.first unless value.is_a?(Integer)
+    value = Organization.where(id: value).limit(1).order(:created_at).ids.first unless value.is_a?(Integer)
     self.salary_organization_id = value
   end
 
@@ -118,8 +118,8 @@ class AccountList < ApplicationRecord
   end
 
   def salary_organization_id
-    settings[:salary_organization_id] || designation_organizations.first&.id ||
-      organizations&.first&.id
+    settings[:salary_organization_id] || designation_organizations.order(:created_at).first&.id ||
+      organizations&.order(:created_at)&.first&.id
   end
 
   def salary_currency

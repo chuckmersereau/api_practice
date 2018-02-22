@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
   let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let!(:task_one) do
     create(:task, account_list: account_list, activity_type: 'Talk to In Person',
                   completed: true, completed_at: 6.days.ago)

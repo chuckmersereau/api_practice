@@ -5,7 +5,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
   let(:resource_type) { :imports }
 
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
   let!(:account_list_id) { account_list.id }
   let!(:id) { import.id }
   let!(:parent_param) { { account_list_id: account_list_id } }

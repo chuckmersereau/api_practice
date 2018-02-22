@@ -16,7 +16,7 @@ class Api::V2::Reports::GoalProgressesController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= account_lists.first
+    @account_list ||= account_lists.order(:created_at).first
   end
 
   def render_report

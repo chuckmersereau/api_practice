@@ -4,7 +4,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
   let(:user) { create(:user_with_account, admin: true) }
   let(:user_to_impersonate) { create(:user) }
   let!(:relay_account) { create(:relay_account, user: user_to_impersonate) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:given_resource_type) { :impersonation }
   let(:correct_attributes) { { reason: 'Reason' } }
   let(:response_data) { JSON.parse(response.body)['data'] }

@@ -19,6 +19,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   def load_designation_accounts
     @designation_accounts = designation_account_scope.filter(filter_params)
                                                      .reorder(sorting_param)
+                                                     .order(:created_at)
                                                      .page(page_number_param)
                                                      .per(per_page_param)
   end

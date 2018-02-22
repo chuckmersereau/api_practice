@@ -72,9 +72,11 @@ module JsonApiService
       { foreign_key => id }
     end
 
-    def id_data_for_object(object)
+    def id_data_for_object(object, nested)
       id = object.dig(:id)
-      id && id.to_sym != :undefined ? { id: id } : {}
+      return {} unless id && id.to_sym != :undefined
+      return { id: id } if !nested || configuration.resource_lookup.find(object.dig(:type)).find_by(id: object.dig(:id))
+      { _client_id: id }
     end
 
     def nested_attributes_for_object(object)
@@ -85,7 +87,6 @@ module JsonApiService
         .each_with_object({}) do |(type, value), hash|
           id_key  = "#{type}_attributes"
           objects = value.dig(:data)
-
           hash[id_key] = objects_array_to_nested_attributes_hash(objects).map do |attribute_hash|
             attribute_hash.merge(overwrite: true)
           end
@@ -95,19 +96,19 @@ module JsonApiService
     def objects_array_to_nested_attributes_hash(objects)
       objects
         .each_with_object({})
-        .map { |object| transform_data_object(object) }
+        .map { |object| transform_data_object(object, true) }
     end
 
     def primary_key
       params.dig(:data, :type)&.singularize
     end
 
-    def transform_data_object(object)
-      id_data           = id_data_for_object(object)
+    def transform_data_object(object, nested = false)
+      id_data           = id_data_for_object(object, nested)
       attributes        = attributes_for_object(object)
       foreign_keys      = foreign_keys_for_object(object)
       nested_attributes = nested_attributes_for_object(object)
-
+      attributes.delete(:id) if nested && id_data.key?(:_client_id)
       attributes
         .merge!(id_data)
         .merge!(foreign_keys)

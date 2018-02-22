@@ -192,6 +192,7 @@ class Person < ApplicationRecord
       email_addresses_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :email,
         :historic,
         :location,
@@ -204,6 +205,7 @@ class Person < ApplicationRecord
       facebook_accounts_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :username,
         :updated_in_db_at
@@ -211,6 +213,7 @@ class Person < ApplicationRecord
       family_relationships_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :related_person_id,
         :relationship,
@@ -219,6 +222,7 @@ class Person < ApplicationRecord
       linkedin_accounts_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :public_url,
         :updated_in_db_at
@@ -227,6 +231,7 @@ class Person < ApplicationRecord
       phone_numbers_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :historic,
         :location,
         :number,
@@ -239,6 +244,7 @@ class Person < ApplicationRecord
       pictures_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :image,
         :image_cache,
         :overwrite,
@@ -248,6 +254,7 @@ class Person < ApplicationRecord
       twitter_accounts_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :primary,
         :screen_name,
@@ -256,6 +263,7 @@ class Person < ApplicationRecord
       websites_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :primary,
         :url,

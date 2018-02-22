@@ -10,7 +10,7 @@ resource 'Tasks' do
   let(:resource_type) { 'tasks' }
   let!(:user)         { create(:user_with_full_account) }
 
-  let!(:task) { create(:task, account_list: user.account_lists.first) }
+  let!(:task) { create(:task, account_list: user.account_lists.order(:created_at).first) }
   let(:id)    { task.id }
 
   let(:new_task) do
@@ -21,7 +21,7 @@ resource 'Tasks' do
   end
 
   let(:form_data) do
-    build_data(new_task, account_list_id: user.account_lists.first.id)
+    build_data(new_task, account_list_id: user.account_lists.order(:created_at).first.id)
   end
 
   let(:resource_attributes) do

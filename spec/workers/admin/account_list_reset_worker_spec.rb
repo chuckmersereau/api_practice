@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Admin::AccountListResetWorker do
   let!(:user) { create(:user_with_account) }
   let!(:admin_user) { create(:admin_user) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
   let!(:reset_log) { Admin::ResetLog.create!(resetted_user: user, admin_resetting: admin_user, reason: "Because I'm writing a spec!") }
 
   before do

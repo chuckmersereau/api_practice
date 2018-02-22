@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe DonationImports::Siebel::ProfileImporter do
   let!(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:organization_account) { user.organization_accounts.first }
   let(:organization) { organization_account.organization }

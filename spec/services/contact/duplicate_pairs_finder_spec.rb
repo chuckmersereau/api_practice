@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Contact::DuplicatePairsFinder do
-  let!(:account_list) { create(:user_with_account).account_lists.first }
+  let!(:account_list) { create(:user_with_account).account_lists.order(:created_at).first }
 
   let!(:unique_contact_one) do
     create(:contact,

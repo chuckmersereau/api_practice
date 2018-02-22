@@ -29,7 +29,7 @@ describe AccountListImportDataEnqueuerWorker do
 
     let!(:inactive_user) do
       create(:user_with_full_account, current_sign_in_at: 70.days.ago).tap do |user|
-        user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: Time.current)
+        user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: Time.current)
       end
     end
 
@@ -54,19 +54,19 @@ describe AccountListImportDataEnqueuerWorker do
     let!(:user) { create(:user_with_full_account, current_sign_in_at: 10.days.ago) }
 
     it 'queues a job if the last_download_attempt_at is recent' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: Time.current)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: Time.current)
       expect_user_to_be_enqueued(user)
       subject
     end
 
     it 'queues a job if the last_download_attempt_at is more than a week ago' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: 8.days.ago)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: 8.days.ago)
       expect_user_to_be_enqueued(user)
       subject
     end
 
     it 'queues a job if the last_download_attempt_at is blank' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: nil)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: nil)
       expect_user_to_be_enqueued(user)
       subject
     end
@@ -76,19 +76,19 @@ describe AccountListImportDataEnqueuerWorker do
     let!(:user) { create(:user_with_full_account, current_sign_in_at: 90.days.ago) }
 
     it 'does not queue a job if the last_download_attempt_at is recent' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: 3.days.ago)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: 3.days.ago)
       expect_user_to_not_be_enqueued(user)
       subject
     end
 
     it 'queues a job if the last_download_attempt_at is more than a week ago' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: 8.days.ago)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: 8.days.ago)
       expect_user_to_be_enqueued(user)
       subject
     end
 
     it 'queues a job if the last_download_attempt_at is blank' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: nil)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: nil)
       expect_user_to_be_enqueued(user)
       subject
     end
@@ -98,19 +98,19 @@ describe AccountListImportDataEnqueuerWorker do
     let!(:user) { create(:user_with_full_account, current_sign_in_at: nil) }
 
     it 'does not queue a job if the last_download_attempt_at is recent' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: 3.days.ago)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: 3.days.ago)
       expect_user_to_not_be_enqueued(user)
       subject
     end
 
     it 'queues a job if the last_download_attempt_at is more than a week ago' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: 8.days.ago)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: 8.days.ago)
       expect_user_to_be_enqueued(user)
       subject
     end
 
     it 'queues a job if the last_download_attempt_at is blank' do
-      user.account_lists.first.organization_accounts.first.update!(last_download_attempt_at: nil)
+      user.account_lists.order(:created_at).first.organization_accounts.first.update!(last_download_attempt_at: nil)
       expect_user_to_be_enqueued(user)
       subject
     end

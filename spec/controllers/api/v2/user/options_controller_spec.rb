@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::User::OptionsController, type: :controller do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:factory_type) { :user_option }
   let!(:resource) { create(:user_option, user: user, created_at: 10.minutes.ago) }
   let!(:second_resource) { create(:user_option, user: user) }

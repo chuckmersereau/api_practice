@@ -6,7 +6,7 @@ resource 'Batch' do
   documentation_scope = :requests
 
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   context 'authorized user' do
     before { api_login(user) }

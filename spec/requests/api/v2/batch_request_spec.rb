@@ -5,7 +5,7 @@ RSpec.describe 'Batch Requests', type: :request do
   let(:batch_endpoint) { '/api/v2/batch' }
   let(:headers) { { 'CONTENT_TYPE' => 'application/vnd.api+json', 'ACCEPT' => '' } }
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:get_current_user) { { method: 'GET', path: api_v2_user_path } }
   let(:get_constants) { { method: 'GET', path: api_v2_constants_path } }
 

@@ -8,7 +8,7 @@ class Contact::Filter::GaveMoreThanPledgedRange < Contact::Filter::Base
                        (beginning_of_start_month.year * 12 + beginning_of_start_month.month)
 
     contacts.where("contacts.id IN (#{above_pledge_contacts_ids_sql})",
-                   account_list_id: account_lists.first.id,
+                   account_list_id: account_lists.order(:created_at).first.id,
                    beginning_of_start_month: beginning_of_start_month,
                    beginning_of_end_month: beginning_of_end_month,
                    number_of_months: number_of_months)

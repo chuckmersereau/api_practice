@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:resource_type) { :address }
-  let(:contact) { create(:contact, account_list: user.account_lists.first) }
+  let(:contact) { create(:contact, account_list: user.account_lists.order(:created_at).first) }
   let!(:resource) { create(:address, addressable: contact, source_donor_account: build(:donor_account)) }
   let!(:second_resource) { create(:address, addressable: contact) }
   let(:id) { resource.id }
@@ -32,7 +32,7 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   describe '#index authorization' do
     it 'does not show resources for contact that user does not own' do
       api_login(user)
-      contact = create(:contact, account_list: create(:user_with_account).account_lists.first)
+      contact = create(:contact, account_list: create(:user_with_account).account_lists.order(:created_at).first)
       get :index, contact_id: contact.id
       expect(response.status).to eq(403)
     end

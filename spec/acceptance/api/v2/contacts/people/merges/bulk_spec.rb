@@ -5,7 +5,7 @@ resource 'People > Merges > Bulk' do
   include_context :json_headers
   documentation_scope = :people_api_merges
 
-  let!(:account_list)    { user.account_lists.first }
+  let!(:account_list)    { user.account_lists.order(:created_at).first }
   let!(:contact)         { create(:contact, account_list: account_list) }
   let!(:person_one)      { create(:person, contacts: [contact]) }
   let!(:person_two)      { create(:person, contacts: [contact]) }

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::Reports::MonthlyGivingGraphsController, type: :controller do
   let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:response_json) { JSON.parse(response.body).deep_symbolize_keys }
 
   let(:resource) do

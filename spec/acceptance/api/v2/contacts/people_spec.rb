@@ -8,7 +8,7 @@ resource 'People' do
   let!(:user)         { create(:user_with_full_account) }
   let(:resource_type) { 'people' }
 
-  let(:contact)    { create(:contact, account_list: user.account_lists.first) }
+  let(:contact)    { create(:contact, account_list: user.account_lists.order(:created_at).first) }
   let(:contact_id) { contact.id }
 
   let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }

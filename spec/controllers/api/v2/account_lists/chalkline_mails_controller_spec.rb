@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controller do
   let(:user)                 { create(:user_with_account) }
-  let(:account_list)         { user.account_lists.first }
+  let(:account_list)         { user.account_lists.order(:created_at).first }
   let(:resource)             { AccountList::ChalklineMails.new(account_list: account_list) }
   let(:parent_param)         { { account_list_id: account_list.id } }
   let(:parsed_response_body) { JSON.parse(response.body) }
@@ -20,9 +20,11 @@ RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controlle
       end
 
       it 'returns a json api spec body' do
-        expect(parsed_response_body).to eq('errors' => [{
-                                             'status' => '401', 'title' => 'Unauthorized', 'detail' => 'Exceptions::AuthenticationError'
-                                           }])
+        expect(parsed_response_body).to eq(
+          'errors' => [{
+            'status' => '401', 'title' => 'Unauthorized', 'detail' => 'Exceptions::AuthenticationError'
+          }]
+        )
       end
     end
 
@@ -41,11 +43,13 @@ RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controlle
       end
 
       it 'returns a json api spec body' do
-        expect(parsed_response_body).to eq('data' => {
-                                             'id' => '',
-                                             'type' => 'chalkline_mails',
-                                             'attributes' => { 'created_at' => Time.current.utc.iso8601, 'updated_at' => nil, 'updated_in_db_at' => nil }
-                                           })
+        expect(parsed_response_body).to eq(
+          'data' => {
+            'id' => '',
+            'type' => 'chalkline_mails',
+            'attributes' => { 'created_at' => Time.current.utc.iso8601, 'updated_at' => nil, 'updated_in_db_at' => nil }
+          }
+        )
       end
     end
 
@@ -53,13 +57,12 @@ RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controlle
       let(:account_list) { create(:account_list) }
       let(:expected_error_data) do
         {
-          errors: [
-            {
-              status: '404',
-              title: 'Not Found',
-              detail: "Couldn't find AccountList with 'id'=#{account_list.id}"
-            }
-          ]
+          errors: [{
+            status: '404',
+            title: 'Not Found',
+            detail: "Couldn't find AccountList with "\
+                    '[WHERE "account_list_users"."user_id" = ? AND "account_lists"."id" = ?]'
+          }]
         }.deep_stringify_keys
       end
 

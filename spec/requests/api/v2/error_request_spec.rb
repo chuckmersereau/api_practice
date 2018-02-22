@@ -29,7 +29,6 @@ RSpec.describe 'Error Response Format', type: :request do
 
   context 'ActiveRecord::RecordNotFound' do
     let(:id) { SecureRandom.uuid }
-    let(:message) { "Couldn't find Contact with 'id'=#{id}" }
 
     let(:expected_error_data) do
       {
@@ -37,7 +36,7 @@ RSpec.describe 'Error Response Format', type: :request do
           {
             status: '404',
             title: 'Not Found',
-            detail: message
+            detail: "Couldn't find Contact"
           }
         ]
       }.deep_stringify_keys

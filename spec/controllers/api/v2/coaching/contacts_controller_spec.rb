@@ -7,7 +7,7 @@ describe Api::V2::Coaching::ContactsController, type: :controller do
   let!(:user) { create(:user, locale: :en) }
 
   let!(:owner) { create(:user_with_account) }
-  let!(:account_list) { owner.account_lists.first }
+  let!(:account_list) { owner.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
 
   let!(:contact_1) { create :contact, account_list_id: account_list.id }

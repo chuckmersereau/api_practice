@@ -68,6 +68,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   def load_invites
     @invites = invite_scope.where(filter_params)
                            .reorder(sorting_param)
+                           .order(:created_at)
                            .page(page_number_param)
                            .per(per_page_param)
   end

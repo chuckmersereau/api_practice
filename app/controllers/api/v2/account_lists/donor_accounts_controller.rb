@@ -22,6 +22,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
     @donor_accounts ||= filter_params[:contacts] ? filtered_donor_accounts : all_donor_accounts
     @donor_accounts = @donor_accounts.filter(load_account_list, filter_params_without_contacts)
                                      .reorder(sorting_param)
+                                     .order(:created_at)
                                      .page(page_number_param)
                                      .per(per_page_param)
   end

@@ -33,11 +33,11 @@ describe AccountList do
     let!(:account_without_user) { create(:account_list) }
 
     it 'scopes account_lists when receiving a User relation' do
-      expect(AccountList.has_users(User.where(id: [user_one.id, user_two.id])).to_a).to eq([user_one.account_lists.first, user_two.account_lists.first])
+      expect(AccountList.has_users(User.where(id: [user_one.id, user_two.id])).to_a).to eq([user_one.account_lists.order(:created_at).first, user_two.account_lists.order(:created_at).first])
     end
 
     it 'scopes account_lists when receiving a User instance' do
-      expect(AccountList.has_users(user_one).to_a).to eq([user_one.account_lists.first])
+      expect(AccountList.has_users(user_one).to_a).to eq([user_one.account_lists.order(:created_at).first])
     end
   end
 

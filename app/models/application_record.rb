@@ -41,6 +41,10 @@ class ApplicationRecord < ActiveRecord::Base
     find_by!(id: id)
   end
 
+  def _client_id=(client_id)
+    self.id = client_id
+  end
+
   private
 
   def presence_of_updated_in_db_at

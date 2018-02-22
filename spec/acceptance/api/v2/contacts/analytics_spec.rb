@@ -11,7 +11,7 @@ resource 'Contacts > Analytics' do
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:alternate_account_list) do
     create(:account_list).tap do |account_list|

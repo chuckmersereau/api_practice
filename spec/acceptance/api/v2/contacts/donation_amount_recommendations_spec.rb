@@ -8,7 +8,7 @@ resource 'Contact > DonationAmountRecommendations' do
   let(:resource_type)  { 'donation_amount_recommendations' }
   let!(:user)          { create(:user_with_full_account) }
 
-  let!(:account_list)   { user.account_lists.first }
+  let!(:account_list)   { user.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
 
   let!(:contact)        { create(:contact, account_list: account_list) }

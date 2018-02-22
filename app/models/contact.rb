@@ -103,6 +103,7 @@ class Contact < ApplicationRecord
         :country,
         :historic,
         :id,
+        :_client_id,
         :location,
         :master_address_id,
         :metro_area,
@@ -120,12 +121,14 @@ class Contact < ApplicationRecord
       contact_referrals_to_me_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :referred_by_id
       ],
       contact_referrals_by_me_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :referred_to_id
       ],
@@ -133,6 +136,7 @@ class Contact < ApplicationRecord
         :_destroy,
         :account_number,
         :id,
+        :_client_id,
         :organization_id,
         :overwrite
       ],
@@ -141,6 +145,7 @@ class Contact < ApplicationRecord
         :_destroy,
         :account_list_id,
         :id,
+        :_client_id,
         :name,
         :notes,
         :overwrite,
@@ -155,8 +160,7 @@ class Contact < ApplicationRecord
         :spouse_email,
         :spouse_first_name,
         :spouse_last_name,
-        :spouse_phone,
-        :id
+        :spouse_phone
       ],
       tag_list: []
     }
@@ -279,7 +283,7 @@ class Contact < ApplicationRecord
     # CSV import uses mailing_address for checking the addresses for contacts
     # before saving them to the database.
     @mailing_address ||= primary_address ||
-                         addresses.reject(&:historic).first || Address.new
+                         addresses.order(:created_at).reject(&:historic).first || Address.new
   end
 
   def reload_mailing_address
@@ -560,7 +564,7 @@ class Contact < ApplicationRecord
 
   def primary_or_first_address
     @primary_or_first_address ||=
-      addresses.order(:created_at).find(&:primary_mailing_address?) || addresses.first
+      addresses.order(:created_at).find(&:primary_mailing_address?) || addresses.order(:created_at).first
   end
 
   def set_timezone
@@ -579,11 +583,11 @@ class Contact < ApplicationRecord
   end
 
   def last_six_donations
-    donations.limit(6)
+    donations.order(:created_at).limit(6)
   end
 
   def last_donation
-    donations.first
+    donations.order(:created_at).first
   end
 
   def last_monthly_total(except_payment_method: nil)

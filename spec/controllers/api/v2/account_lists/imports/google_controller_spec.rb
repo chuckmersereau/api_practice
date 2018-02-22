@@ -6,7 +6,7 @@ describe Api::V2::AccountLists::Imports::GoogleController, type: :controller do
 
   let!(:user) { create(:user_with_account) }
   let!(:google_account) { create(:google_account, person: user) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
   let(:import) { create(:google_import, account_list: account_list, user: user) }
   let(:id) { import.id }

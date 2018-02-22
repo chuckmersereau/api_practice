@@ -7,8 +7,8 @@ describe AccountList::ReadableFinder do
 
   let(:coached_user) { create :user_with_account }
 
-  let(:account_list) { coach.account_lists.first }
-  let(:coached_account_list) { coached_user.account_lists.first }
+  let(:account_list) { coach.account_lists.order(:created_at).first }
+  let(:coached_account_list) { coached_user.account_lists.order(:created_at).first }
   let(:uncoached_account_list) do
     create(:account_list).tap do |account_list|
       coached_user.account_lists << account_list

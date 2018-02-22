@@ -462,7 +462,7 @@ module JsonApiService
                   street: '123 Somewhere St',
                   state: 'CA',
                   country: 'United States',
-                  id: 'addresses-id-abc123',
+                  _client_id: 'addresses-id-abc123',
                   overwrite: true
                 },
                 {
@@ -471,7 +471,7 @@ module JsonApiService
                   street: '100 Lake Hart Drive',
                   state: 'FL',
                   country: 'United States',
-                  id: 'addresses-id-def456',
+                  _client_id: 'addresses-id-def456',
                   overwrite: true
                 }
               ]
@@ -641,7 +641,7 @@ module JsonApiService
             mock_account_list_id: '144b83e8-b7f6-48c8-9c0e-688785bf6164',
             mock_comments_attributes: [
               {
-                id: '91374910-ef15-11e6-8787-ef17a057947e',
+                _client_id: '91374910-ef15-11e6-8787-ef17a057947e',
                 body: 'I love Orange Soda',
                 mock_person_id: '10e9f7f5-b027-4e04-8192-b9b698ac0b18',
                 overwrite: true

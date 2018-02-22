@@ -6,7 +6,7 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
   end
 
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:google_account) { create(:google_account, person: user) }
 
   let(:factory_type) do

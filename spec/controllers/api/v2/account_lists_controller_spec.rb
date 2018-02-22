@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Api::V2::AccountListsController, type: :controller do
   let(:factory_type) { :account_list }
   let!(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let!(:second_account_list) { create(:account_list, users: [user]) }
   let(:id) { account_list.id }
 
