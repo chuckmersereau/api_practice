@@ -5,7 +5,7 @@ class DesignationAccount < ApplicationRecord
   has_many :account_list_entries, dependent: :delete_all
   has_many :account_lists, through: :account_list_entries
   has_many :contacts, through: :account_lists
-  has_many :donations, dependent: :delete_all
+  has_many :donations, dependent: :destroy
   has_many :balances, dependent: :delete_all, as: :resource
   has_many :donation_amount_recommendations, dependent: :destroy, inverse_of: :designation_account
 

@@ -60,7 +60,7 @@ class AccountList < ApplicationRecord
   has_many :organization_accounts, through: :users
   has_many :organizations, -> { distinct }, through: :organization_accounts
   has_many :people, through: :contacts
-  has_many :pledges
+  has_many :pledges, dependent: :destroy
   has_many :tasks
   has_many :coaches, through: :account_list_coaches
   has_many :users, through: :account_list_users
