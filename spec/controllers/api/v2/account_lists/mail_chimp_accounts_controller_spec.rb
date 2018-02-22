@@ -32,7 +32,6 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
 
   let(:correct_attributes) do
     attributes_for(:mail_chimp_account, primary_list_id: primary_list_id)
-      .reject { |attr| attr.to_s.end_with?('_id') }
   end
 
   let(:incorrect_attributes) do
@@ -54,6 +53,26 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
     end
 
     include_examples 'create_examples'
+
+    it 'syncs the mailchimp account after creating' do
+      api_login(user)
+      expect(MailChimp::PrimaryListSyncWorker).to receive(:perform_async)
+
+      get :create, full_correct_attributes
+    end
+
+    context 'without primary_list_id' do
+      let(:correct_attributes) do
+        attributes_for(:mail_chimp_account, primary_list_id: nil)
+      end
+
+      it "doesn't sync the mailchimp account" do
+        api_login(user)
+        expect(MailChimp::PrimaryListSyncWorker).to_not receive(:perform_async)
+
+        get :create, full_correct_attributes
+      end
+    end
   end
 
   describe '#sync' do
