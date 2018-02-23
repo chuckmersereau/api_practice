@@ -17,7 +17,7 @@ RSpec.describe 'Patch Requests', type: :request do
     {
       data: {
         type: 'users',
-        attributes: update_attributes.merge(updated_in_db_at: user.updated_at)
+        attributes: update_attributes.merge(overwrite: true)
       }
     }
   end

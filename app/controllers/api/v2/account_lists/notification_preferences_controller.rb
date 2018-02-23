@@ -62,6 +62,7 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
   def load_notification_preferences
     @notification_preferences ||= notification_preference_scope
                                   .where(filter_params)
+                                  .reorder(:created_at)
                                   .page(page_number_param)
                                   .per(per_page_param)
   end

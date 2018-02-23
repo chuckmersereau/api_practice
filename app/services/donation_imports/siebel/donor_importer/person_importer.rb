@@ -39,7 +39,7 @@ class DonationImports::Siebel
           @donor_account.people << @mpdx_person
         end
 
-        unless @donor_account.master_people.exists?(@mpdx_person&.master_person)
+        unless @donor_account.master_people.exists?(@mpdx_person&.master_person&.id)
           @donor_account.master_people << @mpdx_person.master_person
         end
 

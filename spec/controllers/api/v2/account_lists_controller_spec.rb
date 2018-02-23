@@ -4,7 +4,7 @@ describe Api::V2::AccountListsController, type: :controller do
   let(:factory_type) { :account_list }
   let!(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.order(:created_at).first }
-  let!(:second_account_list) { create(:account_list, users: [user]) }
+  let!(:second_account_list) { create(:account_list, users: [user], created_at: 2.weeks.from_now) }
   let(:id) { account_list.id }
 
   let(:resource) { account_list }

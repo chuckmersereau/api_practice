@@ -78,7 +78,9 @@ describe Admin::AccountListResetWorker do
 
       it 'queues a data sync' do
         number_of_times_called = 0
-        Person::OrganizationAccount.any_instance.stub(:queue_import_data) { number_of_times_called += 1 }
+        allow_any_instance_of(Person::OrganizationAccount).to(
+          receive(:queue_import_data) { number_of_times_called += 1 }
+        )
         subject
         expect(number_of_times_called).to eq(user.organization_accounts.size)
         expect(user.organization_accounts.size).to eq(2)

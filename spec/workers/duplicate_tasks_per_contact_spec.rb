@@ -61,8 +61,8 @@ RSpec.describe DuplicateTasksPerContact do
     contact_one.reload
     contact_two.reload
 
-    expect(contact_one.tasks.first).to eq task
-    expect(contact_two.tasks.first).not_to eq task
+    expect(contact_one.tasks.order(:created_at).first).to eq task
+    expect(contact_two.tasks.order(:created_at).first).not_to eq task
   end
 
   it 'logs the created Task IDs to S3' do

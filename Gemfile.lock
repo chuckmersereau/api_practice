@@ -680,10 +680,9 @@ GEM
       multi_json
     rollout (2.0.0)
       redis
-    roo (1.13.2)
-      nokogiri
-      rubyzip
-      spreadsheet (> 0.6.4)
+    roo (2.7.1)
+      nokogiri (~> 1)
+      rubyzip (~> 1.1, < 2.0.0)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -718,7 +717,6 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-graphviz (1.2.3)
-    ruby-ole (1.2.12.1)
     ruby-progressbar (1.9.0)
     ruby-rtf (0.0.1)
     ruby_dep (1.5.0)
@@ -786,8 +784,6 @@ GEM
     slop (3.6.0)
     snail (2.2.2)
       activesupport
-    spreadsheet (1.1.4)
-      ruby-ole (>= 1.0)
     spring (1.7.2)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -942,7 +938,7 @@ DEPENDENCIES
   retryable-rb (~> 1.1.0)
   rollbar (~> 2.15.5)
   rollout (~> 2.0.0)
-  roo (~> 1.13.2)
+  roo (~> 2.7.1)
   rspec (~> 3.4)
   rspec-rails (~> 3.4)
   rspec-retry (~> 0.5.5)

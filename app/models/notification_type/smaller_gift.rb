@@ -17,9 +17,10 @@ class NotificationType::SmallerGift < NotificationType
              contact.amount_with_gift_aid(without_gift_aid.first.amount) < contact.pledge_amount
     end
 
-    monthly_avg_with_prev_gift_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_with_prev_gift)
-    last_monthly_total_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_current(except_payment_method: Donation::GIFT_AID))
-
+    monthly_avg_with_prev_gift_without_gift_aid =
+      contact.amount_with_gift_aid(contact.monthly_avg_with_prev_gift)
+    last_monthly_total_without_gift_aid =
+      contact.amount_with_gift_aid(contact.monthly_avg_current(except_payment_method: Donation::GIFT_AID))
     monthly_avg_with_prev_gift_without_gift_aid < contact.monthly_pledge &&
       contact.last_monthly_total.positive? && last_monthly_total_without_gift_aid != contact.monthly_pledge &&
       !NotificationType::RecontinuingGift.had_recontinuing_gift?(contact)

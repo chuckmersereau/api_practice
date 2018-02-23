@@ -8,8 +8,12 @@ describe Api::V2::ContactsController, type: :controller do
   let(:account_list)    { user.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
   let(:contact)         { create(:contact_with_person, status: 'Never Contacted', account_list: account_list) }
-  let!(:second_contact) { create(:contact, status: 'Ask in Future', account_list: account_list) }
-  let!(:third_contact) { create(:contact, status: 'Ask in Future', account_list: account_list) }
+  let!(:second_contact) do
+    create(:contact, status: 'Ask in Future', account_list: account_list, created_at: 1.week.from_now)
+  end
+  let!(:third_contact) do
+    create(:contact, status: 'Ask in Future', account_list: account_list, created_at: 2.weeks.from_now)
+  end
   let(:id) { contact.id }
 
   let!(:resource) { contact }

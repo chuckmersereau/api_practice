@@ -40,6 +40,7 @@ class Api::V2::AppealsController < Api::V2Controller
   def load_appeals
     @appeals = appeal_scope.filter(filter_params)
                            .reorder(sorting_param)
+                           .order(:created_at)
                            .page(page_number_param)
                            .per(per_page_param)
   end

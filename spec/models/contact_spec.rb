@@ -248,22 +248,21 @@ describe Contact do
     end
 
     context 'sets to appropriate late_at date when' do
-      it 'has a pledge freqency smaller than 0.4' do
+      it 'has a pledge freqency of 0.2' do
         contact.update(pledge_frequency: 0.2)
-
-        expect(contact.late_at).to eq 1.week.from_now.utc.to_date
+        expect(contact.late_at).to eq contact.pledge_start_date + 1.week
       end
 
-      it 'has a pledge freqency greater than 0.4 but smaller than' do
+      it 'has a pledge freqency of 0.5' do
         contact.update(pledge_frequency: 0.5)
 
-        expect(contact.late_at).to eq 2.weeks.from_now.utc.to_date
+        expect(contact.late_at).to eq contact.pledge_start_date + 2.weeks
       end
 
-      it 'has a pledge freqency greater than 0.4 but smaller than' do
+      it 'has a pledge freqency of 2.0' do
         contact.update(pledge_frequency: 2.0)
 
-        expect(contact.late_at).to eq 2.months.from_now.utc.to_date
+        expect(contact.late_at).to eq contact.pledge_start_date + 2.months
       end
     end
   end

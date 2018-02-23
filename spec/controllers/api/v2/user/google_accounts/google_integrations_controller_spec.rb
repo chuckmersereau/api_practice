@@ -18,7 +18,7 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
   end
 
   let!(:second_resource) do
-    create(:google_integration, account_list: account_list, google_account: google_account, created_at: 1.hour.ago)
+    create(:google_integration, account_list: account_list, google_account: google_account, created_at: 1.hour.from_now)
   end
 
   let(:id) { resource.id }
@@ -69,7 +69,12 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
 
   describe 'account_list_id filter' do
     let!(:account_list_two) { create(:account_list).tap { |account_list| user.account_lists << account_list } }
-    let!(:google_integration_two) { create(:google_integration, account_list: account_list_two, google_account: google_account, created_at: 1.hour.ago) }
+    let!(:google_integration_two) do
+      create(:google_integration,
+             account_list: account_list_two,
+             google_account: google_account,
+             created_at: 1.hour.ago)
+    end
 
     before do
       expect(user.google_integrations.pluck(:account_list_id).uniq.size).to eq(2)
@@ -84,7 +89,9 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
     it 'does not filter by account_list_id' do
       api_login(user)
       get :index, parent_param_if_needed.except(:filter)
-      expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq(user.google_integrations.pluck(:id))
+      expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to(
+        eq(user.google_integrations.order(:created_at).map(&:id))
+      )
     end
   end
 end

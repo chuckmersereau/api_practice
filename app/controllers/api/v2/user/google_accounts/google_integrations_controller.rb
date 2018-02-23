@@ -47,6 +47,7 @@ class Api::V2::User::GoogleAccounts::GoogleIntegrationsController < Api::V2Contr
   def load_google_integrations
     @google_integrations = google_integration_scope
                            .reorder(sorting_param)
+                           .order(:created_at)
                            .page(page_number_param)
                            .per(per_page_param)
   end

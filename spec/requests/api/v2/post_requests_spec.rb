@@ -25,10 +25,10 @@ RSpec.describe 'Post Requests', type: :request do
             relationships: {
               account_list: {
                 data: {
-                  id: SecureRandom.uuid
+                  id: SecureRandom.uuid,
                   type: 'account_lists'
                 }
-              },
+              }
             }
           }
         }.to_json

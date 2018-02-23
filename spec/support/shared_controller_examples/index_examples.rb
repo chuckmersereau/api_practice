@@ -18,7 +18,7 @@ RSpec.shared_examples 'index_examples' do |options = {}|
       api_login(user)
       get :index, parent_param_if_needed
       expect(response.status).to eq(200), invalid_status_detail
-      expect(response.body).to include(resource.class.first.send(reference_key).to_s) if reference_key
+      expect(response.body).to include(resource.class.order(:created_at).first.send(reference_key).to_s) if reference_key
     end
 
     it 'does not show resources that do not belong to the signed in user' do

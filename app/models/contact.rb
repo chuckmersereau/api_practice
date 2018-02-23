@@ -283,7 +283,7 @@ class Contact < ApplicationRecord
     # CSV import uses mailing_address for checking the addresses for contacts
     # before saving them to the database.
     @mailing_address ||= primary_address ||
-                         addresses.order(:created_at).reject(&:historic).first || Address.new
+                         addresses.reject(&:historic).first || Address.new
   end
 
   def reload_mailing_address
@@ -564,7 +564,7 @@ class Contact < ApplicationRecord
 
   def primary_or_first_address
     @primary_or_first_address ||=
-      addresses.order(:created_at).find(&:primary_mailing_address?) || addresses.order(:created_at).first
+      addresses.find(&:primary_mailing_address?) || addresses.first
   end
 
   def set_timezone

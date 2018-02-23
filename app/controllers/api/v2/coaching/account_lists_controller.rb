@@ -21,6 +21,7 @@ class Api::V2::Coaching::AccountListsController < Api::V2Controller
   def load_account_lists
     @account_lists = account_lists_scope.where(filter_params)
                                         .reorder(sorting_param)
+                                        .order(:created_at)
                                         .page(page_number_param)
                                         .per(per_page_param)
   end

@@ -84,13 +84,24 @@ describe AddressMethods do
   end
 
   context '#addresses' do
-    it 'gives a consistent first if none are primary and record order changes' do
-      contact = create(:contact)
-      addr1 = create(:address, street: '1', primary_mailing_address: false,
-                               city: 'b', addressable: contact)
-      create(:address, street: '2', primary_mailing_address: false, city: 'a',
-                       addressable: contact)
+    let(:contact) { create(:contact) }
+    let!(:addr1) do
+      create(:address,
+             street: '1',
+             primary_mailing_address: false,
+             city: 'b',
+             addressable: contact)
+    end
+    let!(:addr2) do
+      create(:address,
+             street: '2',
+             primary_mailing_address: false,
+             city: 'a',
+             addressable: contact,
+             created_at: 1.week.from_now)
+    end
 
+    it 'gives a consistent first if none are primary and record order changes' do
       # Check that we get the same address even if db record order changes
       Address.connection.execute('CLUSTER addresses USING index_addresses_on_lower_city')
       expect(contact.addresses.order(:created_at).first).to eq addr1

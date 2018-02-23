@@ -24,6 +24,7 @@ class Api::V2::Coaching::PledgesController < Api::V2Controller
                                   .filter(scope: pledges_scope,
                                           account_lists: account_lists)
                                   .reorder(sorting_param)
+                                  .order(:created_at)
                                   .page(page_number_param)
                                   .per(per_page_param)
   end

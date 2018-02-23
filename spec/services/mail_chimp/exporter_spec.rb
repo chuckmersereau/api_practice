@@ -26,15 +26,17 @@ describe MailChimp::Exporter do
   let(:mock_gibbon_list) { double(:mock_gibbon_list) }
 
   let!(:contacts) do
-    create_list(
-      :contact,
-      3,
-      account_list: account_list,
-      tag_list: 'tag',
-      people: [
-        build(:person, primary_email_address: build(:email_address))
-      ]
-    )
+    (1..3).map do |count|
+      create(
+        :contact,
+        account_list: account_list,
+        tag_list: 'tag',
+        people: [
+          build(:person, primary_email_address: build(:email_address))
+        ],
+        created_at: count.weeks.from_now
+      )
+    end
   end
 
   let(:appeal) { create(:appeal, account_list: account_list) }
@@ -49,7 +51,7 @@ describe MailChimp::Exporter do
   end
 
   context '#export_contacts!' do
-    let(:contact) { Contact.first }
+    let(:contact) { Contact.order(:created_at).first }
     let!(:mail_chimp_member) do
       create(
         :mail_chimp_member,

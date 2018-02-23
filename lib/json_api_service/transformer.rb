@@ -69,6 +69,7 @@ module JsonApiService
       foreign_key = "#{key}_id"
       id          = value.dig(:data, :id)
       id = id == 'none' ? nil : id
+      configuration.resource_lookup.find(value.dig(:data, :type)).find_by!(id: id) if id
       { foreign_key => id }
     end
 

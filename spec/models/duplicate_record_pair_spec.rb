@@ -177,7 +177,7 @@ describe DuplicateRecordPair, type: :model do
         record_two: record_two,
         reason: 'Testing'
       )
-    end.to_not raise_error(ActiveRecord::RecordInvalid)
+    end.to_not raise_error
     expect do
       DuplicateRecordPair.create!(
         account_list: account_list,
@@ -185,7 +185,7 @@ describe DuplicateRecordPair, type: :model do
         record_two: record_two,
         reason: 'Testing'
       )
-    end.to raise_error
+    end.to raise_error(ActiveRecord::RecordInvalid)
     expect do
       DuplicateRecordPair.create!(
         account_list: account_list,

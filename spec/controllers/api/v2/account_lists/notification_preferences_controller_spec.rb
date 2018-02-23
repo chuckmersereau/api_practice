@@ -21,7 +21,8 @@ RSpec.describe Api::V2::AccountLists::NotificationPreferencesController, type: :
              email: true,
              task: true,
              notification_type_id: notification_type_1.id,
-             user_id: user.id)
+             user_id: user.id,
+             created_at: 1.week.from_now)
     ]
   end
   let(:correct_attributes) do

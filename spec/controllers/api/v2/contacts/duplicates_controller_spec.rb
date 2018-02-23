@@ -4,7 +4,9 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
   let(:factory_type) { :duplicate_contacts_pair }
 
   let!(:duplicate_record_pair) { create(:duplicate_contacts_pair) }
-  let!(:second_duplicate_record_pair) { create(:duplicate_contacts_pair, account_list: duplicate_record_pair.account_list) }
+  let!(:second_duplicate_record_pair) do
+    create(:duplicate_contacts_pair, account_list: duplicate_record_pair.account_list, created_at: 1.week.from_now)
+  end
 
   let(:account_list) { duplicate_record_pair.account_list }
   let(:user) { create(:user).tap { |user| account_list.users << user } }

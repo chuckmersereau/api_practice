@@ -4,7 +4,7 @@ RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller 
   let(:user) { create(:user) }
   let(:factory_type) { :organization_account }
   let!(:resource) { create(:organization_account, person: user) }
-  let!(:second_resource) { create(:organization_account, person: user) }
+  let!(:second_resource) { create(:organization_account, person: user, created_at: 1.week.from_now) }
   let(:id) { resource.id }
   let(:unpermitted_relationships) do
     {

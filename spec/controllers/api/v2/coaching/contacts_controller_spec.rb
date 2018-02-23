@@ -11,8 +11,8 @@ describe Api::V2::Coaching::ContactsController, type: :controller do
   let(:account_list_id) { account_list.id }
 
   let!(:contact_1) { create :contact, account_list_id: account_list.id }
-  let!(:contact_2) { create :contact, account_list_id: account_list.id }
-  let!(:contact_3) { create :contact }
+  let!(:contact_2) { create :contact, account_list_id: account_list.id, created_at: 1.week.from_now }
+  let!(:contact_3) { create :contact, created_at: 2.weeks.from_now }
   let(:id) { contact_1.id }
 
   let!(:coaches) { create_list(:user_coach, 2) }

@@ -12,8 +12,8 @@ describe Api::V2::Coaching::PledgesController, type: :controller do
   let(:appeal) { create :appeal, account_list: account_list }
 
   let!(:pledge_1) { create_pledge amount: 20, expected_date: 2.days.from_now }
-  let!(:pledge_2) { create_pledge amount: 30, expected_date: 3.days.from_now }
-  let!(:pledge_3) { create_pledge amount: 40, expected_date: 4.days.from_now }
+  let!(:pledge_2) { create_pledge amount: 30, expected_date: 3.days.from_now, created_at: 1.week.from_now }
+  let!(:pledge_3) { create_pledge amount: 40, expected_date: 4.days.from_now, created_at: 2.weeks.from_now }
 
   let(:id) { pledge_1.id }
 
