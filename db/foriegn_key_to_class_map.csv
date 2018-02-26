@@ -72,6 +72,7 @@ help_requests,user_id,User,
 help_requests,account_list_id,AccountList,
 imports,account_list_id,AccountList,
 imports,user_id,User,
+imports,source_account_id,Poly,
 mail_chimp_accounts,account_list_id,AccountList,
 mail_chimp_appeal_lists,mail_chimp_account_id,MailChimpAccount,drop
 mail_chimp_appeal_lists,appeal_id,Appeal,drop
