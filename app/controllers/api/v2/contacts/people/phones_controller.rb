@@ -86,6 +86,7 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   def load_phones
     @phones = phone_scope.where(filter_params)
                          .reorder(sorting_param)
+                         .order(:created_at)
                          .page(page_number_param)
                          .per(per_page_param)
   end

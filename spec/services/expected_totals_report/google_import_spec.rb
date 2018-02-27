@@ -440,7 +440,7 @@ describe GoogleImport do
         subject.import
       end.to change(Contact, :count).by(1)
 
-      expect(Contact.last.tag_list.sort).to eq(%w(hi mom more tags))
+      expect(Contact.order(:created_at).last.tag_list.sort).to eq(%w(hi mom more tags))
     end
 
     it 'handles the case when the Google auth token cannot be refreshed' do

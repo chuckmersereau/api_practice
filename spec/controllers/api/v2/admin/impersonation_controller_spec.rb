@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::V2::Admin::ImpersonationController do
-  let(:user) { create(:user_with_account, admin: true) }
-  let(:user_to_impersonate) { create(:user) }
-  let!(:relay_account) { create(:relay_account, user: user_to_impersonate) }
+  let!(:user) { create(:user_with_account, admin: true) }
+  let(:email) { 'bob@burgers.com' }
+  let!(:user_to_impersonate) { create(:user, email: email) }
+  let!(:relay_account) { create(:relay_account, user: user_to_impersonate, email: email) }
   let(:account_list) { user.account_lists.order(:created_at).first }
   let(:given_resource_type) { :impersonation }
   let(:correct_attributes) { { reason: 'Reason' } }
@@ -42,7 +43,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
     end
 
     it 'returns a 200 when an admin is logged in and searches the user by email' do
-      expect_admin_user_to_be_able_to_impersonate_with_id(relay_account.email)
+      expect_admin_user_to_be_able_to_impersonate_with_id(email)
     end
 
     def expect_admin_user_to_be_able_to_impersonate_with_id(user_key)

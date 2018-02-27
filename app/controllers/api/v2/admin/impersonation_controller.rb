@@ -45,7 +45,7 @@ class Api::V2::Admin::ImpersonationController < Api::V2Controller
   end
 
   def find_user_by_email
-    user = User.find_by_email(impersonation_params[:user])
+    user = User.order(:created_at).find_by_email(impersonation_params[:user])
 
     return user if user
 

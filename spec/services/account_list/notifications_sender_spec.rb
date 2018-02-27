@@ -13,7 +13,7 @@ RSpec.describe AccountList::NotificationsSender do
 
   describe '#send_notifications' do
     it 'should call NotificationType.check_all' do
-      expect(NotificationType).to receive(:check_all)
+      expect(NotificationType).to receive(:check_all).and_return({})
       subject.send_notifications
     end
 
