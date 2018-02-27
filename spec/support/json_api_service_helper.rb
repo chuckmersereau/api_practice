@@ -49,7 +49,9 @@ end
 
 class MockResource
   def self.where(_args); end
+
   def self.find_by(_args); end
+
   def self.find_by!(_args); end
 end
 
@@ -60,5 +62,4 @@ class MockContact < MockResource; end
 class MockEmail < MockResource; end
 class MockPerson < MockResource; end
 class MockPerson::FacebookAccount < MockResource; end
-class MockTask < MockResource
-  end
+class MockTask < MockResource; end

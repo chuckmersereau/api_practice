@@ -35,13 +35,9 @@ class DonationImports::Siebel
 
         @mpdx_person.save
 
-        unless @donor_account.people.exists?(@mpdx_person&.id)
-          @donor_account.people << @mpdx_person
-        end
+        @donor_account.people << @mpdx_person unless @donor_account.people.exists?(@mpdx_person&.id)
 
-        unless @donor_account.master_people.exists?(@mpdx_person&.master_person&.id)
-          @donor_account.master_people << @mpdx_person.master_person
-        end
+        @donor_account.master_people << @mpdx_person.master_person unless @donor_account.master_people.exists?(@mpdx_person&.master_person&.id)
 
         @contact.people << @mpdx_person unless @contact.people.exists?(@mpdx_person&.id)
         create_master_person_if_needed

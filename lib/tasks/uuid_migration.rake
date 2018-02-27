@@ -1,6 +1,6 @@
 namespace :mpdx do
   task readd_indexes: :environment do
-    path = Rails.root.join('db','dropped_indexes.csv')
+    path = Rails.root.join('db', 'dropped_indexes.csv')
 
     raise "indexes file doesn't exist!" unless File.exist?(path)
 
