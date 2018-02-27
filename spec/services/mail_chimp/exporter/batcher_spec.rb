@@ -145,5 +145,13 @@ RSpec.describe MailChimp::Exporter::Batcher do
 
       subject.unsubscribe_members([mail_chimp_member.email])
     end
+
+    it 'destroys associated mail chimp members' do
+      allow(mock_gibbon_batches).to receive(:create).and_return(mock_batch_response)
+
+      expect do
+        subject.unsubscribe_members([mail_chimp_member.email])
+      end.to change(MailChimpMember, :count).by(-1)
+    end
   end
 end

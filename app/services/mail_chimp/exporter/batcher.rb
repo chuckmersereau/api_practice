@@ -20,6 +20,8 @@ class MailChimp::Exporter
     end
 
     def unsubscribe_members(emails_of_members_to_remove)
+      return if emails_of_members_to_remove.none?
+
       operations = emails_of_members_to_remove.map do |email|
         {
           method: 'PATCH',
@@ -29,6 +31,7 @@ class MailChimp::Exporter
       end
 
       send_batch_operations(operations)
+      delete_member_records(emails_of_members_to_remove)
     end
 
     private
@@ -181,6 +184,12 @@ class MailChimp::Exporter
                       status: status_for_interest_ids(member_params[:interests]),
                       tags: tags_for_interest_ids(member_params[:interests]))
       end
+    end
+
+    def delete_member_records(emails)
+      MailChimpMember.where('lower(email) in (?)', emails)
+                     .where(list_id: list_id, mail_chimp_account_id: mail_chimp_account.id)
+                     .each(&:destroy)
     end
 
     def interests_for_tags(tags)
