@@ -24,8 +24,7 @@ class AccountList < ApplicationRecord
   validate :active_mpd_start_at_is_before_active_mpd_finish_at
 
   store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :ministry_country,
-                               :currency, :salary_currency, :log_debug_info,
-                               :salary_organization_id]
+                               :currency, :salary_currency, :log_debug_info]
 
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
 
@@ -59,6 +58,7 @@ class AccountList < ApplicationRecord
   has_many :notifications, through: :contacts
   has_many :organization_accounts, through: :users
   has_many :organizations, -> { distinct }, through: :organization_accounts
+  belongs_to :salary_organization, class_name: 'Organization'
   has_many :people, through: :contacts
   has_many :pledges, dependent: :destroy
   has_many :tasks
@@ -79,6 +79,8 @@ class AccountList < ApplicationRecord
   scope :has_users, -> (users) { joins(:account_list_users).where(account_list_users: { user: users }) }
 
   scope :readable_by, -> (user) { AccountList::ReadableFinder.new(user).relation }
+
+  before_validation :set_salary_currency
 
   PERMITTED_ATTRIBUTES = [
     :created_at,
@@ -108,19 +110,17 @@ class AccountList < ApplicationRecord
   alias destroy! destroy
 
   def salary_organization=(value)
+    return super(value) if value.is_a? Organization
     value = Organization.where(uuid: value).limit(1).ids.first unless value.is_a?(Integer)
     self.salary_organization_id = value
   end
 
   def salary_organization_id=(value)
-    settings[:salary_organization_id] = value if value.is_a?(Integer)
-    settings[:salary_organization_id] ||= value.id
-    settings[:salary_currency] = Organization.find(settings[:salary_organization_id]).default_currency_code
+    super(value.is_a?(Organization) ? value.id : value)
   end
 
   def salary_organization_id
-    settings[:salary_organization_id] || designation_organizations.first&.id ||
-      organizations&.first&.id
+    attributes['salary_organization_id'] || designation_organizations.first&.id || organizations&.first&.id
   end
 
   def salary_currency
@@ -397,6 +397,12 @@ class AccountList < ApplicationRecord
   end
 
   private
+
+  def set_salary_currency
+    return unless salary_organization_id_changed?
+    # we also need to set the instance var so self.salary_currency doesn't return the cached value
+    @salary_currency = self.salary_currency = salary_organization&.default_currency_code
+  end
 
   def import_donations
     organization_accounts.reject(&:disable_downloads).each(&:import_all_data)
