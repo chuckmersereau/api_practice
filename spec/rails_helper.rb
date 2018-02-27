@@ -9,11 +9,6 @@ if ENV['CI']
     require 'coveralls'
     Coveralls.wear_merged!('rails')
   end
-
-  if ENV['CODECOV_TOKEN']
-    require 'codecov'
-    SimpleCov.formatter = SimpleCov::Formatter::Codecov
-  end
 end
 
 ENV['RAILS_ENV'] ||= 'test'
