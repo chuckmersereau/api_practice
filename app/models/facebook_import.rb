@@ -12,8 +12,7 @@ class FacebookImport
 
   def import_contacts
     return false unless @import.source_account_id
-
-    facebook_account = @user.facebook_accounts.find(@import.source_account_id)
+    facebook_account = @user.facebook_accounts.find_by!(id: @import.source_account_id)
     begin
       facebook_account.update_column(:downloading, true)
 

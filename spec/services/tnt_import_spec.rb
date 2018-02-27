@@ -95,13 +95,13 @@ describe TntImport do
       it 'adds the referred by name into the contact notes' do
         expect do
           import.send(:import)
-        end.to change { Contact.last&.notes }.from(nil).to("call for amount \n \nReferred by: Steve and Lisa Moss")
+        end.to change { Contact.order(:created_at).last&.notes }.from(nil).to("call for amount \n \nReferred by: Steve and Lisa Moss")
       end
 
       it 'adds a tag so that the contact can be found' do
         expect do
           import.send(:import)
-        end.to change { Contact.last&.tag_list }.from(nil).to(['missing tnt referred by'])
+        end.to change { Contact.order(:created_at).last&.tag_list }.from(nil).to(['missing tnt referred by'])
       end
     end
 

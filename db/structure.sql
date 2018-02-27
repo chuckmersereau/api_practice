@@ -1597,7 +1597,6 @@ ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 --
 
 CREATE TABLE wv_donation_amt_recommendation (
-    organization_id integer,
     donor_number character varying,
     designation_number character varying,
     previous_amount numeric,
@@ -1611,7 +1610,8 @@ CREATE TABLE wv_donation_amt_recommendation (
     ask_at timestamp without time zone,
     zip_code character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    organization_id uuid
 );
 
 
@@ -5015,6 +5015,12 @@ INSERT INTO schema_migrations (version) VALUES ('20171108032537');
 
 INSERT INTO schema_migrations (version) VALUES ('20171113062557');
 
+INSERT INTO schema_migrations (version) VALUES ('20171213024356');
+
+INSERT INTO schema_migrations (version) VALUES ('20171215011225');
+
+INSERT INTO schema_migrations (version) VALUES ('20171219033014');
+
 INSERT INTO schema_migrations (version) VALUES ('20180201214927');
 
 INSERT INTO schema_migrations (version) VALUES ('20180202024130');
@@ -5022,4 +5028,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180202024130');
 INSERT INTO schema_migrations (version) VALUES ('20180202024131');
 
 INSERT INTO schema_migrations (version) VALUES ('20180207204733');
+
+INSERT INTO schema_migrations (version) VALUES ('20180209020330');
 
