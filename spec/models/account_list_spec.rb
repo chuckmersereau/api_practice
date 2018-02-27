@@ -47,11 +47,18 @@ describe AccountList do
   end
 
   describe '#salary_organization=()' do
-    let(:organization) { create(:organization) }
+    let(:organization) { create(:organization, default_currency_code: 'GBP') }
 
     it 'finds the id when given a id' do
       subject.salary_organization = organization.id
       expect(subject.salary_organization_id).to eq(organization.id)
+    end
+
+    it 'updates salary_currency' do
+      subject.name = 'test account list'
+      expect do
+        subject.update!(salary_organization: organization.uuid)
+      end.to change { subject.salary_currency }.to('GBP')
     end
   end
 

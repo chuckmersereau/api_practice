@@ -70,8 +70,11 @@ class MailChimpReport
   private
 
   def add_to_list(list, member)
-    @report[list] ||= { subscribed: [], unsubscribed: [], cleaned: [], pending: [] }
-    @report[list][member['status'].to_sym] << member
+    @report[list] ||= { subscribed: [], unsubscribed: [], manual_unsubscribed: [], cleaned: [], pending: [] }
+    mpdx_unsubscribe = member['unsubscribe_reason'] == 'N/A (Unsubscribed by an admin)'
+    status = member['status'].to_sym
+    status = :manual_unsubscribed if status == :unsubscribed && !mpdx_unsubscribe
+    @report[list][status] << member
   end
 
   def puts_counts(list)
@@ -114,4 +117,23 @@ class MailChimpReport
     p '-- not in mpdx'
     puts_counts :not_in_mpdx
   end
+end
+
+# something like
+# set_member_status('bill.bright@cru.org', :unsubscribed, mca, mca.primary_list_id)
+# or
+# set_member_status(@wrapper.list_members(list_id).first, 'subscribed', mca)
+def set_member_status(member, status, mail_chimp_account, list_id = nil)
+  email = if member.is_a? String
+            member
+          else
+            member['email_address']
+          end
+  return unless email
+
+  list_id ||= member['list_id']
+
+  gibbon = Gibbon::Request.new(api_key: mail_chimp_account.api_key, debug: true)
+
+  gibbon.lists(list_id).members(mail_chimp_account.email_hash(email)).update(body: { status: status.to_s })
 end

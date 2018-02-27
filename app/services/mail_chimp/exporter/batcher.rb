@@ -20,6 +20,8 @@ class MailChimp::Exporter
     end
 
     def unsubscribe_members(emails_of_members_to_remove)
+      return if emails_of_members_to_remove.none?
+
       operations = emails_of_members_to_remove.map do |email|
         {
           method: 'PATCH',
@@ -29,6 +31,7 @@ class MailChimp::Exporter
       end
 
       send_batch_operations(operations)
+      delete_member_records(emails_of_members_to_remove)
     end
 
     private
@@ -109,10 +112,29 @@ class MailChimp::Exporter
       # legitimate Bad Request error message is different. Because I've never
       # seen this happen more than twice in a row, I think that this solution
       # will do.
-      operations.in_groups_of(50, false) do |group_of_operations|
+      groups_with_batches = operations.in_groups_of(50, false).map do |group_of_operations|
         escape_intermittent_bad_request_error do
-          gibbon_wrapper.batches.create(body: { operations: group_of_operations })
+          batch = gibbon_wrapper.batches.create(body: { operations: group_of_operations })
+          { batch: batch, operations: group_of_operations }
         end
+      end
+      groups_with_batches.each(&method(:log_batches))
+    end
+
+    def log_batches(group_with_batch)
+      batch = group_with_batch[:batch]
+      self_link = batch['_links'].find { |link| link['rel'] == 'self' }.try(:[], 'href')
+      group_with_batch[:operations].each do |operation|
+        AuditChangeWorker.perform_async(
+          created_at: Time.zone.now,
+          action: 'create',
+          auditable_type: 'MailChimpBatch',
+          audtiable_id: batch['id'],
+          audited_changes: operation.to_json,
+          associated_id: mail_chimp_account.id,
+          associated_type: 'MailChimpAccount',
+          comment: self_link
+        )
       end
     end
 
@@ -162,6 +184,12 @@ class MailChimp::Exporter
                       status: status_for_interest_ids(member_params[:interests]),
                       tags: tags_for_interest_ids(member_params[:interests]))
       end
+    end
+
+    def delete_member_records(emails)
+      MailChimpMember.where('lower(email) in (?)', emails)
+                     .where(list_id: list_id, mail_chimp_account_id: mail_chimp_account.id)
+                     .each(&:destroy)
     end
 
     def interests_for_tags(tags)

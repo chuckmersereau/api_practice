@@ -14,6 +14,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
   let(:mock_gibbon_batches) { double(:mock_gibbon_batches) }
   let(:mock_interest_categories) { double(:mock_interest_categories) }
   let(:mock_interests) { double(:mock_interests) }
+  let(:mock_batch_response) { { 'id' => 'a1b2c3', '_links' => [] } }
 
   let(:complete_batch_body) do
     { body: { operations: operations_body } }
@@ -86,12 +87,14 @@ RSpec.describe MailChimp::Exporter::Batcher do
           raise Gibbon::MailChimpError, 'nested too deeply'
         when 3
           raise Gibbon::MailChimpError, '<H1>Bad Request</H1>'
+        else
+          mock_batch_response
         end
       end
     end
 
     it 'subscribes the contacts and creates the mail_chimp_members handling all 3 MC API intermittent errors' do
-      expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body).at_least(:once)
+      expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body).exactly(4)
 
       expect do
         subject.subscribe_contacts([contact])
@@ -104,6 +107,12 @@ RSpec.describe MailChimp::Exporter::Batcher do
       subject.subscribe_contacts([contact])
 
       expect(mail_chimp_account.mail_chimp_members(true).last.tags.compact).to_not be_empty
+    end
+
+    it 'logs request to AudtChangeLog' do
+      expect(AuditChangeWorker).to receive(:perform_async)
+
+      subject.subscribe_contacts([contact])
     end
   end
 
@@ -132,9 +141,17 @@ RSpec.describe MailChimp::Exporter::Batcher do
     end
 
     it 'unsubscribes the members based on the emails provided' do
-      expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body)
+      expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body).and_return(mock_batch_response)
 
       subject.unsubscribe_members([mail_chimp_member.email])
+    end
+
+    it 'destroys associated mail chimp members' do
+      allow(mock_gibbon_batches).to receive(:create).and_return(mock_batch_response)
+
+      expect do
+        subject.unsubscribe_members([mail_chimp_member.email])
+      end.to change(MailChimpMember, :count).by(-1)
     end
   end
 end

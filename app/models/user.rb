@@ -17,7 +17,7 @@ class User < Person
 
   devise :trackable
   store :preferences, accessors: [:time_zone, :locale, :locale_display, :contacts_filter,
-                                  :tasks_filter, :default_account_list, :contacts_view_options,
+                                  :tasks_filter, :contacts_view_options,
                                   :tab_orders, :developer, :admin]
   validate :default_account_list_is_valid, if: 'default_account_list.present?'
 
@@ -163,7 +163,12 @@ class User < Person
   end
 
   def preferences=(preferences_attributes)
-    super(preferences.merge(preferences_attributes)) if preferences_attributes
+    return unless preferences_attributes
+    preferences_attributes = preferences_attributes.with_indifferent_access
+    if preferences_attributes[:default_account_list]
+      self.default_account_list = preferences_attributes.delete :default_account_list
+    end
+    super(preferences.merge(preferences_attributes))
   end
 
   def readable_account_lists

@@ -134,6 +134,7 @@ CREATE TABLE account_lists (
     active_mpd_start_at date,
     active_mpd_finish_at date,
     active_mpd_monthly_goal numeric,
+    salary_organization_id uuid,
     primary_appeal_id uuid
 );
 
@@ -1233,7 +1234,8 @@ CREATE TABLE people (
     employer character varying,
     deprecated_not_duplicated_with character varying(2000),
     global_registry_id uuid,
-    global_registry_mdm_id uuid
+    global_registry_mdm_id uuid,
+    default_account_list uuid
 );
 
 
@@ -5020,6 +5022,10 @@ INSERT INTO schema_migrations (version) VALUES ('20171213024356');
 INSERT INTO schema_migrations (version) VALUES ('20171215011225');
 
 INSERT INTO schema_migrations (version) VALUES ('20171219033014');
+
+INSERT INTO schema_migrations (version) VALUES ('20180123202817');
+
+INSERT INTO schema_migrations (version) VALUES ('20180123202818');
 
 INSERT INTO schema_migrations (version) VALUES ('20180201214927');
 
