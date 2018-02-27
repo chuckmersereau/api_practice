@@ -175,7 +175,5 @@ class ApplicationSeeder
     create :background_batch
 
     create :export_log
-
-    create :fix_count, account_list_id: account_list.id
   end
 end
