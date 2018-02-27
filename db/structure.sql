@@ -1597,6 +1597,7 @@ ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 --
 
 CREATE TABLE wv_donation_amt_recommendation (
+    organization_id integer,
     donor_number character varying,
     designation_number character varying,
     previous_amount numeric,
@@ -1610,8 +1611,7 @@ CREATE TABLE wv_donation_amt_recommendation (
     ask_at timestamp without time zone,
     zip_code character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    organization_id uuid
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2320,10 +2320,31 @@ CREATE UNIQUE INDEX index_account_list_coaches_on_coach_id_and_account_list_id O
 
 
 --
+-- Name: index_account_list_coaches_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_list_coaches_on_created_at ON account_list_coaches USING btree (created_at);
+
+
+--
+-- Name: index_account_list_entries_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_list_entries_on_created_at ON account_list_entries USING btree (created_at);
+
+
+--
 -- Name: index_account_list_entries_on_designation_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_account_list_entries_on_designation_account_id ON account_list_entries USING btree (designation_account_id);
+
+
+--
+-- Name: index_account_list_invites_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_list_invites_on_created_at ON account_list_invites USING btree (created_at);
 
 
 --
@@ -2334,10 +2355,24 @@ CREATE INDEX index_account_list_users_on_account_list_id ON account_list_users U
 
 
 --
+-- Name: index_account_list_users_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_list_users_on_created_at ON account_list_users USING btree (created_at);
+
+
+--
 -- Name: index_account_list_users_on_user_id_and_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_account_list_users_on_user_id_and_account_list_id ON account_list_users USING btree (user_id, account_list_id);
+
+
+--
+-- Name: index_account_lists_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_lists_on_created_at ON account_lists USING btree (created_at);
 
 
 --
@@ -2369,6 +2404,13 @@ CREATE INDEX index_activities_on_completed_at ON activities USING btree (complet
 
 
 --
+-- Name: index_activities_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activities_on_created_at ON activities USING btree (created_at);
+
+
+--
 -- Name: index_activities_on_notification_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2394,6 +2436,13 @@ CREATE INDEX index_activities_on_start_at ON activities USING btree (start_at);
 --
 
 CREATE INDEX index_activity_comments_on_activity_id ON activity_comments USING btree (activity_id);
+
+
+--
+-- Name: index_activity_comments_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activity_comments_on_created_at ON activity_comments USING btree (created_at);
 
 
 --
@@ -2425,10 +2474,24 @@ CREATE UNIQUE INDEX index_activity_contacts_on_contact_id_and_activity_id ON act
 
 
 --
+-- Name: index_activity_contacts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activity_contacts_on_created_at ON activity_contacts USING btree (created_at);
+
+
+--
 -- Name: index_addresses_on_addressable_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_addresses_on_addressable_id ON addresses USING btree (addressable_id);
+
+
+--
+-- Name: index_addresses_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_addresses_on_created_at ON addresses USING btree (created_at);
 
 
 --
@@ -2474,6 +2537,20 @@ CREATE INDEX index_addresses_on_valid_values ON addresses USING btree (valid_val
 
 
 --
+-- Name: index_admin_impersonation_logs_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_admin_impersonation_logs_on_created_at ON admin_impersonation_logs USING btree (created_at);
+
+
+--
+-- Name: index_admin_reset_logs_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_admin_reset_logs_on_created_at ON admin_reset_logs USING btree (created_at);
+
+
+--
 -- Name: index_appeal_contacts_on_appeal_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2495,10 +2572,31 @@ CREATE INDEX index_appeal_contacts_on_contact_id ON appeal_contacts USING btree 
 
 
 --
+-- Name: index_appeal_contacts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_appeal_contacts_on_created_at ON appeal_contacts USING btree (created_at);
+
+
+--
+-- Name: index_appeal_excluded_appeal_contacts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_appeal_excluded_appeal_contacts_on_created_at ON appeal_excluded_appeal_contacts USING btree (created_at);
+
+
+--
 -- Name: index_appeals_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_appeals_on_account_list_id ON appeals USING btree (account_list_id);
+
+
+--
+-- Name: index_appeals_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_appeals_on_created_at ON appeals USING btree (created_at);
 
 
 --
@@ -2509,10 +2607,31 @@ CREATE INDEX index_background_batch_requests_on_background_batch_id ON backgroun
 
 
 --
+-- Name: index_background_batch_requests_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batch_requests_on_created_at ON background_batch_requests USING btree (created_at);
+
+
+--
+-- Name: index_background_batches_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batches_on_created_at ON background_batches USING btree (created_at);
+
+
+--
 -- Name: index_background_batches_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_background_batches_on_user_id ON background_batches USING btree (user_id);
+
+
+--
+-- Name: index_balances_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_balances_on_created_at ON balances USING btree (created_at);
 
 
 --
@@ -2523,6 +2642,13 @@ CREATE INDEX index_balances_on_resource_id_and_resource_type ON balances USING b
 
 
 --
+-- Name: index_companies_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_created_at ON companies USING btree (created_at);
+
+
+--
 -- Name: index_company_partnerships_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2530,10 +2656,24 @@ CREATE INDEX index_company_partnerships_on_company_id ON company_partnerships US
 
 
 --
+-- Name: index_company_partnerships_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_company_partnerships_on_created_at ON company_partnerships USING btree (created_at);
+
+
+--
 -- Name: index_company_positions_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_company_positions_on_company_id ON company_positions USING btree (company_id);
+
+
+--
+-- Name: index_company_positions_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_company_positions_on_created_at ON company_positions USING btree (created_at);
 
 
 --
@@ -2558,6 +2698,13 @@ CREATE INDEX index_contact_donor_accounts_on_contact_id ON contact_donor_account
 
 
 --
+-- Name: index_contact_donor_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_contact_donor_accounts_on_created_at ON contact_donor_accounts USING btree (created_at);
+
+
+--
 -- Name: index_contact_donor_accounts_on_donor_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2569,6 +2716,13 @@ CREATE INDEX index_contact_donor_accounts_on_donor_account_id ON contact_donor_a
 --
 
 CREATE INDEX index_contact_notes_logs_on_contact_id ON contact_notes_logs USING btree (contact_id);
+
+
+--
+-- Name: index_contact_notes_logs_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_contact_notes_logs_on_created_at ON contact_notes_logs USING btree (created_at);
 
 
 --
@@ -2586,10 +2740,24 @@ CREATE UNIQUE INDEX index_contact_people_on_contact_id_and_person_id ON contact_
 
 
 --
+-- Name: index_contact_people_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_contact_people_on_created_at ON contact_people USING btree (created_at);
+
+
+--
 -- Name: index_contact_people_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contact_people_on_person_id ON contact_people USING btree (person_id);
+
+
+--
+-- Name: index_contact_referrals_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_contact_referrals_on_created_at ON contact_referrals USING btree (created_at);
 
 
 --
@@ -2604,6 +2772,13 @@ CREATE INDEX index_contact_referrals_on_referred_to_id ON contact_referrals USIN
 --
 
 CREATE INDEX index_contacts_on_account_list_id ON contacts USING btree (account_list_id);
+
+
+--
+-- Name: index_contacts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_contacts_on_created_at ON contacts USING btree (created_at);
 
 
 --
@@ -2642,6 +2817,13 @@ CREATE INDEX index_contacts_on_total_donations ON contacts USING btree (total_do
 
 
 --
+-- Name: index_currency_aliases_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_currency_aliases_on_created_at ON currency_aliases USING btree (created_at);
+
+
+--
 -- Name: index_currency_rates_on_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2663,6 +2845,20 @@ CREATE INDEX index_currency_rates_on_exchanged_on ON currency_rates USING btree 
 
 
 --
+-- Name: index_designation_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_designation_accounts_on_created_at ON designation_accounts USING btree (created_at);
+
+
+--
+-- Name: index_designation_profile_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_designation_profile_accounts_on_created_at ON designation_profile_accounts USING btree (created_at);
+
+
+--
 -- Name: index_designation_profiles_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2670,10 +2866,24 @@ CREATE INDEX index_designation_profiles_on_account_list_id ON designation_profil
 
 
 --
+-- Name: index_designation_profiles_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_designation_profiles_on_created_at ON designation_profiles USING btree (created_at);
+
+
+--
 -- Name: index_designation_profiles_on_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_designation_profiles_on_organization_id ON designation_profiles USING btree (organization_id);
+
+
+--
+-- Name: index_donation_amount_recommendations_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_donation_amount_recommendations_on_created_at ON donation_amount_recommendations USING btree (created_at);
 
 
 --
@@ -2719,6 +2929,13 @@ CREATE INDEX index_donations_on_tnt_id ON donations USING btree (tnt_id);
 
 
 --
+-- Name: index_donor_account_people_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_donor_account_people_on_created_at ON donor_account_people USING btree (created_at);
+
+
+--
 -- Name: index_donor_account_people_on_donor_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2744,6 +2961,13 @@ CREATE INDEX index_donor_accounts_on_account_number ON donor_accounts USING btre
 --
 
 CREATE INDEX index_donor_accounts_on_acct_num_trig ON donor_accounts USING gin (account_number gin_trgm_ops);
+
+
+--
+-- Name: index_donor_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_donor_accounts_on_created_at ON donor_accounts USING btree (created_at);
 
 
 --
@@ -2803,6 +3027,20 @@ CREATE INDEX index_duplicate_record_pairs_on_account_list_id ON duplicate_record
 
 
 --
+-- Name: index_duplicate_record_pairs_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_duplicate_record_pairs_on_created_at ON duplicate_record_pairs USING btree (created_at);
+
+
+--
+-- Name: index_email_addresses_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_email_addresses_on_created_at ON email_addresses USING btree (created_at);
+
+
+--
 -- Name: index_email_addresses_on_email_and_person_id_and_source; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2845,6 +3083,20 @@ CREATE UNIQUE INDEX index_excluded_appeal_contacts_on_appeal_and_contact ON appe
 
 
 --
+-- Name: index_export_logs_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_export_logs_on_created_at ON export_logs USING btree (created_at);
+
+
+--
+-- Name: index_family_relationships_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_family_relationships_on_created_at ON family_relationships USING btree (created_at);
+
+
+--
 -- Name: index_family_relationships_on_person_id_and_related_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2863,6 +3115,13 @@ CREATE INDEX index_family_relationships_on_related_person_id ON family_relations
 --
 
 CREATE INDEX index_google_contacts_on_contact_id ON google_contacts USING btree (contact_id);
+
+
+--
+-- Name: index_google_contacts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_google_contacts_on_created_at ON google_contacts USING btree (created_at);
 
 
 --
@@ -2901,10 +3160,24 @@ CREATE INDEX index_google_email_activities_on_activity_id ON google_email_activi
 
 
 --
+-- Name: index_google_email_activities_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_google_email_activities_on_created_at ON google_email_activities USING btree (created_at);
+
+
+--
 -- Name: index_google_email_activities_on_google_email_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_email_activities_on_google_email_id ON google_email_activities USING btree (google_email_id);
+
+
+--
+-- Name: index_google_emails_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_google_emails_on_created_at ON google_emails USING btree (created_at);
 
 
 --
@@ -2922,6 +3195,13 @@ CREATE INDEX index_google_events_on_activity_id ON google_events USING btree (ac
 
 
 --
+-- Name: index_google_events_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_google_events_on_created_at ON google_events USING btree (created_at);
+
+
+--
 -- Name: index_google_events_on_google_integration_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2936,10 +3216,24 @@ CREATE INDEX index_google_integrations_on_account_list_id ON google_integrations
 
 
 --
+-- Name: index_google_integrations_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_google_integrations_on_created_at ON google_integrations USING btree (created_at);
+
+
+--
 -- Name: index_google_integrations_on_google_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_integrations_on_google_account_id ON google_integrations USING btree (google_account_id);
+
+
+--
+-- Name: index_google_plus_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_google_plus_accounts_on_created_at ON google_plus_accounts USING btree (created_at);
 
 
 --
@@ -2950,10 +3244,24 @@ CREATE INDEX index_google_plus_accounts_on_email_address_id ON google_plus_accou
 
 
 --
+-- Name: index_help_requests_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_help_requests_on_created_at ON help_requests USING btree (created_at);
+
+
+--
 -- Name: index_imports_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_imports_on_account_list_id ON imports USING btree (account_list_id);
+
+
+--
+-- Name: index_imports_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_imports_on_created_at ON imports USING btree (created_at);
 
 
 --
@@ -2971,6 +3279,13 @@ CREATE INDEX index_mail_chimp_accounts_on_account_list_id ON mail_chimp_accounts
 
 
 --
+-- Name: index_mail_chimp_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_mail_chimp_accounts_on_created_at ON mail_chimp_accounts USING btree (created_at);
+
+
+--
 -- Name: index_mail_chimp_appeal_lists_on_appeal_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2978,10 +3293,24 @@ CREATE INDEX index_mail_chimp_appeal_lists_on_appeal_list_id ON mail_chimp_appea
 
 
 --
+-- Name: index_mail_chimp_appeal_lists_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_mail_chimp_appeal_lists_on_created_at ON mail_chimp_appeal_lists USING btree (created_at);
+
+
+--
 -- Name: index_mail_chimp_appeal_lists_on_mail_chimp_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_mail_chimp_appeal_lists_on_mail_chimp_account_id ON mail_chimp_appeal_lists USING btree (mail_chimp_account_id);
+
+
+--
+-- Name: index_mail_chimp_members_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_mail_chimp_members_on_created_at ON mail_chimp_members USING btree (created_at);
 
 
 --
@@ -3020,6 +3349,13 @@ CREATE INDEX index_master_addresses_on_country ON master_addresses USING btree (
 
 
 --
+-- Name: index_master_addresses_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_master_addresses_on_created_at ON master_addresses USING btree (created_at);
+
+
+--
 -- Name: index_master_addresses_on_latitude; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3048,6 +3384,13 @@ CREATE INDEX index_master_addresses_on_street ON master_addresses USING btree (s
 
 
 --
+-- Name: index_master_companies_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_master_companies_on_created_at ON master_companies USING btree (created_at);
+
+
+--
 -- Name: index_master_companies_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3055,10 +3398,31 @@ CREATE INDEX index_master_companies_on_name ON master_companies USING btree (nam
 
 
 --
+-- Name: index_master_people_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_master_people_on_created_at ON master_people USING btree (created_at);
+
+
+--
+-- Name: index_master_person_donor_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_master_person_donor_accounts_on_created_at ON master_person_donor_accounts USING btree (created_at);
+
+
+--
 -- Name: index_master_person_donor_accounts_on_donor_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_person_donor_accounts_on_donor_account_id ON master_person_donor_accounts USING btree (donor_account_id);
+
+
+--
+-- Name: index_master_person_sources_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_master_person_sources_on_created_at ON master_person_sources USING btree (created_at);
 
 
 --
@@ -3083,6 +3447,13 @@ CREATE INDEX index_messages_on_contact_id ON messages USING btree (contact_id);
 
 
 --
+-- Name: index_messages_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_created_at ON messages USING btree (created_at);
+
+
+--
 -- Name: index_messages_on_from_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3097,10 +3468,24 @@ CREATE INDEX index_messages_on_to_id ON messages USING btree (to_id);
 
 
 --
+-- Name: index_name_male_ratios_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_name_male_ratios_on_created_at ON name_male_ratios USING btree (created_at);
+
+
+--
 -- Name: index_name_male_ratios_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_name_male_ratios_on_name ON name_male_ratios USING btree (name);
+
+
+--
+-- Name: index_nicknames_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_nicknames_on_created_at ON nicknames USING btree (created_at);
 
 
 --
@@ -3132,6 +3517,13 @@ CREATE INDEX index_notification_preferences_on_account_list_id ON notification_p
 
 
 --
+-- Name: index_notification_preferences_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notification_preferences_on_created_at ON notification_preferences USING btree (created_at);
+
+
+--
 -- Name: index_notification_preferences_on_notification_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3146,10 +3538,24 @@ CREATE UNIQUE INDEX index_notification_preferences_unique ON notification_prefer
 
 
 --
+-- Name: index_notification_types_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notification_types_on_created_at ON notification_types USING btree (created_at);
+
+
+--
 -- Name: index_notifications_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notifications_on_contact_id ON notifications USING btree (contact_id);
+
+
+--
+-- Name: index_notifications_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notifications_on_created_at ON notifications USING btree (created_at);
 
 
 --
@@ -3167,6 +3573,13 @@ CREATE INDEX index_notifications_on_notification_type_id ON notifications USING 
 
 
 --
+-- Name: index_organizations_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organizations_on_created_at ON organizations USING btree (created_at);
+
+
+--
 -- Name: index_organizations_on_query_ini_url; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3178,6 +3591,13 @@ CREATE UNIQUE INDEX index_organizations_on_query_ini_url ON organizations USING 
 --
 
 CREATE INDEX index_partner_status_logs_on_contact_id ON partner_status_logs USING btree (contact_id);
+
+
+--
+-- Name: index_partner_status_logs_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_partner_status_logs_on_created_at ON partner_status_logs USING btree (created_at);
 
 
 --
@@ -3209,6 +3629,13 @@ CREATE INDEX index_people_on_anniversary_month ON people USING btree (anniversar
 
 
 --
+-- Name: index_people_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_people_on_created_at ON people USING btree (created_at);
+
+
+--
 -- Name: index_people_on_first_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3227,6 +3654,13 @@ CREATE INDEX index_people_on_last_name ON people USING btree (last_name);
 --
 
 CREATE INDEX index_people_on_master_person_id ON people USING btree (master_person_id);
+
+
+--
+-- Name: index_person_facebook_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_facebook_accounts_on_created_at ON person_facebook_accounts USING btree (created_at);
 
 
 --
@@ -3251,6 +3685,13 @@ CREATE INDEX index_person_facebook_accounts_on_remote_id ON person_facebook_acco
 
 
 --
+-- Name: index_person_google_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_google_accounts_on_created_at ON person_google_accounts USING btree (created_at);
+
+
+--
 -- Name: index_person_google_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3262,6 +3703,13 @@ CREATE INDEX index_person_google_accounts_on_person_id ON person_google_accounts
 --
 
 CREATE INDEX index_person_google_accounts_on_remote_id ON person_google_accounts USING btree (remote_id);
+
+
+--
+-- Name: index_person_key_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_key_accounts_on_created_at ON person_key_accounts USING btree (created_at);
 
 
 --
@@ -3279,6 +3727,13 @@ CREATE INDEX index_person_key_accounts_on_remote_id ON person_key_accounts USING
 
 
 --
+-- Name: index_person_linkedin_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_linkedin_accounts_on_created_at ON person_linkedin_accounts USING btree (created_at);
+
+
+--
 -- Name: index_person_linkedin_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3293,6 +3748,13 @@ CREATE INDEX index_person_linkedin_accounts_on_remote_id ON person_linkedin_acco
 
 
 --
+-- Name: index_person_options_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_options_on_created_at ON person_options USING btree (created_at);
+
+
+--
 -- Name: index_person_options_on_key_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3300,10 +3762,24 @@ CREATE UNIQUE INDEX index_person_options_on_key_and_user_id ON person_options US
 
 
 --
+-- Name: index_person_organization_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_organization_accounts_on_created_at ON person_organization_accounts USING btree (created_at);
+
+
+--
 -- Name: index_person_organization_accounts_on_last_download_attempt_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_organization_accounts_on_last_download_attempt_at ON person_organization_accounts USING btree (last_download_attempt_at);
+
+
+--
+-- Name: index_person_relay_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_relay_accounts_on_created_at ON person_relay_accounts USING btree (created_at);
 
 
 --
@@ -3321,6 +3797,13 @@ CREATE INDEX index_person_relay_accounts_on_relay_remote_id ON person_relay_acco
 
 
 --
+-- Name: index_person_twitter_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_twitter_accounts_on_created_at ON person_twitter_accounts USING btree (created_at);
+
+
+--
 -- Name: index_person_twitter_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3335,10 +3818,24 @@ CREATE INDEX index_person_twitter_accounts_on_remote_id ON person_twitter_accoun
 
 
 --
+-- Name: index_person_websites_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_websites_on_created_at ON person_websites USING btree (created_at);
+
+
+--
 -- Name: index_person_websites_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_websites_on_person_id ON person_websites USING btree (person_id);
+
+
+--
+-- Name: index_phone_numbers_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_phone_numbers_on_created_at ON phone_numbers USING btree (created_at);
 
 
 --
@@ -3370,6 +3867,20 @@ CREATE INDEX index_phone_numbers_on_valid_values ON phone_numbers USING btree (v
 
 
 --
+-- Name: index_pictures_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pictures_on_created_at ON pictures USING btree (created_at);
+
+
+--
+-- Name: index_pledge_donations_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledge_donations_on_created_at ON pledge_donations USING btree (created_at);
+
+
+--
 -- Name: index_pledge_donations_on_donation_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3398,6 +3909,13 @@ CREATE INDEX index_pledges_on_appeal_id ON pledges USING btree (appeal_id);
 
 
 --
+-- Name: index_pledges_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledges_on_created_at ON pledges USING btree (created_at);
+
+
+--
 -- Name: index_pls_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3405,10 +3923,24 @@ CREATE INDEX index_pls_accounts_on_account_list_id ON pls_accounts USING btree (
 
 
 --
+-- Name: index_pls_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pls_accounts_on_created_at ON pls_accounts USING btree (created_at);
+
+
+--
 -- Name: index_prayer_letters_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_prayer_letters_accounts_on_account_list_id ON prayer_letters_accounts USING btree (account_list_id);
+
+
+--
+-- Name: index_prayer_letters_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_prayer_letters_accounts_on_created_at ON prayer_letters_accounts USING btree (created_at);
 
 
 --
@@ -3423,6 +3955,13 @@ CREATE UNIQUE INDEX index_remote_id_on_person_relay_account ON person_relay_acco
 --
 
 CREATE INDEX index_taggings_on_context ON taggings USING btree (context);
+
+
+--
+-- Name: index_taggings_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taggings_on_created_at ON taggings USING btree (created_at);
 
 
 --
@@ -4476,17 +5015,11 @@ INSERT INTO schema_migrations (version) VALUES ('20171108032537');
 
 INSERT INTO schema_migrations (version) VALUES ('20171113062557');
 
-INSERT INTO schema_migrations (version) VALUES ('20171213024356');
-
-INSERT INTO schema_migrations (version) VALUES ('20171215011225');
-
-INSERT INTO schema_migrations (version) VALUES ('20171219033014');
-
 INSERT INTO schema_migrations (version) VALUES ('20180201214927');
 
 INSERT INTO schema_migrations (version) VALUES ('20180202024130');
 
 INSERT INTO schema_migrations (version) VALUES ('20180202024131');
 
-INSERT INTO schema_migrations (version) VALUES ('20180209020330');
+INSERT INTO schema_migrations (version) VALUES ('20180207204733');
 
