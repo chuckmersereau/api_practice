@@ -38,10 +38,7 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
   end
 
   def notification_preference_scope
-    # This is just a placeholder to remind you to properly scope the model
-    # ie: It's meant to blow up :)
-    # NotificationPreference.that_belong_to(current_user)
-    load_account_list.notification_preferences
+    current_user.notification_preferences.where(account_list: load_account_list)
   end
 
   def authorize_notification_preference

@@ -8,6 +8,7 @@ class Person::OrganizationAccount < ApplicationRecord
   include Person::Account
   include Async
   include Sidekiq::Worker
+  audited associated_with: :person, except: [:password, :locked_at]
   sidekiq_options queue: :api_person_organization_account, retry: false, unique: :until_executed
   delegate :requires_credentials?, to: :organization, allow_nil: true
 

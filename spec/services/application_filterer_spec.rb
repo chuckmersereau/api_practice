@@ -24,10 +24,15 @@ describe ApplicationFilterer do
 
   describe '#initialize' do
     it 'initializes filters variable' do
-      expect(described_class.new(abc: '123').filters).to eq(abc: '123')
+      expect(described_class.new(abc: '123').filters).to eq('abc' => '123')
     end
+
+    it 'intializes filters with_indifferent_access' do
+      expect(described_class.new(abc: { 'def' => '123' }).filters[:abc][:def]).to eq('123')
+    end
+
     it 'strips filter string params' do
-      expect(described_class.new(abc: ' 1 2 3 ').filters).to eq(abc: '1 2 3')
+      expect(described_class.new(abc: ' 1 2 3 ').filters).to eq('abc' => '1 2 3')
     end
   end
 

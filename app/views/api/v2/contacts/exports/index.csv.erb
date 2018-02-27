@@ -3,6 +3,7 @@
   # Handles the assignments in contacts_controller#index
   contacts ||= @contacts
   contacts.each do |contact|
-    csv << spreadsheet_values(contact)
+    row = spreadsheet_values(contact)
+    csv << row unless row.empty?
   end
 end %>

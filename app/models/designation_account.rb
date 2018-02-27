@@ -5,13 +5,15 @@ class DesignationAccount < ApplicationRecord
   has_many :account_list_entries, dependent: :delete_all
   has_many :account_lists, through: :account_list_entries
   has_many :contacts, through: :account_lists
-  has_many :donations, dependent: :delete_all
+  has_many :donations, dependent: :destroy
   has_many :balances, dependent: :delete_all, as: :resource
   has_many :donation_amount_recommendations, dependent: :destroy, inverse_of: :designation_account
 
   after_save :create_balance, if: :balance_changed?
 
   validates :organization_id, presence: true
+
+  audited except: [:updated_at, :balance, :balance_updated_at]
 
   def to_s
     designation_number

@@ -15,13 +15,16 @@ module ContactsHelper
   def spreadsheet_values(contact)
     @contact = contact
     @row = []
+    return @row unless @contact
 
-    @primary_person = @contact.try(:primary_person)
-    @spouse = @contact.try(:spouse)
+    @primary_person, @spouse = [@contact.primary_person, @contact.spouse].reject { |person| person&.deceased? }
 
-    add_preliminary_values_to_row
-    add_email_addresses_to_row
-    add_phone_numbers_to_row
+    if @primary_person
+      add_preliminary_values_to_row
+      add_email_addresses_to_row
+      add_phone_numbers_to_row
+    end
+    @row
   end
 
   def type_array
@@ -35,9 +38,9 @@ module ContactsHelper
 
   def add_preliminary_values_to_row
     @row << @contact.name
-    @row << @contact.first_name
-    @row << @contact.last_name
-    @row << @contact.spouse_first_name
+    @row << @primary_person.first_name
+    @row << @primary_person.last_name
+    @row << @spouse&.first_name
     @row << @contact.greeting
     @row << @contact.envelope_greeting
     @row << @contact.mailing_address.csv_street
@@ -55,29 +58,29 @@ module ContactsHelper
   end
 
   def add_email_addresses_to_row
-    @primary_email_address = @primary_person.try(:primary_email_address)
-    @spouse_primary_email_address = @spouse.try(:primary_email_address)
+    @primary_email_address = @primary_person&.primary_email_address
+    @spouse_primary_email_address = @spouse&.primary_email_address
 
-    @row << @primary_email_address.try(:email) || ''
-    @row << @spouse_primary_email_address.try(:email) || ''
+    @row << @primary_email_address&.email || ''
+    @row << @spouse_primary_email_address&.email || ''
 
     @other_relevant_email_addresses = fetch_other_relevant_email_addresses
 
-    @row << find_email_address_by_person_id(@primary_person.try(:id)).try(:email) || ''
-    @row << find_email_address_by_person_id(@spouse.try(:id)).try(:email) || ''
+    @row << find_email_address_by_person_id(@primary_person&.id)&.email || ''
+    @row << find_email_address_by_person_id(@spouse&.id)&.email || ''
   end
 
   def add_phone_numbers_to_row
-    @primary_phone_number = @primary_person.try(:primary_phone_number)
-    @spouse_primary_phone_number = @spouse.try(:primary_phone_number)
+    @primary_phone_number = @primary_person&.primary_phone_number
+    @spouse_primary_phone_number = @spouse&.primary_phone_number
 
-    @row << @primary_phone_number.try(:number) || ''
-    @row << @spouse_primary_phone_number.try(:number) || ''
+    @row << @primary_phone_number&.number || ''
+    @row << @spouse_primary_phone_number&.number || ''
 
     @other_relevant_phone_numbers = fetch_other_relevant_phone_numbers
 
-    @row << find_phone_number_by_person_id(@primary_person.try(:id)).try(:number) || ''
-    @row << find_phone_number_by_person_id(@spouse.try(:id)).try(:number) || ''
+    @row << find_phone_number_by_person_id(@primary_person&.id)&.number || ''
+    @row << find_phone_number_by_person_id(@spouse&.id)&.number || ''
   end
 
   def find_email_address_by_person_id(person_id)
@@ -97,16 +100,26 @@ module ContactsHelper
   end
 
   def fetch_other_relevant_email_addresses
-    @contact.people.map(&:email_addresses).to_a.flatten.compact.select do |email_address|
-      [@primary_email_address.try(:id), @spouse_primary_email_address.try(:id)].exclude?(email_address.id) &&
-        email_address.historic == false
+    @contact.people
+            .alive
+            .map(&:email_addresses)
+            .flatten
+            .compact
+            .select do |email_address|
+      ids = [@primary_email_address&.id, @spouse_primary_email_address&.id]
+      ids.exclude?(email_address.id) && email_address.historic == false
     end
   end
 
   def fetch_other_relevant_phone_numbers
-    @contact.people.map(&:phone_numbers).to_a.flatten.compact.select do |phone_number|
-      [@primary_phone_number.try(:id), @spouse_primary_phone_number.try(:id)].exclude?(phone_number.id) &&
-        phone_number.historic == false
+    @contact.people
+            .alive
+            .map(&:phone_numbers)
+            .flatten
+            .compact
+            .select do |phone_number|
+      ids = [@primary_phone_number&.id, @spouse_primary_phone_number&.id]
+      ids.exclude?(phone_number.id) && phone_number.historic == false
     end
   end
 

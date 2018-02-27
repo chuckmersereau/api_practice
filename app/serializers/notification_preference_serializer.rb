@@ -1,5 +1,4 @@
 class NotificationPreferenceSerializer < ApplicationSerializer
-  attributes :actions
-
+  attributes :email, :task
   belongs_to :notification_type
 end

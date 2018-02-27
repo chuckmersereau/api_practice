@@ -196,8 +196,8 @@ class DataServer
     attributes = { balance: balance[:balance], balance_updated_at: balance[:date] }
     profile.update_attributes(attributes)
 
-    return unless balance[:designation_numbers]
-    attributes[:name] = balance[:account_names].first if balance[:designation_numbers].length == 1
+    return unless balance[:designation_numbers] && balance[:designation_numbers].length == 1
+    attributes[:name] = balance[:account_names].first
     balance[:designation_numbers].each_with_index do |number, _i|
       find_or_create_designation_account(number, profile, attributes)
     end
@@ -226,7 +226,8 @@ class DataServer
         end
       end
     rescue DataServerError => e
-      return false if e.message =~ /password/
+      # provid?ed is necessary because there is a typo in the error message
+      return false if e.message =~ /password/ || e.message =~ /No client_id was provid?ed/
       raise e
     rescue Errno::ETIMEDOUT
       return false

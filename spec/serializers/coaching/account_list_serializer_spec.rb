@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Coaching::AccountListSerializer, type: :serializer do
   let(:organization) { create(:organization) }
-  let(:account_list) { create(:account_list, settings: { salary_organization_id: organization.id }) }
+  let(:account_list) { create(:account_list, salary_organization_id: organization) }
 
   let(:serializer) { Coaching::AccountListSerializer.new(account_list) }
   subject { serializer }

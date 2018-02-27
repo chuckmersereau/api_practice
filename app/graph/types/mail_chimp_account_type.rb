@@ -18,7 +18,6 @@ module Types
     end
     field :primaryListId, types.String, 'The id of the Primary List for this account', property: :primary_list_id
     field :primaryListName, types.String, 'The name of the Primary List for this account', property: :primary_list_name
-    field :syncAllActiveContacts, types.Boolean, 'Whether or not to sync all active contentx', property: :sync_all_active_contacts
     field :valid, types.Boolean, 'Whether or not the Mail Chimp Account is valid', property: :valid?
     field :validateKey, types.String, 'Whether or not to validate to validate the key for this Mail Chimp Account', property: :validate_key
     field :validationError, types.String, 'An error message returned in the event of a validation problem', property: :validation_error

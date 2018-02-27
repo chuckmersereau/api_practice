@@ -4,8 +4,12 @@ require 'sidekiq/cron/web'
 Rails.application.routes.draw do
   mount Auth::Engine, at: '/', constraints: { subdomain: 'auth' }
 
-  authenticated :user, ->(u) { u.developer } do
+  if Rails.env.development?
     mount Sidekiq::Web => '/sidekiq'
+  else
+    authenticated :user, ->(u) { u.developer } do
+      mount Sidekiq::Web => '/sidekiq'
+    end
   end
 
   namespace :api do
@@ -45,6 +49,9 @@ Rails.application.routes.draw do
 
             resources :merge, only: [:create]
             resources :notification_preferences, only: [:index, :show, :create, :destroy]
+            namespace :notification_preferences do
+              resource :bulk, only: [:create], controller: :bulk
+            end
             resources :notifications, only: [:index, :show, :create, :update, :destroy]
             resources :pledges, only: [:index, :show, :create, :update, :destroy]
 

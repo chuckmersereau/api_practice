@@ -3,6 +3,8 @@ require 'async'
 class MailChimpAccount < ApplicationRecord
   COUNT_PER_PAGE = 100
 
+  audited associated_with: :account_list, except: [:importing]
+
   belongs_to :account_list
   has_one :mail_chimp_appeal_list, dependent: :destroy
   has_many :mail_chimp_members, dependent: :destroy
@@ -34,30 +36,17 @@ class MailChimpAccount < ApplicationRecord
     :grouping_id,
     :overwrite,
     :primary_list_id,
-    :sync_all_active_contacts,
     :updated_at,
     :updated_in_db_at,
     :uuid
   ].freeze
 
-  def relevant_emails
-    if sync_all_active_contacts
-      active_contacts_emails
-    else
-      newsletter_emails
-    end
-  end
-
   def newsletter_emails
     newsletter_contacts_with_emails(nil).pluck('email_addresses.email')
   end
 
-  def active_contacts_emails
-    active_contacts_with_emails(nil).pluck('email_addresses.email')
-  end
-
   def relevant_contacts(contact_ids = nil, force_sync = false)
-    return active_contacts_with_emails(contact_ids) if (contact_ids && force_sync) || sync_all_active_contacts
+    return active_contacts_with_emails(contact_ids) if contact_ids && force_sync
     newsletter_contacts_with_emails(contact_ids)
   end
 

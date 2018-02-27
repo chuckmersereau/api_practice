@@ -55,6 +55,8 @@ RSpec.describe AccountList::Destroyer do
         account_list.designation_accounts.collect(&:designation_profile_accounts).flatten,
         account_list.designation_profiles,
         account_list.donations,
+        account_list.pledges,
+        account_list.pledges.collect(&:pledge_donations).flatten,
         account_list.google_integrations,
         account_list.imports,
         account_list.mail_chimp_account,

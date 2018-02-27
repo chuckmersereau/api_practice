@@ -24,8 +24,7 @@ class EmailAddress < ApplicationRecord
   before_create :set_valid_values
   after_save :trigger_mail_chimp_syncs_to_relevant_contacts, if: :sync_with_mail_chimp_required?
   after_create :start_google_plus_account_fetcher_job, unless: :checked_for_google_plus_account
-
-  validates :email, presence: true, email: true, uniqueness: { scope: [:person_id, :source] }
+  validates :email, presence: true, email: true, uniqueness: { scope: [:person_id, :source], case_sensitive: false }
   validates :email, :remote_id, :location, updatable_only_when_source_is_mpdx: true
 
   global_registry_bindings parent: :person,
@@ -35,6 +34,10 @@ class EmailAddress < ApplicationRecord
     email
   end
 
+  def email=(email)
+    super(email&.downcase)
+  end
+
   class << self
     def add_for_person(person, attributes)
       attributes = attributes.with_indifferent_access.except(:_destroy)
@@ -42,7 +45,7 @@ class EmailAddress < ApplicationRecord
         person.email_addresses.reload
       end
 
-      attributes['email'] = strip_email(attributes['email'].to_s)
+      attributes['email'] = strip_email(attributes['email'].to_s).downcase
 
       email = Retryable.retryable on: ActiveRecord::RecordNotUnique,
                                   then: then_cb do

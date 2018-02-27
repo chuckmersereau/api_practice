@@ -27,7 +27,6 @@ gem 'ddtrace', '~> 0.7.2'
 gem 'deadlock_retry', '~> 1.2.0'
 gem 'devise', '~> 4.2.1'
 gem 'display_case', '= 0.0.5'
-gem 'dotenv-rails', '~> 2.1.1'
 gem 'elasticsearch-persistence', '~> 5.0.1'
 gem 'email_reply_parser', '~> 0.5.9'
 gem 'email_validator', '~> 1.6.0'
@@ -100,13 +99,14 @@ group :development, :test do
   gem 'awesome_print', '~> 1.7.0'
   gem 'database_cleaner', '~> 1.5.3'
   gem 'equivalent-xml', '~> 0.6.0'
+  gem 'dotenv-rails', '~> 2.2.1', require: 'dotenv/rails-now'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'gettext', '~> 3.1.6', require: false, group: :development
   gem 'guard-brakeman'
   gem 'guard-bundler'
   gem 'guard-bundler-audit', git: 'https://github.com/christianhellsten/guard-bundler-audit.git'
   gem 'guard-puma'
-  gem 'guard-rails'
+  gem 'guard-rails', require: false
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'guard-sidekiq'
@@ -137,6 +137,7 @@ group :test do
   gem 'mock_redis', '~> 0.17.0'
   gem 'rb-fsevent', require: false
   gem 'roo', '~> 1.13.2'
+  gem 'rspec-sidekiq', '~>3.0.3'
   gem 'rspec-retry', '~> 0.5.5'
   gem 'rubocop', '~> 0.49.0', require: false
   gem 'shoulda-matchers', '~> 3.1.1'

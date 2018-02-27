@@ -1,18 +1,17 @@
 class NotificationPreference < ApplicationRecord
+  audited associated_with: :account_list
+
   belongs_to :account_list
   belongs_to :notification_type
+  belongs_to :user
 
-  serialize :actions, Array
-
-  validates :notification_type_id, presence: true
-
+  validates :account_list, :notification_type, presence: true
   delegate :type, to: :notification_type
+  before_save :update_other_notification_preferences, if: :user
 
   PERMITTED_ATTRIBUTES = [
-    {
-      actions: []
-    },
-    :actions,
+    :email,
+    :task,
     :created_at,
     :id,
     :notification_type_id,
@@ -22,19 +21,25 @@ class NotificationPreference < ApplicationRecord
     :uuid
   ].freeze
 
-  def self.default_actions
-    %w(email task)
+  protected
+
+  def update_other_notification_preferences
+    create_notification_preference_without_user
+    account_list.notification_preferences
+                .where(notification_type_id: notification_type_id)
+                .where('id != ?', id)
+                .update_all(task: task)
   end
 
-  def actions=(actions)
-    actions = actions.split(',').map(&:strip) if actions.is_a?(String)
-
-    value = Array[actions].tap do |array|
-      array.flatten!
-      array.uniq!
-      array.select!(&:present?)
-      array.sort!
-    end
-    self[:actions] = value
+  def create_notification_preference_without_user
+    account_list.notification_preferences
+                .create_with(
+                  email: false,
+                  task: task
+                )
+                .find_or_create_by(
+                  notification_type_id: notification_type_id,
+                  user_id: nil
+                )
   end
 end
