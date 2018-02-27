@@ -1,4 +1,6 @@
 class NotificationPreference < ApplicationRecord
+  audited associated_with: :account_list
+
   belongs_to :account_list
   belongs_to :notification_type
   belongs_to :user

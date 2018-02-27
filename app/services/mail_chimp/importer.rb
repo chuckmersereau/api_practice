@@ -1,6 +1,10 @@
 class MailChimp::Importer
   attr_reader :mail_chimp_account, :account_list, :gibbon_wrapper
 
+  # this is currently the reason that Mailchimp lists if MPDX removed the contact from the list
+  # We do not want to mark someone as opt-out if they were unsubscibed by the user or our system somehow.
+  ADMIN_UNSUBSCRIBE_REASON = 'N/A (Unsubscribed by an admin)'.freeze
+
   def initialize(mail_chimp_account)
     @mail_chimp_account = mail_chimp_account
     @account_list = mail_chimp_account.account_list
@@ -18,17 +22,17 @@ class MailChimp::Importer
   end
 
   def import_all_members!
-    all_emails_to_import = fetch_all_emails_to_import
+    # all_emails_to_import = fetch_all_emails_to_import
 
-    import_members_by_email(all_emails_to_import)
+    # import_members_by_email(all_emails_to_import)
   end
 
   def import_members_by_email!(member_emails)
-    subscribed_members = list_of_members_info(member_emails)
+    # subscribed_members = list_of_members_info(member_emails)
 
-    formatted_subscribed_members = subscribed_members.map(&method(:format_member_info))
+    # formatted_subscribed_members = subscribed_members.map(&method(:format_member_info))
 
-    import_members(formatted_subscribed_members)
+    # import_members(formatted_subscribed_members)
   end
 
   private
@@ -49,7 +53,8 @@ class MailChimp::Importer
       last_name: nil_if_hex_chars(member_info['merge_fields']['LNAME']),
       greeting: nil_if_hex_chars(member_info['merge_fields']['GREETING']),
       groupings: member_info['merge_fields']['GROUPINGS'],
-      status: member_info['status']
+      status: member_info['status'].downcase,
+      unsubscribe_reason: member_info['unsubscribe_reason']
     }
   end
 
@@ -64,7 +69,7 @@ class MailChimp::Importer
 
   def fetch_all_emails_to_import
     gibbon_wrapper.list_emails(mail_chimp_account.primary_list_id) -
-      mail_chimp_account.relevant_emails
+      mail_chimp_account.newsletter_emails
   end
 
   def import_members(member_infos)
@@ -93,9 +98,7 @@ class MailChimp::Importer
   end
 
   def add_or_remove_person_from_newsletter(person, member_info)
-    return if mail_chimp_account.sync_all_active_contacts?
-
-    person.optout_enewsletter = true if person_should_be_opted_out?(person, member_info)
+    person.optout_enewsletter = person_opt_out_value(person, member_info)
     person.email = member_info[:email]
     person.save(validate: false)
 
@@ -105,21 +108,29 @@ class MailChimp::Importer
   end
 
   def primary_email_address_should_be_made_historic?(member_info)
-    member_info[:status].casecmp('cleaned').zero?
+    member_info[:status] == 'cleaned'
   end
 
-  def person_should_be_opted_out?(person, member_info)
-    %w(cleaned unsubscribed).include?(member_info[:status].downcase) || person.contact&.send_newsletter == 'None'
+  def person_opt_out_value(person, member_info)
+    return person.optout_enewsletter if member_info[:unsubscribe_reason] == ADMIN_UNSUBSCRIBE_REASON
+
+    member_info[:status] == 'unsubscribed'
   end
 
   def add_or_remove_contact_from_newsletter(contact, member_info)
-    return if contact.send_newsletter == 'None'
+    return if [nil, '', 'None'].include? contact.send_newsletter
 
-    if member_info[:status].casecmp('unsubscribed').zero?
-      contact.update(send_newsletter: nil)
+    if member_info[:status] == 'unsubscribed'
+      remove_from_newsletter_if_all_opt_out(contact)
     else
       contact.update(send_newsletter: (contact.send_newsletter == 'Physical' ? 'Both' : 'Email'))
     end
+  end
+
+  # it can be that only one of the people on a contact unsubscribes,
+  # you would still want to keep the contact set to send newsletters
+  def remove_from_newsletter_if_all_opt_out(contact)
+    contact.update(send_newsletter: nil) if contact.send_newsletter != 'Physical' && contact.people.all?(&:optout_enewsletter)
   end
 
   def create_person(member)

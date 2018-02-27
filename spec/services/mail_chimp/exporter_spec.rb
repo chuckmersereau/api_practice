@@ -6,7 +6,6 @@ describe MailChimp::Exporter do
     create(
       :mail_chimp_account,
       active: true,
-      sync_all_active_contacts: true,
       primary_list_id: list_id
     )
   end
@@ -76,20 +75,8 @@ describe MailChimp::Exporter do
       expect(mock_merge_field_adder).to receive(:add_merge_field).with('GREETING')
 
       expect(mock_batcher).to receive(:subscribe_contacts).with(contacts)
-      expect(mock_batcher).to_not receive(:unsubscribe_members)
-
+      expect(mock_batcher).to receive(:unsubscribe_members).with([contact.people.first.primary_email_address.email])
       subject.export_contacts!(contacts.map(&:id))
-    end
-
-    context 'sync_all_active_contacts = false' do
-      before do
-        mail_chimp_account.sync_all_active_contacts = false
-      end
-
-      it 'removes correct emails' do
-        expect(mock_batcher).to receive(:unsubscribe_members).with([mail_chimp_member.email])
-        subject.export_contacts! nil
-      end
     end
   end
 end

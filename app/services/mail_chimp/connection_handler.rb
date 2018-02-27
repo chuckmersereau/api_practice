@@ -68,7 +68,9 @@ class MailChimp::ConnectionHandler
   end
 
   def api_key_disabled?
-    @error.message.include?('API Key Disabled') || @error.message.include?('code 104')
+    @error.message.include?('API Key Disabled') ||
+      @error.message.include?('This account has been deactivated.') ||
+      @error.message.include?('code 104')
   end
 
   def server_temporarily_unavailable?

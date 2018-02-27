@@ -46,6 +46,7 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
     authorize_mail_chimp_account
 
     if save_mail_chimp_account
+      MailChimp::PrimaryListSyncWorker.perform_async(@mail_chimp_account.id) if @mail_chimp_account.primary_list_id
       render_mail_chimp_account
     else
       render_with_resource_errors(@mail_chimp_account)

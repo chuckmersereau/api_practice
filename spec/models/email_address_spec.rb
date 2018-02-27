@@ -26,6 +26,15 @@ describe EmailAddress do
       end.to_not change(EmailAddress, :count)
     end
 
+    it "doesn't create an email address if it exists - case insensitive" do
+      person.email = address
+      expect do
+        person.email = address_changed_case
+        person.save!
+        expect(person.reload.email_addresses.first.email).to eq(address)
+      end.to_not change(EmailAddress, :count)
+    end
+
     it 'creates a duplicate email address if it is from an TntImport' do
       EmailAddress.add_for_person(person, email: address)
       expect do

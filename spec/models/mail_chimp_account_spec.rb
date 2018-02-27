@@ -82,14 +82,6 @@ describe MailChimpAccount do
       non_newsletter_contacts
     end
 
-    describe '#relevant_emails' do
-      it 'returns the right list of emails which depends on the settings set by the user' do
-        expect(mail_chimp_account.relevant_emails.size).to eq(2)
-        mail_chimp_account.update(sync_all_active_contacts: true)
-        expect(mail_chimp_account.relevant_emails.size).to eq(3)
-      end
-    end
-
     describe '#relevant_contacts' do
       context 'contact_ids set' do
         it 'returns newsletter configured contacts' do
@@ -103,13 +95,6 @@ describe MailChimpAccount do
       end
       it 'returns newsletter configured contacts' do
         expect(mail_chimp_account.relevant_contacts).to match_array(newsletter_contacts)
-      end
-      context 'sync_all_active_contacts = true' do
-        before { mail_chimp_account.update(sync_all_active_contacts: true) }
-
-        it 'returns all active contacts' do
-          expect(mail_chimp_account.relevant_contacts).to match_array(contacts)
-        end
       end
     end
   end

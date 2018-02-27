@@ -60,7 +60,7 @@ class MailChimp::Exporter
   end
 
   def fetch_emails_of_members_to_remove
-    relevant_mail_chimp_members.pluck(:email) - mail_chimp_account.relevant_emails
+    relevant_mail_chimp_members.pluck(:email) - mail_chimp_account.newsletter_emails
   end
 
   def fetch_contacts_to_export(contact_ids)

@@ -8,6 +8,8 @@ class DesignationProfile < ApplicationRecord
   after_save :create_balance, if: :balance_changed?
   scope :for_org, -> (org_id) { where(organization_id: org_id) }
 
+  audited associated_with: :account_list, except: [:updated_at, :balance, :balance_updated_at]
+
   def to_s
     name
   end

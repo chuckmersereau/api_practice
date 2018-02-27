@@ -45,7 +45,7 @@ class EmailAddress < ApplicationRecord
         person.email_addresses.reload
       end
 
-      attributes['email'] = strip_email(attributes['email'].to_s)
+      attributes['email'] = strip_email(attributes['email'].to_s).downcase
 
       email = Retryable.retryable on: ActiveRecord::RecordNotUnique,
                                   then: then_cb do

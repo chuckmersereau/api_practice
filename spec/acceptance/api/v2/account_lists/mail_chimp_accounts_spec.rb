@@ -29,7 +29,6 @@ resource 'Account Lists > Mailchimp Accounts' do
       lists_present
       primary_list_id
       primary_list_name
-      sync_all_active_contacts
       valid
       validate_key
       validation_error
@@ -56,7 +55,6 @@ resource 'Account Lists > Mailchimp Accounts' do
       response_field 'lists_present',                   'Lists Present',                   type: 'Boolean'
       response_field 'primary_list_id',                 'Primary List ID',                 type: 'Number'
       response_field 'primary_list_name',               'Primary List Name',               type: 'String'
-      response_field 'sync_all_active_contacts',        'Sync all active contacts',        type: 'Boolean'
       response_field 'updated_at',                      'Updated At',                      type: 'String'
       response_field 'updated_in_db_at',                'Updated In Db At',                type: 'String'
       response_field 'valid',                           'Valid',                           type: 'Boolean'
@@ -95,7 +93,6 @@ resource 'Account Lists > Mailchimp Accounts' do
       parameter 'lists_present',                   'Lists Present or Not',            type: 'Boolean'
       parameter 'primary_list_id',                 'Primary List ID',                 type: 'String', required: true
       parameter 'primary_list_name',               'Primary List Name',               type: 'String'
-      parameter 'sync_all_active_contacts',        'Sync all active contacts',        type: 'Boolean'
       parameter 'valid',                           'Valid',                           type: 'Boolean'
       parameter 'validation_error',                'Validation Error',                type: 'String'
       parameter 'validate_key',                    'Validate Key or Not',             type: 'Boolean'
