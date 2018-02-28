@@ -145,11 +145,26 @@ describe Appeal do
     end
 
     describe '#pledges_amount_processed' do
-      it 'returns the total amount of all pledges that were received that were' do
+      let(:part_donation) { create(:donation, amount: 100, appeal_amount: 50, appeal: subject) }
+      let(:full_donation) { create(:donation, amount: 150, appeal: subject) }
+      before do
+        create(:pledge_donation, pledge: processed_pledge, donation: part_donation)
+        create(:pledge_donation, pledge: processed_pledge, donation: full_donation)
+      end
+
+      it 'returns the total amount of all pledges that were received and processed' do
         expect(ConvertedTotal).to receive(:new).with(
-          [[processed_pledge.amount,
-            processed_pledge.contact.read_attribute(:pledge_currency),
-            processed_pledge.created_at]],
+          [
+            [
+              part_donation.appeal_amount,
+              part_donation.currency,
+              part_donation.donation_date
+            ], [
+              full_donation.amount,
+              full_donation.currency,
+              full_donation.donation_date
+            ]
+          ],
           subject.account_list.salary_currency_or_default
         ).and_call_original
         expect(subject.pledges_amount_processed).to eq(200.00)

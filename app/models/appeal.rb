@@ -75,12 +75,22 @@ class Appeal < ApplicationRecord
 
   def pledges_amount_processed
     ConvertedTotal.new(
-      pledges_by_status(:processed),
+      donations_from_pledges,
       account_list.salary_currency_or_default
     ).total
   end
 
   protected
+
+  def donations_from_pledges
+    donations.reorder(:created_at)
+             .joins(:pledges)
+             .where(pledges: { status: 'processed' })
+             .pluck(:appeal_amount, :amount, :currency, :donation_date)
+             .map do |donation|
+      [donation[0].positive? ? donation[0] : donation[1], donation[2], donation[3]]
+    end
+  end
 
   def pledges_by_status(status)
     pledges.where(status: status).joins(:contact).pluck('pledges.amount, contacts.pledge_currency, pledges.created_at')

@@ -36,3 +36,5 @@ env:
     - TEST_SUITE=4
 addons:
   postgresql: "9.6"
+notifications:
+  webhooks: https://coveralls.io/webhook?repo_token=COVERALLS_REPO_TOKEN

@@ -76,7 +76,6 @@ gem 'rubyzip', '~> 1.2.1'
 gem 'sidekiq-cron', '~> 0.4.4'
 gem 'sidekiq-unique-jobs', '~> 5.0.8'
 gem 'siebel_donations', '1.0.7'
-gem 'sinatra', '~> 1.4.7', require: nil
 gem 'slim', '~> 3.0.7' # used for sidekiq web
 gem 'snail', '~> 2.2.1'
 gem 'syslog-logger', '~> 1.6.8'
@@ -131,7 +130,6 @@ end
 group :test do
   gem 'ammeter', '~> 1.1.4' # for testing generators
   gem 'coveralls', '~> 0.8.21', require: false
-  gem 'codecov', require: false
   gem 'faker', '~> 1.6.6'
   gem 'growl', '~> 1.0.3'
   gem 'mock_redis', '~> 0.17.0'
