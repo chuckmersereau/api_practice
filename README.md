@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=master)](https://travis-ci.com/CruGlobal/mpdx_api)
-[![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
-
+[![Coverage Status](https://coveralls.io/repos/github/CruGlobal/mpdx_api/badge.svg?t=VD72R0)](https://coveralls.io/github/CruGlobal/mpdx_api)
 
 MPDX API
 ========
@@ -117,11 +116,13 @@ If start_es.sh errors with 'Error response from daemon: Conflict. The container 
 
 ## Branches
 
-### master [![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=master)](https://travis-ci.com/CruGlobal/mpdx_api) [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
+### master
+[![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=master)](https://travis-ci.com/CruGlobal/mpdx_api)
 
 The master branch is deployed to production at [api.mpdx.org](https://api.mpdx.org/)
 
-### staging [![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=staging)](https://travis-ci.com/CruGlobal/mpdx_api) [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/staging/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
+### staging
+[![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=staging)](https://travis-ci.com/CruGlobal/mpdx_api)
 
 The staging branch is deployed to staging [stage.api.mpdx.org](https://stage.api.mpdx.org/)
 
