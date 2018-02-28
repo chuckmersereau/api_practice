@@ -50,7 +50,7 @@ class Api::V2::Contacts::DuplicatesController < Api::V2Controller
   end
 
   def load_duplicate
-    @duplicate = DuplicateRecordPair.type('Contact').find_by!(id: params[:id])
+    @duplicate = DuplicateRecordPair.type('Contact').find(params[:id])
   end
 
   def build_duplicate

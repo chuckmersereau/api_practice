@@ -10,7 +10,7 @@ module Auth
       session['redirect_to'] = params[:redirect_to]
       session['account_list_id'] = params[:account_list_id]
       if params[:provider] == 'donorhub'
-        organization = Organization.find_by!(id: params[:organization_id])
+        organization = Organization.find(params[:organization_id])
         redirect_to "/auth/donorhub?oauth_url=#{URI.encode(organization.oauth_url)}"
       elsif params[:provider] == 'sidekiq'
         raise AuthenticationError unless current_user.developer
@@ -50,7 +50,7 @@ module Auth
     end
 
     def fetch_current_user
-      @current_user ||= User.find_by!(id: jwt_payload['user_id']) if jwt_payload
+      @current_user ||= User.find(jwt_payload['user_id']) if jwt_payload
     end
   end
 end

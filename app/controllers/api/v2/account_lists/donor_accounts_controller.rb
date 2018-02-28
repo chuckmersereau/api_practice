@@ -28,7 +28,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   end
 
   def load_donor_account
-    @donor_account ||= DonorAccount.find_by!(id: params[:id])
+    @donor_account ||= DonorAccount.find(params[:id])
   end
 
   def render_donor_account
@@ -44,7 +44,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(id: params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def permitted_filters

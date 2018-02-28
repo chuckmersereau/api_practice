@@ -70,7 +70,7 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   end
 
   def load_email_address
-    @email_address ||= email_address_scope.find_by!(id: params[:id])
+    @email_address ||= email_address_scope.find(params[:id])
   end
 
   def load_email_addresses
@@ -100,11 +100,11 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   end
 
   def current_contact
-    @current_contact ||= Contact.find_by!(id: params[:contact_id])
+    @current_contact ||= Contact.find(params[:contact_id])
   end
 
   def current_person
-    @current_person ||= current_contact.people.find_by!(id: params[:person_id])
+    @current_person ||= current_contact.people.find(params[:person_id])
   end
 
   def pundit_user

@@ -34,7 +34,7 @@ class Api::V2::Coaching::PledgesController < Api::V2Controller
   end
 
   def load_pledge
-    @pledge ||= Pledge.find_by!(id: params[:id])
+    @pledge ||= Pledge.find(params[:id])
   end
 
   def authorize_pledge

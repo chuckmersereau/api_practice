@@ -136,7 +136,7 @@ class User < Person
   end
 
   def to_person
-    Person.find_by!(id: id)
+    Person.find(id)
   end
 
   def assign_time_zone(timezone_object)

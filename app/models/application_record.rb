@@ -37,10 +37,6 @@ class ApplicationRecord < ActiveRecord::Base
     end.compact
   end
 
-  def self.find(id)
-    find_by!(id: id)
-  end
-
   def _client_id=(client_id)
     self.id = client_id
   end

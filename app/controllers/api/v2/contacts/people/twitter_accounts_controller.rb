@@ -45,7 +45,7 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   end
 
   def load_twitter_account
-    @twitter_account ||= twitter_account_scope.find_by!(id: params[:id])
+    @twitter_account ||= twitter_account_scope.find(params[:id])
   end
 
   def authorize_twitter_account
@@ -88,11 +88,11 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   end
 
   def load_person
-    @person ||= load_contact.people.find_by!(id: params[:person_id])
+    @person ||= load_contact.people.find(params[:person_id])
   end
 
   def load_contact
-    @contact ||= Contact.find_by!(id: params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def pundit_user

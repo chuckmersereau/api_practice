@@ -19,7 +19,7 @@ class Api::V2::Contacts::DonationAmountRecommendationsController < Api::V2Contro
   private
 
   def current_contact
-    @current_contact ||= Contact.find_by!(id: params[:contact_id])
+    @current_contact ||= Contact.find(params[:contact_id])
   end
 
   def donation_amount_recommendation_scope
@@ -31,7 +31,7 @@ class Api::V2::Contacts::DonationAmountRecommendationsController < Api::V2Contro
   end
 
   def load_donation_amount_recommendation
-    @donation_amount_recommendation ||= donation_amount_recommendation_scope.find_by!(id: params[:id])
+    @donation_amount_recommendation ||= donation_amount_recommendation_scope.find(params[:id])
   end
 
   def load_donation_amount_recommendations

@@ -31,7 +31,7 @@ class Api::V2::Coaching::AccountListsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(id: params[:id])
+    @account_list ||= AccountList.find(params[:id])
   end
 
   def authorize_account_list

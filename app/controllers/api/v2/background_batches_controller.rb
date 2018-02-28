@@ -37,7 +37,7 @@ class Api::V2::BackgroundBatchesController < Api::V2Controller
   end
 
   def load_background_batch
-    @background_batch ||= BackgroundBatch.find_by!(id: params[:id])
+    @background_batch ||= BackgroundBatch.find(params[:id])
   end
 
   def render_background_batch

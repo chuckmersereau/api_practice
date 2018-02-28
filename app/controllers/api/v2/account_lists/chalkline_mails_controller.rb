@@ -17,7 +17,7 @@ class Api::V2::AccountLists::ChalklineMailsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= account_lists_scope.find_by!(id: params[:account_list_id])
+    @account_list ||= account_lists_scope.find(params[:account_list_id])
   end
 
   def load_chalkline_mails

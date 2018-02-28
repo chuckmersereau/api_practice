@@ -45,7 +45,7 @@ class Api::V2::User::KeyAccountsController < Api::V2Controller
   end
 
   def load_key_account
-    @key_account ||= Person::KeyAccount.find_by!(id: params[:id])
+    @key_account ||= Person::KeyAccount.find(params[:id])
   end
 
   def render_key_account

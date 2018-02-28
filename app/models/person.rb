@@ -335,7 +335,7 @@ class Person < ApplicationRecord
   end
 
   def to_user
-    @user ||= User.find_by!(id: id)
+    @user ||= User.find(id)
   end
 
   def email=(val)

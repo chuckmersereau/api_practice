@@ -4,7 +4,7 @@ class BackgroundBatch::RequestWorker
   sidekiq_options queue: :api_background_batch_request, unique: :until_executed, retry: true
 
   def perform(id)
-    @request = BackgroundBatch::Request.find_by!(id: id)
+    @request = BackgroundBatch::Request.find(id)
     load_response if @request
   end
 

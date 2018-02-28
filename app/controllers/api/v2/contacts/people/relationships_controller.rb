@@ -51,7 +51,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def load_relationship
-    @relationship ||= relationship_scope.find_by!(id: params[:id])
+    @relationship ||= relationship_scope.find(params[:id])
   end
 
   def authorize_relationship
@@ -79,11 +79,11 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def current_contact
-    @contact ||= Contact.find_by!(id: params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def current_person
-    @person ||= current_contact.people.find_by!(id: params[:person_id])
+    @person ||= current_contact.people.find(params[:person_id])
   end
 
   def relationship_params

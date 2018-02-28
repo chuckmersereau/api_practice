@@ -16,7 +16,7 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
   private
 
   def load_merge_account_list
-    @merge_account_list ||= merge_account_list_scope.find_by!(id: merge_account_list_params[:account_list_to_merge_id])
+    @merge_account_list ||= merge_account_list_scope.find(merge_account_list_params[:account_list_to_merge_id])
   end
 
   def authorize_merge_account_list
@@ -34,7 +34,7 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(id: params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def pundit_user

@@ -51,7 +51,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def load_task
-    @task ||= Task.find_by!(id: params[:id])
+    @task ||= Task.find(params[:id])
   end
 
   def render_task

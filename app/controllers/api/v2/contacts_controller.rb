@@ -49,7 +49,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def load_contact
-    @contact ||= Contact.find_by!(id: params[:id])
+    @contact ||= Contact.find(params[:id])
   end
 
   def authorize_contact

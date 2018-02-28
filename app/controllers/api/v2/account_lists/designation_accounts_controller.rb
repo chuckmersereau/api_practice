@@ -25,7 +25,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   end
 
   def load_designation_account
-    @designation_account ||= DesignationAccount.find_by!(id: params[:id])
+    @designation_account ||= DesignationAccount.find(params[:id])
   end
 
   def authorize_designation_account
@@ -41,7 +41,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(id: params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def permitted_filters

@@ -36,7 +36,7 @@ class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
   private
 
   def load_import
-    @import ||= import_scope.find_by!(id: params[:id])
+    @import ||= import_scope.find(params[:id])
   end
 
   def load_imports
@@ -104,7 +104,7 @@ class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(id: params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def pundit_user

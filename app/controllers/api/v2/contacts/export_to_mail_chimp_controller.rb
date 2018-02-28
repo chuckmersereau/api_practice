@@ -51,7 +51,7 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
 
   def fetch_appeal
     return account_list.appeals.order(:created_at).first unless filter_params[:appeal_id]
-    account_list.appeals.find_by!(id: filter_params[:appeal_id])
+    account_list.appeals.find(filter_params[:appeal_id])
   end
 
   def account_list

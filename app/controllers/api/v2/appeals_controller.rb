@@ -46,7 +46,7 @@ class Api::V2::AppealsController < Api::V2Controller
   end
 
   def load_appeal
-    @appeal ||= Appeal.find_by!(id: params[:id])
+    @appeal ||= Appeal.find(params[:id])
   end
 
   def render_appeal

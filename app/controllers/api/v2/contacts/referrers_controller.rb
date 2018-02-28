@@ -8,7 +8,7 @@ class Api::V2::Contacts::ReferrersController < Api::V2Controller
   private
 
   def current_contact
-    @contact ||= Contact.find_by!(id: params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def referrer_scope

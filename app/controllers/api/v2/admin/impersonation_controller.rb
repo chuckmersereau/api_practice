@@ -38,7 +38,7 @@ class Api::V2::Admin::ImpersonationController < Api::V2Controller
 
   def load_impersonated
     @impersonated ||= if UUID_REGEX.match(impersonation_params[:user])
-                        User.find_by!(id: impersonation_params[:user])
+                        User.find(impersonation_params[:user])
                       else
                         find_user_by_email
                       end

@@ -43,7 +43,7 @@ class Api::V2::Tasks::CommentsController < Api::V2Controller
   end
 
   def load_comment
-    @comment ||= comments_scope.find_by!(id: params[:id])
+    @comment ||= comments_scope.find(params[:id])
   end
 
   def destroy_comment
@@ -72,7 +72,7 @@ class Api::V2::Tasks::CommentsController < Api::V2Controller
   end
 
   def load_activity
-    @activity ||= Activity.find_by!(id: activity_param_id)
+    @activity ||= Activity.find(activity_param_id)
   end
 
   def comments_scope

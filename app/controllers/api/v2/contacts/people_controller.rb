@@ -56,12 +56,12 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
 
   def contact_scope
     return Contact.where(account_list: account_lists) if params[:contact_id].blank?
-    Contact.find_by!(id: params[:contact_id])
+    Contact.find(params[:contact_id])
     Contact.where(id: params[:contact_id])
   end
 
   def current_contact
-    @contact ||= Contact.find_by!(id: params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def authorize_index
@@ -79,7 +79,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def load_person
-    @person ||= Person.find_by!(id: params[:id])
+    @person ||= Person.find(params[:id])
   end
 
   def load_people

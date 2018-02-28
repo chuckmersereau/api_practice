@@ -65,7 +65,7 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
   end
 
   def load_<%= resource_name %>
-    <%= resource_instance %> ||= <%= resource_class_name %>.find_by!(id: params[:id])
+    <%= resource_instance %> ||= <%= resource_class_name %>.find(params[:id])
   end
 
   def load_<%= resources_name %>

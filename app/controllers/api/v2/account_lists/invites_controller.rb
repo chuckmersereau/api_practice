@@ -74,7 +74,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def load_invite
-    @invite ||= AccountListInvite.find_by!(id: params[:id])
+    @invite ||= AccountListInvite.find(params[:id])
   end
 
   def render_invite
@@ -108,7 +108,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(id: params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def load_account_list_invite
