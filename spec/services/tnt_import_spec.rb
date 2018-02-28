@@ -88,7 +88,7 @@ describe TntImport do
       expect do
         import.send(:import)
       end.to change(ContactReferral, :count).by(1)
-      expect(Contact.first.no_appeals).to be true
+      expect(Contact.order(:created_at).first.no_appeals).to be true
     end
 
     context 'referred by contact cannot be found' do
