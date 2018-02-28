@@ -806,7 +806,7 @@ CREATE TABLE tmp_imports (
 	    tags text,
 	    override boolean DEFAULT false NOT NULL,
 	    user_id uuid,
-	    source_account_id uuid,
+	    source_account_id integer,
 	    import_by_group boolean DEFAULT false,
 	    groups text,
 	    group_tags text,

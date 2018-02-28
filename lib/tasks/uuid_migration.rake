@@ -9,18 +9,4 @@ namespace :mpdx do
       ActiveRecord::Base.connection.execute index_row['indexdef'].sub('INDEX', 'INDEX CONCURRENTLY IF NOT EXISTS')
     end
   end
-
-  task index_created_at: :environment do
-    tables_query = "SELECT DISTINCT table_name
-                    FROM information_schema.columns
-                    WHERE table_schema = 'public'
-                    and column_name = 'id' and data_type = 'uuid'"
-    ActiveRecord::Base.connection.execute(tables_query).each do |foreign_table_row|
-      table = foreign_table_row['table_name']
-
-      next if ActiveRecord::Base.connection.index_exists?(table, :created_at)
-      next unless ActiveRecord::Base.connection.connection.column_exists?(table, :created_at)
-      ActiveRecord::Base.connection.add_index table, :created_at, algorithm: :concurrently
-    end
-  end
 end
