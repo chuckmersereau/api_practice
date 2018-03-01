@@ -88,7 +88,7 @@ class Appeal < ApplicationRecord
              .where(pledges: { status: 'processed' })
              .pluck(:appeal_amount, :amount, :currency, :donation_date)
              .map do |donation|
-      [donation[0].positive? ? donation[0] : donation[1], donation[2], donation[3]]
+      [donation[0]&.positive? ? donation[0] : donation[1], donation[2], donation[3]]
     end
   end
 
