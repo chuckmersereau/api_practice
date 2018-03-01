@@ -60,8 +60,8 @@ RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controlle
           errors: [{
             status: '404',
             title: 'Not Found',
-            detail: "Couldn't find AccountList with "\
-                    '[WHERE "account_list_users"."user_id" = ? AND "account_lists"."id" = ?]'
+            detail: "Couldn't find AccountList with 'id'=#{account_list.id} "\
+                    '[WHERE "account_list_users"."user_id" = ?]'
           }]
         }.deep_stringify_keys
       end

@@ -57,7 +57,7 @@ describe AccountList do
     it 'updates salary_currency' do
       subject.name = 'test account list'
       expect do
-        subject.update!(salary_organization: organization.uuid)
+        subject.update!(salary_organization: organization.id)
       end.to change { subject.salary_currency }.to('GBP')
     end
   end

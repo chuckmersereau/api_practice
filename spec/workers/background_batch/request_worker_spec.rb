@@ -14,7 +14,7 @@ RSpec.describe BackgroundBatch::RequestWorker do
   describe '#perform' do
     it 'should find background_batch_request' do
       expect(BackgroundBatch::Request).to(
-        receive(:find_by!).with(id: background_batch_request.id).and_return(background_batch_request)
+        receive(:find).with(background_batch_request.id).and_return(background_batch_request)
       )
       subject.perform(background_batch_request.id)
     end
@@ -70,7 +70,7 @@ RSpec.describe BackgroundBatch::RequestWorker do
   describe '#update_request' do
     it 'should call background_batch_request.update' do
       allow(BackgroundBatch::Request).to(
-        receive(:find_by!).with(id: background_batch_request.id).and_return(background_batch_request)
+        receive(:find).with(background_batch_request.id).and_return(background_batch_request)
       )
       expect(background_batch_request).to receive(:update).with(
         response_body: "{\"id\":\"#{user.id}\"}",

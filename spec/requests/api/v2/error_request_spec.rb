@@ -36,7 +36,7 @@ RSpec.describe 'Error Response Format', type: :request do
           {
             status: '404',
             title: 'Not Found',
-            detail: "Couldn't find Contact"
+            detail: "Couldn't find Contact with 'id'=#{id}"
           }
         ]
       }.deep_stringify_keys
