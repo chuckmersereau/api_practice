@@ -76,7 +76,6 @@ gem 'rubyzip', '~> 1.2.1'
 gem 'sidekiq-cron', '~> 0.4.4'
 gem 'sidekiq-unique-jobs', '~> 5.0.8'
 gem 'siebel_donations', '1.0.7'
-gem 'slim', '~> 3.0.7' # used for sidekiq web
 gem 'snail', '~> 2.2.1'
 gem 'syslog-logger', '~> 1.6.8'
 gem 'twitter_cldr', '~> 4.4.0'
