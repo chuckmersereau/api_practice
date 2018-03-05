@@ -7,8 +7,10 @@ module JsonWebTokenAuthentication
     raise Exceptions::AuthenticationError
   end
 
+  # The check for user_uuid should be removed 30 days after the following PR is merged to master
+  # https://github.com/CruGlobal/mpdx_api/pull/993
   def user_id_in_token?
-    http_token && jwt_payload && jwt_payload['user_id'].to_i
+    http_token && jwt_payload && (jwt_payload['user_id'].present? || jwt_payload['user_uuid'].present?)
   end
 
   def http_token
