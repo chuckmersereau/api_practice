@@ -9,11 +9,6 @@ if ENV['CI']
     require 'coveralls'
     Coveralls.wear_merged!('rails')
   end
-
-  if ENV['CODECOV_TOKEN']
-    require 'codecov'
-    SimpleCov.formatter = SimpleCov::Formatter::Codecov
-  end
 end
 
 ENV['RAILS_ENV'] ||= 'test'
@@ -100,4 +95,11 @@ end
 
 def response_json
   JSON.parse(response.body)
+end
+
+# locks the current time down to the second so we don't hit differences in updated_in_db_at
+def lock_time_around
+  around(:example) do |example|
+    travel_to Time.zone.now, &example
+  end
 end
