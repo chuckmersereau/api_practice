@@ -61,9 +61,7 @@ resource 'Users' do
 
   context 'authorized user' do
     before { api_login(user) }
-    around(:example) do |example|
-      travel_to Time.zone.local(1951, 1, 24, 1, 1, 0), &example
-    end
+    lock_time_around
 
     get '/api/v2/user' do
       response_field 'attributes',    'User object',                                type: 'Object'
