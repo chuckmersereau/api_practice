@@ -360,10 +360,15 @@ class Person < ApplicationRecord
       # We need to access the field value directly via c[:greeting] because c.greeting defaults to the first name
       # even if the field is nil. That causes an infinite loop here where it keeps trying to remove the first name
       # from the greeting but it keeps getting defaulted back to having it.
-      contact_updates[:greeting] = c.greeting.sub(first_name, '').sub(/ #{_('and')} /, ' ').strip if c[:greeting].present? && c[:greeting].include?(first_name)
+      if c[:greeting].present? && c[:greeting].include?(first_name)
+        contact_updates[:greeting] = c.greeting.sub(first_name, '').sub(/ #{_('and')} /, ' ').strip
+      end
+
       contact_updates[:envelope_greeting] = '' if c[:envelope_greeting].present?
 
-      contact_updates[:name] = c.name.sub(first_name, '').sub(/ & | #{_('and')} /, '').strip if c.name.include?(first_name)
+      if c.name.include?(first_name)
+        contact_updates[:name] = c.name.sub(first_name, '').sub(/ & | #{_('and')} /, '').strip
+      end
 
       if c.primary_person_id == id && c.people.count > 1
         # This only modifies associated people via update_column, so we can call it directly

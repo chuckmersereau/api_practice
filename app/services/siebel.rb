@@ -150,7 +150,6 @@ class Siebel < DataServer
         name: profile.name,
         code: profile.id }
     end
-    @profiles_with_designation_numbers
   end
 
   def profiles

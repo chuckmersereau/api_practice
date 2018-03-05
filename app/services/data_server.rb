@@ -238,7 +238,6 @@ class DataServer
       { designation_numbers: designation_numbers(profile[:code]) }
         .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
     end
-    @profiles_with_designation_numbers
   end
 
   protected
@@ -421,8 +420,12 @@ class DataServer
     person.last_name = line['LAST_NAME'] if person.last_name.blank?
 
     # Phone numbers
-    person.phone_number = { 'number' => line[prefix + 'PHONE'] } if line[prefix + 'PHONE'].present? && line[prefix + 'PHONE'] != line[prefix + 'MOBILE_PHONE']
-    person.phone_number = { 'number' => line[prefix + 'MOBILE_PHONE'], 'location' => 'mobile' } if line[prefix + 'MOBILE_PHONE'].present?
+    if line[prefix + 'PHONE'].present? && line[prefix + 'PHONE'] != line[prefix + 'MOBILE_PHONE']
+      person.phone_number = { 'number' => line[prefix + 'PHONE'] }
+    end
+    if line[prefix + 'MOBILE_PHONE'].present?
+      person.phone_number = { 'number' => line[prefix + 'MOBILE_PHONE'], 'location' => 'mobile' }
+    end
 
     # email address
     person.email = line[prefix + 'EMAIL'] if line[prefix + 'EMAIL'] && line[prefix + 'EMAIL_VALID'] != 'FALSE'
@@ -430,7 +433,9 @@ class DataServer
     person.save(validate: false)
 
     donor_account.people << person unless donor_account.people.include?(person)
-    donor_account.master_people << person.master_person unless donor_account.master_people.include?(person.master_person)
+    unless donor_account.master_people.include?(person.master_person)
+      donor_account.master_people << person.master_person
+    end
 
     contact = account_list.contacts.for_donor_account(donor_account).first
     contact_person = contact.add_person(person, donor_account)
@@ -462,7 +467,9 @@ class DataServer
       country: line['CNTRY_DESCR']
     )
     company.save!
-    donor_account.update_attributes(master_company_id: company.master_company_id) unless donor_account.master_company_id == company.master_company.id
+    unless donor_account.master_company_id == company.master_company.id
+      donor_account.update_attributes(master_company_id: company.master_company_id)
+    end
     company
   end
 

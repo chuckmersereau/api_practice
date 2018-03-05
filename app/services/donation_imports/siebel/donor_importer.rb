@@ -29,7 +29,9 @@ class DonationImports::Siebel
       siebel_donors.each do |siebel_donor|
         donor_account = add_or_update_donor_account(designation_profile.account_list, siebel_donor)
 
-        add_or_update_company(designation_profile.account_list, siebel_donor, donor_account) if siebel_donor.type == 'Business'
+        if siebel_donor.type == 'Business'
+          add_or_update_company(designation_profile.account_list, siebel_donor, donor_account)
+        end
       end
     end
 
@@ -46,9 +48,10 @@ class DonationImports::Siebel
     end
 
     def designation_numbers
-      @designation_numbers ||= DesignationAccount.joins(:designation_profile_accounts)
-                                                 .where(designation_profile_accounts: { designation_profile: designation_profiles })
-                                                 .pluck(:designation_number)
+      @designation_numbers ||=
+        DesignationAccount.joins(:designation_profile_accounts)
+                          .where(designation_profile_accounts: { designation_profile: designation_profiles })
+                          .pluck(:designation_number)
     end
 
     def add_or_update_company(account_list, siebel_donor, donor_account)
@@ -65,7 +68,9 @@ class DonationImports::Siebel
         postal_code: address.zip
       )
 
-      donor_account.update!(master_company: company.master_company) if company.persisted? && donor_account.master_company == company.master_company
+      if company.persisted? && donor_account.master_company == company.master_company
+        donor_account.update!(master_company: company.master_company)
+      end
 
       company
     end
@@ -73,7 +78,9 @@ class DonationImports::Siebel
     def fetch_company_from_siebel_donor(account_list, siebel_donor)
       master_company = MasterCompany.find_by(name: siebel_donor.account_name)
 
-      company = organization_account.user.partner_companies.find_by(master_company_id: master_company.id) if master_company
+      if master_company
+        company = organization_account.user.partner_companies.find_by(master_company_id: master_company.id)
+      end
 
       company || account_list.companies.new(master_company: master_company)
     end
@@ -151,11 +158,16 @@ class DonationImports::Siebel
     end
 
     def mpdx_address_instance_from_siebel_address(siebel_address, donor_account, contact)
-      mpdx_address_instance = Address.new(street: [siebel_address.address1, siebel_address.address2, siebel_address.address3, siebel_address.address4].compact.join("\n"),
+      mpdx_address_instance = Address.new(street: [siebel_address.address1,
+                                                   siebel_address.address2,
+                                                   siebel_address.address3,
+                                                   siebel_address.address4].compact.join("\n"),
                                           city: siebel_address.city,
                                           state: siebel_address.state,
                                           postal_code: siebel_address.zip,
-                                          primary_mailing_address: should_be_primary?(contact, siebel_address, donor_account),
+                                          primary_mailing_address: should_be_primary?(
+                                            contact, siebel_address, donor_account
+                                          ),
                                           seasonal: siebel_address.seasonal,
                                           location: siebel_address.type,
                                           remote_id: siebel_address.id,
