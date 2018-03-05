@@ -246,9 +246,8 @@ class Address < ApplicationRecord
   end
 
   def clean_up_master_address
-    master_address.destroy if master_address&.addresses&.where&.not(id: id)&.empty?
-
-    true
+    return true unless master_address
+    master_address.destroy if master_address.addresses.where.not(id: id).empty?
   end
 
   def find_master_address
