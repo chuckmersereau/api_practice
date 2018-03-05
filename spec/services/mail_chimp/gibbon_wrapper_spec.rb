@@ -77,7 +77,7 @@ RSpec.describe MailChimp::GibbonWrapper do
     before do
       lists_response = {
         members: [
-          { 'email_address' => 'email@gmail.com' },
+          { 'email_address' => 'EMAIL@gmail.com' },
           { 'email_address' => 'email_two@gmail.com' }
         ]
       }
@@ -87,7 +87,7 @@ RSpec.describe MailChimp::GibbonWrapper do
     context '#list_members' do
       it 'returns an array of lists associated to the mail_chimp_account' do
         expect(subject.list_members('list_id_one')).to match_array [
-          { 'email_address' => 'email@gmail.com' },
+          { 'email_address' => 'EMAIL@gmail.com' },
           { 'email_address' => 'email_two@gmail.com' }
         ]
       end
