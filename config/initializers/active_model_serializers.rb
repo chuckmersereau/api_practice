@@ -17,16 +17,3 @@ class ActiveModelSerializers::Adapter::JsonApi
     end
   end
 end
-
-module ActiveModelSerializers
-  module Adapter
-    class JsonApi
-      class ResourceIdentifier
-        private
-        def id_for(serializer)
-          serializer.read_attribute_for_serialization(:id).to_s
-        end
-      end
-    end
-  end
-end
