@@ -58,6 +58,17 @@ RSpec.describe MailChimp::CampaignLogger do
           subject.log_sent_campaign('Random_id', 'Random Subject')
         end.to raise_error Gibbon::MailChimpError
       end
+
+      it 'handles invalid api key' do
+        allow(mock_gibbon).to receive(:campaigns).and_return(mock_gibbon_campaigns)
+        exception = Gibbon::MailChimpError.new("Your API key may be invalid, or you've attempted to access the wrong datacenter.")
+        allow(mock_gibbon_campaigns).to receive(:retrieve).and_raise(exception)
+        mail_chimp_account.update_column(:active, true)
+
+        expect do
+          subject.log_sent_campaign('Random_id', 'Random Subject')
+        end.to change { mail_chimp_account.reload.active }.to(false)
+      end
     end
 
     context 'successful logging' do

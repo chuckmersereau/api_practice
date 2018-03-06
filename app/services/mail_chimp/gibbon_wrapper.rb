@@ -130,9 +130,15 @@ class MailChimp::GibbonWrapper
   end
 
   def build_list_objects
-    retrieve_lists.map do |list|
+    fetched_lists = connection_handler.call_mail_chimp(self, :retrieve_lists, require_primary: false)
+    return [] unless fetched_lists.is_a? Array
+    fetched_lists.map do |list|
       List.new(list['id'], list['name'], list.dig('stats', 'open_rate'))
     end
+  end
+
+  def connection_handler
+    MailChimp::ConnectionHandler.new(mail_chimp_account)
   end
 
   def list_members_page(list_id, offset)

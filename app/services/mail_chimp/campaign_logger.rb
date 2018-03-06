@@ -14,6 +14,7 @@ class MailChimp::CampaignLogger
 
     log_sent_campaign!(campaign_id, subject, campaign_send_time)
   rescue Gibbon::MailChimpError => error
+    return deactivate_account if invalid_key?(error)
     raise unless campaign_not_completely_sent?(error)
 
     if campaign_has_been_running_for_less_than_one_hour?(campaign_send_time)
@@ -49,6 +50,12 @@ class MailChimp::CampaignLogger
           .retrieve(params: { count: 15_000 }).with_indifferent_access[:sent_to]
   end
 
+  def invalid_key?(error)
+    MailChimp::ConnectionHandler::INVALID_KEY_ERROR_MESSAGES.any? do |error_part|
+      error.message.include? error_part
+    end
+  end
+
   def campaign_not_completely_sent?(error)
     # Campaign stats are not available until the campaign has been completely
     # sent. (code 301)
@@ -78,5 +85,9 @@ class MailChimp::CampaignLogger
     }
 
     contact.tasks.find_or_create_by(activity_attributes)
+  end
+
+  def deactivate_account
+    mail_chimp_account.update_column(:active, false)
   end
 end

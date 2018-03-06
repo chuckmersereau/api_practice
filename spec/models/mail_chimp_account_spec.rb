@@ -69,6 +69,8 @@ describe MailChimpAccount do
         }.with_indifferent_access
       )
       MailChimpAppealList.create(mail_chimp_account: mail_chimp_account, appeal_id: appeal.id, appeal_list_id: primary_list_id_2)
+      mail_chimp_account.update!(active: true)
+
       expect(mail_chimp_account.appeal_open_rate).to eq(20)
     end
   end

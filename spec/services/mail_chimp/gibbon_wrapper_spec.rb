@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MailChimp::GibbonWrapper do
-  let(:mail_chimp_account) { build(:mail_chimp_account) }
+  let(:mail_chimp_account) { build(:mail_chimp_account, active: true) }
   let(:api_prefix) { 'https://us4.api.mailchimp.com/3.0' }
 
   subject { described_class.new(mail_chimp_account) }
@@ -20,6 +20,18 @@ RSpec.describe MailChimp::GibbonWrapper do
   describe '#lists' do
     it 'returns an array of lists associated to the mail_chimp_account' do
       expect(subject.lists.map(&:name)).to eq ['Test 1', 'Test 2']
+    end
+
+    it 'deactivates account if api key is invalid' do
+      error = {
+        title: 'API Key Invalid', status: 401,
+        detail: "Your API key may be invalid, or you've attempted to access the wrong datacenter."
+      }
+      stub_request(:get, "#{api_prefix}/lists?count=100").to_return(status: 401, body: error.to_json)
+      mail_chimp_account.primary_list_id = nil
+      mail_chimp_account.save
+
+      expect { subject.lists }.to change { mail_chimp_account.reload.active }.to(false)
     end
   end
 
