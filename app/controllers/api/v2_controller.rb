@@ -44,14 +44,16 @@ class Api::V2Controller < ApiController
 
   private
 
+  # The check for user_uuid should be removed 30 days after the following PR is merged to master
+  # https://github.com/CruGlobal/mpdx_api/pull/993
   def fetch_current_user
     # See JsonWebToken::Middleware and application.rb where the middleware is initialized
 
     jwt_payload = request.env['auth.jwt_payload']
 
-    return unless jwt_payload.try(:[], 'user_id') && jwt_payload.try(:[], 'exp')
+    return unless (jwt_payload.try(:[], 'user_id') || jwt_payload.try(:[], 'user_uuid')) && jwt_payload.try(:[], 'exp')
 
-    User.find_by(id: jwt_payload['user_id'])
+    User.find_by(id: jwt_payload['user_id'] || jwt_payload['user_uuid'])
   end
 
   def authenticate!
