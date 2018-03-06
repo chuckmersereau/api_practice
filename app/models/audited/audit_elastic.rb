@@ -4,7 +4,7 @@ module Audited
   class AuditElastic
     include Elasticsearch::Persistence::Model
 
-    index_name ['mpdx', Rails.env, Date.today.to_s.tr('-', '.')].join('-')
+    index_name ['mpdx', 'uuid', Rails.env, Date.today.to_s.tr('-', '.')].join('-')
 
     attribute :auditable_id, String
     attribute :auditable_type, String
