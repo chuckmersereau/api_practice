@@ -32,8 +32,10 @@ module Auth
       raise AuthenticationError
     end
 
+    # The check for user_uuid should be removed 30 days after the following PR is merged to master
+    # https://github.com/CruGlobal/mpdx_api/pull/993
     def user_id_in_token?
-      http_token && jwt_payload && jwt_payload['user_id']
+      http_token && jwt_payload && (jwt_payload['user_id'].present? || jwt_payload['user_uuid'].present?)
     end
 
     def http_token
@@ -48,9 +50,11 @@ module Auth
     def jwt_payload
       @jwt_payload ||= JsonWebToken.decode(http_token) if http_token
     end
-
+    
+    # The check for user_uuid should be removed 30 days after the following PR is merged to master
+    # https://github.com/CruGlobal/mpdx_api/pull/993
     def fetch_current_user
-      @current_user ||= User.find(jwt_payload['user_id']) if jwt_payload
+      @current_user ||= User.find(jwt_payload['user_id'] || jwt_payload['user_uuid']) if jwt_payload
     end
   end
 end
