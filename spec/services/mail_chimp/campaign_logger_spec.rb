@@ -48,6 +48,17 @@ RSpec.describe MailChimp::CampaignLogger do
         end.not_to raise_error
       end
 
+      it 'handles case where campaign is under compliance review' do
+        exception = Gibbon::MailChimpError.new('Error', title: 'Compliance Related', status_code: 403)
+        expect(subject).to receive(:log_sent_campaign!).and_raise(exception)
+        expect(mock_gibbon).to receive(:campaigns).with('Random_id').and_return(mock_gibbon_campaigns)
+        expect(mock_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 2.hours.ago.to_s)
+
+        expect do
+          subject.log_sent_campaign('Random_id', 'Random Subject')
+        end.not_to raise_error
+      end
+
       it 'handles all other errors by raising the Mail Chimp error' do
         allow(mock_gibbon).to receive(:campaigns).and_return(mock_gibbon_campaigns)
         allow(mock_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 2.hours.ago.to_s)

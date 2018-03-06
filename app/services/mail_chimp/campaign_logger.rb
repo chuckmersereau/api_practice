@@ -15,7 +15,7 @@ class MailChimp::CampaignLogger
     log_sent_campaign!(campaign_id, subject, campaign_send_time)
   rescue Gibbon::MailChimpError => error
     return deactivate_account if invalid_key?(error)
-    raise unless campaign_not_completely_sent?(error)
+    raise unless campaign_not_completely_sent?(error) || campaign_under_review?(error)
 
     if campaign_has_been_running_for_less_than_one_hour?(campaign_send_time)
       raise LowerRetryWorker::RetryJobButNoRollbarError
@@ -60,6 +60,10 @@ class MailChimp::CampaignLogger
     # Campaign stats are not available until the campaign has been completely
     # sent. (code 301)
     error.message.include?('code 301')
+  end
+
+  def campaign_under_review?(error)
+    error.status_code == 403 && error.title == 'Compliance Related'
   end
 
   def campaign_has_been_running_for_less_than_one_hour?(campaign_send_time)
