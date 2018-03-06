@@ -89,7 +89,7 @@ class MailChimp::Exporter
         email_address: person.primary_email_address.email,
         merge_fields: {
           EMAIL: person.primary_email_address.email, FNAME: person.first_name,
-          LNAME: person.last_name, GREETING: contact.greeting
+          LNAME: person.last_name || '', GREETING: contact.greeting
         }
       }
     end

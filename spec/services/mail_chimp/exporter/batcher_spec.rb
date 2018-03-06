@@ -53,22 +53,26 @@ RSpec.describe MailChimp::Exporter::Batcher do
         {
           method: 'PUT',
           path: '/lists/list_one/members/1919bfc4fa95c7f6b231e583da677a17',
-          body: {
-            status: 'subscribed',
-            email_address: 'email@gmail.com',
-            merge_fields: {
-              EMAIL: 'email@gmail.com',
-              FNAME: person.first_name,
-              LNAME: person.last_name,
-              GREETING: contact.greeting
-            },
-            language: 'en',
-            interests: {
-              random: false
-            }
-          }.to_json
+          body: person_operation_body.to_json
         }
       ]
+    end
+
+    let(:person_operation_body) do
+      {
+        status: 'subscribed',
+        email_address: 'email@gmail.com',
+        merge_fields: {
+          EMAIL: 'email@gmail.com',
+          FNAME: person.first_name,
+          LNAME: person.last_name,
+          GREETING: contact.greeting
+        },
+        language: 'en',
+        interests: {
+          random: false
+        }
+      }
     end
 
     before do
@@ -111,6 +115,15 @@ RSpec.describe MailChimp::Exporter::Batcher do
 
     it 'logs request to AudtChangeLog' do
       expect(AuditChangeWorker).to receive(:perform_async)
+
+      subject.subscribe_contacts([contact])
+    end
+
+    it "doesn't send null on last name or greeting" do
+      person.update!(last_name: nil)
+      contact.update!(greeting: nil)
+      person_operation_body[:merge_fields][:LNAME] = ''
+      expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body).exactly(4)
 
       subject.subscribe_contacts([contact])
     end
