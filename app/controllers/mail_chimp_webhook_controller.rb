@@ -17,12 +17,12 @@ class MailChimpWebhookController < ActionController::API
     case hook_params[:type]
       # when 'subscribe'
       # handler.subscribe_hook(data_param(:email))
-      # when 'unsubscribe'
-      # handler.unsubscribe_hook(data_param(:email))
       # when 'upemail'
       # handler.email_update_hook(data_param(:old_email), data_param(:new_email))
-      # when 'cleaned'
-      # handler.email_cleaned_hook(data_param(:email), data_param(:reason))
+    when 'unsubscribe'
+      handler.unsubscribe_hook(data_param(:email), data_param(:reason), data_param(:list_id))
+    when 'cleaned'
+      handler.email_cleaned_hook(data_param(:email), data_param(:reason), data_param(:list_id))
     when 'campaign'
       handler.campaign_status_hook(data_param(:id), data_param(:status), data_param(:subject))
     end

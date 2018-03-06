@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MailChimp::GibbonWrapper do
-  let(:mail_chimp_account) { build(:mail_chimp_account) }
+  let(:mail_chimp_account) { build(:mail_chimp_account, active: true) }
   let(:api_prefix) { 'https://us4.api.mailchimp.com/3.0' }
 
   subject { described_class.new(mail_chimp_account) }
@@ -17,13 +17,25 @@ RSpec.describe MailChimp::GibbonWrapper do
     stub_request(:get, "#{api_prefix}/lists?count=100").to_return(body: lists_response.to_json)
   end
 
-  context '#lists' do
+  describe '#lists' do
     it 'returns an array of lists associated to the mail_chimp_account' do
       expect(subject.lists.map(&:name)).to eq ['Test 1', 'Test 2']
     end
+
+    it 'deactivates account if api key is invalid' do
+      error = {
+        title: 'API Key Invalid', status: 401,
+        detail: "Your API key may be invalid, or you've attempted to access the wrong datacenter."
+      }
+      stub_request(:get, "#{api_prefix}/lists?count=100").to_return(status: 401, body: error.to_json)
+      mail_chimp_account.primary_list_id = nil
+      mail_chimp_account.save
+
+      expect { subject.lists }.to change { mail_chimp_account.reload.active }.to(false)
+    end
   end
 
-  context '#lists_available_for_appeals' do
+  describe '#lists_available_for_appeals' do
     it 'returns an available lists for appeal. the primary is excluded' do
       # list id from above stub
       mail_chimp_account.primary_list_id = 'list_id_one'
@@ -31,7 +43,7 @@ RSpec.describe MailChimp::GibbonWrapper do
     end
   end
 
-  context '#lists_available_for_newsletters' do
+  describe '#lists_available_for_newsletters' do
     it 'returns all lists if no appeals list.' do
       expect(subject.lists_available_for_newsletters.length).to eq(2)
     end
@@ -74,28 +86,48 @@ RSpec.describe MailChimp::GibbonWrapper do
   end
 
   context 'fetching member data from MailChimp' do
+    let(:member1_info) { { 'email_address' => 'email@gmail.com' } }
+    let(:member2_info) { { 'email_address' => 'email_two@gmail.com' } }
+    let(:member3_info) { { 'email_address' => 'email_three@gmail.com' } }
+
     before do
       lists_response = {
         members: [
-          { 'email_address' => 'EMAIL@gmail.com' },
-          { 'email_address' => 'email_two@gmail.com' }
+          member1_info,
+          member2_info,
+          member3_info
         ]
       }
       stub_request(:get, "#{api_prefix}/lists/list_id_one/members?count=100&offset=0").to_return(body: lists_response.to_json)
     end
 
-    context '#list_members' do
+    describe '#list_members' do
       it 'returns an array of lists associated to the mail_chimp_account' do
         expect(subject.list_members('list_id_one')).to match_array [
-          { 'email_address' => 'EMAIL@gmail.com' },
-          { 'email_address' => 'email_two@gmail.com' }
+          member1_info,
+          member2_info,
+          member3_info
         ]
       end
     end
 
-    context '#list_emails' do
+    describe '#list_emails' do
       it 'returns an array of lists associated to the mail_chimp_account' do
-        expect(subject.list_emails('list_id_one')).to match_array ['email@gmail.com', 'email_two@gmail.com']
+        emails = %w(email@gmail.com email_two@gmail.com email_three@gmail.com)
+        expect(subject.list_emails('list_id_one')).to match_array emails
+      end
+    end
+
+    describe '#list_member_info' do
+      it 'makes a single request if there is only one email' do
+        stub_request(:get, "#{api_prefix}/lists/list_id_one/members/1919bfc4fa95c7f6b231e583da677a17").to_return(body: member1_info.to_json)
+
+        expect(subject.list_member_info('list_id_one', 'email@gmail.com')).to eq [member1_info]
+      end
+
+      it 'filters members list for multiple emails' do
+        emails = %w(email@gmail.com email_two@gmail.com)
+        expect(subject.list_member_info('list_id_one', emails)).to match_array [member1_info, member2_info]
       end
     end
   end

@@ -1,5 +1,12 @@
 # This class wraps the Mail Chimp API connection and handles most possible errors.
 class MailChimp::ConnectionHandler
+  INVALID_KEY_ERROR_MESSAGES = [
+    'API Key Disabled',
+    'This account has been deactivated.',
+    'code 104',
+    "Your API key may be invalid, or you've attempted to access the wrong datacenter."
+  ].freeze
+
   attr_accessor :mail_chimp_account
 
   delegate :active,
@@ -10,8 +17,12 @@ class MailChimp::ConnectionHandler
     @mail_chimp_account = mail_chimp_account
   end
 
+  # you can include require_primary: false as an argument when calling
+  # this to prevent it from returning when primary_list_id is blank
   def call_mail_chimp(object, method, *args)
-    return if inactive_account? || primary_list_id.blank?
+    require_primary = args.last&.delete(:require_primary)
+    args.pop if args.last == {}
+    return if inactive_account? || (primary_list_id.blank? && require_primary != false)
 
     mail_chimp_account.update(importing: true)
 
@@ -68,9 +79,7 @@ class MailChimp::ConnectionHandler
   end
 
   def api_key_disabled?
-    @error.message.include?('API Key Disabled') ||
-      @error.message.include?('This account has been deactivated.') ||
-      @error.message.include?('code 104')
+    INVALID_KEY_ERROR_MESSAGES.any? { |error| @error.message.include? error }
   end
 
   def server_temporarily_unavailable?

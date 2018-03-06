@@ -91,6 +91,9 @@ class MailChimp::GibbonWrapper
   end
 
   def list_member_info(list_id, emails)
+    emails = Array.wrap(emails)
+    return [gibbon.lists(list_id).members(mail_chimp_account.email_hash(emails.first)).retrieve] if emails.one?
+
     # The MailChimp API v3 doesn't provide an easy, syncronous way to retrieve
     # member info scoped to a set of email addresses, so just pull it all and
     # filter it for now.
@@ -127,9 +130,15 @@ class MailChimp::GibbonWrapper
   end
 
   def build_list_objects
-    retrieve_lists.map do |list|
+    fetched_lists = connection_handler.call_mail_chimp(self, :retrieve_lists, require_primary: false)
+    return [] unless fetched_lists.is_a? Array
+    fetched_lists.map do |list|
       List.new(list['id'], list['name'], list.dig('stats', 'open_rate'))
     end
+  end
+
+  def connection_handler
+    MailChimp::ConnectionHandler.new(mail_chimp_account)
   end
 
   def list_members_page(list_id, offset)

@@ -48,6 +48,17 @@ RSpec.describe MailChimp::CampaignLogger do
         end.not_to raise_error
       end
 
+      it 'handles case where campaign is under compliance review' do
+        exception = Gibbon::MailChimpError.new('Error', title: 'Compliance Related', status_code: 403)
+        expect(subject).to receive(:log_sent_campaign!).and_raise(exception)
+        expect(mock_gibbon).to receive(:campaigns).with('Random_id').and_return(mock_gibbon_campaigns)
+        expect(mock_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 2.hours.ago.to_s)
+
+        expect do
+          subject.log_sent_campaign('Random_id', 'Random Subject')
+        end.not_to raise_error
+      end
+
       it 'handles all other errors by raising the Mail Chimp error' do
         allow(mock_gibbon).to receive(:campaigns).and_return(mock_gibbon_campaigns)
         allow(mock_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 2.hours.ago.to_s)
@@ -57,6 +68,17 @@ RSpec.describe MailChimp::CampaignLogger do
         expect do
           subject.log_sent_campaign('Random_id', 'Random Subject')
         end.to raise_error Gibbon::MailChimpError
+      end
+
+      it 'handles invalid api key' do
+        allow(mock_gibbon).to receive(:campaigns).and_return(mock_gibbon_campaigns)
+        exception = Gibbon::MailChimpError.new("Your API key may be invalid, or you've attempted to access the wrong datacenter.")
+        allow(mock_gibbon_campaigns).to receive(:retrieve).and_raise(exception)
+        mail_chimp_account.update_column(:active, true)
+
+        expect do
+          subject.log_sent_campaign('Random_id', 'Random Subject')
+        end.to change { mail_chimp_account.reload.active }.to(false)
       end
     end
 

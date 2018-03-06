@@ -5,7 +5,7 @@ module MailChimp::Webhook
       # This will have to be implemented one day
     end
 
-    def unsubscribe_hook(email)
+    def unsubscribe_hook(_email, _reason)
       # This will have to be implemented one day
     end
 
