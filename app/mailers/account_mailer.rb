@@ -1,4 +1,6 @@
 class AccountMailer < ApplicationMailer
+  layout 'inky'
+
   def invalid_mailchimp_key(account_list)
     mail to: account_list.users.map(&:email).compact.map(&:email),
          subject: _('Mailchimp API Key no longer valid')
