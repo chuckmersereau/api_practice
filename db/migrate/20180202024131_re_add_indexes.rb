@@ -3,7 +3,7 @@ class ReAddIndexes < ActiveRecord::Migration
 
   def up
     # we don't want running this to prevent production from starting
-    return if Rails.env.production?
+    return if Rails.env.production? || Rails.env.staging?
 
     path = Rails.root.join('db','dropped_indexes.csv')
 

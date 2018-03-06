@@ -3,7 +3,7 @@ class IndexTablesOnCreatedAt < ActiveRecord::Migration
 
   def up
     # we don't want running this to prevent production from starting
-    return if Rails.env.production?
+    return if Rails.env.production? || Rails.env.staging?
 
     tables_query = "SELECT DISTINCT table_name
                     FROM information_schema.columns
