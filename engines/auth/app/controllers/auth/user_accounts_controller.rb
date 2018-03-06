@@ -50,7 +50,7 @@ module Auth
     def jwt_payload
       @jwt_payload ||= JsonWebToken.decode(http_token) if http_token
     end
-    
+
     # The check for user_uuid should be removed 30 days after the following PR is merged to master
     # https://github.com/CruGlobal/mpdx_api/pull/993
     def fetch_current_user
