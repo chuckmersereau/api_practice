@@ -33,7 +33,7 @@ module Auth
     end
 
     def user_id_in_token?
-      http_token && jwt_payload && jwt_payload['user_uuid']
+      http_token && jwt_payload && jwt_payload['user_id']
     end
 
     def http_token
