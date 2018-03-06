@@ -6,9 +6,9 @@ module Audited
 
     index_name ['mpdx', Rails.env, Date.today.to_s.tr('-', '.')].join('-')
 
-    attribute :auditable_id, Integer
+    attribute :auditable_id, String
     attribute :auditable_type, String
-    attribute :associated_id, Integer
+    attribute :associated_id, String
     attribute :associated_type, String
     attribute :user_id, String
     attribute :user_type, String
