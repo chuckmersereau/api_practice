@@ -91,6 +91,9 @@ class MailChimp::GibbonWrapper
   end
 
   def list_member_info(list_id, emails)
+    emails = Array.wrap(emails)
+    return [gibbon.lists(list_id).members(mail_chimp_account.email_hash(emails.first)).retrieve] if emails.one?
+
     # The MailChimp API v3 doesn't provide an easy, syncronous way to retrieve
     # member info scoped to a set of email addresses, so just pull it all and
     # filter it for now.
