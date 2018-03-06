@@ -4,7 +4,7 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
   let(:resource_type) { :tags }
 
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:first_tag) { 'tag_one' }
   let(:second_tag) { 'tag_two' }
@@ -14,7 +14,7 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
 
   let(:full_correct_attributes) do
     {
-      contact_id: contact.uuid,
+      contact_id: contact.id,
       data: {
         type: resource_type,
         attributes: correct_attributes
@@ -24,7 +24,7 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
 
   let(:full_incorrect_attributes) do
     {
-      contact_id: contact.uuid,
+      contact_id: contact.id,
       data: {
         type: resource_type,
         attributes: incorrect_attributes
@@ -54,7 +54,7 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
     context 'account_list_id filter' do
       it 'filters results' do
         api_login(user)
-        get :index, filter: { account_list_id: account_list_two.uuid }
+        get :index, filter: { account_list_id: account_list_two.id }
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)['data'].length).to eq(1)
         expect(JSON.parse(response.body)['data'][0]['attributes']['name']).to eq(second_tag)
@@ -94,7 +94,7 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
     it 'deletes the resource object for users that have that access' do
       api_login(user)
       expect do
-        delete :destroy, contact_id: contact.uuid, tag_name: first_tag
+        delete :destroy, contact_id: contact.id, tag_name: first_tag
       end.to change { contact.reload.tag_list.length }.by(-1)
       expect(response.status).to eq(204)
     end
@@ -102,14 +102,14 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
     it 'does not destroy the resource for users that do not own the resource' do
       api_login(create(:user))
       expect do
-        delete :destroy, contact_id: contact.uuid, tag_name: second_tag
+        delete :destroy, contact_id: contact.id, tag_name: second_tag
       end.not_to change { contact.tag_list.length }
       expect(response.status).to eq(403)
     end
 
     it 'does not delete the resource object for users that are not signed in' do
       expect do
-        delete :destroy, contact_id: contact.uuid, tag_name: second_tag
+        delete :destroy, contact_id: contact.id, tag_name: second_tag
       end.not_to change { contact.tag_list.length }
       expect(response.status).to eq(401)
     end

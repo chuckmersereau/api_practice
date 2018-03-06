@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Person::Filter::WildcardSearch do
   let!(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:person_one) do
     create(:person, email_addresses: [build(:email_address, email: 'email@gmail.com')],

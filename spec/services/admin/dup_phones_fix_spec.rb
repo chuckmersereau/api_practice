@@ -10,7 +10,7 @@ describe Admin::DupPhonesFix, '#fix' do
 
     Admin::DupPhonesFix.new(person).fix
 
-    numbers = person.reload.phone_numbers.to_a.sort
+    numbers = person.reload.phone_numbers.order(:number).to_a
     expect(numbers.map(&:number)).to eq ['+16174567890', '+12204567890']
     expect(numbers[0]).to be_primary
     expect(numbers[1]).to_not be_primary

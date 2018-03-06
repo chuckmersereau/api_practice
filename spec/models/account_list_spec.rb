@@ -33,26 +33,31 @@ describe AccountList do
     let!(:account_without_user) { create(:account_list) }
 
     it 'scopes account_lists when receiving a User relation' do
-      expect(AccountList.has_users(User.where(id: [user_one.id, user_two.id])).to_a).to eq([user_one.account_lists.first, user_two.account_lists.first])
+      expect(AccountList.has_users(User.where(id: [user_one.id, user_two.id])).to_a).to(
+        contain_exactly(
+          user_one.account_lists.order(:created_at).first,
+          user_two.account_lists.order(:created_at).first
+        )
+      )
     end
 
     it 'scopes account_lists when receiving a User instance' do
-      expect(AccountList.has_users(user_one).to_a).to eq([user_one.account_lists.first])
+      expect(AccountList.has_users(user_one).to_a).to eq([user_one.account_lists.order(:created_at).first])
     end
   end
 
   describe '#salary_organization=()' do
     let(:organization) { create(:organization, default_currency_code: 'GBP') }
 
-    it 'finds the id when given a uuid' do
-      subject.salary_organization = organization.uuid
+    it 'finds the id when given a id' do
+      subject.salary_organization = organization.id
       expect(subject.salary_organization_id).to eq(organization.id)
     end
 
     it 'updates salary_currency' do
       subject.name = 'test account list'
       expect do
-        subject.update!(salary_organization: organization.uuid)
+        subject.update!(salary_organization: organization.id)
       end.to change { subject.salary_currency }.to('GBP')
     end
   end
@@ -134,7 +139,7 @@ describe AccountList do
         account_list.contacts << create(:contact, total_donations: i)
       end
 
-      expect(account_list.top_partners).to eq(account_list.contacts.order(:id)[1..-1].reverse)
+      expect(account_list.top_partners).to eq(account_list.contacts.order(:created_at)[1..-1].reverse)
     end
   end
 

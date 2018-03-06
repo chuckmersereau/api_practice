@@ -29,7 +29,7 @@ class Appeal < ApplicationRecord
                           :created_at,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   def self.filter(filter_params)
     chain = where(filter_params.except(:wildcard_search))
@@ -42,7 +42,7 @@ class Appeal < ApplicationRecord
     contact_ids_to_add = contact_ids.uniq - self.contact_ids
 
     appeal_contacts_to_import = contact_ids_to_add.map do |contact_id|
-      AppealContact.new(contact_id: contact_id, appeal: self, uuid: SecureRandom.uuid)
+      AppealContact.new(contact_id: contact_id, appeal: self)
     end
 
     AppealContact.import(appeal_contacts_to_import)
@@ -116,7 +116,7 @@ class Appeal < ApplicationRecord
   def bulk_add_excluded_appeal_contacts(exclusions)
     excluded_appeal_contacts_to_import = []
     exclusions.each do |id, reasons|
-      excluded_appeal_contacts_to_import << excluded_appeal_contacts.build(contact_id: id, reasons: reasons, uuid: SecureRandom.uuid)
+      excluded_appeal_contacts_to_import << excluded_appeal_contacts.build(contact_id: id, reasons: reasons)
     end
     Appeal::ExcludedAppealContact.import(excluded_appeal_contacts_to_import)
   end

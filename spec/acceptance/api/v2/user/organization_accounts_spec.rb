@@ -9,7 +9,7 @@ resource 'User > Organization Accounts' do
   let(:resource_type) { 'organization_accounts' }
 
   let!(:organization_account) { create(:organization_account, person: user) }
-  let(:id)                    { organization_account.uuid }
+  let(:id)                    { organization_account.id }
 
   let(:new_organization_account_params) do
     attributes_for(:organization_account)
@@ -27,13 +27,13 @@ resource 'User > Organization Accounts' do
       person: {
         data: {
           type: 'people',
-          id: user.uuid
+          id: user.id
         }
       },
       organization: {
         data: {
           type: 'organizations',
-          id: create(:organization).uuid
+          id: create(:organization).id
         }
       }
     }

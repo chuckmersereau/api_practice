@@ -30,8 +30,8 @@ describe MailChimpAccount do
   end
 
   it 'validates the format of an api key' do
-    expect(MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
-    expect(MailChimpAccount.new(account_list_id: 1, api_key: 'jk234lkwjntlkj3n5lk3j3kj-us4')).to be_valid
+    expect(MailChimpAccount.new(account_list_id: account_list.id, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
+    expect(MailChimpAccount.new(account_list_id: account_list.id, api_key: 'jk234lkwjntlkj3n5lk3j3kj-us4')).to be_valid
   end
 
   it 'deactivates the account if the api key is invalid' do

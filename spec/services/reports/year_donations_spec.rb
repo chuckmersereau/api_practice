@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Reports::YearDonations, type: :model do
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
   let!(:year_donations) { Reports::YearDonations.new(account_list: account_list) }
   let!(:designation_account) { create(:designation_account) }
   let!(:donor_account) { create(:donor_account) }

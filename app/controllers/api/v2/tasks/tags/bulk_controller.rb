@@ -58,7 +58,7 @@ class Api::V2::Tasks::Tags::BulkController < Api::V2::BulkController
     render json: BulkResourceSerializer.new(resources: @tasks)
   end
 
-  def task_uuids
+  def task_ids
     filter_params[:task_ids].to_s.split(',').map(&:strip)
   end
 
@@ -66,7 +66,7 @@ class Api::V2::Tasks::Tags::BulkController < Api::V2::BulkController
     {
       account_list: account_lists
     }.tap do |query|
-      query[:uuid] = task_uuids if task_uuids.present?
+      query[:id] = task_ids if task_ids.present?
     end
   end
 

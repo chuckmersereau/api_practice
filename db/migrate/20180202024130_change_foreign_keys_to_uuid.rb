@@ -64,7 +64,9 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
   def copy_rows(table_name, foreign_keys_list)
     # if foreign relation is polymorphic, we have to do some more complicated work.
     poly_relation = foreign_keys_list.find { |fk| fk[2] == 'Poly' }
-    if poly_relation
+    if table_name == 'imports'
+      imports_uuid_convert(table_name, foreign_keys_list)
+    elsif poly_relation
       relation_name = poly_relation[1].sub(/_id$/, '')
       poly_id_to_uuid(table_name, relation_name, foreign_keys_list)
     else
@@ -74,6 +76,15 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
 
   def poly_id_to_uuid(table_name, relation_name, foreign_keys)
     foreign_tables = quiet_execute("SELECT DISTINCT #{relation_name}_type as type from #{table_name} where #{relation_name}_type is not null")
+    foreign_tables.each do |foreign_table_row|
+      poly_class = foreign_table_row['type']
+      next unless poly_class.present?
+      execute_row_load(table_name, foreign_keys, poly_class)
+    end
+  end
+
+  def imports_uuid_convert(table_name, foreign_keys)
+    foreign_tables = quiet_execute("SELECT DISTINCT source as type from #{table_name} where source is not null")
     foreign_tables.each do |foreign_table_row|
       poly_class = foreign_table_row['type']
       next unless poly_class.present?
@@ -105,7 +116,7 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     where_clause = ''
     if poly_class
       poly_foreign_key = foreign_keys.find { |fk| fk[2] == 'Poly'}
-      where_clause = "WHERE #{table_name}.#{poly_foreign_key[1].sub(/_id$/, '_type')} = '#{poly_class}'"
+      where_clause = "WHERE #{table_name}.#{poly_type_field(poly_foreign_key[1])} = '#{poly_class}'"
     end
 
     joins_list = join_list.map do |col, info|
@@ -120,9 +131,20 @@ class ChangeForeignKeysToUuid < ActiveRecord::Migration
     execute query
   end
 
+  def poly_type_field(poly_foreign_key)
+    return 'source' if poly_foreign_key == 'source_account_id'
+    poly_foreign_key.sub(/_id$/, '_type')
+  end
+
   def table_name(string)
     return 'addresses' if string == 'Addressable'
     return Person.const_get(string).table_name if string.starts_with? 'Person::'
+    return Person::OrganizationAccount.table_name if string == 'tnt_data_sync'
+
+    # any tnt or csv imports don't have source_account_id, so it doesn't matter what table it's joined to
+    return Person.table_name if %w(tnt csv).include? string
+
+    return "person_#{string}_accounts" if %w(google facebook).include? string
     string.classify.constantize.table_name
   end
 

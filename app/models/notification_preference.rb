@@ -18,7 +18,7 @@ class NotificationPreference < ApplicationRecord
     :overwrite,
     :updated_at,
     :updated_in_db_at,
-    :uuid
+    :id
   ].freeze
 
   protected

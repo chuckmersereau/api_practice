@@ -70,7 +70,7 @@ RSpec.shared_examples 'sorting examples' do |options|
       next if permit_multiple_sorting_params?
 
       api_login(user)
-      get options[:action], parent_param_if_needed.merge(sort: 'id,uuid')
+      get options[:action], parent_param_if_needed.merge(sort: 'id,id')
       expect(response.status).to eq(400)
       expect(JSON.parse(response.body)['errors'].first['detail']).to eq('This endpoint does not support multiple sorting parameters.')
     end

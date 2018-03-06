@@ -103,29 +103,29 @@ class ConstantList < ActiveModelSerializers::Model
   end
 
   def notifications_hash
-    NotificationType.all.inject({}) do |hash, nt|
-      hash.merge!(nt.uuid => nt.description)
+    NotificationType.all.inject({}) do |hash, notification_type|
+      hash.merge!(notification_type.id => notification_type.description)
     end
   end
 
   def organizations_hash
-    Organization.active.order(name: :asc).inject({}) do |hash, org|
-      hash.merge!(org.uuid => org.name)
+    Organization.active.order(name: :asc).inject({}) do |hash, organization|
+      hash.merge!(organization.id => organization.name)
     end
   end
 
   def organizations_attributes_hash
-    Organization.active.order(name: :asc).inject({}) do |hash, org|
-      hash.merge!(org.uuid => org_attributes_hash(org))
+    Organization.active.order(name: :asc).inject({}) do |hash, organization|
+      hash.merge!(organization.id => organization_attributes_hash(organization))
     end
   end
 
-  def org_attributes_hash(org)
+  def organization_attributes_hash(organization)
     {
-      name: org.name,
-      api_class: org.api_class.to_s,
-      help_email: org.org_help_email,
-      oauth: org.oauth?
+      name: organization.name,
+      api_class: organization.api_class.to_s,
+      help_email: organization.org_help_email,
+      oauth: organization.oauth?
     }
   end
 

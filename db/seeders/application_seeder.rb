@@ -53,9 +53,9 @@ class ApplicationSeeder
 
     organization = create :organization
     user = create :user_with_full_account
-    account_list = user.account_lists.reload.last
+    account_list = user.account_lists.reload.order(:created_at).last
     contact = create :contact_with_person, account_list: account_list
-    person = contact.people.reload.last
+    person = contact.people.reload.order(:created_at).last
 
     create :contact_referral, referred_by: contact, referred_to: create(:contact)
     create :contact_notes_log, contact: contact
@@ -63,9 +63,9 @@ class ApplicationSeeder
     create :account_list_invite, account_list: account_list
     create :account_list_coach, account_list: account_list, coach: user.becomes(User::Coach)
 
-    create :activity, account_list: account_list
-    create :activity_comment, activity: Activity.last, person: person
-    create :activity_contact, activity: Activity.last, contact: contact
+    activity = create :activity, account_list: account_list
+    create :activity_comment, activity: activity, person: person
+    create :activity_contact, activity: activity, contact: contact
 
     create :address, addressable: contact
 
@@ -76,26 +76,30 @@ class ApplicationSeeder
     create :appeal_contact, appeal: appeal, contact: contact
     create :appeal_excluded_appeal_contact, appeal: appeal, contact: contact
 
-    create :company
-    create :company_partnership, company: Company.last, account_list: account_list
-    create :company_position, company: Company.last, person: person
+    company = create :company
+    create :company_partnership, company: company, account_list: account_list
+    create :company_position, company: company, person: person
 
     create(:currency_alias) unless CurrencyAlias.any?
     create(:currency_rate) unless CurrencyRate.any?
 
-    create :donor_account, organization: organization
-    create :contact_donor_account, contact: contact, donor_account: DonorAccount.last
-    create :donor_account_person, donor_account: DonorAccount.last, person: person
+    donor_account = create :donor_account, organization: organization
+    create :contact_donor_account, contact: contact, donor_account: donor_account
+    create :donor_account_person, donor_account: donor_account, person: person
 
-    create :designation_account, organization: organization
-    create :designation_profile_account, designation_profile: DesignationProfile.last, designation_account: DesignationAccount.last
+    designation_account = create :designation_account, organization: organization
+    create :designation_profile_account,
+           designation_profile: DesignationProfile.order(:created_at).last,
+           designation_account: designation_account
 
     create :duplicate_contacts_pair, account_list: account_list
     create :duplicate_people_pair, account_list: account_list
 
-    create :donation, donor_account: DonorAccount.last, designation_account: DesignationAccount.last
-    create :pledge, account_list: account_list, contact: contact
-    create :pledge_donation, pledge: Pledge.last, donation: Donation.last
+    donation = create :donation,
+                      donor_account: donor_account,
+                      designation_account: designation_account
+    pledge = create :pledge, account_list: account_list, contact: contact
+    create :pledge_donation, pledge: pledge, donation: donation
 
     create :phone_number, person: person
 
@@ -106,32 +110,45 @@ class ApplicationSeeder
 
     create :family_relationship, person: person, related_person: create(:person)
 
-    create :google_account, person: person
+    google_account = create :google_account, person: person
     create :google_contact, person: person
-    create :google_email, google_account: Person::GoogleAccount.last
-    create :google_email_activity, google_email: GoogleEmail.last, activity: create(:activity, account_list: account_list)
-    create :google_integration, account_list: account_list, google_account: Person::GoogleAccount.last, calendar_integration: false
-    create :google_event, activity: create(:activity, account_list: account_list), google_integration: GoogleIntegration.last
+    google_email = create :google_email, google_account: google_account
+    create :google_email_activity,
+           google_email: google_email,
+           activity: create(:activity, account_list: account_list)
+    google_integration = create :google_integration,
+                                account_list: account_list,
+                                google_account: google_account,
+                                calendar_integration: false
+    create :google_event,
+           activity: create(:activity, account_list: account_list),
+           google_integration: google_integration
 
     create :help_request, account_list: account_list
 
     create :import, account_list: account_list
 
-    create :mail_chimp_account, account_list: account_list
-    create :mail_chimp_appeal_list, mail_chimp_account: MailChimpAccount.last, appeal: Appeal.last
-    create :mail_chimp_member, mail_chimp_account: MailChimpAccount.last
+    mail_chimp_account = create :mail_chimp_account, account_list: account_list
+    create :mail_chimp_appeal_list,
+           mail_chimp_account: mail_chimp_account,
+           appeal: appeal
+    create :mail_chimp_member, mail_chimp_account: mail_chimp_account
 
     create :master_address
     create :master_company
-    create :master_person
-    create :master_person_donor_account, master_person: MasterPerson.last, donor_account: DonorAccount.last
-    create :master_person_source, master_person: MasterPerson.last, organization: organization
+    master_person = create :master_person
+    create :master_person_donor_account,
+           master_person: master_person,
+           donor_account: donor_account
+    create :master_person_source, master_person: master_person, organization: organization
 
     create :message, account_list: account_list
     create :name_male_ratio
     create :nickname
 
-    create :notification_preference, notification_type: NotificationType.last, account_list: account_list
+    create :notification_preference,
+           notification_type: NotificationType.order(:created_at).last,
+           account_list: account_list
     create :notification, contact: contact
 
     create :user_option, user: user
@@ -158,7 +175,5 @@ class ApplicationSeeder
     create :background_batch
 
     create :export_log
-
-    create :fix_count, account_list_id: account_list.id
   end
 end

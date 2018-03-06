@@ -16,7 +16,7 @@ describe PersonSerializer do
     end
 
     it 'returns an array of parent contacts' do
-      expect(subject[:parent_contacts].first).to eq(person.contacts.first.uuid)
+      expect(subject[:parent_contacts].first).to eq(person.contacts.first.id)
       expect(subject[:parent_contacts].count).to eq(2)
     end
   end

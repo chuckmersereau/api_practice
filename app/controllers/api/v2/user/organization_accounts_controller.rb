@@ -39,12 +39,13 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   def load_organization_accounts
     @organization_accounts = organization_account_scope.where(filter_params)
                                                        .reorder(sorting_param)
+                                                       .order(:created_at)
                                                        .page(page_number_param)
                                                        .per(per_page_param)
   end
 
   def load_organization_account
-    @organization_account ||= Person::OrganizationAccount.find_by_uuid_or_raise!(params[:id])
+    @organization_account ||= Person::OrganizationAccount.find(params[:id])
   end
 
   def render_organization_account

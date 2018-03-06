@@ -3,9 +3,7 @@ RSpec.shared_examples 'create_examples' do |options = {}|
   include_context 'common_variables'
 
   describe '#create' do
-    unless options[:except].include?(:includes)
-      include_examples 'including related resources examples', action: :create
-    end
+    include_examples 'including related resources examples', action: :create unless options[:except].include?(:includes)
     include_examples 'sparse fieldsets examples', action: :create
 
     it 'creates resource for users that are signed in' do
@@ -22,8 +20,8 @@ RSpec.shared_examples 'create_examples' do |options = {}|
       if parent_association_if_needed.present?
         api_login(user)
         post :create, full_correct_attributes
-        created_resource = resource.class.find_by_uuid(JSON.parse(response.body)['data']['id'])
-        expect(created_resource.send(parent_association_if_needed).uuid).to eq parent_param_if_needed.values.last
+        created_resource = resource.class.find_by_id(JSON.parse(response.body)['data']['id'])
+        expect(created_resource.send(parent_association_if_needed).id).to eq parent_param_if_needed.values.last
       end
     end
 

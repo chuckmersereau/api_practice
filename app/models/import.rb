@@ -31,7 +31,7 @@ class Import < ApplicationRecord
                           :updated_at,
                           :updated_in_db_at,
                           :user_id,
-                          :uuid].freeze
+                          :id].freeze
 
   belongs_to :user
   belongs_to :account_list
@@ -133,7 +133,7 @@ class Import < ApplicationRecord
 
     begin
       async = "#{source.camelize}Import".safe_constantize.new(self).import
-    rescue => exception
+    rescue StandardError => exception
       exception.is_a?(Import::UnsurprisingImportError) ? Rollbar.info(exception) : Rollbar.error(exception)
       ImportCallbackHandler.new(self).handle_failure(exception: exception)
       false
@@ -142,7 +142,7 @@ class Import < ApplicationRecord
       true
     end
 
-  rescue => exception
+  rescue StandardError => exception
     Rollbar.error(exception)
     ImportCallbackHandler.new(self).handle_failure(exception: exception) unless async
     false

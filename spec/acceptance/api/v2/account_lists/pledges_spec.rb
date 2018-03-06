@@ -17,8 +17,8 @@ resource 'Pledges' do
   let(:contact) { create(:contact, account_list: account_list) }
   let!(:pledge) { create(:pledge, account_list: account_list, contact: contact) }
 
-  let(:id) { pledge.uuid }
-  let(:account_list_id) { account_list.uuid }
+  let(:id) { pledge.id }
+  let(:account_list_id) { account_list.id }
 
   # This is the reference data used to create/update a resource.
   # specify the `attributes` specifically in your request actions below.
@@ -27,7 +27,7 @@ resource 'Pledges' do
       relationships: {
         contact: {
           data: {
-            id: contact.uuid,
+            id: contact.id,
             type: 'contacts'
           }
         }

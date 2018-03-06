@@ -37,12 +37,12 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
   end
 
   def contact_ids
-    @contact_ids = current_user.contacts.where(uuid: filter_params[:contact_ids]).ids if filter_params[:contact_ids]
+    @contact_ids = current_user.contacts.where(id: filter_params[:contact_ids]).ids if filter_params[:contact_ids]
     @contact_ids ||= load_appeal.contacts.ids
   end
 
   def mail_chimp_scope
-    account_lists.first
+    account_lists.order(:created_at).first
   end
 
   def load_appeal
@@ -50,16 +50,16 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
   end
 
   def fetch_appeal
-    return account_list.appeals.first unless filter_params[:appeal_id]
-    account_list.appeals.find_by_uuid_or_raise!(filter_params[:appeal_id])
+    return account_list.appeals.order(:created_at).first unless filter_params[:appeal_id]
+    account_list.appeals.find(filter_params[:appeal_id])
   end
 
   def account_list
-    account_lists.first
+    account_lists.order(:created_at).first
   end
 
   def account_lists
-    @account_lists ||= current_user.account_lists.where(uuid: filter_params[:account_list_id]).presence || current_user.account_lists
+    @account_lists ||= current_user.account_lists.where(id: filter_params[:account_list_id]).presence || current_user.account_lists
   end
 
   def permitted_filters

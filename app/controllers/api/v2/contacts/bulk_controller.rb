@@ -59,7 +59,7 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
   end
 
   def build_empty_contacts
-    @contacts = params.require(:data).map { |data| Contact.new(uuid: data['contact']['uuid']) }
+    @contacts = params.require(:data).map { |data| Contact.new(id: data['contact']['id']) }
   end
 
   def build_contacts
@@ -76,7 +76,7 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
   def data_attribute_index(contact)
     params
       .require(:data)
-      .find_index { |contact_data| contact_data[:contact][:uuid] == contact.uuid }
+      .find_index { |contact_data| contact_data[:contact][:id] == contact.id }
   end
 
   def contact_params(attributes)

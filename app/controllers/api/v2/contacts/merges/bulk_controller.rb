@@ -16,7 +16,7 @@ class Api::V2::Contacts::Merges::BulkController < Api::V2Controller
 
   private
 
-  def contact_uuids
+  def contact_ids
     params[:data].flat_map do |merge_params|
       attributes = extract_merge_attributes(merge_params)
       [attributes[:winner_id], attributes[:loser_id]]
@@ -35,7 +35,7 @@ class Api::V2::Contacts::Merges::BulkController < Api::V2Controller
   end
 
   def load_contacts
-    @contacts = contact_scope.where(uuid: contact_uuids).tap(&:first!).to_a
+    @contacts = contact_scope.where(id: contact_ids).tap(&:first!).to_a
   end
 
   def contact_scope
@@ -53,8 +53,8 @@ class Api::V2::Contacts::Merges::BulkController < Api::V2Controller
   end
 
   def build_merge_from_attributes(attributes)
-    winner = @contacts.find { |contact| contact.uuid == attributes[:winner_id] }
-    loser  = @contacts.find { |contact| contact.uuid == attributes[:loser_id] }
+    winner = @contacts.find { |contact| contact.id == attributes[:winner_id] }
+    loser  = @contacts.find { |contact| contact.id == attributes[:loser_id] }
 
     return nil unless (winner && loser) && (winner.account_list_id == loser.account_list_id)
 

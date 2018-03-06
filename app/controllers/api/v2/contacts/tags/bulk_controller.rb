@@ -35,7 +35,7 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2::BulkController
     end
   end
 
-  def contact_uuids
+  def contact_ids
     filter_params[:contact_ids].to_s.split(',').map(&:strip)
   end
 
@@ -43,7 +43,7 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2::BulkController
     {
       account_list: account_lists
     }.tap do |query|
-      query[:uuid] = contact_uuids if contact_uuids.present?
+      query[:id] = contact_ids if contact_ids.present?
     end
   end
 

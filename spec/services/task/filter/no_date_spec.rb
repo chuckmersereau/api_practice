@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Task::Filter::NoDate do
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:task_one)   { create(:task, account_list: account_list, no_date: true) }
   let!(:task_two)   { create(:task, account_list: account_list, no_date: false) }

@@ -11,7 +11,7 @@ resource 'Contacts > Analytics' do
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:alternate_account_list) do
     create(:account_list).tap do |account_list|
@@ -115,7 +115,7 @@ resource 'Contacts > Analytics' do
 
         example doc_helper.title_for(:show), document: doc_helper.document_scope do
           explanation doc_helper.description_for(:show)
-          do_request filter: { account_list_id: alternate_account_list.uuid }
+          do_request filter: { account_list_id: alternate_account_list.id }
 
           check_resource(additional_attribute_keys)
           expect(resource_object.keys).to match_array expected_attribute_keys

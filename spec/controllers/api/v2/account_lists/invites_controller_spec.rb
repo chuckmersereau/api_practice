@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Api::V2::AccountLists::InvitesController, type: :controller do
   let(:factory_type) { :account_list_invite }
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
+  let(:account_list_id) { account_list.id }
   let!(:invite) do
     create(:account_list_invite,
            account_list: account_list,
@@ -19,7 +19,7 @@ describe Api::V2::AccountLists::InvitesController, type: :controller do
            accepted_by_user: nil,
            cancelled_by_user: nil)
   end
-  let(:id) { invite.uuid }
+  let(:id) { invite.id }
 
   let(:resource) { invite }
   let(:parent_param) { { account_list_id: account_list_id } }
@@ -77,7 +77,7 @@ describe Api::V2::AccountLists::InvitesController, type: :controller do
     end
 
     it 'returns a 404 when the id is not related to the account_list specified' do
-      full_correct_attributes[:id] = create(:account_list_invite).uuid
+      full_correct_attributes[:id] = create(:account_list_invite).id
 
       expect do
         put :update, full_correct_attributes

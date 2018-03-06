@@ -6,7 +6,7 @@ describe Admin::Reset, '#reset!' do
   let!(:user_finder) { Admin::UserFinder }
   let!(:reset_logger) { Admin::ResetLog }
   let!(:resetted_user_email) { 'resetted_user@internet.com' }
-  let!(:account_list) { resetted_user.account_lists.first }
+  let!(:account_list) { resetted_user.account_lists.order(:created_at).first }
 
   before do
     Sidekiq::Testing.inline!

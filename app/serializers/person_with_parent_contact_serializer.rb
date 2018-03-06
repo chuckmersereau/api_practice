@@ -28,7 +28,7 @@ class PersonWithParentContactSerializer < ApplicationSerializer
            :title,
            :twitter_accounts,
            :updated_at,
-           :uuid,
+           :id,
            :websites,
            to: :object
 

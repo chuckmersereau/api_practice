@@ -28,14 +28,14 @@ module JsonApiService
           included: [
             {
               type: 'users',
-              id: 'uuid-users-1',
+              id: 'id-users-1',
               attributes: {
                 name: 'Tony Stark'
               }
             },
             {
               type: 'contacts',
-              id: 'uuid-contacts-1',
+              id: 'id-contacts-1',
               attributes: {
                 first_name: 'Steve',
                 last_name: 'Rogers'
@@ -50,8 +50,8 @@ module JsonApiService
         object = build_object(params: params, store: store)
         store  = object.store
 
-        expect(store['contacts']['uuid-contacts-1']).not_to be_nil
-        expect(store['users']['uuid-users-1']).not_to       be_nil
+        expect(store['contacts']['id-contacts-1']).not_to be_nil
+        expect(store['users']['id-users-1']).not_to       be_nil
       end
     end
 
@@ -70,12 +70,12 @@ module JsonApiService
       {
         data: {
           type: 'contacts',
-          id: 'uuid-contacts-1'
+          id: 'id-contacts-1'
         },
         included: [
           {
             type: 'users',
-            id: 'uuid-users-1',
+            id: 'id-users-1',
             attributes: {
               name: 'Tony Stark'
             }

@@ -8,7 +8,7 @@ class Api::V2::Contacts::ReferrersController < Api::V2Controller
   private
 
   def current_contact
-    @contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def referrer_scope
@@ -22,6 +22,7 @@ class Api::V2::Contacts::ReferrersController < Api::V2Controller
   def load_referrers
     @referrers = referrer_scope.where(filter_params)
                                .reorder(sorting_param)
+                               .order(:created_at)
                                .page(page_number_param)
                                .per(per_page_param)
   end

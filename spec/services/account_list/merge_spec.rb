@@ -2,9 +2,9 @@ require 'rails_helper'
 
 describe AccountList::Merge, '#merge' do
   let!(:loser_user) { create(:user_with_account) }
-  let!(:loser) { loser_user.account_lists.first }
+  let!(:loser) { loser_user.account_lists.order(:created_at).first }
   let!(:winner_user) { create(:user_with_account) }
-  let!(:winner) { winner_user.account_lists.first }
+  let!(:winner) { winner_user.account_lists.order(:created_at).first }
 
   before do
     winner.users << loser_user

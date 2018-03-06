@@ -75,9 +75,7 @@ class ContactSerializer < ApplicationSerializer
     ContactExhibit.new(object, self)
   end
 
-  def account_list_id
-    object.account_list.uuid
-  end
+  delegate :account_list_id, to: :object
 
   def tag_list
     object.tags.collect(&:name)

@@ -88,20 +88,20 @@ describe TntImport do
       expect do
         import.send(:import)
       end.to change(ContactReferral, :count).by(1)
-      expect(Contact.first.no_appeals).to be true
+      expect(Contact.order(:created_at).first.no_appeals).to be true
     end
 
     context 'referred by contact cannot be found' do
       it 'adds the referred by name into the contact notes' do
         expect do
           import.send(:import)
-        end.to change { Contact.last&.notes }.from(nil).to("call for amount \n \nReferred by: Steve and Lisa Moss")
+        end.to change { Contact.order(:created_at).last&.notes }.from(nil).to("call for amount \n \nReferred by: Steve and Lisa Moss")
       end
 
       it 'adds a tag so that the contact can be found' do
         expect do
           import.send(:import)
-        end.to change { Contact.last&.tag_list }.from(nil).to(['missing tnt referred by'])
+        end.to change { Contact.order(:created_at).last&.tag_list }.from(nil).to(['missing tnt referred by'])
       end
     end
 

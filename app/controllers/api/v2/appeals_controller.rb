@@ -40,12 +40,13 @@ class Api::V2::AppealsController < Api::V2Controller
   def load_appeals
     @appeals = appeal_scope.filter(filter_params)
                            .reorder(sorting_param)
+                           .order(:created_at)
                            .page(page_number_param)
                            .per(per_page_param)
   end
 
   def load_appeal
-    @appeal ||= Appeal.find_by_uuid_or_raise!(params[:id])
+    @appeal ||= Appeal.find(params[:id])
   end
 
   def render_appeal

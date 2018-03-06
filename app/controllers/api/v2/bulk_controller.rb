@@ -32,7 +32,7 @@ class Api::V2::BulkController < Api::V2Controller
   end
 
   def fetch_account_list_with_filter
-    current_user.account_lists.where(uuid: account_list_filter)
+    current_user.account_lists.where(id: account_list_filter)
   end
 
   def missing_id_error

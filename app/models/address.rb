@@ -42,7 +42,7 @@ class Address < ApplicationRecord
                           :street,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid,
+                          :id,
                           :valid_values].freeze
 
   assignable_values_for :location, allow_blank: true do
@@ -121,9 +121,7 @@ class Address < ApplicationRecord
     unless master_address_id
       master_address = find_master_address
 
-      unless master_address
-        master_address = MasterAddress.create(attributes_for_master_address)
-      end
+      master_address ||= MasterAddress.create(attributes_for_master_address)
 
       self.master_address_id = master_address.id
       self.verified = master_address.verified
@@ -133,7 +131,7 @@ class Address < ApplicationRecord
   end
 
   def csv_street
-    street.gsub("\r\n", "\n").strip if street
+    street&.gsub("\r\n", "\n")&.strip
   end
 
   def csv_country(home_country)
@@ -237,9 +235,7 @@ class Address < ApplicationRecord
       new_master_address_match = find_master_address
 
       if master_address.nil? || master_address != new_master_address_match
-        unless new_master_address_match
-          new_master_address_match = MasterAddress.create(attributes_for_master_address)
-        end
+        new_master_address_match ||= MasterAddress.create(attributes_for_master_address)
 
         self.master_address_id = new_master_address_match.id
         self.verified = new_master_address_match.verified
@@ -250,9 +246,8 @@ class Address < ApplicationRecord
   end
 
   def clean_up_master_address
-    master_address.destroy if master_address && master_address.addresses.where.not(id: id).empty?
-
-    true
+    return true unless master_address
+    master_address.destroy if master_address.addresses.where.not(id: id).empty?
   end
 
   def find_master_address
@@ -307,7 +302,7 @@ class Address < ApplicationRecord
                                             attributes_for_master_address[:country]].join(','))
           attributes_for_master_address[:latitude] = lat.to_s
           attributes_for_master_address[:longitude] = long.to_s
-        rescue
+        rescue StandardError
           # Don't blow up if Google didn't like the request... Rate limit most likely.
         end
       end

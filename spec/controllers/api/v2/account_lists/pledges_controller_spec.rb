@@ -4,7 +4,7 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
   # This is required!
   let(:user) { create(:user_with_account) }
 
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:contact) { create(:contact, account_list: account_list) }
 
   # This is required!
@@ -21,11 +21,11 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
   end
 
   # If needed, keep this ;)
-  let(:id) { resource.uuid }
+  let(:id) { resource.id }
 
   # If needed, keep this ;)
   let(:parent_param) do
-    { account_list_id: account_list.uuid }
+    { account_list_id: account_list.id }
   end
 
   # This is required!
@@ -37,7 +37,7 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
     {
       contact: {
         data: {
-          id: contact.uuid,
+          id: contact.id,
           type: 'contacts'
         }
       }
@@ -49,7 +49,7 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
     {
       contact: {
         data: {
-          id: create(:contact).uuid,
+          id: create(:contact).id,
           type: 'contacts'
         }
       }
@@ -76,7 +76,7 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
 
       json = JSON.parse(response.body)
       ids = json['data'].collect { |pledge| pledge['id'] }
-      expect(ids.last).to eq pledge3.uuid
+      expect(ids.last).to eq pledge3.id
     end
 
     it 'sorts results by contact.name asc' do
@@ -84,7 +84,7 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
 
       json = JSON.parse(response.body)
       ids = json['data'].collect { |pledge| pledge['id'] }
-      expect(ids.first).to eq pledge3.uuid
+      expect(ids.first).to eq pledge3.id
     end
   end
 
@@ -100,7 +100,7 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
 
         expect(response.status).to eq(200)
         expect(response_json['data'].length).to eq(1)
-        expect(response_json['data'][0]['id']).to eq(pledge3.uuid)
+        expect(response_json['data'][0]['id']).to eq(pledge3.id)
       end
     end
   end

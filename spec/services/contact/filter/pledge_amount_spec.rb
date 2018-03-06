@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Contact::Filter::PledgeAmount do
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:contact_one)   { create(:contact, account_list_id: account_list.id, pledge_amount: 100.00) }
   let!(:contact_two)   { create(:contact, account_list_id: account_list.id, pledge_amount: 100.00) }

@@ -1,4 +1,4 @@
-class ExportLog < ActiveRecord::Base
+class ExportLog < ApplicationRecord
   self.inheritance_column = :_type_disabled
 
   belongs_to :user

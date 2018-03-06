@@ -40,9 +40,7 @@ class TntImport::ContactImport
 
     merge_dups_by_donor_accts(contact, @donor_accounts)
 
-    if true?(row['IsOrganization'])
-      @donor_accounts.each { |donor_account| add_or_update_company(row, donor_account) }
-    end
+    @donor_accounts.each { |donor_account| add_or_update_company(row, donor_account) } if true?(row['IsOrganization'])
 
     contact
   end

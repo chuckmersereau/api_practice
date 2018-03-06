@@ -25,7 +25,7 @@ class Api::V2::Reports::MonthlyLossesGraphsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by(uuid: params[:id])
+    @account_list ||= AccountList.find_by(id: params[:id])
   end
 
   def render_report

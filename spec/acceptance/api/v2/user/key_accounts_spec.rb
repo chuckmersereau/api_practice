@@ -9,7 +9,7 @@ resource 'User > Key Accounts' do
   let(:resource_type) { 'key_accounts' }
 
   let!(:key_account) { create(:key_account, person: user) }
-  let(:id)           { key_account.uuid }
+  let(:id)           { key_account.id }
 
   let(:new_key_account_params) do
     attributes_for(:key_account)
@@ -25,7 +25,7 @@ resource 'User > Key Accounts' do
       person: {
         data: {
           type: 'persons',
-          id: user.uuid
+          id: user.id
         }
       }
     }

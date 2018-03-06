@@ -6,9 +6,7 @@ class Contact::Filter::Status < Contact::Filter::Base
     status_filters += Contact.active_statuses + ['null'] if status_filters.include?('active')
     status_filters += Contact.inactive_statuses if status_filters.include?('hidden')
 
-    if status_filters.include? 'null'
-      return contacts.where('status is null OR status in (?)', status_filters)
-    end
+    return contacts.where(status: status_filters + [nil]) if status_filters.include? 'null'
     contacts.where(status: status_filters)
   end
 

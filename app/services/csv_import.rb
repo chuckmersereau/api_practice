@@ -106,7 +106,7 @@ class CsvImport
     sample_contacts = @import.file_row_samples.collect do |sample_row|
       contact_from_file_line(sample_row)
     end.compact
-    generate_uuids_for_contacts(sample_contacts)
+    generate_ids_for_contacts(sample_contacts)
   end
 
   def update_cached_file_data
@@ -157,8 +157,8 @@ class CsvImport
     CsvRowContactBuilder.new(csv_row: csv_row, import: @import).build
   end
 
-  def generate_uuids_for_contacts(contacts)
-    objects_needing_uuid = contacts.collect do |contact|
+  def generate_ids_for_contacts(contacts)
+    objects_needing_ids = contacts.collect do |contact|
       [
         contact,
         contact.primary_person,
@@ -170,7 +170,7 @@ class CsvImport
         contact.spouse&.phone_numbers
       ]
     end.flatten.compact
-    objects_needing_uuid.each { |record| record.uuid ||= SecureRandom.uuid }
+    objects_needing_ids.each { |record| record.id ||= SecureRandom.uuid }
     contacts
   end
 end

@@ -16,7 +16,7 @@ describe TntImport::PledgesImport do
   describe '#import' do
     it 'creates expected number of pledge records' do
       expect { pledges_import.import }.to change { Pledge.count }.from(0).to(13)
-      pledge = Pledge.last
+      pledge = Pledge.order(:created_at).last
       expect(pledge.amount).to eq(75)
       expect(pledge.amount_currency).to eq('USD')
       expect(pledge.expected_date).to eq(Date.parse('2017-06-10'))

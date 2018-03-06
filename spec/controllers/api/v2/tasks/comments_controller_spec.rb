@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::Tasks::CommentsController, type: :controller do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:person) { create(:contact_with_person, account_list: account_list).reload.people.first }
   let(:activity) { create(:activity, account_list: account_list) }
   let!(:resource) { create(:activity_comment, activity: activity, person: user) }
   let!(:second_resource) { create(:activity_comment, activity: activity, person: person) }
-  let(:id) { resource.uuid }
-  let(:parent_param) { { task_id: activity.uuid } }
+  let(:id) { resource.id }
+  let(:parent_param) { { task_id: activity.id } }
   let(:parent_association) { :activity }
   let(:correct_attributes) { { body: 'My insightful comment' } }
   let(:unpermitted_attributes) { nil }
@@ -20,7 +20,7 @@ RSpec.describe Api::V2::Tasks::CommentsController, type: :controller do
       person: {
         data: {
           type: 'people',
-          id: user.uuid
+          id: user.id
         }
       }
     }
@@ -30,7 +30,7 @@ RSpec.describe Api::V2::Tasks::CommentsController, type: :controller do
       person: {
         data: {
           type: 'people',
-          id: create(:person).uuid
+          id: create(:person).id
         }
       }
     }
@@ -49,8 +49,8 @@ RSpec.describe Api::V2::Tasks::CommentsController, type: :controller do
   describe '#index authorization' do
     it 'does not show resources for contact that user does not own' do
       api_login(user)
-      activity = create(:activity, account_list: create(:user_with_account).account_lists.first)
-      get :index, task_id: activity.uuid
+      activity = create(:activity, account_list: create(:user_with_account).account_lists.order(:created_at).first)
+      get :index, task_id: activity.id
       expect(response.status).to eq(403)
     end
   end

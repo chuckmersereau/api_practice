@@ -11,10 +11,12 @@ RSpec.describe DonationImports::Base::MergeDonations do
     let!(:account_list) { create(:account_list) }
     let!(:donor_account)  { create(:donor_account, total_donations: 0) }
     let!(:designation_account) { create(:designation_account).tap { |da| da.account_lists << account_list } }
-    let!(:contact) { create(:contact, account_list: account_list, total_donations: 0).tap { |c| c.donor_accounts << donor_account } }
-
+    let(:appeal_id) { SecureRandom.uuid }
+    let!(:contact) do
+      create(:contact, account_list: account_list, total_donations: 0).tap { |c| c.donor_accounts << donor_account }
+    end
     let!(:donation_one) do
-      create(:donation, appeal_id: 1, tnt_id: nil, motivation: nil, amount: 1.0, donation_date: Date.new,
+      create(:donation, appeal_id: appeal_id, tnt_id: nil, motivation: nil, amount: 1.0, donation_date: Date.new,
                         donor_account: donor_account, designation_account: designation_account)
     end
     let!(:donation_two) do
@@ -25,7 +27,9 @@ RSpec.describe DonationImports::Base::MergeDonations do
       create(:donation, appeal_id: nil, tnt_id: '2', motivation: 'Motivation', amount: 1.0, donation_date: Date.new,
                         donor_account: donor_account, designation_account: designation_account)
     end
-    let!(:other_donation) { create(:donation, amount: 1.0, donor_account: donor_account, designation_account: designation_account) }
+    let!(:other_donation) do
+      create(:donation, amount: 1.0, donor_account: donor_account, designation_account: designation_account)
+    end
 
     it 'returns if the donations has one or zero elements' do
       expect do
@@ -38,7 +42,7 @@ RSpec.describe DonationImports::Base::MergeDonations do
       expect do
         expect(described_class.new([donation_one, donation_two, donation_three]).merge).to eq(donation_one)
       end.to change { Donation.count }.from(4).to(2)
-      expect(donation_one.reload.appeal_id).to eq(1)
+      expect(donation_one.reload.appeal_id).to eq(appeal_id)
       expect(donation_one.tnt_id).to eq('2')
       expect(donation_one.motivation).to eq('Motivation')
     end

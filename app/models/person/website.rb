@@ -7,7 +7,7 @@ class Person::Website < ApplicationRecord
                           :updated_at,
                           :updated_in_db_at,
                           :url,
-                          :uuid].freeze
+                          :id].freeze
 
   validates :url, presence: true
 end

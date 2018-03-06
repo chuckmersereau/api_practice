@@ -1,3 +1,3 @@
-class GooglePlusAccount < ActiveRecord::Base
+class GooglePlusAccount < ApplicationRecord
   belongs_to :email_address
 end

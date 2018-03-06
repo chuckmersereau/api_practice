@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Contact::Filter::Appeal do
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:appeal_1) { create(:appeal, account_list_id: account_list.id) }
 
@@ -21,7 +21,7 @@ RSpec.describe Contact::Filter::Appeal do
                                                                 name: :appeal,
                                                                 options: [{ name: '-- Any --', id: '', placeholder: 'None' },
                                                                           { name: '-- Do not ask --', id: 'no_appeals' },
-                                                                          { name: appeal_1.name, id: appeal_1.uuid }],
+                                                                          { name: appeal_1.name, id: appeal_1.id }],
                                                                 parent: nil,
                                                                 title: 'Appeal',
                                                                 type: 'multiselect',
@@ -46,13 +46,13 @@ RSpec.describe Contact::Filter::Appeal do
         expect(described_class.query(contacts, { appeal: 'no_appeals' }, nil).to_a).to match_array [contact_one, contact_two]
       end
       it 'returns only contacts with no_appeals set to true and who are part of the appeal' do
-        expect(described_class.query(contacts, { appeal: "#{appeal_1.uuid}, no_appeals" }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { appeal: "#{appeal_1.id}, no_appeals" }, nil).to_a).to eq [contact_one]
       end
     end
 
     context 'filter by appeals' do
       it 'returns only contacts associated to the selected appeal' do
-        expect(described_class.query(contacts, { appeal: appeal_1.uuid }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { appeal: appeal_1.id }, nil).to_a).to eq [contact_one]
       end
     end
   end

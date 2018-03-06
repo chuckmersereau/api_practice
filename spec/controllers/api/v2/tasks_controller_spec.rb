@@ -2,18 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::TasksController, type: :controller do
   let(:user)             { create(:user_with_account) }
-  let(:account_list)     { user.account_lists.first }
+  let(:account_list)     { user.account_lists.order(:created_at).first }
   let(:factory_type)     { :task }
-  let!(:resource)        { create(:task, account_list: account_list) }
-  let!(:second_resource) { create(:task, account_list: account_list) }
-  let(:id)               { resource.uuid }
+  let!(:resource)        { create(:task, account_list: account_list, start_at: 2.days.ago) }
+  let!(:second_resource) { create(:task, account_list: account_list, start_at: Time.now) }
+  let(:id)               { resource.id }
 
   let(:unpermitted_relationships) do
     {
       account_list: {
         data: {
           type: 'account_lists',
-          id: create(:account_list).uuid
+          id: create(:account_list).id
         }
       }
     }
@@ -62,7 +62,7 @@ RSpec.describe Api::V2::TasksController, type: :controller do
       Task::Filterer::FILTERS_TO_HIDE.collect(&:underscore)
     )
 
-    FILTERS.each_with_index do |filter|
+    FILTERS.each do |filter|
       context "#{filter} filter" do
         let(:value) { filter == 'updated_at' ? Date.today.to_s : '' }
 
@@ -83,7 +83,7 @@ RSpec.describe Api::V2::TasksController, type: :controller do
       before { user.account_lists << account_list_two }
 
       it 'filters results' do
-        get :index, filter: { account_list_id: account_list_two.uuid }
+        get :index, filter: { account_list_id: account_list_two.id }
 
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)['data'].length).to eq(1)

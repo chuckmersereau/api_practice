@@ -10,14 +10,8 @@ class UserSerializer < PersonSerializer
 
   def preferences
     object.preferences.merge(
-      default_account_list: default_account_list_uuid,
+      default_account_list: object.default_account_list_record.try(:id),
       setup: object.setup
     )
-  end
-
-  private
-
-  def default_account_list_uuid
-    object.default_account_list_record.try(:uuid)
   end
 end

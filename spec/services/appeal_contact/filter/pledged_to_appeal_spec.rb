@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AppealContact::Filter::PledgedToAppeal do
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:appeal) { create(:appeal, account_list: account_list) }
 

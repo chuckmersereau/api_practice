@@ -14,7 +14,7 @@ class DonationReports::DonorInfo < ActiveModelSerializers::Model
 
   def self.from_contact(contact)
     new(
-      contact_id: contact.uuid,
+      contact_id: contact.id,
       contact_name: contact.name,
       late_by_30_days: contact.late_by?(31, 60),
       late_by_60_days: contact.late_by?(60),

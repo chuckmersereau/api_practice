@@ -59,7 +59,7 @@ class Api::V2::AccountLists::Imports::TntDataSyncController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def pundit_user

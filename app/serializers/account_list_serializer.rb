@@ -20,7 +20,7 @@ class AccountListSerializer < ApplicationSerializer
 
     Organization.where(id: object.salary_organization_id)
                 .limit(1)
-                .pluck(:uuid)
+                .pluck(:id)
                 .first
   end
 end

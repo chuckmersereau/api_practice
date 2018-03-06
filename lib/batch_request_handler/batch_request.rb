@@ -16,9 +16,7 @@ module BatchRequestHandler
     end
 
     def add_instrumentation(instrument_class)
-      if instrument_class.enabled_for?(self)
-        @instruments << instrument_class.new(@params)
-      end
+      @instruments << instrument_class.new(@params) if instrument_class.enabled_for?(self)
     end
 
     def process(app)

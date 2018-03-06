@@ -4,9 +4,7 @@ namespace :mpdx do
   task set_special: :environment do
     AccountList.find_each do |al|
       al.contacts.includes(:donor_accounts).find_each do |contact|
-        if contact.status.blank? && contact.donor_accounts.present?
-          contact.update_attributes(status: 'Partner - Special')
-        end
+        contact.update_attributes(status: 'Partner - Special') if contact.status.blank? && contact.donor_accounts.present?
       end
     end
   end
@@ -84,7 +82,7 @@ namespace :mpdx do
                 addresses.first
 
       # Make sure we have a smarty streets response on file
-      next unless address && address.master_address && address.master_address.smarty_response.present?
+      next unless address&.master_address && address.master_address.smarty_response.present?
 
       smarty = address.master_address.smarty_response
       meta = smarty.first['metadata']

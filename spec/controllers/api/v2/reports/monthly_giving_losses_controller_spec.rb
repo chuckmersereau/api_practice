@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::Reports::MonthlyLossesGraphsController, type: :controller do
   let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:response_json) { JSON.parse(response.body).deep_symbolize_keys }
 
   let(:resource) do
@@ -10,7 +10,7 @@ RSpec.describe Api::V2::Reports::MonthlyLossesGraphsController, type: :controlle
   end
 
   let(:correct_attributes) { {} }
-  let(:id) { account_list.uuid }
+  let(:id) { account_list.id }
 
   include_examples 'show_examples', except: [:sparse_fieldsets]
 
@@ -31,7 +31,7 @@ RSpec.describe Api::V2::Reports::MonthlyLossesGraphsController, type: :controlle
 
       expect(response.status).to eq(200), invalid_status_detail
       expect(response_json[:data][:relationships][:account_list][:data][:id])
-        .to eq account_list.uuid
+        .to eq account_list.id
       expect(response.body)
         .to include(resource.send(reference_key).to_json) if reference_key
     end

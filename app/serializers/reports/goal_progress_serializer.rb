@@ -23,7 +23,7 @@ class Reports::GoalProgressSerializer < ServiceSerializer
   def salary_organization_id
     Organization.where(id: account_list.salary_organization_id)
                 .limit(1)
-                .pluck(:uuid)
+                .pluck(:id)
                 .first
   end
 end

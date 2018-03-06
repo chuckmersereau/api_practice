@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe ApplicationFilter do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   describe '#query' do
     let(:contact_one) { create(:contact, name: 'name') }

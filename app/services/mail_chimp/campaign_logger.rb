@@ -16,9 +16,7 @@ class MailChimp::CampaignLogger
   rescue Gibbon::MailChimpError => error
     raise unless campaign_not_completely_sent?(error)
 
-    if campaign_has_been_running_for_less_than_one_hour?(campaign_send_time)
-      raise LowerRetryWorker::RetryJobButNoRollbarError
-    end
+    raise LowerRetryWorker::RetryJobButNoRollbarError if campaign_has_been_running_for_less_than_one_hour?(campaign_send_time)
   end
 
   private

@@ -13,7 +13,7 @@ class BulkResourceSerializer
 
   def resource_or_error_json(resource, args)
     if resource.errors.any?
-      { id: resource.uuid }.as_json(args).merge(
+      { id: resource.id }.as_json(args).merge(
         ErrorSerializer.new(hash: resource.errors, resource: resource, status: error_status_code(resource)).as_json(args)
       )
     else

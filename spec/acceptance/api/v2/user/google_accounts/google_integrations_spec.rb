@@ -9,14 +9,14 @@ resource 'Google Integrations' do
   include_context :json_headers
   let(:resource_type) { 'google_integrations' }
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:form_data) { build_data(attributes) }
 
   let(:google_account) { create(:google_account, person: user) }
-  let(:google_account_id) { google_account.uuid }
+  let(:google_account_id) { google_account.id }
 
   let!(:google_integration) { create(:google_integration, account_list: account_list, google_account: google_account) }
-  let(:id) { google_integration.uuid }
+  let(:id) { google_integration.id }
 
   let(:resource_attributes) do
     %w(
@@ -45,13 +45,13 @@ resource 'Google Integrations' do
       account_list: {
         data: {
           type: 'account_lists',
-          id: account_list.uuid
+          id: account_list.id
         }
       },
       google_account: {
         data: {
           type: 'google_accounts',
-          id: google_account.uuid
+          id: google_account.id
         }
       }
     }

@@ -9,7 +9,7 @@ class BackgroundBatch < ApplicationRecord
   after_commit :create_workers, on: :create
 
   PERMITTED_ATTRIBUTES = [
-    :uuid,
+    :id,
     requests_attributes: [
       :default_account_list,
       :path,
@@ -17,7 +17,7 @@ class BackgroundBatch < ApplicationRecord
       :request_body,
       :request_headers,
       :request_method,
-      :uuid
+      :id
     ]
   ].freeze
 

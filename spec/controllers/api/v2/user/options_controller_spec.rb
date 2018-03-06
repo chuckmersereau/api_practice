@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::User::OptionsController, type: :controller do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:factory_type) { :user_option }
   let!(:resource) { create(:user_option, user: user, created_at: 10.minutes.ago) }
   let!(:second_resource) { create(:user_option, user: user) }
@@ -18,13 +18,9 @@ RSpec.describe Api::V2::User::OptionsController, type: :controller do
   options = { except: [] }
 
   describe '#show' do
-    unless options[:except].include?(:includes)
-      include_examples 'including related resources examples', action: :show
-    end
+    include_examples 'including related resources examples', action: :show unless options[:except].include?(:includes)
 
-    unless options[:except].include?(:sparse_fieldsets)
-      include_examples 'sparse fieldsets examples', action: :show
-    end
+    include_examples 'sparse fieldsets examples', action: :show unless options[:except].include?(:sparse_fieldsets)
 
     it 'shows resource to users that are signed in' do
       api_login(user)
@@ -52,13 +48,9 @@ RSpec.describe Api::V2::User::OptionsController, type: :controller do
   include_examples 'create_examples'
 
   describe '#update' do
-    unless options[:except].include?(:includes)
-      include_examples 'including related resources examples', action: :update
-    end
+    include_examples 'including related resources examples', action: :update unless options[:except].include?(:includes)
 
-    unless options[:except].include?(:sparse_fieldsets)
-      include_examples 'sparse fieldsets examples', action: :update
-    end
+    include_examples 'sparse fieldsets examples', action: :update unless options[:except].include?(:sparse_fieldsets)
 
     it 'updates resource for users that are signed in' do
       api_login(user)

@@ -8,11 +8,11 @@ resource 'People' do
   let!(:user)         { create(:user_with_full_account) }
   let(:resource_type) { 'people' }
 
-  let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id) { contact.uuid }
+  let(:contact)    { create(:contact, account_list: user.account_lists.order(:created_at).first) }
+  let(:contact_id) { contact.id }
 
   let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
-  let(:id)        { resource.uuid }
+  let(:id)        { resource.id }
 
   let(:new_resource) do
     attributes_for(:person, first_name: 'Mpdx')
@@ -75,7 +75,7 @@ resource 'People' do
             related_person: {
               data: {
                 type: 'people',
-                id: relationship_person.uuid
+                id: relationship_person.id
               }
             }
           },
@@ -126,7 +126,7 @@ resource 'People' do
           deceased: false
         },
         type: 'people',
-        id: resource.uuid
+        id: resource.id
       }
     }
   end
@@ -420,7 +420,6 @@ resource 'People' do
         expect(resource.family_relationships).to be_empty
 
         do_request nested_family_relationship_data
-
         expect(response_status).to eq(200), invalid_status_detail
         expect(resource.reload.family_relationships).not_to be_empty
       end

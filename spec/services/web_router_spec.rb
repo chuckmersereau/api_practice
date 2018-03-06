@@ -62,10 +62,10 @@ describe WebRouter do
   end
 
   describe '.account_list_invite_url' do
-    let(:invite) { double(account_list: double(uuid: 'account_list_uuid'), uuid: 'invite_uuid', code: 'invite_code') }
+    let(:invite) { double(account_list: double(id: 'account_list_id'), id: 'invite_id', code: 'invite_code') }
 
     it 'returns the expected url' do
-      expect(described_class.account_list_invite_url(invite)).to eq('https://mpdx.org/account_lists/account_list_uuid/accept_invite/invite_uuid?code=invite_code')
+      expect(described_class.account_list_invite_url(invite)).to eq('https://mpdx.org/account_lists/account_list_id/accept_invite/invite_id?code=invite_code')
     end
   end
 
@@ -82,15 +82,15 @@ describe WebRouter do
   end
 
   describe '.contact_url' do
-    let(:contact) { double(uuid: 'contact_uuid') }
+    let(:contact) { double(id: 'contact_id') }
 
     it 'returns the expected url' do
-      expect(described_class.contact_url(contact)).to eq('https://mpdx.org/contacts/contact_uuid')
+      expect(described_class.contact_url(contact)).to eq('https://mpdx.org/contacts/contact_id')
     end
 
     describe 'tab' do
       it 'returns the expected url' do
-        expect(described_class.contact_url(contact, 'donations')).to eq('https://mpdx.org/contacts/contact_uuid/donations')
+        expect(described_class.contact_url(contact, 'donations')).to eq('https://mpdx.org/contacts/contact_id/donations')
       end
     end
   end
@@ -102,10 +102,10 @@ describe WebRouter do
   end
 
   describe '.person_url' do
-    let(:person) { double(uuid: 'person_uuid', contact: double(uuid: 'contact_uuid')) }
+    let(:person) { double(id: 'person_id', contact: double(id: 'contact_id')) }
 
     it 'returns the expected url' do
-      expect(described_class.person_url(person)).to eq('https://mpdx.org/contacts/contact_uuid?personId=person_uuid')
+      expect(described_class.person_url(person)).to eq('https://mpdx.org/contacts/contact_id?personId=person_id')
     end
   end
 

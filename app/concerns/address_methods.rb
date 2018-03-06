@@ -4,21 +4,21 @@ module AddressMethods
   # Used by the copy_address below to know which attributes to exclude
   FIELDS_TO_NOT_COPY = [
     :id, :addressable_id, :created_at, :updated_at, :primary_mailing_address,
-    :addressable_type, :remote_id, :source, :source_donor_account_id, :uuid
+    :addressable_type, :remote_id, :source, :source_donor_account_id
   ].freeze
 
   included do
     has_many :addresses, (lambda do
       where(deleted: false)
         .order('addresses.primary_mailing_address::int desc')
-        .order(:master_address_id).order(:street).order(:id)
+        .order(:master_address_id, :street, :created_at)
     end), as: :addressable
 
     has_many :addresses_including_deleted, class_name: 'Address', as: :addressable
 
     has_one :primary_address, (lambda do
       where(primary_mailing_address: true, deleted: false).where.not(historic: true)
-        .order(:master_address_id).order(:street).order(:id)
+        .joins(:master_address).order('master_addresses.created_at', :street, :created_at)
     end), class_name: 'Address', as: :addressable, autosave: true
 
     accepts_nested_attributes_for :addresses, reject_if: :blank_or_duplicate_address?, allow_destroy: true
@@ -35,7 +35,7 @@ module AddressMethods
   end
 
   def address
-    primary_address || addresses.first
+    primary_address || addresses.order(:created_at).first
   end
 
   def destroy_addresses

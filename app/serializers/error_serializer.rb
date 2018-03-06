@@ -24,9 +24,7 @@ class ErrorSerializer
   private
 
   def add_conflict_info_to_metadata(metadata, key, _error)
-    if key == :updated_in_db_at && resource.present?
-      metadata[:updated_in_db_at] = resource.updated_at&.utc&.iso8601
-    end
+    metadata[:updated_in_db_at] = resource.updated_at&.utc&.iso8601 if key == :updated_in_db_at && resource.present?
   end
 
   def after_initialize
@@ -35,9 +33,7 @@ class ErrorSerializer
             'must provide a status for the title response'
     end
 
-    unless resource.present? || title.present? || hash.present?
-      raise ArgumentError, error_data_validation_message
-    end
+    raise ArgumentError, error_data_validation_message unless resource.present? || title.present? || hash.present?
   end
 
   def error_data_validation_message
@@ -78,7 +74,7 @@ class ErrorSerializer
   end
 
   def formatted_resource_errors
-    return unless resource && resource.errors.present?
+    return unless resource&.errors.present?
 
     format_active_model_errors_object(resource.errors)
   end

@@ -7,8 +7,8 @@ resource 'Reports > Monthly Losses Graphs Report' do
 
   let(:resource_type) { 'reports_monthly_losses_graphs' }
   let(:user) { create(:user_with_account) }
-  let(:account_list)    { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list)    { user.account_lists.order(:created_at).first }
+  let(:account_list_id) { account_list.id }
 
   let(:resource_attributes) do
     %w(

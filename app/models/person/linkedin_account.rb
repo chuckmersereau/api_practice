@@ -13,7 +13,7 @@ class Person::LinkedinAccount < ApplicationRecord
                           :remote_id,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   validates :public_url, presence: true
 

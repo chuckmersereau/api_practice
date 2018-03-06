@@ -12,14 +12,12 @@ class ImportCallbackHandler
   def handle_success(successes: nil)
     @account_list.queue_sync_with_google_contacts
 
-    if @account_list.valid_mail_chimp_account
-      MailChimp::PrimaryListSyncWorker.perform_async(@account_list.mail_chimp_account.id)
-    end
+    MailChimp::PrimaryListSyncWorker.perform_async(@account_list.mail_chimp_account.id) if @account_list.valid_mail_chimp_account
 
     begin
       ImportMailer.delay.success(@import, successes)
       @import.update_column(:error, nil)
-    rescue => exception
+    rescue StandardError => exception
       Rollbar.error(exception)
     end
   end
@@ -27,7 +25,7 @@ class ImportCallbackHandler
   def handle_failure(exception: nil, failures: nil, successes: nil)
     ImportMailer.delay.failed(@import, successes, failures)
     @import.update_column(:error, exception_to_text(exception))
-  rescue => exception
+  rescue StandardError => exception
     Rollbar.error(exception)
   end
 

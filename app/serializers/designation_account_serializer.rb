@@ -45,6 +45,6 @@ class DesignationAccountSerializer < ApplicationSerializer
   private
 
   def list
-    scope.is_a?(User) ? account_list(scope) : account_lists.first
+    scope.is_a?(User) ? account_list(scope) : account_lists.order(:created_at).first
   end
 end

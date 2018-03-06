@@ -3,7 +3,7 @@ require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
 
 describe TntDataSyncImport do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   before do
     stub_smarty_streets

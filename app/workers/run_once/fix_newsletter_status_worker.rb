@@ -211,9 +211,7 @@ class RunOnce::FixNewsletterStatusWorker
       }
     end
 
-    if operations.present?
-      gibbon.batches.create(body: { operations: operations })
-    end
+    gibbon.batches.create(body: { operations: operations }) if operations.present?
   end
 
   def connect_mpdx_to_new_list(list_id)

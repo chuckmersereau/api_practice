@@ -5,7 +5,6 @@ RSpec.describe Person::GoogleAccount::ContactGroupSerializer do
     Person::GoogleAccount::ContactGroup.new(
       id: 'contact_group_id_0',
       title: 'System Group: My Family',
-      uuid: 'contact_group_id_0',
       created_at: Date.today,
       updated_at: Date.today
     )

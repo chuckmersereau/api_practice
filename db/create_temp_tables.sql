@@ -70,6 +70,7 @@ CREATE TABLE tmp_account_lists (
 	    active_mpd_start_at date,
 	    active_mpd_finish_at date,
 	    active_mpd_monthly_goal numeric,
+			salary_organization_id uuid,
 	    primary_appeal_id uuid
 );
 
@@ -806,7 +807,7 @@ CREATE TABLE tmp_imports (
 	    tags text,
 	    override boolean DEFAULT false NOT NULL,
 	    user_id uuid,
-	    source_account_id integer,
+	    source_account_id uuid,
 	    import_by_group boolean DEFAULT false,
 	    groups text,
 	    group_tags text,
@@ -1169,7 +1170,8 @@ CREATE TABLE tmp_people (
 	    employer character varying,
 	    deprecated_not_duplicated_with character varying(2000),
 	    global_registry_id uuid,
-	    global_registry_mdm_id uuid
+	    global_registry_mdm_id uuid,
+      default_account_list uuid
 );
 
 
@@ -1481,4 +1483,3 @@ CREATE TABLE tmp_tags (
 	    name character varying,
 	    taggings_count integer DEFAULT 0
 );
-

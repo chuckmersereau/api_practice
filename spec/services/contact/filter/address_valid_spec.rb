@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Contact::Filter::AddressValid do
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:contact_one)   { create(:contact, account_list: account_list) }
   let!(:contact_two)   { create(:contact, account_list: account_list) }

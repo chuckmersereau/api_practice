@@ -26,11 +26,11 @@ RSpec.describe Api::V2::UsersController, type: :controller do
     it 'correctly saves default_account_list when passed as a preference' do
       api_login(user)
       put :update, data: {
-        id: user.uuid,
+        id: user.id,
         type: 'users',
         attributes: {
           preferences: {
-            default_account_list: second_account_list.uuid
+            default_account_list: second_account_list.id
           },
           overwrite: true
         }
@@ -38,7 +38,7 @@ RSpec.describe Api::V2::UsersController, type: :controller do
 
       expect(
         JSON.parse(response.body)['data']['attributes']['preferences']['default_account_list']
-      ).to eq(second_account_list.uuid)
+      ).to eq(second_account_list.id)
     end
   end
 end

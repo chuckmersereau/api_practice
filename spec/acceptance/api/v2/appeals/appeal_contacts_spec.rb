@@ -8,15 +8,15 @@ resource 'Appeals > AppealContacts' do
   let(:resource_type)  { 'appeal_contacts' }
   let!(:user)          { create(:user_with_full_account) }
 
-  let!(:account_list)   { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let!(:account_list)   { user.account_lists.order(:created_at).first }
+  let(:account_list_id) { account_list.id }
 
   let!(:appeal)         { create(:appeal, account_list: account_list) }
-  let(:appeal_id)       { appeal.uuid }
+  let(:appeal_id)       { appeal.id }
   let!(:contact)        { create(:contact, account_list: account_list) }
   let!(:new_contact)    { create(:contact, account_list: account_list) }
   let!(:appeal_contact) { create(:appeal_contact, appeal: appeal, contact: contact) }
-  let(:id)              { appeal_contact.uuid }
+  let(:id)              { appeal_contact.id }
 
   let(:resource_attributes) do
     %w(
@@ -66,7 +66,7 @@ resource 'Appeals > AppealContacts' do
           contact: {
             data: {
               type: 'contacts',
-              id: new_contact.uuid
+              id: new_contact.id
             }
           }
         }

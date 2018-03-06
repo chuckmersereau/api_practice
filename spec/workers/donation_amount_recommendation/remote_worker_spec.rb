@@ -58,7 +58,7 @@ describe DonationAmountRecommendation::RemoteWorker do
 
   context 'unknown organization' do
     before do
-      create(:donation_amount_recommendation_remote, organization_id: 123)
+      create(:donation_amount_recommendation_remote, organization_id: SecureRandom.uuid)
     end
 
     it 'should not create donation_amount_recommendation' do

@@ -2,14 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:resource_type) { :person }
-  let(:contact) { create(:contact, account_list: user.account_lists.first) }
+  let(:contact) { create(:contact, account_list: user.account_lists.order(:created_at).first) }
   let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
   let!(:second_resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
-  let(:id) { resource.uuid }
-  let(:parent_param) { { contact_id: contact.uuid } }
-  let(:correct_attributes) { { first_name: 'Billy', email_address: { email: 'billy@internet.com' }, updated_at: Time.now + 1.day } }
+  let(:id) { resource.id }
+  let(:parent_param) { { contact_id: contact.id } }
+  let(:correct_attributes) do
+    { first_name: 'Billy', email_address: { email: 'billy@internet.com' }, updated_at: Time.now + 1.day }
+  end
   let(:incorrect_attributes) { nil }
   let(:factory_type) { :person }
 
@@ -38,7 +40,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   end
 
   context 'a specific contact' do
-    let(:parent_param) { { contact_id: contact.uuid } }
+    let(:parent_param) { { contact_id: contact.id } }
     include_examples 'index_examples'
   end
 
@@ -50,15 +52,15 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
 
   describe 'Nested Examples' do
     describe 'Creating / Updating a Facebook Account nested under Person' do
-      let(:generated_uuid) { SecureRandom.uuid }
+      let(:generated_id) { SecureRandom.uuid }
 
       let(:params) do
         {
-          id: resource.uuid,
-          contact_id: contact.uuid,
+          id: resource.id,
+          contact_id: contact.id,
           data: {
             type: 'people',
-            id: resource.uuid,
+            id: resource.id,
             attributes: {
               updated_in_db_at: resource.updated_at
             },
@@ -67,7 +69,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
                 data: [
                   {
                     type: 'facebook_accounts',
-                    id: generated_uuid
+                    id: generated_id
                   }
                 ]
               }
@@ -76,7 +78,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
           included: [
             {
               type: 'facebook_accounts',
-              id: generated_uuid,
+              id: generated_id,
               attributes: {
                 username: 'captain.america'
               }
@@ -93,8 +95,8 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
 
         expect(response.status).to eq(200), invalid_status_detail
 
-        expect(resource.reload.facebook_accounts.count).to   eq(1)
-        expect(resource.facebook_accounts.first.uuid).to     eq generated_uuid
+        expect(resource.reload.facebook_accounts.count).to eq(1)
+        expect(resource.facebook_accounts.first.id).to eq generated_id
         expect(resource.facebook_accounts.first.username).to eq 'captain.america'
       end
     end
@@ -107,11 +109,11 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
 
       let(:params) do
         {
-          id: resource.uuid,
-          contact_id: contact.uuid,
+          id: resource.id,
+          contact_id: contact.id,
           data: {
             type: 'people',
-            id: resource.uuid,
+            id: resource.id,
             attributes: {
               updated_in_db_at: resource.updated_at
             },
@@ -120,7 +122,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
                 data: [
                   {
                     type: 'linkedin_accounts',
-                    id: linkedin_account.uuid
+                    id: linkedin_account.id
                   }
                 ]
               }
@@ -129,7 +131,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
           included: [
             {
               type: 'linkedin_accounts',
-              id: linkedin_account.uuid,
+              id: linkedin_account.id,
               attributes: {
                 public_url: 'https://linkedin.com/new-url'
               }
@@ -150,15 +152,15 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
     end
 
     describe 'Creating / Updating a Phone Number nested under Person' do
-      let(:generated_uuid) { SecureRandom.uuid }
+      let(:generated_id) { SecureRandom.uuid }
 
       let(:params) do
         {
-          id: resource.uuid,
-          contact_id: contact.uuid,
+          id: resource.id,
+          contact_id: contact.id,
           data: {
             type: 'people',
-            id: resource.uuid,
+            id: resource.id,
             attributes: {
               updated_in_db_at: resource.updated_at
             },
@@ -167,7 +169,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
                 data: [
                   {
                     type: 'phone_numbers',
-                    id: generated_uuid
+                    id: generated_id
                   }
                 ]
               }
@@ -176,7 +178,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
           included: [
             {
               type: 'phone_numbers',
-              id: generated_uuid,
+              id: generated_id,
               attributes: {
                 number: '5011231234'
               }
@@ -194,21 +196,21 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
         expect(response.status).to eq(200), invalid_status_detail
 
         expect(resource.reload.phone_numbers.count).to eq(1)
-        expect(resource.phone_numbers.first.uuid).to   eq generated_uuid
+        expect(resource.phone_numbers.first.id).to eq generated_id
         expect(resource.phone_numbers.first.number).to eq '+5011231234'
       end
     end
 
     describe 'Creating / Updating an Email Address under Person' do
-      let(:generated_uuid) { SecureRandom.uuid }
+      let(:generated_id) { SecureRandom.uuid }
 
       let(:params) do
         {
-          id: resource.uuid,
-          contact_id: contact.uuid,
+          id: resource.id,
+          contact_id: contact.id,
           data: {
             type: 'people',
-            id: resource.uuid,
+            id: resource.id,
             attributes: {
               updated_in_db_at: resource.updated_at
             },
@@ -217,7 +219,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
                 data: [
                   {
                     type: 'email_addresses',
-                    id: generated_uuid
+                    id: generated_id
                   }
                 ]
               }
@@ -226,7 +228,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
           included: [
             {
               type: 'email_addresses',
-              id: generated_uuid,
+              id: generated_id,
               attributes: {
                 email: 'tester@testing.com'
               }
@@ -244,8 +246,8 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
         expect(response.status).to eq(200), invalid_status_detail
 
         expect(resource.reload.email_addresses.count).to eq(2)
-        expect(resource.email_addresses.last.uuid).to    eq generated_uuid
-        expect(resource.email_addresses.last.email).to   eq 'tester@testing.com'
+        expect(resource.email_addresses.last.id).to eq generated_id
+        expect(resource.email_addresses.last.email).to eq 'tester@testing.com'
       end
     end
   end

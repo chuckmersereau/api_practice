@@ -6,7 +6,7 @@ resource 'Tasks > Tags > Bulk Delete' do
   doc_helper = DocumentationHelper.new(resource: [:tasks, :tags])
 
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:tag_one)   { 'tag_one' }
   let(:tag_two)   { 'tag_two' }
@@ -16,7 +16,7 @@ resource 'Tasks > Tags > Bulk Delete' do
   let!(:task_two)   { create(:task, account_list: account_list, tag_list: [tag_one, tag_three]) }
   let!(:task_three) { create(:task, account_list: account_list, tag_list: [tag_two, tag_three]) }
 
-  let(:task_ids) { [task_one, task_two].map(&:uuid).join(', ') }
+  let(:task_ids) { [task_one, task_two].map(&:id).join(', ') }
 
   let(:form_data) do
     {

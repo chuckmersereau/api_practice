@@ -23,7 +23,7 @@ class GoogleIntegration < ApplicationRecord
     :email_integration,
     :overwrite,
     :updated_in_db_at,
-    :uuid,
+    :id,
     {
       calendar_integrations: [],
       email_blacklist: []

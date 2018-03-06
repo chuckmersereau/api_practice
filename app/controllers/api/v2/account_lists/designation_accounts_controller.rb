@@ -19,12 +19,13 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   def load_designation_accounts
     @designation_accounts = designation_account_scope.filter(filter_params)
                                                      .reorder(sorting_param)
+                                                     .order(:created_at)
                                                      .page(page_number_param)
                                                      .per(per_page_param)
   end
 
   def load_designation_account
-    @designation_account ||= DesignationAccount.find_by_uuid_or_raise!(params[:id])
+    @designation_account ||= DesignationAccount.find(params[:id])
   end
 
   def authorize_designation_account
@@ -40,7 +41,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def permitted_filters

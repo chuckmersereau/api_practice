@@ -10,6 +10,7 @@ account_list_users,user_id,User,
 account_list_users,account_list_id,AccountList,
 account_lists,creator_id,Person,
 account_lists,primary_appeal_id,Appeal,
+account_lists,salary_organization_id,Organization,
 activities,account_list_id,AccountList,
 activities,notification_id,Notification,
 activity_comments,activity_id,Activity,
@@ -72,6 +73,7 @@ help_requests,user_id,User,
 help_requests,account_list_id,AccountList,
 imports,account_list_id,AccountList,
 imports,user_id,User,
+imports,source_account_id,Poly,
 mail_chimp_accounts,account_list_id,AccountList,
 mail_chimp_appeal_lists,mail_chimp_account_id,MailChimpAccount,drop
 mail_chimp_appeal_lists,appeal_id,Appeal,drop
@@ -89,6 +91,7 @@ notifications,contact_id,Contact,
 notifications,notification_type_id,NotificationType,
 notifications,donation_id,Donation,
 partner_status_logs,contact_id,Contact,drop
+people,default_account_list,AccountList,
 person_facebook_accounts,person_id,Person,drop
 person_google_accounts,person_id,Person,
 person_key_accounts,person_id,Person,

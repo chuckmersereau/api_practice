@@ -66,9 +66,7 @@ module BetweenScopeable
     end
 
     def between_scopeable_validate_date_order(start_date, end_date)
-      if start_date > end_date
-        raise ArgumentError, 'start_date cannot take place after end_date'
-      end
+      raise ArgumentError, 'start_date cannot take place after end_date' if start_date > end_date
     end
 
     def between_scopeable_validate_neighboring_months(start_date, end_date)
@@ -79,9 +77,7 @@ module BetweenScopeable
     end
 
     def between_scopeable_validate_same_month(start_date, end_date)
-      if start_date.month != end_date.month
-        raise ArgumentError, 'dates must be in the same month'
-      end
+      raise ArgumentError, 'dates must be in the same month' if start_date.month != end_date.month
     end
   end
 end

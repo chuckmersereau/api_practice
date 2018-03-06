@@ -11,7 +11,7 @@ class AppealContact < ApplicationRecord
                           :contact_id,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   def destroy_related_excluded_appeal_contact
     Appeal::ExcludedAppealContact.find_by(appeal: appeal, contact: contact).try(:destroy)

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe ContactFilter do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   describe 'filters' do
     it 'filters by comma separated ids' do
@@ -32,7 +32,7 @@ describe ContactFilter do
       create(:email_address, person: p)
       cf = ContactFilter.new(newsletter: 'email', state: a.state)
       expect(
-        cf.filter(Contact, user.account_lists.first)
+        cf.filter(Contact, user.account_lists.order(:created_at).first)
           .includes([{ primary_person: [:facebook_account, :primary_picture] },
                      :tags, :primary_address, { people: :primary_phone_number }])
       ).to eq([c])

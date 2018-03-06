@@ -56,12 +56,12 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
 
   def contact_scope
     return Contact.where(account_list: account_lists) if params[:contact_id].blank?
-    Contact.find_by_uuid_or_raise!(params[:contact_id])
-    Contact.where(uuid: params[:contact_id])
+    Contact.find(params[:contact_id])
+    Contact.where(id: params[:contact_id])
   end
 
   def current_contact
-    @contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def authorize_index
@@ -79,13 +79,14 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def load_person
-    @person ||= Person.find_by_uuid_or_raise!(params[:id])
+    @person ||= Person.find(params[:id])
   end
 
   def load_people
     @people = Person::Filterer.new(filter_params)
                               .filter(scope: person_scope, account_lists: account_lists)
                               .reorder(sorting_param)
+                              .order(:created_at)
                               .page(page_number_param)
                               .per(per_page_param)
   end
@@ -111,7 +112,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   def save_person
     ActiveRecord::Base.transaction do
       person_save_result = @person.save(context: persistence_context)
-      @person.contact_people.create(contact: contact_scope.first) if action_name == 'create' && person_save_result
+      @person.contact_people.create(contact: contact_scope.order(:created_at).first) if action_name == 'create' && person_save_result
       person_save_result
     end
   end

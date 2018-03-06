@@ -8,7 +8,7 @@ class ExpectedTotalsReport::RowFormatter
 
   def format(type:, contact:, donation_amount:, donation_currency:)
     {
-      contact_id: contact.uuid,
+      contact_id: contact.id,
       contact_name: contact.name,
       contact_status: _(contact.status),
       converted_amount: (donation_amount * rate_for_currency(donation_currency)).to_f,

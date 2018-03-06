@@ -7,8 +7,8 @@ class NewUserTransferWorker
     return if NewUserTransferWorker.disabled?
     user = User.find(user_id)
     return unless user
-    RowTransferRequest.transfer(MasterPerson, user.master_person.uuid, safe: false) if user.master_person
-    RowTransferRequest.transfer(User, user.uuid)
+    RowTransferRequest.transfer(MasterPerson, user.master_person.id, safe: false) if user.master_person
+    RowTransferRequest.transfer(User, user.id)
   end
 
   def self.perform_async(user_id)

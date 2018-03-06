@@ -51,7 +51,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def load_relationship
-    @relationship ||= relationship_scope.find_by_uuid_or_raise!(params[:id])
+    @relationship ||= relationship_scope.find(params[:id])
   end
 
   def authorize_relationship
@@ -79,11 +79,11 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def current_contact
-    @contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def current_person
-    @person ||= current_contact.people.find_by_uuid_or_raise!(params[:person_id])
+    @person ||= current_contact.people.find(params[:person_id])
   end
 
   def relationship_params
@@ -97,10 +97,5 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
 
   def pundit_user
     PunditContext.new(current_user, contact: current_contact)
-  end
-
-  def transform_uuid_attributes_params_to_ids
-    change_specific_param_id_key_to_uuid(params[:data][:attributes], :related_person_id, Person)
-    super
   end
 end

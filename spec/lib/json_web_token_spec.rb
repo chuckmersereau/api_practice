@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe JsonWebToken do
-  let(:payload) { { 'user_uuid' => SecureRandom.uuid } }
+  let(:payload) { { 'user_id' => SecureRandom.uuid } }
   let(:token)   { JsonWebToken.encode(payload) }
 
   context '.encode' do

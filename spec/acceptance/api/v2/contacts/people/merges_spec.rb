@@ -12,9 +12,9 @@ resource 'Contacts > People > Merges' do
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let!(:contact) { create(:contact, name: 'Doe, John', account_list: account_list) }
-  let(:contact_id) { contact.uuid }
+  let(:contact_id) { contact.id }
   let!(:winner) { create(:person, first_name: 'John', last_name: 'Doe') }
   let!(:loser) { create(:person, first_name: 'John', last_name: 'Doe 2') }
 
@@ -104,13 +104,13 @@ resource 'Contacts > People > Merges' do
           winner: {
             data: {
               type: 'people',
-              id: winner.uuid
+              id: winner.id
             }
           },
           loser: {
             data: {
               type: 'people',
-              id: loser.uuid
+              id: loser.id
             }
           }
         }

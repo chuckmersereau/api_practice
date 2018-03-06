@@ -46,7 +46,7 @@ describe TntImport::PersonImport do
       prefix = ''
       row = { 'Email1' => 'a@a.com', 'Email1IsValid' => 'false' }
       import.send(:update_person_emails, person, row, prefix)
-      expect(person.email_addresses.first.historic).to be true
+      expect(person.email_addresses.order(:created_at).first.historic).to be true
 
       person.email_addresses.destroy_all
 
@@ -98,14 +98,14 @@ describe TntImport::PersonImport do
       expect { import.import }.to change { Person.count }.from(0).to(1)
       person = Person.last
       expect(person.facebook_accounts.size).to eq 1
-      expect(person.facebook_accounts.first.username).to eq '@bobfacebook'
+      expect(person.facebook_accounts.order(:created_at).first.username).to eq '@bobfacebook'
       expect(person.linkedin_accounts.size).to eq 1
-      expect(person.linkedin_accounts.first.public_url).to eq '@boblinkedin'
+      expect(person.linkedin_accounts.order(:created_at).first.public_url).to eq '@boblinkedin'
       expect(person.twitter_accounts.size).to eq 1
-      expect(person.twitter_accounts.first.screen_name).to eq '@bobtwitter'
+      expect(person.twitter_accounts.order(:created_at).first.screen_name).to eq '@bobtwitter'
       expect(person.websites.size).to eq 2
-      expect(person.websites.first.url).to eq 'www.bobwebpage.com'
-      expect(person.websites.second.url).to eq 'www.bobwebpage2.com'
+      expect(person.websites.order(:created_at).first.url).to eq 'www.bobwebpage.com'
+      expect(person.websites.order(:created_at).second.url).to eq 'www.bobwebpage2.com'
     end
 
     context 'spouse' do
@@ -115,14 +115,14 @@ describe TntImport::PersonImport do
         expect { import.import }.to change { Person.count }.from(0).to(1)
         person = Person.last
         expect(person.facebook_accounts.size).to eq 1
-        expect(person.facebook_accounts.first.username).to eq '@helenfacebook'
+        expect(person.facebook_accounts.order(:created_at).first.username).to eq '@helenfacebook'
         expect(person.linkedin_accounts.size).to eq 1
-        expect(person.linkedin_accounts.first.public_url).to eq '@helenlinkedin'
+        expect(person.linkedin_accounts.order(:created_at).first.public_url).to eq '@helenlinkedin'
         expect(person.twitter_accounts.size).to eq 1
-        expect(person.twitter_accounts.first.screen_name).to eq '@helentwitter'
+        expect(person.twitter_accounts.order(:created_at).first.screen_name).to eq '@helentwitter'
         expect(person.websites.size).to eq 2
-        expect(person.websites.first.url).to eq 'www.helenparr.com'
-        expect(person.websites.second.url).to eq 'www.helenparr2.com'
+        expect(person.websites.order(:created_at).first.url).to eq 'www.helenparr.com'
+        expect(person.websites.order(:created_at).second.url).to eq 'www.helenparr2.com'
       end
     end
 
@@ -136,7 +136,7 @@ describe TntImport::PersonImport do
 
       it 'does not create social accounts' do
         expect { import.import }.to change { Person.count }.from(0).to(1)
-        person = Person.last
+        person = Person.order(:created_at).last
         expect(person.facebook_accounts.size).to eq 0
         expect(person.linkedin_accounts.size).to eq 0
         expect(person.twitter_accounts.size).to eq 0

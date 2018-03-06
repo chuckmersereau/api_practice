@@ -342,7 +342,7 @@ describe Person do
       winner.contacts << create(:contact)
       loser.contacts << winner.contacts.first
       expect(winner.account_lists).to eq(loser.account_lists)
-      dup_pair_id = DuplicateRecordPair.create!(account_list: winner.account_lists.first, record_one: winner, record_two: loser, reason: 'Testing').id
+      dup_pair_id = DuplicateRecordPair.create!(account_list: winner.account_lists.order(:created_at).first, record_one: winner, record_two: loser, reason: 'Testing').id
       expect { winner.merge(loser) }.to change { DuplicateRecordPair.exists?(dup_pair_id) }.from(true).to(false)
     end
 

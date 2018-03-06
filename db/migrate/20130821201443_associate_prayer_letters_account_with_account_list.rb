@@ -3,7 +3,7 @@ class AssociatePrayerLettersAccountWithAccountList < ActiveRecord::Migration
     rename_table :person_prayer_letters_accounts, :prayer_letters_accounts
     add_column :prayer_letters_accounts, :account_list_id, :integer
     PrayerLettersAccount.find_each do |pl|
-      al = User.find(pl.person_id).account_lists.first
+      al = User.find(pl.person_id).account_lists.order(:created_at).first
       pl.update_column(:account_list_id, al.id)
     end
     remove_column :prayer_letters_accounts, :person_id

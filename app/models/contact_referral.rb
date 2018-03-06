@@ -5,7 +5,7 @@ class ContactReferral < ApplicationRecord
                           :referred_to_id,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   belongs_to :referred_by, class_name: 'Contact', foreign_key: :referred_by_id
   belongs_to :referred_to, class_name: 'Contact', foreign_key: :referred_to_id

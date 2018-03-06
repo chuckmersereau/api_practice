@@ -5,7 +5,7 @@ RSpec.describe Api::V2::Contacts::AnalyticsController, type: :controller do
   let(:user) { create(:user_with_account) }
 
   # This MAY be required!
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let!(:contact_with_anniversary_with_week) do
     person = create(:person, anniversary_month: Date.current.month,
@@ -65,7 +65,7 @@ RSpec.describe Api::V2::Contacts::AnalyticsController, type: :controller do
       it 'includes parent_contact relationship when birthdays_this_week is included' do
         api_login(user)
         get :show, include: :birthdays_this_week
-        expect(parent_contact_relationship['data']['id']).to eq(contact_with_birthday_this_week.uuid)
+        expect(parent_contact_relationship['data']['id']).to eq(contact_with_birthday_this_week.id)
       end
     end
   end

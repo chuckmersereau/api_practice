@@ -38,14 +38,14 @@ class Api::V2::Admin::ImpersonationController < Api::V2Controller
 
   def load_impersonated
     @impersonated ||= if UUID_REGEX.match(impersonation_params[:user])
-                        User.find_by_uuid_or_raise!(impersonation_params[:user])
+                        User.find(impersonation_params[:user])
                       else
                         find_user_by_email
                       end
   end
 
   def find_user_by_email
-    user = User.find_by_email(impersonation_params[:user])
+    user = User.order(:created_at).find_by_email(impersonation_params[:user])
 
     return user if user
 
@@ -54,7 +54,7 @@ class Api::V2::Admin::ImpersonationController < Api::V2Controller
 
   def load_token
     @token ||= JsonWebToken.encode(
-      user_uuid: load_impersonated.uuid,
+      user_id: load_impersonated.id,
       exp: 1.hour.from_now.utc.to_i
     )
   end

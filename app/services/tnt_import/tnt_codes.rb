@@ -81,7 +81,7 @@ class TntImport::TntCodes
     end
 
     def task_status_completed?(task_status_id)
-      task_status_id.to_i == 2 ? true : false
+      task_status_id.to_i == 2
     end
 
     def history_result(history_result_id)

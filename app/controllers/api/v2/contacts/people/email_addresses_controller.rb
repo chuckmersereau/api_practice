@@ -70,12 +70,13 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   end
 
   def load_email_address
-    @email_address ||= email_address_scope.find_by_uuid_or_raise!(params[:id])
+    @email_address ||= email_address_scope.find(params[:id])
   end
 
   def load_email_addresses
     @email_addresses = email_address_scope.where(filter_params)
                                           .reorder(sorting_param)
+                                          .order(:created_at)
                                           .page(page_number_param)
                                           .per(per_page_param)
   end
@@ -99,11 +100,11 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   end
 
   def current_contact
-    @current_contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
+    @current_contact ||= Contact.find(params[:contact_id])
   end
 
   def current_person
-    @current_person ||= current_contact.people.find_by_uuid_or_raise!(params[:person_id])
+    @current_person ||= current_contact.people.find(params[:person_id])
   end
 
   def pundit_user

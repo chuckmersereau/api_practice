@@ -45,7 +45,7 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   end
 
   def load_website
-    @website ||= website_scope.find_by_uuid_or_raise!(params[:id])
+    @website ||= website_scope.find(params[:id])
   end
 
   def authorize_website
@@ -89,11 +89,11 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   end
 
   def load_person
-    @person ||= load_contact.people.find_by_uuid_or_raise!(params[:person_id])
+    @person ||= load_contact.people.find(params[:person_id])
   end
 
   def load_contact
-    @contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def pundit_user

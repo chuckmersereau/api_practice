@@ -11,19 +11,19 @@ resource 'Contacts > Referrals' do
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:contact)     { create(:contact, account_list: account_list) }
-  let(:contact_id)  { contact.uuid }
+  let(:contact_id)  { contact.id }
 
   let(:referral)    { create(:contact, account_list: account_list) }
-  let(:referral_id) { referral.uuid }
+  let(:referral_id) { referral.id }
 
   let(:contact_referral) do
     create(:contact_referral, referred_by: contact, referred_to: referral)
   end
 
-  let(:id) { contact_referral.uuid }
+  let(:id) { contact_referral.id }
 
   # This is the reference data used to create/update a resource.
   # specify the `attributes` specifically in your request actions below.
@@ -94,13 +94,13 @@ resource 'Contacts > Referrals' do
           referred_to: {
             data: {
               type: 'contacts',
-              id: referral.uuid
+              id: referral.id
             }
           },
           referred_by: {
             data: {
               type: 'contacts',
-              id: contact.uuid
+              id: contact.id
             }
           }
         }
@@ -112,9 +112,9 @@ resource 'Contacts > Referrals' do
 
         expect(response_status).to eq 201
 
-        contact_referrals_by_me_uuids = contact.contact_referrals_by_me.map(&:uuid)
+        contact_referrals_by_me_ids = contact.contact_referrals_by_me.map(&:id)
         created_id = json_response['data']['id']
-        expect(contact_referrals_by_me_uuids).to include created_id
+        expect(contact_referrals_by_me_ids).to include created_id
       end
     end
 
@@ -136,13 +136,13 @@ resource 'Contacts > Referrals' do
           referred_to: {
             data: {
               type: 'contacts',
-              id: alternate.uuid
+              id: alternate.id
             }
           },
           referred_by: {
             data: {
               type: 'contacts',
-              id: contact.uuid
+              id: contact.id
             }
           }
         }

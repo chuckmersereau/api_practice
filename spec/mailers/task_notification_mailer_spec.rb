@@ -10,7 +10,7 @@ describe TaskNotificationMailer do
       task.contacts << contact
       mail = TaskNotificationMailer.notify(task.id, user.id)
       expect(mail.to)
-      expect(mail.body.raw_source).to include("https://mpdx.org/contacts/#{contact.uuid}/tasks")
+      expect(mail.body.raw_source).to include("https://mpdx.org/contacts/#{contact.id}/tasks")
     end
   end
 end
