@@ -60,6 +60,7 @@ resource 'User > Organization Accounts' do
 
   context 'authorized user' do
     before { api_login(user) }
+    lock_time_around
 
     get '/api/v2/user/organization_accounts' do
       example 'Organization Account [LIST]', document: documentation_scope do

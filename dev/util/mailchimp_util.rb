@@ -91,30 +91,50 @@ class MailChimpReport
 
   def print_report
     if @mailchimp_dups.keys.any?
-      p '=========='
-      p 'Duplicate emails in mailchimp:'
-      p @mailchimp_dups.keys
+      puts '=========='
+      puts 'Duplicate emails in mailchimp:'
+      puts @mailchimp_dups.keys
     end
     if @not_in_mailchimp.any?
-      p '=========='
-      p 'Emails not in mailchimp:'
-      p @not_in_mailchimp
+      puts '=========='
+      puts 'Emails in MPDX but not in mailchimp:'
+      puts 'We can try to resubscribe them if you agree they should be in Mailchimp.'
+      puts @not_in_mailchimp
     end
 
-    p '=========='
-    p '-- Newsletter contacts'
+    puts '=========='
+    puts 'Newsletter contacts:'
+    puts 'These email addresses are primary on a contact that has newsletter set to either Email or Both.'
+    puts 'We can try to resubscribe them if you think they were unsubscribed in error.'
     puts_counts :newsletter_contacts
-    p '-- Active Contacts (Physical or none newsletter)'
+
+    puts 'Active Contacts (Physical or none newsletter):'
     puts_counts :active_contacts
-    p '-- Inactive Contact Statuses'
+
+    puts 'Inactive Contact Statuses:'
+    puts 'These email addresses are primary on a contact that has a hidden or inactive status, but subscribed in Mailchimp.'
+    puts 'We recommend changing them to Partner - Prayer if you want them to continue to receive newsletters.'
     puts_counts :inactive_contacts
-    p '-- Opted Out =  true'
+
+    puts 'Opted Out = true:'
+    puts 'These emails addresses are primary on a person in MPDX who is labeled with "Opt-out of Email Newsletter", but are subscribed on Mailchimp.'
+    puts 'They should either be unsubscribed on Mailchimp if they asked you to mark them as such,'
+    puts 'or that flag should be removed in MPDX if they should be subscribed.'
     puts_counts :opted_out
-    p '-- Non-primary email addresses'
+
+    puts 'Non-primary email addresses:'
+    puts 'These emails addresses are non-primary on people in MPDX, but are subscribed in Mailchimp.'
+    puts 'We can unsubscribe them on Mailchimp if they are old email addresses.'
     puts_counts :non_primary
-    p '-- historic emails'
+
+    puts 'Historic Emails:'
+    puts 'These emails addresses are marked as "Invalid" in MPDX, but are subscribed in Mailchimp.'
+    puts 'We can unsubscribe them on Mailchimp if they are old email addresses.'
     puts_counts :inactive_email
-    p '-- not in mpdx'
+
+    puts 'Not in MPDX:'
+    puts 'These email addresses are subscribed on Mailchimp, but are not in MPDX.'
+    puts "We suggest adding them to a contact in MPDX so they don't fall through the cracks."
     puts_counts :not_in_mpdx
   end
 end

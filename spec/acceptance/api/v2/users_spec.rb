@@ -61,6 +61,7 @@ resource 'Users' do
 
   context 'authorized user' do
     before { api_login(user) }
+    lock_time_around
 
     get '/api/v2/user' do
       response_field 'attributes',    'User object',                                type: 'Object'

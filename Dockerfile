@@ -12,8 +12,6 @@ RUN bundle config gems.contribsys.com $SIDEKIQ_CREDS
 RUN bundle install --jobs 20 --retry 5 --path vendor
 RUN bundle binstub puma sidekiq rake
 
-COPY . ./
-
 ARG DB_ENV_POSTGRESQL_USER
 ARG DB_ENV_POSTGRESQL_PASS
 ARG DB_PORT_5432_TCP_ADDR
@@ -49,6 +47,8 @@ ARG PLS_CLIENT_SECRET
 ARG SECRET_KEY_BASE
 ARG WSAPI_KEY
 ARG DISABLE_ROLLBAR=true
+
+COPY . ./
 
 RUN bundle exec rake assets:clobber assets:precompile RAILS_ENV=production
 

@@ -73,7 +73,7 @@ class MailChimp::GibbonWrapper
   end
 
   def list_emails(list_id)
-    list_members(list_id).map { |list_member| list_member['email_address'] }
+    list_members(list_id).map { |list_member| list_member['email_address'].downcase }.uniq
   end
 
   def list_members(list_id)
@@ -94,8 +94,8 @@ class MailChimp::GibbonWrapper
     # The MailChimp API v3 doesn't provide an easy, syncronous way to retrieve
     # member info scoped to a set of email addresses, so just pull it all and
     # filter it for now.
-    email_set = emails.to_set
-    list_members(list_id).select { |m| m['email_address'].in?(email_set) }
+    email_set = emails.map(&:downcase).to_set
+    list_members(list_id).select { |m| m['email_address'].downcase.in?(email_set) }
   end
 
   def appeal_open_rate

@@ -60,7 +60,7 @@ class MailChimp::Exporter
   end
 
   def fetch_emails_of_members_to_remove
-    relevant_mail_chimp_members.pluck(:email) - mail_chimp_account.newsletter_emails
+    relevant_mail_chimp_members.pluck(:email).map(&:downcase).uniq - mail_chimp_account.newsletter_emails
   end
 
   def fetch_contacts_to_export(contact_ids)
@@ -108,7 +108,7 @@ class MailChimp::Exporter
   end
 
   def members_by_email
-    @members_by_email ||= relevant_mail_chimp_members.map { |member| { member.email => member } }.reduce({}, :merge)
+    @members_by_email ||= relevant_mail_chimp_members.map { |member| { member.email.downcase => member } }.reduce({}, :merge)
   end
 
   def relevant_mail_chimp_members
