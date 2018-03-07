@@ -1,4 +1,5 @@
 namespace :mpdx do
+  # this runs really slow when the rails server is on and has database connections
   task readd_indexes: :environment do
     path = Rails.root.join('db', 'dropped_indexes.csv')
 
@@ -6,6 +7,7 @@ namespace :mpdx do
 
     CSV.read(path, headers: true).each do |index_row|
       puts "attempting to add index: #{index_row['indexname']}"
+      next unless ActiveRecord::Base.connection.table_exists?(index_row['tablename'])
       ActiveRecord::Base.connection.execute index_row['indexdef'].sub('INDEX', 'INDEX CONCURRENTLY IF NOT EXISTS')
     end
   end
@@ -19,7 +21,9 @@ namespace :mpdx do
       table = foreign_table_row['table_name']
 
       next if ActiveRecord::Base.connection.index_exists?(table, :created_at)
-      next unless ActiveRecord::Base.connection.connection.column_exists?(table, :created_at)
+      next unless ActiveRecord::Base.connection.column_exists?(table, :created_at)
+
+      puts "indexing #{table}"
       ActiveRecord::Base.connection.add_index table, :created_at, algorithm: :concurrently
     end
   end
