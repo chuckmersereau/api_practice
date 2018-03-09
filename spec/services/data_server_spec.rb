@@ -561,6 +561,10 @@ describe DataServer do
       )
     end
 
+    it 'raises InvalidCredentialsError if the second line includes the phrase "oauth_token is not recognized"' do
+      expect_bad_passsword_err("﻿ERROR\nThe oauth_token is not recognized.")
+    end
+
     it 'raises MissingCredentialsError if the second line includes the phrase "not found"' do
       stub_request(:post, 'http://example.com').to_return(body: "ERROR\nNot Found")
       expect do
