@@ -1,4 +1,13 @@
 namespace :mpdx do
+  task ensure_uuids: :environment do
+    tables_for_uuid_fill = %w(activities activity_comments activity_contacts appeal_contacts appeal_excluded_appeal_contacts)
+    tables_for_uuid_fill.each do |table_name|
+      sql = "UPDATE #{table_name} SET uuid = uuid_generate_v4() WHERE uuid IS NULL;"
+      puts "-- execute(#{sql})"
+      ActiveRecord::Base.connection.execute sql
+    end
+  end
+
   # this runs really slow when the rails server is on and has database connections
   task readd_indexes: :environment do
     path = Rails.root.join('db', 'dropped_indexes.csv')
