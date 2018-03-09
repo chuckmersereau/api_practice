@@ -27,4 +27,46 @@ namespace :mpdx do
       ActiveRecord::Base.connection.add_index table, :created_at, algorithm: :concurrently
     end
   end
+
+  # a task that sets the status of sidekiq
+  # This will change the counts of running instances, so don't do it if you don't know for sure.
+  # It will use your local aws config, so make sure you run `aws configure` before starting here.
+  #
+  # To turn sidekiq on: rake mpdx:set_sidekiq
+  #
+  # To turn sidekiq off: rake mpdx:set_sidekiq[false], or if you're using zsh: rake mpdx:set_sidekiq\[false\]
+  #
+  # For extra excitement, you can change the status of production by setting the second arg to 'production':
+  # rake mpdx:set_sidekiq[true, production]
+
+  task :set_sidekiq, [:up, :env] => [:environment] do |_t, args|
+    args.with_defaults(up: true, env: 'staging')
+    direction = args[:up] != 'false' ? :up : :down
+    puts "Turning #{args[:env]} sidekiq #{args[:up] != 'false' ? 'on' : 'off'}"
+    puts 'Are you sure? (y/n)'
+    input = STDIN.gets.strip
+    if input == 'y'
+      puts 'OK...'
+
+      aws_home = `echo $AWS_HOME`.sub("\n", '')
+      cred_lines = File.readlines(aws_home + '/credentials')
+      access_key = cred_lines.find { |l| l.start_with? 'aws_access_key_id' }.to_s.split(' = ').last.sub("\n", '')
+      secret_key = cred_lines.find { |l| l.start_with? 'aws_secret_access_key' }.to_s.split(' = ').last.sub("\n", '')
+      access_args = "AWS_ACCESS_KEY_ID=#{access_key} AWS_SECRET_ACCESS_KEY=#{secret_key}"
+
+      count = args[:env] == 'production' ? 8 : 2
+      cluster = args[:env] == 'production' ? 'prod' : 'stage'
+
+      def container_name(n)
+        "mpdx_api-staging-sidekiq-#{n}-sv2"
+      end
+
+      desired_count = direction == :up ? 1 : 0
+      count.times do |i|
+        system "#{access_args} aws ecs update-service --cluster #{cluster} --service #{container_name(i)} --desired-count #{desired_count}"
+      end
+    else
+      puts 'So sorry for the confusion'
+    end
+  end
 end
