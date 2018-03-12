@@ -19,6 +19,7 @@ class MailChimp::Syncer
 
   def two_way_sync_with_primary_list!
     setup_webhooks
+    delete_mail_chimp_members
     # import_mail_chimp_subscribers
     export_mpdx_contacts_to_mail_chimp
   end
@@ -26,8 +27,6 @@ class MailChimp::Syncer
   private
 
   def import_mail_chimp_subscribers
-    delete_mail_chimp_members
-
     MailChimp::Importer.new(mail_chimp_account).import_all_members
   end
 
@@ -36,7 +35,12 @@ class MailChimp::Syncer
   end
 
   def delete_mail_chimp_members
-    mail_chimp_account.mail_chimp_members.where(list_id: list_id).delete_all
+    wrapper = MailChimp::GibbonWrapper.new(mail_chimp_account)
+    subscribed_emails = wrapper.list_members(list_id)
+                               .select { |member| member['status'] == 'subscribed' }
+                               .map { |member| member['email_address'].downcase }
+
+    mail_chimp_account.mail_chimp_members.where(list_id: list_id).where.not(email: subscribed_emails).delete_all
     mail_chimp_account.mail_chimp_members.reload
   end
 

@@ -14,12 +14,23 @@ RSpec.describe MailChimp::Syncer do
 
   let(:mock_list) { double(:mock_list) }
   let(:mock_request) { double(:mock_request) }
+  let(:mock_wrapper) { double(:mock_wrapper) }
   let(:mock_webhooks) { double(:mock_webhooks) }
 
   context '#sync_with_primary_list' do
     context 'connection_handler, importer and exporter' do
       let!(:mail_chimp_member_one) { create(:mail_chimp_member, mail_chimp_account: mail_chimp_account, list_id: list_id) }
       let!(:mail_chimp_member_two) { create(:mail_chimp_member, mail_chimp_account: mail_chimp_account, list_id: 'random_list') }
+      let!(:mail_chimp_member_three) do
+        create(:mail_chimp_member, mail_chimp_account: mail_chimp_account,
+                                   list_id: list_id,
+                                   email: 'ironman@marvel.com')
+      end
+      let!(:mail_chimp_member_four) do
+        create(:mail_chimp_member, mail_chimp_account: mail_chimp_account,
+                                   list_id: list_id,
+                                   email: 'antman@marvel.com')
+      end
 
       before do
         allow(Gibbon::Request).to receive(:new).and_return(mock_request)
@@ -27,6 +38,16 @@ RSpec.describe MailChimp::Syncer do
         allow(mock_list).to receive(:webhooks).and_return(mock_webhooks)
         allow(mock_webhooks).to receive(:retrieve)
         allow(mock_webhooks).to receive(:create)
+        allow(MailChimp::GibbonWrapper).to receive(:new).and_return(mock_wrapper)
+        mock_member_info_one = {
+          'status' => 'unsubscribed',
+          'email_address' => mail_chimp_member_one.email
+        }
+        mock_member_info_three = {
+          'status' => 'subscribed',
+          'email_address' => mail_chimp_member_three.email
+        }
+        allow(mock_wrapper).to receive(:list_members).and_return([mock_member_info_one, mock_member_info_three])
       end
 
       it 'it uses the connection handler' do
@@ -34,6 +55,21 @@ RSpec.describe MailChimp::Syncer do
         expect(mock_connection_handler).to receive(:call_mail_chimp).with(subject, :two_way_sync_with_primary_list!)
 
         subject.two_way_sync_with_primary_list
+      end
+
+      it 'deletes existing members' do
+        subject.two_way_sync_with_primary_list
+
+        expect(MailChimpMember.exists?(mail_chimp_member_one.id)).to be false
+
+        # doesn't delete if not on list_id
+        expect(MailChimpMember.exists?(mail_chimp_member_two.id)).to be true
+
+        # doesn't delete if still subscribed
+        expect(MailChimpMember.exists?(mail_chimp_member_three.id)).to be true
+
+        # deletes if not in member info list
+        expect(MailChimpMember.exists?(mail_chimp_member_four.id)).to be false
       end
 
       # it 'calls the importer and exporter classes' do
@@ -52,6 +88,7 @@ RSpec.describe MailChimp::Syncer do
       before do
         allow_any_instance_of(MailChimp::Importer).to receive(:import_all_members)
         allow_any_instance_of(MailChimp::Exporter).to receive(:export_contacts)
+        allow_any_instance_of(MailChimp::Syncer).to receive(:delete_mail_chimp_members)
         allow(Rails.env).to receive(:staging?).and_return(true)
       end
 
