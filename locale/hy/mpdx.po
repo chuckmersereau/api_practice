@@ -1,7 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"PO-Revision-Date: 2017-07-19 01:56+0000\n"
+"POT-Creation-Date: 2018-02-27 21:05+0000\n"
+"PO-Revision-Date: 2018-02-27 21:05+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: hy\n"
@@ -10,14 +11,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid " is designated to the \"%{appeal_name}\" appeal."
-msgstr ""
-
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "\"%{name}\" (նվիրատու #%{account_number})"
-
-msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-msgstr ""
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
 msgstr "%{contact_name} –ից սպասվում է  նվիրատվություն մեկ ամսվա ընթացքում: Կապ հաստատել՝ հետևողականություն ցուցաբերելու համար:"
@@ -28,23 +23,8 @@ msgstr "%{contact_name} կատարեց իր առաջին նվիրատվությ�
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
 msgstr "%{contact_name}-ը կարծես բաց է թողել նվիրատվություն: Զանգահարել՝ ՝ հետևողականություն ցուցաբերելու համար:"
 
-msgid "%{number_of_failed_contacts} contacts failed to import."
-msgstr ""
-
-msgid "%{number_of_successful_contacts} contacts imported successfully."
-msgstr ""
-
 msgid "%{number} ext %{extension}"
 msgstr "%{number} ներքին %{extension}"
-
-msgid "%{org_name} said we have the wrong password for your account."
-msgstr ""
-
-#, fuzzy
-msgid "-- All --"
-msgstr ""
-"-- Ցանկացածը--\n"
-" \n"
 
 msgid "-- All Active --"
 msgstr "-- Բոլոր ակտիվները --"
@@ -53,9 +33,7 @@ msgid "-- All Hidden --"
 msgstr "-- Բոլոր թաքցվածները --"
 
 msgid "-- Any --"
-msgstr ""
-"-- Ցանկացածը--\n"
-" \n"
+msgstr "-- Ցանկացածը--\n \n"
 
 msgid "-- Do not ask --"
 msgstr "-- Չհարցնել --"
@@ -144,6 +122,7 @@ msgstr "Մորաքույր/Հորաքույր"
 msgid "Average"
 msgstr "Միջին"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "Միջ."
 
@@ -195,47 +174,16 @@ msgstr "Ընկերություն"
 msgid "Completed"
 msgstr "Ավարտվել է"
 
-msgid "Contact Church"
-msgstr ""
-
-#, fuzzy
-msgid "Contact Commitment Details"
-msgstr "Հանձնառված հովանավորության մանրամասները"
-
 msgid "Contact Details"
-msgstr "Կոնտակտային տվյալներ"
-
-#, fuzzy
-msgid "Contact Gift Details"
 msgstr "Կոնտակտային տվյալներ"
 
 msgid "Contact Information"
 msgstr "Կոնտակտային տվյալներ"
 
-msgid "Contact Likely To Give"
-msgstr ""
-
 msgid "Contact Location"
 msgstr "Կոնտակտի գտնվելու վայրը"
 
 msgid "Contact Name"
-msgstr "Կոնտի անունը"
-
-msgid "Contact Newsletter"
-msgstr ""
-
-msgid "Contact Referrer"
-msgstr ""
-
-#, fuzzy
-msgid "Contact Status"
-msgstr "Կոնտակտային տվյալներ"
-
-msgid "Contact Timezone"
-msgstr ""
-
-#, fuzzy
-msgid "Contact Type"
 msgstr "Կոնտի անունը"
 
 msgid "Contact for Appointment"
@@ -286,9 +234,11 @@ msgstr "Ժամկետի լրանալու օր"
 msgid "Email"
 msgstr "Էլ. փոստի հասցե"
 
+#. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "նշանված"
 
+#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "Ծրարի վրայի դիմելաձևը"
 
@@ -328,12 +278,7 @@ msgstr "Առաջին նվերը"
 msgid "First Name"
 msgstr "Անուն"
 
-msgid ""
-"For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n"
-"  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n"
-"  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n"
-"  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n"
-"  address on MPDX it will update on mailchimp)."
+msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "MailChimp ինտեգրացման համար խորհուրդ ենք տալիս ստեղծել մի նոր ցանկ՝ MailChimp-ում օգտագործելու համար (ոչ թե նոր հաշիվ, այլ պարզապես նոր ցանկ), և թողնել MailChimp-ի բոլոր լռելյայն պարամետրերը: Եթե ստեղծեք նոր ցանկ, ապա բոլոր այն կոնտրակտները, որոնք ստանում են Ձեր նորությունների թերթիկը, ավտոմատ կերպով կպատճենվեն, և ապա կկարողանաք կառավարել բոլոր թարմացումները MPDX-ում (օրինակ՝ երբ MPDX-ում փոխեք էլ. Փոստի հասցե, ապա այն կթարմացվի նաև MailChimp-ում):"
 
 msgid "Future"
@@ -358,10 +303,7 @@ msgid "Gift Details"
 msgstr "Նվերի մանրամասները"
 
 msgid "Gift Options"
-msgstr "Նվերի Ընտրանքներ"
-
-msgid "Google Integration Settings"
-msgstr ""
+msgstr "Նվերի Տարբերակներ"
 
 msgid "Google account needs to be refreshed"
 msgstr "Google հաշիվը պետք է թարմացվի"
@@ -396,19 +338,15 @@ msgstr "Գլխավոր"
 msgid "Home Phone"
 msgstr " Տան հեռախոսահամար"
 
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "Հարգարժան"
 
 msgid "Husband"
 msgstr "Ամուսին"
 
-msgid ""
-"If you do want to stick with your existing list, you will need to make that extra merge field not a\n"
-"  required field."
+msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
 msgstr "Եթե ցանկանում եք շարունակել օգտագործել առկա ցուցակը, ապա պետք է այս լրացուցիչ միաձուլված դաշտը դարձնել ոչ պարտադիր:"
-
-msgid "Increase Gift Recommendation"
-msgstr ""
 
 msgid "Increased their giving in the last 3 months"
 msgstr "Բարձրացրել է հովանավորության չափը վերջին 3 ամսվա ընթացքում"
@@ -479,14 +417,8 @@ msgstr "MPDX- ի ցանկ. %{name}"
 msgid "MPDX Support Team"
 msgstr "MPDX Աջակցման Թիմ"
 
-msgid "MPDX encountered errors while trying to import your %{source} contacts."
-msgstr ""
-
 msgid "MPDX has finished importing your %{source} contacts."
 msgstr "MPDX ավարտեց Ձեր %{source} կոնտակտների ներմուծումը "
-
-msgid "MailChimp Integration Settings"
-msgstr ""
 
 msgid "MailChimp subscriber email bounced"
 msgstr "Չհաջողվեց հաղորդագրությունն ուղարկել  MailChimp-ի բաժանորդի էլ.  փոստի հասցեին:"
@@ -564,16 +496,13 @@ msgid "Mr."
 msgstr "Պրն."
 
 msgid "Mrs."
-msgstr ""
-"Տկն.\n"
+msgstr "Տկն.\n"
 
 msgid "Ms."
-msgstr ""
-"Օրիորդ\n"
+msgstr "Օրիորդ\n"
 
 msgid "Nephew"
-msgstr ""
-"Եղբոր կամ քրոջ որդի\n"
+msgstr "Եղբոր կամ քրոջ որդի\n"
 
 msgid "Never Ask"
 msgstr "Երբեք չհարցնել"
@@ -587,12 +516,6 @@ msgstr "Նոր նվիրատվություն"
 msgid "Newsletter"
 msgstr "Նորությունների թերթիկ"
 
-msgid "Newsletter - Email"
-msgstr ""
-
-msgid "Newsletter - Physical"
-msgstr ""
-
 msgid "Newsletter Recipients"
 msgstr "Նորությունների թերթիկ ստացողներ"
 
@@ -603,8 +526,7 @@ msgid "Next Week"
 msgstr "Հաջորդ շաբաթ"
 
 msgid "Niece"
-msgstr ""
-"Քրոջ կամ եղբոր աղջիկ\n"
+msgstr "Քրոջ կամ եղբոր աղջիկ\n"
 
 msgid "No"
 msgstr "Ոչ"
@@ -614,9 +536,6 @@ msgstr "Ամսաթիվ չկա"
 
 msgid "No Gifts"
 msgstr "Նվեր չկա"
-
-msgid "No Incomplete Tasks"
-msgstr ""
 
 msgid "No Subject"
 msgstr "Թեմա չկա"
@@ -642,10 +561,6 @@ msgstr "Չի ստացվել"
 msgid "Notes"
 msgstr "Նշումներ"
 
-#, fuzzy
-msgid "Nothing Selected"
-msgstr "Դու ոչինչ չեք ընտրել"
-
 msgid "Notifications from MPDX"
 msgstr "Ծանուցումներ MPDX- ից"
 
@@ -657,16 +572,6 @@ msgstr "Մեկ կամ ավելի նվեր"
 
 msgid "Other"
 msgstr "Այլ"
-
-msgid "Other Email"
-msgstr ""
-
-#, fuzzy
-msgid "Other Phone"
-msgstr " Տան հեռախոսահամար"
-
-msgid "Outstanding"
-msgstr ""
 
 msgid "Overdue"
 msgstr "Ժամկետն անցած"
@@ -683,17 +588,11 @@ msgstr "Գործընկեր - Աղոթք"
 msgid "Partner - Special"
 msgstr "Գործընկեր - Հատուկ"
 
-msgid "Pending"
-msgstr ""
-
 msgid "Person"
 msgstr "Անձ"
 
 msgid "Physical"
 msgstr "Փոստային առաքում տպված տարբերակով"
-
-msgid "Please try updating it here: %{link}"
-msgstr ""
 
 msgid "Please update their address to"
 msgstr "Փոխել կոնտակտի էլ. փոստի հասցեն"
@@ -701,25 +600,14 @@ msgstr "Փոխել կոնտակտի էլ. փոստի հասցեն"
 msgid "Pledge"
 msgstr "Խոստում"
 
-#, fuzzy
-msgid "Pledge Status"
-msgstr "Գործընկերոջ կարգավիճակը"
-
-msgid "Prayer Request"
-msgstr ""
-
 msgid "Pre Call Letter"
 msgstr "Նամակ նախքան զանգահարելը"
 
 msgid "Primary Email"
 msgstr "Հիմնական Էլ. փոստի հասցե"
 
-msgid "Primary Phone"
-msgstr ""
-
 msgid "Quarterly"
-msgstr ""
-"Երեք ամիսը մեկ անգամ\n"
+msgstr "Երեք ամիսը մեկ անգամ\n"
 
 msgid "REPLACE WITH NEW CITY, STATE, ZIP"
 msgstr "Փոխել քաղաքը, նահանգը, փոստային կոդը"
@@ -729,9 +617,6 @@ msgstr "Փոխարինել նոր հասցեով"
 
 msgid "Received"
 msgstr "Ստացվել է"
-
-msgid "Received, but not Processed"
-msgstr ""
 
 msgid "Referrals"
 msgstr "Երաշխավորումներ"
@@ -748,6 +633,7 @@ msgstr "Հիշեցում նամակ"
 msgid "Research Abandoned"
 msgstr "Ուսումնասիրությունը դադարեցվել է"
 
+#. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "Վերապատվելի"
 
@@ -757,6 +643,7 @@ msgstr "Սեզոնային"
 msgid "Separated"
 msgstr "Ապրում են իրարից բաժան"
 
+#. this is a relationship status
 msgid "Single"
 msgstr "Չամուսնացած"
 
@@ -771,17 +658,6 @@ msgstr "Ամուսնու/Կնոջ էլ. փոստի հասցեն"
 
 msgid "Spouse First Name"
 msgstr "Ամուսնու/Կնոջ անունը"
-
-#, fuzzy
-msgid "Spouse Other Email"
-msgstr "Ամուսնու/Կնոջ էլ. փոստի հասցեն"
-
-msgid "Spouse Other Phone"
-msgstr ""
-
-#, fuzzy
-msgid "Spouse Phone"
-msgstr " Տան հեռախոսահամար"
 
 msgid "Sr."
 msgstr "Ավագ"
@@ -804,9 +680,6 @@ msgstr "Հովանավորության նամակ"
 msgid "Tags"
 msgstr "Նշումներ"
 
-msgid "Talk to In Person"
-msgstr ""
-
 msgid "Task on MPDX"
 msgstr "Առաջադրանք  MPDX-ում"
 
@@ -817,8 +690,7 @@ msgid "Temporary"
 msgstr "Ժամանակավոր"
 
 msgid "Text Message"
-msgstr ""
-"Տեքստային հաղորդագրություն\n"
+msgstr "Տեքստային հաղորդագրություն\n"
 
 msgid "Thank"
 msgstr "Շնորհակալություն հայտնել"
@@ -829,48 +701,23 @@ msgstr "Շնորհակալություն"
 msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
 msgstr "Այս էլ. փոստի հասցեն նշված է որպես «այլևս հասանելի չէ»: Խմբագրեք  մարդկանց մասին անձնական տվյալները՝ սեղմելով նրանց անվան վրա և հաստատելով, որ  տեղեկատվությունը ճշգրիտ է: Եթե տվյալ անձը փոխել է իր էլ. փոստի հասցեն, ապա այդ հասցեն կդառնա հիմնական և կսինքրոնիզացվի MailChimp-ի հետ, եթե նա ներառված է Ձեր՝ նորությունունների թերթիկ ստացողների ցանկում: Եթե չեք ցանկանում ներառել այս հասցեն MailChimp-ի մեջ, ջնջեք այն, ընտրեք «Հրաժարվել նորությունների թերթիկից» կամ հիմնական դարձրեք մեկ այլ հասցե:"
 
-msgid ""
-"The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n"
-"  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n"
-"  unable to sync your contacts to MailChimp."
+msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
 msgstr "MailChimp –ի նորությունների թերթիկ ստացողների ցանկը, որը կապված է Ձեր MPDX-ի հաշվի հետ պարունակում է լրացուցիչ միաձուլված դաշտ, որը Դուք ստեղծել եք և նշել որպես պարտադիր: MPDX չգիտի, թե ինչպես լրացնել լրացուցիչ միաձուլված դաշտը, հետևաբար, չի կարող սինքրոնիզացնել Ձեր կոնտակտները MailChimp-ի հետ:"
 
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "Ձեր LinkedIn հաշվի կապը պետք է նորացվի:"
 
-msgid ""
-"The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n"
-"  automatically sync with your Google account, please go to %{link}\n"
-"  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n"
-"  that you had set already."
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
 msgstr "MPDX-ի կապը Ձեր Google-ի հաշվի հետ կտրվեց: Եթե ցանկանում եք, որ MPDX-ը շարունակի ավտոմատ կերպով սինքրոնիզացվել Ձեր Google-ի հաշվի հետ, անցեք հետևյալ հղումով  %{link} և սեղմեք «Թարմացնել Google-ի հաշիվը»: Դրանից հետո, պետք է ձեռքով կրկին ակտիվացնեք այն բոլոր ինտեգրացիաները, որոնք արդեն ակտիվացրել էիք:"
 
-msgid ""
-"The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n"
-"  automatically push changes over to prayerletters.com, please go to\n"
-"  and click the 'Enable' button"
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
 msgstr "MPDX-ի կապը prayerletters.com-ի Ձեր հաշվի հետ կտրվեց: Եթե ցանկանում եք, որ MPDX-ը շարունակի ավտոմատ կերպով փոփոխությունները տարածել prayerletters.com-ի վրա, խնդրում ենք այցելել հասցեյով և սեղմել «Ակտիվացնել»"
 
 msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
 msgstr "Անհրաժեշտ է թարմացնել կապը Ձեր Facebook-ի հաշիվի հետ: <a href=\"/auth/facebook\"> Սեղմեք այստեղ՝ Facebook-ի նորից միանալու համար </a> Facebook, ապա փորձեք կրկին ներմուծել:"
 
-msgid ""
-"The mailchimp API key associated with your MPDX account is no longer valid.\n"
-"If you would like Mailchimp syncronization to continue to work, please go to\n"
-" %{link} and update your API key."
+msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
 msgstr "MailChimp-ի API բանալին, որը կապված է Ձեր MPDX հաշվին, այլևս վավեր  չէ: Եթե ցանկանում, որ MailChimp-ի սինքրոնիզացիան շարունակվի, անցեք հետևյալ լինքով %{link} և թարմացրեք API բանալին:"
-
-msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
 
 msgid "This Month"
 msgstr "Այս ամիս"
@@ -880,9 +727,6 @@ msgstr "Այս շաբաթ"
 
 msgid "This Year"
 msgstr "Այս տարի"
-
-msgid "This donation was imported from Tnt."
-msgstr ""
 
 msgid "Timezone"
 msgstr "Ժամային գոտի"
@@ -923,10 +767,7 @@ msgstr "Չի արձագանքում"
 msgid "Upcoming"
 msgstr "Առաջիկայում"
 
-msgid ""
-"We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n"
-"  chosen one of the options above, please go back to %{link}\n"
-"  and update your MailChimp settings."
+msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "Մենք ժամանակավորապես անջատեցինք Ձեր MailChimp-ի ցանկի կապը MPDX-ի հետ ՝ խուսափելու համար հետագա սխալներից: Երբ ընտրեք վերը նշված տարբերակներից մեկը, անցեք հետևյալ հղումով % {link} և թարմացրեք MailChimp-ի կարգավորումները:"
 
 msgid "Weekly"
@@ -950,24 +791,11 @@ msgstr "Այո"
 msgid "Yesterday"
 msgstr "Երեկ"
 
-#, fuzzy
-msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
-msgstr "Դուք ստացել եք այս ծանուցումը MPDX-ից, քանի որ Ձեր նախապատվությունների մեջ նշել եք, որ   ցանկանում ենք ստանալ նմանատիպ ծանուցումներ էլեկտրոնային փոստով: Դուք կարող եք փոխել այս կարգավորումը <a href=\"preferences_url\"> այստեղ </a>:"
-
 msgid "You have no monthly recurring gift recommendations."
 msgstr "Դուք չունեք ամսական պարբերաբար կրկնվող նվերների առաջարկներ:"
 
-msgid "You must log in to MPDX again"
-msgstr ""
-
 msgid "You must select at least 2 contacts to merge."
 msgstr "Դուք պետք է ընտրեք առնվազն 2 կոնտակտ միաձուլելու համար:"
-
-msgid "You've been invited to access an account on MPDX"
-msgstr ""
-
-msgid "You've been invited to be a coach for an account on MPDX"
-msgstr ""
 
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "MPDX -ի Ձեր հետևյալ կոնտակտը \"%{contact}\"  ներառում է անձ <a href=\"%{edit_person_url}\">%{person_name}</a>, որը սինքրոնիզացվել է կամ էքսպորտ է արվել MailChimp, բայց այժմ նրա %{email} Էլ. փոստին ուղարկված նամակները հետ են վերադառնում:"
@@ -1001,3 +829,4 @@ msgstr "հանրագումարից"
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "prayerletters.com-ի հաշիվը պետք է թարմացվի"
+
