@@ -1,0 +1,960 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VERSION\n"
+"POT-Creation-Date: 2018-02-27 21:05+0000\n"
+"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
+"Language: nl_nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid " is designated to the \"%{appeal_name}\" appeal."
+msgstr " is toegewezen aan het \"%{appeal_name}\" verzoek."
+
+msgid "\"%{name}\" (donor #%{account_number})"
+msgstr "\"%{name}\" (partner #%{account_number})"
+
+msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgstr "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+
+msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
+msgstr "%{contact_name} gaf een onverwachte gift. Neem contact op met deze partner."
+
+msgid "%{contact_name} just gave their first gift. Send them a Thank You."
+msgstr "%{contact_name} heeft net hun eerste gift gegeven. Stuur ze een Bedankje."
+
+msgid "%{contact_name} seems to have missed a gift. Call to follow up."
+msgstr "%{contact_name} lijkt een gift te hebben gemist. Neem contact op."
+
+msgid "%{number_of_failed_contacts} contacts failed to import."
+msgstr "%{number_of_failed_contacts} contacten konden niet worden geïmporteerd."
+
+msgid "%{number_of_successful_contacts} contacts imported successfully."
+msgstr "%{number_of_successful_contacts} contacten zijn succesvol geïmporteerd."
+
+msgid "%{number} ext %{extension}"
+msgstr "%{number} ext %{extension}"
+
+msgid "%{org_name} said we have the wrong password for your account."
+msgstr "%{org_name} heeft gezegd dat we het verkeerde wachtwoord voor je account hebben."
+
+msgid "-- All --"
+msgstr "-- Allen --"
+
+msgid "-- All Active --"
+msgstr "- Alle Actieve -"
+
+msgid "-- All Hidden --"
+msgstr "-- Verborgen --"
+
+msgid "-- Any --"
+msgstr "-- Enkele --"
+
+msgid "-- Do not ask --"
+msgstr "- Niet Vragen -"
+
+msgid "-- Has referrer --"
+msgstr "-- Heeft verwijzer --"
+
+msgid "-- None --"
+msgstr "-- Geen --"
+
+msgid "-- Unspecified --"
+msgstr "-- onbekend --"
+
+msgid "1 day before"
+msgstr "1 dag ervoor"
+
+msgid "1 hour before"
+msgstr "1 uur ervoor"
+
+msgid "1 week before"
+msgstr "1 week ervoor"
+
+msgid "15 minutes before"
+msgstr "15 minuten ervoor"
+
+msgid "2 days before"
+msgstr "2 dagen ervoor"
+
+msgid "2 hours before"
+msgstr "2 uur ervoor"
+
+msgid "30 minutes before"
+msgstr "30 minuten ervoor"
+
+msgid "5 minutes before"
+msgstr "5 minuten ervoor"
+
+msgid "Account List"
+msgstr "Account Lijst"
+
+msgid "Action"
+msgstr "Actie"
+
+msgid "Add an Account"
+msgstr "Voeg een Account toe"
+
+msgid "Add another Account"
+msgstr "Voeg nog een Account toe"
+
+msgid "Address"
+msgstr "Adres"
+
+msgid "Address No Longer Valid"
+msgstr "Adres Niet Langer Geldig"
+
+msgid "All"
+msgstr "Allen"
+
+msgid "Annual"
+msgstr "Jaarlijks"
+
+msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
+msgstr "Een ander contact in je organisatie heeft al het partner account nummer dat je probeert toe te wijzen aan dit contact. Maak het nummer uniek."
+
+msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
+msgstr "Een ander contact in je account heeft al het partner account nummer dat je probeert toe te wijzen aan dit contact."
+
+msgid "Appeal"
+msgstr "Verzoek"
+
+msgid "Appointment"
+msgstr "Afspraak"
+
+msgid "Appointment Scheduled"
+msgstr "Afspraak Gemaakt"
+
+msgid "Are marked as do not ask for appeals"
+msgstr "Zijn gemarkeerd als niet voor verzoeken vragen"
+
+msgid "Ask in Future"
+msgstr "Vraag in Toekomst"
+
+msgid "Aunt"
+msgstr "Tante"
+
+msgid "Average"
+msgstr "Gemiddeld"
+
+#. "Avg." is an abbreviation for "Average"
+msgid "Avg."
+msgstr "Gem"
+
+msgid "Balance: %{balance}"
+msgstr "Balans: %{balance}"
+
+msgid "Both"
+msgstr "Beide"
+
+msgid "Brother"
+msgstr "Broer"
+
+msgid "Business"
+msgstr "Bedrijf"
+
+msgid "Call"
+msgstr "Bellen"
+
+msgid "Call for Decision"
+msgstr "Bellen voor Beslissing"
+
+msgid "Church"
+msgstr "Kerk"
+
+msgid "City"
+msgstr "Stad"
+
+msgid "Commitment"
+msgstr "Toezegging"
+
+msgid "Commitment Amount"
+msgstr "Bedrag Toezegging"
+
+msgid "Commitment Currency"
+msgstr "Valuta Toezegging"
+
+msgid "Commitment Details"
+msgstr "Gegevens Toezegging"
+
+msgid "Commitment Frequency"
+msgstr "Frequentie Toezegging"
+
+msgid "Commitment Received"
+msgstr "Ontvangen Toezegging"
+
+msgid "Company"
+msgstr "Bedrijf"
+
+msgid "Completed"
+msgstr "Voltooid"
+
+msgid "Contact Church"
+msgstr "Contact Kerk"
+
+msgid "Contact Commitment Details"
+msgstr "Contact Toezegging Gegevens"
+
+msgid "Contact Details"
+msgstr "Contactgegevens"
+
+msgid "Contact Gift Details"
+msgstr "Contact Gift Gegevens"
+
+msgid "Contact Information"
+msgstr "Contact Informatie"
+
+msgid "Contact Likely To Give"
+msgstr "Contact Geeft Waarschijnlijk"
+
+msgid "Contact Location"
+msgstr "Contact Locatie"
+
+msgid "Contact Name"
+msgstr "Contact Naam"
+
+msgid "Contact Newsletter"
+msgstr "Contact Nieuwsbrief"
+
+msgid "Contact Referrer"
+msgstr "Contact Doorverwijzer"
+
+msgid "Contact Status"
+msgstr "Contact Status"
+
+msgid "Contact Timezone"
+msgstr "Contact Tijdzone"
+
+msgid "Contact Type"
+msgstr "Contact Type"
+
+msgid "Contact for Appointment"
+msgstr "Contact voor Afspraak"
+
+msgid "Contacts"
+msgstr "Contacten"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Cousin (Female)"
+msgstr "Nicht"
+
+msgid "Cousin (Male)"
+msgstr "Neef"
+
+msgid "Currency"
+msgstr "Valuta"
+
+msgid "Date Range"
+msgstr "Datumbereik"
+
+msgid "Daughter"
+msgstr "Dochter"
+
+msgid "Dear Donation Services"
+msgstr "Beste Financiële Afdeling"
+
+msgid "Details"
+msgstr "Gegevens"
+
+msgid "Divorced"
+msgstr "Gescheiden"
+
+msgid "Done"
+msgstr "Klaar"
+
+msgid "Donor system"
+msgstr "Gift systeem"
+
+msgid "Dr."
+msgstr "Dr."
+
+msgid "Due Date"
+msgstr "Einddatum"
+
+msgid "Email"
+msgstr "E-mail"
+
+#. This is a marital status. The person is pledged to be married
+msgid "Engaged"
+msgstr "Verloofd"
+
+#. This is how a person's name is formatted on the first line of an envelope.
+msgid "Envelope Greeting"
+msgstr "Begroeting op Enveloppe"
+
+msgid "Every 2 Months"
+msgstr "Elke 2 Maanden"
+
+msgid "Every 2 Weeks"
+msgstr "Elke 2 Weken"
+
+msgid "Every 2 Years"
+msgstr "Elke 2 Jaar"
+
+msgid "Every 4 Months"
+msgstr "Elke 4 Maanden"
+
+msgid "Every 6 Months"
+msgstr "Elke 6 Maanden"
+
+msgid "Exact Gift Amount"
+msgstr "Exact Gift Bedrag"
+
+msgid "Expired Referral"
+msgstr "Verlopen Doorverwijzing"
+
+msgid "Facebook Message"
+msgstr "Facebook Bericht"
+
+msgid "Facebook Profile"
+msgstr "Facebook Profiel"
+
+msgid "Father"
+msgstr "Vader"
+
+msgid "First Gift"
+msgstr "Eerste Gift"
+
+msgid "First Name"
+msgstr "Voornaam"
+
+msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
+msgstr "Voor de integratie met MailChimp raden we aan dat je een nieuwe lijst maakt in MailChimp\n(geen nieuw account, alleen een nieuwe lijst). Laat vervolgens alle standaardinstellingen van MailChimp voor de lijst staan.\nAls je een nieuwe lijst instelt wordt iedereen die is ingesteld om je nieuwsbrief te ontvangen automatisch gekopieerd en vanaf dat moment kan je alle updates vanuit MPDX beheren (bijv. wanneer je een e-mail wijzigt in MPDX wordt het ook bijgewerkt op MailChimp)."
+
+msgid "Future"
+msgstr "Toekomst"
+
+msgid "Gave a special gift in the last 3 months"
+msgstr "Gaf een speciale gift in de afgelopen 3 maanden"
+
+msgid "Gift Amount Higher Than or Equal To"
+msgstr "Gift Bedrag Hoger dan of Gelijk aan"
+
+msgid "Gift Amount Less Than or Equal To"
+msgstr "Gift Bedrag Minder dan of Gelijk aan"
+
+msgid "Gift Amount Range"
+msgstr "Gift Bedrag Bereik"
+
+msgid "Gift Date"
+msgstr "Gift Datum"
+
+msgid "Gift Details"
+msgstr "Gift Gegevens"
+
+msgid "Gift Options"
+msgstr "Gift Opties"
+
+msgid "Google Integration Settings"
+msgstr "Google Integratie Instellingen"
+
+msgid "Google account needs to be refreshed"
+msgstr "Google account moet ververst worden"
+
+msgid "Google import"
+msgstr "Google import"
+
+msgid "Google sync"
+msgstr "Google sync"
+
+msgid "Granddaughter"
+msgstr "Kleindochter"
+
+msgid "Grandfather"
+msgstr "Opa"
+
+msgid "Grandmother"
+msgstr "Oma"
+
+msgid "Grandson"
+msgstr "Kleinzoon"
+
+msgid "Greeting"
+msgstr "Begroeting"
+
+msgid "History"
+msgstr "Geschiedenis"
+
+msgid "Home"
+msgstr "Thuis"
+
+msgid "Home Phone"
+msgstr "Huistelefoon"
+
+msgid "Husband"
+msgstr "Man"
+
+msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
+msgstr "Als je je bestaande lijst wilt behouden, dien je het extra samenvoegveld geen verplicht veld te maken."
+
+msgid "Increase Gift Recommendation"
+msgstr "Aanbevolen Gift Verhoging"
+
+msgid "Increased their giving in the last 3 months"
+msgstr "Hebben hun gift in de afgelopen 3 maanden verhoogd"
+
+msgid "Insights for "
+msgstr "Inzichten voor "
+
+msgid "Joined my team in the last 3 months"
+msgstr "Is onderdeel geworden van mijn team in de afgelopen 3 maanden"
+
+msgid "Jr."
+msgstr "Jr."
+
+msgid "Language"
+msgstr "Taal"
+
+msgid "Last 30 Days"
+msgstr "Afgelopen 30 Dagen"
+
+msgid "Last Gift"
+msgstr "Laatste Gift"
+
+msgid "Last Month"
+msgstr "Afgelopen Maand"
+
+msgid "Last Name"
+msgstr "Achternaam"
+
+msgid "Last Three Months"
+msgstr "Afgelopen 3 Maanden"
+
+msgid "Last Two Months"
+msgstr "Afgelopen 2 Maanden"
+
+msgid "Last Two Years"
+msgstr "Afgelopen 2 Jaar"
+
+msgid "Last Week"
+msgstr "Afgelopen Week"
+
+msgid "Last Year"
+msgstr "Afgelopen Jaar"
+
+msgid "Last month"
+msgstr "Afgelopen maand"
+
+msgid "Late By"
+msgstr "Te Laat Op"
+
+msgid "Least Likely"
+msgstr "Minst Waarschijnlijk"
+
+msgid "Less than 30 days late"
+msgstr "Minder dan 30 dagen te laat"
+
+msgid "Letter"
+msgstr "Brief"
+
+msgid "Likely"
+msgstr "Waarschijnlijk"
+
+msgid "Likely To Give"
+msgstr "Geeft Waarschijnlijk"
+
+msgid "MPDX List: %{name}"
+msgstr "MPDX Lijst: %{name}"
+
+msgid "MPDX Support Team"
+msgstr "MPDX Ondersteuningsteam"
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts."
+msgstr "MPDX heeft fouten aangetroffen tijdens het importeren van je %{source} contacten."
+
+msgid "MPDX has finished importing your %{source} contacts."
+msgstr "MPDX is klaar met het importeren van je %{source} contacten."
+
+msgid "MailChimp Integration Settings"
+msgstr "MailChimp Integratie Instellingen"
+
+msgid "MailChimp subscriber email bounced"
+msgstr "MailChimp abonnee met ongeldig e-mail"
+
+msgid "Mailchimp API Key no longer valid"
+msgstr "Mailchimp API Key niet langer geldig"
+
+msgid "Mailchimp List is requiring an additional merge field"
+msgstr "MailChimp lijst vereist een extra samenvoegveld"
+
+msgid "Mailing"
+msgstr "Mailing"
+
+msgid "Mailing City"
+msgstr "Mailing Stad"
+
+msgid "Mailing Country"
+msgstr "Mailing Land"
+
+msgid "Mailing Postal Code"
+msgstr "Mailing Postcode"
+
+msgid "Mailing State"
+msgstr "Mailing Staat"
+
+msgid "Mailing Street Address"
+msgstr "Mailing Straatnaam"
+
+msgid "Manual entry"
+msgstr "Handmatige invoer"
+
+msgid "Married"
+msgstr "Getrouwd"
+
+msgid "May take a few days to update"
+msgstr "Kan enkele dagen duren om bij te werken"
+
+msgid "Metro Area"
+msgstr "Metro Gebied"
+
+msgid "Min."
+msgstr "Min."
+
+msgid "Minimum"
+msgstr "Minimaal"
+
+msgid "Miss"
+msgstr "Mevrouw"
+
+msgid "Mobile"
+msgstr "Mobiel"
+
+msgid "Mobile Phone"
+msgstr "Mobiele Telefoon"
+
+msgid "Monthly"
+msgstr "Maandelijks"
+
+msgid "More than 30 days late"
+msgstr "Meer dan 30 dagen te laat"
+
+msgid "More than 60 days late"
+msgstr "Meer dan 60 dagen te laat"
+
+msgid "More than 90 days late"
+msgstr "Meer dan 90 dagen te laat"
+
+msgid "Most Likely"
+msgstr "Zeer Waarschijnlijk"
+
+msgid "Mother"
+msgstr "Moeder"
+
+msgid "Mr."
+msgstr "Mr."
+
+msgid "Mrs."
+msgstr "Mw."
+
+msgid "Ms."
+msgstr "Mw."
+
+msgid "Nephew"
+msgstr "Neef"
+
+msgid "Never Ask"
+msgstr "Nooit Vragen"
+
+msgid "Never Contacted"
+msgstr "Nooit Contact Gehad"
+
+msgid "New Donation"
+msgstr "Nieuwe Gift"
+
+msgid "Newsletter"
+msgstr "Nieuwsbrief"
+
+msgid "Newsletter - Email"
+msgstr "Nieuwsbrief - E-mail"
+
+msgid "Newsletter - Physical"
+msgstr "Nieuwsbrief - Papier"
+
+msgid "Newsletter Recipients"
+msgstr "Nieuwsbrief Ontvangers"
+
+msgid "Next Month"
+msgstr "Volgende Maand"
+
+msgid "Next Week"
+msgstr "Volgende Week"
+
+msgid "Niece"
+msgstr "Nicht"
+
+msgid "No"
+msgstr "Nee"
+
+msgid "No Date"
+msgstr "Geen Datum"
+
+msgid "No Gifts"
+msgstr "Geen Giften"
+
+msgid "No Incomplete Tasks"
+msgstr "Geen Onvoltooide Taken"
+
+msgid "No Subject"
+msgstr "Geen Onderwerp"
+
+msgid "No email addess on file"
+msgstr "Geen e-mailadres in bestand"
+
+msgid "No mailing address on file"
+msgstr "Geen postadres in bestand"
+
+msgid "No mailing address or email addess on file"
+msgstr "Geen postadres of e-mailadres in bestand"
+
+msgid "None"
+msgstr "Geen"
+
+msgid "Not Interested"
+msgstr "Niet Geïnsteresseerd"
+
+msgid "Not Received"
+msgstr "Niet Ontvangen"
+
+msgid "Notes"
+msgstr "Notities"
+
+msgid "Nothing Selected"
+msgstr "Niets Geselecteerd"
+
+msgid "Notifications from MPDX"
+msgstr "Meldingen van MPDX"
+
+msgid "One of my donors, %{donor} has a new current address."
+msgstr "Één van je partners, %{donor} heeft een nieuw postadres."
+
+msgid "One or More Gifts"
+msgstr "Één of Meer Giften"
+
+msgid "Other"
+msgstr "Ander"
+
+msgid "Other Email"
+msgstr "Ander E-mail"
+
+msgid "Other Phone"
+msgstr "Andere Telefoon"
+
+msgid "Outstanding"
+msgstr "Uitstaand"
+
+msgid "Overdue"
+msgstr "Achterstallig"
+
+msgid "Partner"
+msgstr "Partner"
+
+msgid "Partner - Financial"
+msgstr "Partner - Financieel"
+
+msgid "Partner - Pray"
+msgstr "Partner - Gebed"
+
+msgid "Partner - Special"
+msgstr "Partner - Speciaal"
+
+msgid "Pending"
+msgstr "In Afwachting"
+
+msgid "Person"
+msgstr "Persoon"
+
+msgid "Physical"
+msgstr "Papier"
+
+msgid "Please try updating it here: %{link}"
+msgstr "Probeer het hier bij te werken: %{link}"
+
+msgid "Please update their address to"
+msgstr "Werk hun adres bij naar"
+
+msgid "Pledge"
+msgstr "Toezegging"
+
+msgid "Pledge Status"
+msgstr "Toezegging Status"
+
+msgid "Prayer Request"
+msgstr "Gebedsverzoek"
+
+msgid "Pre Call Letter"
+msgstr "Voorbereidingsbrief Bellen"
+
+msgid "Primary Email"
+msgstr "Primaire E-mail"
+
+msgid "Primary Phone"
+msgstr "Primaire Telefoon"
+
+msgid "Quarterly"
+msgstr "Per Kwartaal"
+
+msgid "REPLACE WITH NEW CITY, STATE, ZIP"
+msgstr "VERVANG MET NIEUWE STAD, STAAT, POSTCODE"
+
+msgid "REPLACE WITH NEW STREET"
+msgstr "VERVANG MET NIEUWE STRAAT"
+
+msgid "Received"
+msgstr "Ontvangen"
+
+msgid "Received, but not Processed"
+msgstr "Ontvangen, maar niet Verwerkt"
+
+msgid "Referrals"
+msgstr "Doorverwijzingen"
+
+msgid "Referrer"
+msgstr "Doorverwijzer"
+
+msgid "Region"
+msgstr "Regio"
+
+msgid "Reminder Letter"
+msgstr "Herinneringsbrief"
+
+msgid "Research Abandoned"
+msgstr "Onderzoek Gestaakt"
+
+#. "Rev." is an abbreviated title for Reverend.
+msgid "Rev."
+msgstr "ds."
+
+msgid "Seasonal"
+msgstr "Per Seizoen"
+
+msgid "Separated"
+msgstr "Uit Elkaar"
+
+#. this is a relationship status
+msgid "Single"
+msgstr "Vrijgezel"
+
+msgid "Sister"
+msgstr "Zus"
+
+msgid "Son"
+msgstr "Zoon"
+
+msgid "Spouse Email"
+msgstr "Partner E-mail"
+
+msgid "Spouse First Name"
+msgstr "Partner Voornaam"
+
+msgid "Spouse Other Email"
+msgstr "Partner Andere E-mail"
+
+msgid "Spouse Other Phone"
+msgstr "Partner Andere Telefoon"
+
+msgid "Spouse Phone"
+msgstr "Partner Telefoon"
+
+msgid "Sr."
+msgstr "Sr."
+
+msgid "State"
+msgstr "Staat"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Stopped giving for the last 2 months"
+msgstr "Is de afgelopen 2 maanden gestopt met geven"
+
+msgid "Support Letter"
+msgstr "Ondersteuningsbrief"
+
+msgid "Tags"
+msgstr "Labels"
+
+msgid "Talk to In Person"
+msgstr "Persoonlijk Benaderen"
+
+msgid "Task on MPDX"
+msgstr "Taak op MPDX"
+
+msgid "Tasks"
+msgstr "Taken"
+
+msgid "Temporary"
+msgstr "Tijdelijk"
+
+msgid "Text Message"
+msgstr "Tekstbericht"
+
+msgid "Thank"
+msgstr "Bedanken"
+
+msgid "Thanks!"
+msgstr "Bedankt!"
+
+msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
+msgstr "Dat e-mailadres is gemarkeerd als \"niet langer geldig\". Bewerk de persoonsgegevens door op hun naam hierboven te klikken en controleer of de gegevens kloppen. Als deze persoon een ander geldig e-mailadres heeft wordt deze als primair ingesteld en wordt deze met MailChimp gesynchroniseerd als deze persoon op je e-mail nieuwsbrieflijst staat. Als je dit e-mailadres niet met Mailchimp wil synchroniseren verwijder het e-mailadres dan. Kies \"Afmelden voor e-mailnieuwsbrief\" of maak een andere e-mailadres primair."
+
+msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
+msgstr "De mailinglijst van MailChimp die je aan je MPDX account gekoppeld hebt bevat een extra samenvoegveld die jij hebt aangemaakt en als vereist hebt ingesteld. MPDX weet niet hoe het gebruik moet maken van je samenvoegveld en is daarom niet in staat om je contacten met MailChimp te synchorniseren."
+
+msgid "The connection to your LinkedIn account needs to be renewed."
+msgstr "De verbinding met je LinkedIn account moet worden vernieuwd."
+
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "De koppeling tussen MPDX en je Google account werkt niet meer. Als je wilt dat MPDX automatisch blijft synchroniseren met je Google account ga dan naar %{link} en klik op \"Google Account Verversen\". Hierna moet je de integraties die je had ingesteld opnieuw handmatig inschakelen."
+
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
+msgstr "De koppeling tussen MPDX en je prayerletters.com account werkt niet meer. Als je wilt dat MPDX automatisch wijzigingen blijft doorvoeren naar prayerletters.com, klik dan op de knop \"Inschakelen\"."
+
+msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
+msgstr "De link naar je Facebook account moet worden vernieuwd. <a href=\"/auth/facebook\">Klik hier om opnieuw verbinding te maken met Facebook </a> en probeer vervolgens opnieuw te importeren."
+
+msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
+msgstr "De MailChimp API key die aan je MPDX account is gekoppeld is niet langer geldig.\nAls je wilt dat de MailChimp synchronisatie blijft werken, ga dan naar %{link} en werk je API key bij."
+
+msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Er zijn een aantal redenen waarom een ​​import mislukt. De storing is vaak een netwerk probleem. Probeer je import opnieuw. Als het niet lukt, stuur ons dan een e-mail op support@mpdx.org en we zullen uitzoeken wat er mis is gegaan."
+
+msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Er zijn een aantal redenen waarom een ​​import mislukt. Vaak is de fout een tijdelijk probleem met Facebook dat buiten onze controle ligt. Probeer je import opnieuw. Als het niet lukt, stuur ons dan een e-mail op support@mpdx.org en we zullen uitzoeken wat er mis is gegaan."
+
+msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
+msgstr "Er zijn een aantal redenen waarom een ​​import mislukt. De meest voorkomende reden is een tijdelijk probleem met de server. Probeer je import opnieuw. Als het opnieuw mislukt, stuur dan een e-mail naar support@mpdx.org met je Tnt-export toegevoegd. Het bestand dat je probeert te importeren helpt ons enorm om te proberen te achterhalen waarom het importeren is mislukt."
+
+msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
+msgstr "Er zijn een aantal redenen waarom een ​​import mislukt. De meest waarschijnlijke reden waarom een ​​CSV import mislukt is te wijten aan de Voornaam. De Voornaam is een verplicht veld bij het importeren van CSV's. We hebben een CSV bestand bijgevoegd bij deze e-mail met de rijen die niet konden worden geïmporteerd. De eerste kolom in deze CSV bevat een foutmelding over die rij. Download dit CSV, verhelp de problemen erin en probeer het opnieuw te importeren. Je hoeft de contacten die eerder met succes zijn geïmporteerd niet opnieuw te importeren. Als het niet lukt, stuur ons dan een e-mail op support@mpdx.org en we zullen uitzoeken wat er mis is gegaan."
+
+msgid "This Month"
+msgstr "Deze Maand"
+
+msgid "This Week"
+msgstr "Deze Week"
+
+msgid "This Year"
+msgstr "Dit Jaar"
+
+msgid "This donation was imported from Tnt."
+msgstr "Deze gift is vanuit Tnt geïmporteerd."
+
+msgid "Timezone"
+msgstr "Tijdzone"
+
+msgid "Tnt import"
+msgstr "Tnt import"
+
+msgid "To Do"
+msgstr "Te Doen"
+
+msgid "Today"
+msgstr "Vandaag"
+
+msgid "Tomorrow"
+msgstr "Morgen"
+
+msgid "Total"
+msgstr "Totaal"
+
+msgid "Total (last month excluded from total)"
+msgstr "Totaal (afgelopen maand uitgesloten van totaal)"
+
+msgid "Totals"
+msgstr "Totaal"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Uncle"
+msgstr "Oom"
+
+msgid "Unknown"
+msgstr "Onbekend"
+
+msgid "Unresponsive"
+msgstr "Reageert Niet"
+
+msgid "Upcoming"
+msgstr "Aankomend"
+
+msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
+msgstr "We hebben je MailChimp lijst tijdelijk van MPDX losgekoppeld om verdere fouten te voorkomen. Ga terug naar %{link} wanneer je een van de bovenstaande opties hebt gekozen en werk dan je MailChimp instellingen bij."
+
+msgid "Weekly"
+msgstr "Wekelijks"
+
+msgid "Widowed"
+msgstr "Weduwnaar"
+
+msgid "Wife"
+msgstr "Vrouw"
+
+msgid "Work"
+msgstr "Werk"
+
+msgid "Work Phone"
+msgstr "Werk Telefoon"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Yesterday"
+msgstr "Gisteren"
+
+msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr "Je krijgt deze melding van MPDX omdat je in de e-mailinstellingen hebt aangegeven dat je dit type melding wilt ontvangen. Je kunt deze instellingen <a href=\"%{preferences_url}\">hier</a> wijzigen."
+
+msgid "You have no monthly recurring gift recommendations."
+msgstr "Je hebt geen maandelijks terugkerende gift aanbevelingen."
+
+msgid "You must log in to MPDX again"
+msgstr "Je moet opnieuw inloggen bij MPDX"
+
+msgid "You must select at least 2 contacts to merge."
+msgstr "Je moet ten minste 2 contacten selecteren om samen te voegen."
+
+msgid "You've been invited to access an account on MPDX"
+msgstr "U bent uitgenodigd om toegang te krijgen tot een account op MPDX"
+
+msgid "You've been invited to be a coach for an account on MPDX"
+msgstr "Je bent uitgenodigd om coach te worden voor een account op MPDX"
+
+msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
+msgstr "Je MPDX contact \"%{contact}\" heeft een persoon <a href=\"%{edit_person_url}\">%{person_name}</a> gesynchroniseerd of geëxporteerd naar MailChimp maar heeft nu een ongeldige e-mail: %{email}"
+
+msgid "Your username and password are missing for this account."
+msgstr "Je gebruikersnaam en wachtwoord ontbreken voor dit account."
+
+msgid "Your username and password for %{org} are invalid."
+msgstr "Je gebruikersnaam en wachtwoord voor %{org} zijn ongeldig."
+
+msgid "[MPDX] Importing your %{source} contacts completed"
+msgstr "[MPDX] Importeren van je %{source} contacten voltooid"
+
+msgid "[MPDX] Importing your %{source} contacts failed"
+msgstr "[MPDX] Importeren van je %{source} contacten mislukt"
+
+msgid "[MPDX] Your username and password for %{source} are invalid"
+msgstr "[MPDX] Je gebruikersnaam en wachtwoord voor %{source} zijn ongeldig"
+
+msgid "at the time of event"
+msgstr "op het moment van de afspraak"
+
+msgid "can not be blank"
+msgstr "kan niet leeg zijn"
+
+msgid "converted as"
+msgstr "omgezet als"
+
+msgid "of total"
+msgstr "van totaal"
+
+msgid "prayerletters.com account needs to be refreshed"
+msgstr "prayerletters.com account moet worden ververst"
+

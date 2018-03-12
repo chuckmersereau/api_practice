@@ -40,7 +40,7 @@ describe Donation do
 
   describe '#update_related_pledge' do
     let(:pledge)   { create(:pledge, amount: 100.00) }
-    let(:donation) { build(:donation) }
+    let(:donation) { build(:donation, appeal: create(:appeal)) }
     let!(:persisted_donation) { create(:donation) }
 
     it 'calls the match service method whenever a new donation is created' do
@@ -54,6 +54,14 @@ describe Donation do
     it "doesn't call the match service method whenever a new donation is updated" do
       expect_any_instance_of(AccountList::PledgeMatcher).not_to receive(:pledge)
       persisted_donation.update(amount: 200.00)
+    end
+
+    it 'deletes pledge donation if appeal is removed' do
+      expect_any_instance_of(AccountList::PledgeMatcher).to receive(:needs_pledge?).and_return(true)
+      expect_any_instance_of(AccountList::PledgeMatcher).to receive(:pledge).and_return(pledge)
+      donation.save
+
+      expect { donation.update(appeal: nil) }.to change(PledgeDonation, :count).by(-1)
     end
   end
 

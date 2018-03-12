@@ -1,4 +1,6 @@
 module GoogleContactSync
+  MAX_SYNCED_ADDRESSES = 10
+
   module_function
 
   def sync_contact(contact, g_contacts_and_links)
@@ -233,8 +235,14 @@ module GoogleContactSync
     contact_primary = contact.addresses.where(primary_mailing_address: true)
     addresses.each do |address|
       address.primary_mailing_address = false if contact_primary
+      next if empty_address?(address)
       contact.addresses << address
     end
+  end
+
+  def empty_address?(address)
+    address.attributes.slice('street', 'city', 'state', 'postal_code') ==
+      { 'street' => nil, 'city' => nil, 'state' => nil, 'postal_code' => nil }
   end
 
   def add_emails_from_g_contact(emails_to_add, g_contact, person)
@@ -325,7 +333,7 @@ module GoogleContactSync
     [
       mpdx_adds.map { |master_id| lookup_by_key(g_contact_address_records, master_address_id: master_id) },
       mpdx_dels,
-      contact.addresses.where(master_address_id: g_contact_adds.to_a),
+      contact.addresses.where(master_address_id: g_contact_adds.to_a).limit(MAX_SYNCED_ADDRESSES),
       g_contact_dels,
       g_contact_address_records
     ]

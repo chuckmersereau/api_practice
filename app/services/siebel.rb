@@ -344,7 +344,7 @@ class Siebel < DataServer
 
       add_or_update_email_address(email, person)
 
-      # Make sure the contact person has the primary phone number
+      # Make sure the contact person has the primary email address
       add_or_update_email_address(email, contact_person) if email.primary == true
     end
 

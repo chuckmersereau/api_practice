@@ -357,7 +357,7 @@ class DataServer
     first_line = lines.first.to_s.upcase
     first_two_lines = first_line + lines[1].to_s
 
-    if first_two_lines =~ /password|not registered|not authorized/i
+    if first_two_lines =~ /password|not registered|not authorized|oauth_token is not recognized/i
       raise_invalid_credentials
     elsif first_two_lines =~ /not found/i
       raise_missing_credentials

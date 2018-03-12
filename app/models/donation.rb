@@ -109,6 +109,8 @@ class Donation < ApplicationRecord
   end
 
   def update_related_pledge
+    return pledge_donations.each(&:destroy) if appeal.blank?
+
     pledge_match = AccountList::PledgeMatcher.new(self)
     pledge_match.pledge.donations << self if pledge_match.needs_pledge?
   end

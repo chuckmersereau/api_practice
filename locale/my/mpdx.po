@@ -1,7 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"PO-Revision-Date: 2017-06-08 14:36+0000\n"
+"POT-Creation-Date: 2018-02-27 21:05+0000\n"
+"PO-Revision-Date: 2018-02-27 21:05+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: my\n"
@@ -9,60 +10,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-msgid " is designated to the \"%{appeal_name}\" appeal."
-msgstr ""
-
-msgid "\"%{name}\" (donor #%{account_number})"
-msgstr ""
-
-msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-msgstr ""
-
-msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
-msgstr ""
-
-msgid "%{contact_name} just gave their first gift. Send them a Thank You."
-msgstr ""
-
-msgid "%{contact_name} seems to have missed a gift. Call to follow up."
-msgstr ""
-
-msgid "%{number_of_failed_contacts} contacts failed to import."
-msgstr ""
-
-msgid "%{number_of_successful_contacts} contacts imported successfully."
-msgstr ""
-
-msgid "%{number} ext %{extension}"
-msgstr ""
-
-msgid "%{org_name} said we have the wrong password for your account."
-msgstr ""
-
-msgid "-- All --"
-msgstr ""
-
-msgid "-- All Active --"
-msgstr ""
-
-msgid "-- All Hidden --"
-msgstr ""
-
-msgid "-- Any --"
-msgstr ""
-
-msgid "-- Do not ask --"
-msgstr ""
-
-msgid "-- Has referrer --"
-msgstr ""
-
-msgid "-- None --"
-msgstr ""
-
-msgid "-- Unspecified --"
-msgstr ""
 
 msgid "1 day before"
 msgstr "1 နေ့ကမတိုင်မီ"
@@ -91,9 +38,6 @@ msgstr "မိနစ် 30 မတိုင်မီ"
 msgid "Account List"
 msgstr "အကောင့်စာရင်း"
 
-msgid "Action"
-msgstr ""
-
 msgid "Add an Account"
 msgstr "အကောင့်တခုဖွင် ပါ"
 
@@ -102,21 +46,6 @@ msgstr "အခြားအကောင့် တခုဖွင် ပါ"
 
 msgid "Address"
 msgstr "လိပ်စာ"
-
-msgid "Address No Longer Valid"
-msgstr ""
-
-msgid "All"
-msgstr ""
-
-msgid "Annual"
-msgstr ""
-
-msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
-msgstr ""
-
-msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
-msgstr ""
 
 msgid "Appeal"
 msgstr "အယူခံဝင် Appeal"
@@ -139,11 +68,9 @@ msgstr "အဒေါ်"
 msgid "Average"
 msgstr "ပျမ်းမျှ"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "Avg."
-
-msgid "Balance: %{balance}"
-msgstr ""
 
 msgid "Both"
 msgstr "နှစ်ခုလုံး"
@@ -153,137 +80,6 @@ msgstr "ညီအစ်ကို"
 
 msgid "Business"
 msgstr "စီးပွားရေးလုပ်ငန်း"
-
-msgid "Call"
-msgstr ""
-
-msgid "Call for Decision"
-msgstr ""
-
-msgid "Church"
-msgstr ""
-
-msgid "City"
-msgstr ""
-
-msgid "Commitment"
-msgstr ""
-
-msgid "Commitment Amount"
-msgstr ""
-
-msgid "Commitment Currency"
-msgstr ""
-
-msgid "Commitment Details"
-msgstr ""
-
-msgid "Commitment Frequency"
-msgstr ""
-
-msgid "Commitment Received"
-msgstr ""
-
-msgid "Company"
-msgstr ""
-
-msgid "Completed"
-msgstr ""
-
-msgid "Contact Church"
-msgstr ""
-
-msgid "Contact Commitment Details"
-msgstr ""
-
-msgid "Contact Details"
-msgstr ""
-
-msgid "Contact Gift Details"
-msgstr ""
-
-msgid "Contact Information"
-msgstr ""
-
-msgid "Contact Likely To Give"
-msgstr ""
-
-msgid "Contact Location"
-msgstr ""
-
-msgid "Contact Name"
-msgstr ""
-
-msgid "Contact Newsletter"
-msgstr ""
-
-msgid "Contact Referrer"
-msgstr ""
-
-msgid "Contact Status"
-msgstr ""
-
-msgid "Contact Timezone"
-msgstr ""
-
-msgid "Contact Type"
-msgstr ""
-
-msgid "Contact for Appointment"
-msgstr ""
-
-msgid "Contacts"
-msgstr ""
-
-msgid "Country"
-msgstr ""
-
-msgid "Cousin (Female)"
-msgstr ""
-
-msgid "Cousin (Male)"
-msgstr ""
-
-msgid "Currency"
-msgstr ""
-
-msgid "Date Range"
-msgstr ""
-
-msgid "Daughter"
-msgstr ""
-
-msgid "Dear Donation Services"
-msgstr ""
-
-msgid "Details"
-msgstr ""
-
-msgid "Divorced"
-msgstr ""
-
-msgid "Done"
-msgstr ""
-
-msgid "Donor system"
-msgstr ""
-
-#, fuzzy
-msgid "Dr."
-msgstr "Mr."
-
-msgid "Due Date"
-msgstr ""
-
-#, fuzzy
-msgid "Email"
-msgstr "အီးမေးလ်"
-
-msgid "Engaged"
-msgstr ""
-
-msgid "Envelope Greeting"
-msgstr ""
 
 msgid "Every 2 Months"
 msgstr "2 လတစ်ကြိမ်"
@@ -297,16 +93,6 @@ msgstr "2 နှစ်တစ်ကြိမ်"
 msgid "Every 4 Months"
 msgstr "4 လတစ်ကြိမ်"
 
-#, fuzzy
-msgid "Every 6 Months"
-msgstr "2 လတစ်ကြိမ်"
-
-msgid "Exact Gift Amount"
-msgstr ""
-
-msgid "Expired Referral"
-msgstr ""
-
 msgid "Facebook Message"
 msgstr "FacebookMessage"
 
@@ -315,20 +101,6 @@ msgstr "Facebook Profile"
 
 msgid "Father"
 msgstr "ဖခင်"
-
-msgid "First Gift"
-msgstr ""
-
-msgid "First Name"
-msgstr ""
-
-msgid ""
-"For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n"
-"  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n"
-"  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n"
-"  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n"
-"  address on MPDX it will update on mailchimp)."
-msgstr ""
 
 msgid "Future"
 msgstr "အနာဂတ်"
@@ -342,20 +114,11 @@ msgstr "လက်ဆောင်ပေးမယ်ငွေပမာဏပို
 msgid "Gift Amount Less Than or Equal To"
 msgstr "လက်ဆောင်ပေးမယ်ငွေပမာဏထက်နည်းသို့မဟုတ်တူညီသောငွေပမာဏ"
 
-msgid "Gift Amount Range"
-msgstr ""
-
 msgid "Gift Date"
 msgstr "လက်ဆောင်ပေးမယ်နေ့စွဲ"
 
 msgid "Gift Details"
 msgstr "Gift Details"
-
-msgid "Gift Options"
-msgstr ""
-
-msgid "Google Integration Settings"
-msgstr ""
 
 msgid "Google account needs to be refreshed"
 msgstr "Google account needs to be refreshed"
@@ -378,114 +141,8 @@ msgstr "အဖွါး"
 msgid "Grandson"
 msgstr "မြေး"
 
-msgid "Greeting"
-msgstr ""
-
-#, fuzzy
-msgid "History"
-msgstr "အစ်မ ညီမ"
-
-msgid "Home"
-msgstr ""
-
-#, fuzzy
-msgid "Home Phone"
-msgstr "မိုဘိုင်းဖုန်း"
-
-msgid "Hon."
-msgstr ""
-
-msgid "Husband"
-msgstr ""
-
-msgid ""
-"If you do want to stick with your existing list, you will need to make that extra merge field not a\n"
-"  required field."
-msgstr ""
-
-msgid "Increase Gift Recommendation"
-msgstr ""
-
-msgid "Increased their giving in the last 3 months"
-msgstr ""
-
-msgid "Insights for "
-msgstr ""
-
-msgid "Joined my team in the last 3 months"
-msgstr ""
-
-#, fuzzy
-msgid "Jr."
-msgstr "Mr."
-
-msgid "Language"
-msgstr ""
-
-msgid "Last 30 Days"
-msgstr ""
-
-msgid "Last Gift"
-msgstr ""
-
-msgid "Last Month"
-msgstr ""
-
-msgid "Last Name"
-msgstr ""
-
-msgid "Last Three Months"
-msgstr ""
-
-msgid "Last Two Months"
-msgstr ""
-
-msgid "Last Two Years"
-msgstr ""
-
-msgid "Last Week"
-msgstr ""
-
-msgid "Last Year"
-msgstr ""
-
-msgid "Last month"
-msgstr ""
-
-msgid "Late By"
-msgstr ""
-
-#, fuzzy
-msgid "Least Likely"
-msgstr "လောက်နီးပါး"
-
-#, fuzzy
-msgid "Less than 30 days late"
-msgstr " ရက်ပေါင်း 60 ကျော်နောက်ကျ"
-
-msgid "Letter"
-msgstr ""
-
-msgid "Likely"
-msgstr ""
-
-msgid "Likely To Give"
-msgstr ""
-
-msgid "MPDX List: %{name}"
-msgstr ""
-
-msgid "MPDX Support Team"
-msgstr ""
-
-msgid "MPDX encountered errors while trying to import your %{source} contacts."
-msgstr ""
-
 msgid "MPDX has finished importing your %{source} contacts."
 msgstr "MPDXခြင်းပြီးဆုံး importing your %{source} contacts."
-
-msgid "MailChimp Integration Settings"
-msgstr ""
 
 msgid "MailChimp subscriber email bounced"
 msgstr "MailChimp subscriber email bounced"
@@ -505,38 +162,14 @@ msgstr "စာပို့ထားသောမြို့"
 msgid "Mailing Country"
 msgstr "စာပို့ထားသောတိုင်းပြည်"
 
-msgid "Mailing Postal Code"
-msgstr ""
-
 msgid "Mailing State"
 msgstr "စာပို့ထားသောပြည်နယ်"
 
 msgid "Mailing Street Address"
 msgstr "လမ်းလိပ်စာ"
 
-msgid "Manual entry"
-msgstr ""
-
 msgid "Married"
 msgstr "အိမ်ထောင်သည်"
-
-msgid "May take a few days to update"
-msgstr ""
-
-msgid "Metro Area"
-msgstr ""
-
-msgid "Min."
-msgstr ""
-
-msgid "Minimum"
-msgstr ""
-
-msgid "Miss"
-msgstr ""
-
-msgid "Mobile"
-msgstr ""
 
 msgid "Mobile Phone"
 msgstr "မိုဘိုင်းဖုန်း"
@@ -562,14 +195,6 @@ msgstr "မိခင်"
 msgid "Mr."
 msgstr "Mr."
 
-#, fuzzy
-msgid "Mrs."
-msgstr "Mr."
-
-#, fuzzy
-msgid "Ms."
-msgstr "Mr."
-
 msgid "Nephew"
 msgstr "တူ"
 
@@ -585,154 +210,6 @@ msgstr "အသစ်လှူဒါန်းခြင်း"
 msgid "Newsletter"
 msgstr "သတင်းလွှာ Newsletter"
 
-msgid "Newsletter - Email"
-msgstr ""
-
-msgid "Newsletter - Physical"
-msgstr ""
-
-msgid "Newsletter Recipients"
-msgstr ""
-
-msgid "Next Month"
-msgstr ""
-
-msgid "Next Week"
-msgstr ""
-
-msgid "Niece"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "No Date"
-msgstr ""
-
-msgid "No Gifts"
-msgstr ""
-
-msgid "No Incomplete Tasks"
-msgstr ""
-
-msgid "No Subject"
-msgstr ""
-
-msgid "No email addess on file"
-msgstr ""
-
-msgid "No mailing address on file"
-msgstr ""
-
-msgid "No mailing address or email addess on file"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Not Interested"
-msgstr ""
-
-msgid "Not Received"
-msgstr ""
-
-msgid "Notes"
-msgstr ""
-
-msgid "Nothing Selected"
-msgstr ""
-
-msgid "Notifications from MPDX"
-msgstr ""
-
-msgid "One of my donors, %{donor} has a new current address."
-msgstr ""
-
-msgid "One or More Gifts"
-msgstr ""
-
-#, fuzzy
-msgid "Other"
-msgstr "ဖခင်"
-
-msgid "Other Email"
-msgstr ""
-
-msgid "Other Phone"
-msgstr ""
-
-msgid "Outstanding"
-msgstr ""
-
-#, fuzzy
-msgid "Overdue"
-msgstr "ပျမ်းမျှ"
-
-#, fuzzy
-msgid "Partner"
-msgstr "ဖခင်"
-
-msgid "Partner - Financial"
-msgstr ""
-
-msgid "Partner - Pray"
-msgstr ""
-
-msgid "Partner - Special"
-msgstr ""
-
-msgid "Pending"
-msgstr ""
-
-msgid "Person"
-msgstr ""
-
-msgid "Physical"
-msgstr ""
-
-msgid "Please try updating it here: %{link}"
-msgstr ""
-
-msgid "Please update their address to"
-msgstr ""
-
-msgid "Pledge"
-msgstr ""
-
-msgid "Pledge Status"
-msgstr ""
-
-msgid "Prayer Request"
-msgstr ""
-
-msgid "Pre Call Letter"
-msgstr ""
-
-msgid "Primary Email"
-msgstr ""
-
-msgid "Primary Phone"
-msgstr ""
-
-msgid "Quarterly"
-msgstr ""
-
-msgid "REPLACE WITH NEW CITY, STATE, ZIP"
-msgstr ""
-
-msgid "REPLACE WITH NEW STREET"
-msgstr ""
-
-msgid "Received"
-msgstr ""
-
-msgid "Received, but not Processed"
-msgstr ""
-
-#, fuzzy
-msgid "Referrals"
-msgstr "ရည်ညွှန်းပေးသူများ"
-
 msgid "Referrer"
 msgstr "ရည်ညွှန်းပေးသူများ"
 
@@ -742,18 +219,11 @@ msgstr "ဒေသ"
 msgid "Reminder Letter"
 msgstr "သတိပေးစာ"
 
-msgid "Research Abandoned"
-msgstr ""
-
+#. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "Rev."
 
-msgid "Seasonal"
-msgstr ""
-
-msgid "Separated"
-msgstr ""
-
+#. this is a relationship status
 msgid "Single"
 msgstr "တစ်ကိုယ်ရေအိမ်ထောင်မရှိ"
 
@@ -769,29 +239,7 @@ msgstr "အိမ်ထောင်ဖက်၏အီးမေးလ်"
 msgid "Spouse First Name"
 msgstr "အိမ်ထောင်ဖက်၏ပဌမ နာမည်"
 
-#, fuzzy
-msgid "Spouse Other Email"
-msgstr "အိမ်ထောင်ဖက်၏အီးမေးလ်"
-
-msgid "Spouse Other Phone"
-msgstr ""
-
-msgid "Spouse Phone"
-msgstr ""
-
-#, fuzzy
-msgid "Sr."
-msgstr "Mr."
-
-#, fuzzy
-msgid "Starred"
-msgstr "အိမ်ထောင်သည်"
-
 msgid "State"
-msgstr "ပြည်နယ်"
-
-#, fuzzy
-msgid "Status"
 msgstr "ပြည်နယ်"
 
 msgid "Stopped giving for the last 2 months"
@@ -802,9 +250,6 @@ msgstr "ထောက်ပံ့မှု ပေးစာ"
 
 msgid "Tags"
 msgstr "Tags"
-
-msgid "Talk to In Person"
-msgstr ""
 
 msgid "Task on MPDX"
 msgstr "MPDX ကိုTask လုပ်"
@@ -827,169 +272,11 @@ msgstr "ကျေးဇူးတင်ပါသည်"
 msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
 msgstr "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary"
 
-msgid ""
-"The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n"
-"  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n"
-"  unable to sync your contacts to MailChimp."
-msgstr ""
-"The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n"
-"created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n"
-"unable to sync your contacts to MailChimp."
-
-msgid "The connection to your LinkedIn account needs to be renewed."
-msgstr ""
-
-msgid ""
-"The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n"
-"  automatically sync with your Google account, please go to %{link}\n"
-"  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n"
-"  that you had set already."
-msgstr ""
-
-msgid ""
-"The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n"
-"  automatically push changes over to prayerletters.com, please go to\n"
-"  and click the 'Enable' button"
-msgstr ""
-
-msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
-msgstr ""
-
-msgid ""
-"The mailchimp API key associated with your MPDX account is no longer valid.\n"
-"If you would like Mailchimp syncronization to continue to work, please go to\n"
-" %{link} and update your API key."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
-
-msgid "This Month"
-msgstr ""
-
-msgid "This Week"
-msgstr ""
-
-msgid "This Year"
-msgstr ""
-
-msgid "This donation was imported from Tnt."
-msgstr ""
-
-msgid "Timezone"
-msgstr ""
-
-msgid "Tnt import"
-msgstr ""
-
-msgid "To Do"
-msgstr ""
-
-msgid "Today"
-msgstr ""
-
-msgid "Tomorrow"
-msgstr ""
-
-msgid "Total"
-msgstr ""
-
-msgid "Total (last month excluded from total)"
-msgstr ""
-
-msgid "Totals"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Uncle"
-msgstr ""
-
-msgid "Unknown"
-msgstr ""
-
-msgid "Unresponsive"
-msgstr ""
-
-msgid "Upcoming"
-msgstr ""
-
-msgid ""
-"We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n"
-"  chosen one of the options above, please go back to %{link}\n"
-"  and update your MailChimp settings."
-msgstr ""
-
-msgid "Weekly"
-msgstr ""
-
-msgid "Widowed"
-msgstr ""
-
-msgid "Wife"
-msgstr ""
-
-msgid "Work"
-msgstr ""
-
-msgid "Work Phone"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "Yesterday"
-msgstr ""
-
-msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
-msgstr ""
-
-msgid "You have no monthly recurring gift recommendations."
-msgstr ""
-
-msgid "You must log in to MPDX again"
-msgstr ""
-
-msgid "You must select at least 2 contacts to merge."
-msgstr ""
-
-msgid "You've been invited to access an account on MPDX"
-msgstr ""
-
-msgid "You've been invited to be a coach for an account on MPDX"
-msgstr ""
-
-msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
-msgstr ""
-
-msgid "Your username and password are missing for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Your username and password for %{org} are invalid."
-msgstr "%{source} are invalidအတွက် [MPDX] သင့်ရဲ့အသုံးပြုသူအမည်နှင့်စကားဝှက်"
-
-msgid "[MPDX] Importing your %{source} contacts completed"
-msgstr ""
-
-msgid "[MPDX] Importing your %{source} contacts failed"
-msgstr ""
+msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
+msgstr "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\ncreated and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\nunable to sync your contacts to MailChimp."
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "%{source} are invalidအတွက် [MPDX] သင့်ရဲ့အသုံးပြုသူအမည်နှင့်စကားဝှက်"
-
-msgid "at the time of event"
-msgstr ""
 
 msgid "can not be blank"
 msgstr "ကွက်လပ်ထားလို့မရပါ"
@@ -997,9 +284,3 @@ msgstr "ကွက်လပ်ထားလို့မရပါ"
 msgid "converted as"
 msgstr "အဖြစ်ပြောင်းလဲ"
 
-msgid "of total"
-msgstr ""
-
-#, fuzzy
-msgid "prayerletters.com account needs to be refreshed"
-msgstr "Google account needs to be refreshed"

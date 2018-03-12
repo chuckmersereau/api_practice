@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe PledgeDonation do
   context '#processed status' do
-    let(:pledge) { create(:pledge, donations: [donation_one], amount: 400.00) }
-    let(:donation_one) { create(:donation, amount: 200.00) }
-    let(:donation_two) { create(:donation, amount: 200.00) }
+    let(:appeal) { create(:appeal) }
+    let(:pledge) { create(:pledge, donations: [donation_one], amount: 400.00, appeal: appeal) }
+    let(:donation_one) { create(:donation, amount: 200.00, appeal: appeal) }
+    let(:donation_two) { create(:donation, amount: 200.00, appeal: appeal) }
 
     it 'is removed when associated donations are missing from pledge' do
       expect(pledge).to_not be_processed

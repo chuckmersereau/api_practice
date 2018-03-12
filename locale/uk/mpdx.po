@@ -1,49 +1,39 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"PO-Revision-Date: 2017-06-08 14:36+0000\n"
+"POT-Creation-Date: 2018-02-27 21:05+0000\n"
+"PO-Revision-Date: 2018-02-27 21:05+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-
-msgid " is designated to the \"%{appeal_name}\" appeal."
-msgstr ""
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "\"%{name}\" (donor #%{account_number})"
-msgstr ""
-
-msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
-msgstr ""
+msgstr "\"%{name}\" (партнер #%{account_number})"
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
-msgstr ""
+msgstr "Від %{contact_name} очікується пожертвування через місяць. Взяти до уваги."
 
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
-msgstr ""
+msgstr "%{contact_name} тільки що надіслав вам свою першу пожертву. Надійшліть йому подяку."
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
-msgstr ""
+msgstr "%{contact_name} схоже пропустив пожертвування. Подзвоніть для уточнення."
 
 msgid "%{number_of_failed_contacts} contacts failed to import."
-msgstr ""
+msgstr "%{number_of_failed_contacts} контактів не вдалося імпортувати."
 
 msgid "%{number_of_successful_contacts} contacts imported successfully."
-msgstr ""
+msgstr "%{number_of_successful_contacts} контактів успішно імпортовано."
 
 msgid "%{number} ext %{extension}"
-msgstr ""
+msgstr "%{number} ext %{extension}"
 
 msgid "%{org_name} said we have the wrong password for your account."
-msgstr ""
-
-#, fuzzy
-msgid "-- All --"
-msgstr "-- Все --"
+msgstr "%{org_name} повідомило, що невірний пароль до вашого акаунту."
 
 msgid "-- All Active --"
 msgstr "-- Всі активні --"
@@ -58,55 +48,55 @@ msgid "-- Do not ask --"
 msgstr "-- Не питати --"
 
 msgid "-- Has referrer --"
-msgstr ""
+msgstr "-- Має рекомедателя --"
 
 msgid "-- None --"
-msgstr "-- Немає --"
+msgstr "-- Жоден --"
 
 msgid "-- Unspecified --"
 msgstr "-- Не вказано --"
 
 msgid "1 day before"
-msgstr ""
+msgstr "За 1 день"
 
 msgid "1 hour before"
-msgstr ""
+msgstr "За 1 годину"
 
 msgid "1 week before"
-msgstr ""
+msgstr "За 1 тиждень"
 
 msgid "15 minutes before"
-msgstr ""
+msgstr "За 15 хвилин"
 
 msgid "2 days before"
-msgstr ""
+msgstr "За два дні"
 
 msgid "2 hours before"
-msgstr ""
+msgstr "За 2 години"
 
 msgid "30 minutes before"
-msgstr ""
+msgstr "За 30 хвилин"
 
 msgid "5 minutes before"
-msgstr ""
+msgstr "За 5 хвилин"
 
 msgid "Account List"
-msgstr ""
+msgstr "Список акаунту"
 
 msgid "Action"
 msgstr "Дія"
 
 msgid "Add an Account"
-msgstr ""
+msgstr "Додати акаунт"
 
 msgid "Add another Account"
-msgstr ""
+msgstr "Добавити ще один обліковий запис"
 
 msgid "Address"
 msgstr "Адреса"
 
 msgid "Address No Longer Valid"
-msgstr ""
+msgstr "Адреса більше не дійсна"
 
 msgid "All"
 msgstr "Все"
@@ -115,10 +105,10 @@ msgid "Annual"
 msgstr "Щорічний"
 
 msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
-msgstr ""
+msgstr "Інший контакт в вашій організації вже має той номер партнера, який ви намагаєтесь внести для цього контакту. Будь ласка, зробіть його більш унікальним."
 
 msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
-msgstr ""
+msgstr "Інший контакт в вашому акаунті вже має той номер партнера, який ви намагаєтесь внести для цього контакту."
 
 msgid "Appeal"
 msgstr "Прохання"
@@ -130,7 +120,7 @@ msgid "Appointment Scheduled"
 msgstr "Запланована зустріч"
 
 msgid "Are marked as do not ask for appeals"
-msgstr ""
+msgstr "Відмічені як не приймаючі прохань"
 
 msgid "Ask in Future"
 msgstr "Спитати в майбутньому"
@@ -141,6 +131,7 @@ msgstr "Тітка"
 msgid "Average"
 msgstr "В середньому"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "Сер."
 
@@ -148,7 +139,7 @@ msgid "Balance: %{balance}"
 msgstr "Баланс: %{balance}"
 
 msgid "Both"
-msgstr "Обидва"
+msgstr "І так, і так"
 
 msgid "Brother"
 msgstr "Брат"
@@ -169,23 +160,22 @@ msgid "City"
 msgstr "Місто"
 
 msgid "Commitment"
-msgstr "Платіж"
+msgstr "Обіцянка"
 
 msgid "Commitment Amount"
-msgstr "Сума платежу"
+msgstr "Обіцяна сума"
 
 msgid "Commitment Currency"
-msgstr "Валюта платежу"
+msgstr "Валюта обіцянки"
 
 msgid "Commitment Details"
-msgstr "Дані про платіж"
+msgstr "Дані про обіцянку"
 
 msgid "Commitment Frequency"
-msgstr "Частота платежів"
+msgstr "Частота обіцянки"
 
-#, fuzzy
 msgid "Commitment Received"
-msgstr "Дані про платіж"
+msgstr "Обіцянку отримано"
 
 msgid "Company"
 msgstr "Компанія"
@@ -193,52 +183,20 @@ msgstr "Компанія"
 msgid "Completed"
 msgstr "Завершено"
 
-msgid "Contact Church"
-msgstr ""
-
-#, fuzzy
-msgid "Contact Commitment Details"
-msgstr "Дані про платіж"
-
 msgid "Contact Details"
-msgstr "Контактні дані"
-
-#, fuzzy
-msgid "Contact Gift Details"
 msgstr "Контактні дані"
 
 msgid "Contact Information"
 msgstr "Контактні дані"
 
-msgid "Contact Likely To Give"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Location"
-msgstr "Контактні дані"
+msgstr "Місце розташування контакту"
 
 msgid "Contact Name"
 msgstr "Ім'я контакту"
 
-msgid "Contact Newsletter"
-msgstr ""
-
-msgid "Contact Referrer"
-msgstr ""
-
-#, fuzzy
-msgid "Contact Status"
-msgstr "Контактні дані"
-
-msgid "Contact Timezone"
-msgstr ""
-
-#, fuzzy
-msgid "Contact Type"
-msgstr "Ім'я контакту"
-
 msgid "Contact for Appointment"
-msgstr ""
+msgstr "Контакт для зустрічі"
 
 msgid "Contacts"
 msgstr "Контакти"
@@ -262,13 +220,13 @@ msgid "Daughter"
 msgstr "Донька"
 
 msgid "Dear Donation Services"
-msgstr ""
+msgstr "Шановна служба пожертвувань"
 
 msgid "Details"
 msgstr "Докладно"
 
 msgid "Divorced"
-msgstr ""
+msgstr "Розлучений/а"
 
 msgid "Done"
 msgstr "Готово"
@@ -276,77 +234,64 @@ msgstr "Готово"
 msgid "Donor system"
 msgstr "Система пожертвувань"
 
-#, fuzzy
 msgid "Dr."
-msgstr "Пан"
+msgstr "Док."
 
-#, fuzzy
 msgid "Due Date"
-msgstr "Без дати"
+msgstr "Термін"
 
-#, fuzzy
 msgid "Email"
-msgstr "Ел. пошта 1"
+msgstr "Ел.пошта"
 
+#. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "Заручений(-на)"
 
+#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
-msgstr ""
+msgstr "Вітання на конверті"
 
 msgid "Every 2 Months"
-msgstr ""
+msgstr "Кожні 2 місяці"
 
 msgid "Every 2 Weeks"
-msgstr ""
+msgstr "Кожні 2 тижні"
 
 msgid "Every 2 Years"
-msgstr ""
+msgstr "Кожні 2 роки"
 
 msgid "Every 4 Months"
-msgstr ""
+msgstr "Кожні 4 місяці"
 
 msgid "Every 6 Months"
-msgstr ""
-
-msgid "Exact Gift Amount"
-msgstr ""
+msgstr "Кожні 6 місяців"
 
 msgid "Expired Referral"
-msgstr ""
+msgstr "Протермінована рекомендація"
 
 msgid "Facebook Message"
-msgstr ""
+msgstr "Повідомлення Facebook"
 
 msgid "Facebook Profile"
-msgstr ""
+msgstr "Профіль Facebook"
 
 msgid "Father"
 msgstr "Батько"
 
-#, fuzzy
 msgid "First Gift"
-msgstr "Остання пожертва ( подарунок)"
+msgstr "Перша пожертва"
 
 msgid "First Name"
 msgstr "Ім'я"
 
-msgid ""
-"For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n"
-"  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n"
-"  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n"
-"  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n"
-"  address on MPDX it will update on mailchimp)."
-msgstr ""
-
 msgid "Future"
-msgstr ""
+msgstr "Майбутній"
 
 msgid "Gave a special gift in the last 3 months"
-msgstr ""
+msgstr "Дав особливу пожертву за останні 3 місяці"
 
 msgid "Gift Amount Higher Than or Equal To"
-msgstr "Вартість подарунку не менш ніж"
+msgstr "Вартість пожертви не менш ніж"
 
 msgid "Gift Amount Less Than or Equal To"
 msgstr "Вартість подарунку не більш ніж"
@@ -364,7 +309,7 @@ msgid "Gift Options"
 msgstr "Варіанти подарунку"
 
 msgid "Google Integration Settings"
-msgstr ""
+msgstr "Налаштування Google інтеграції"
 
 msgid "Google account needs to be refreshed"
 msgstr "Необхідно оновити обліковий запис Google"
@@ -376,7 +321,7 @@ msgid "Google sync"
 msgstr "Синхронізація Google"
 
 msgid "Granddaughter"
-msgstr "Онучка"
+msgstr "Онука"
 
 msgid "Grandfather"
 msgstr "Дідусь"
@@ -399,19 +344,15 @@ msgstr "Головна сторінка"
 msgid "Home Phone"
 msgstr "Домашній телефон"
 
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "Шановн."
 
 msgid "Husband"
 msgstr "Чоловік"
 
-msgid ""
-"If you do want to stick with your existing list, you will need to make that extra merge field not a\n"
-"  required field."
-msgstr ""
-
-msgid "Increase Gift Recommendation"
-msgstr ""
+msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
+msgstr "Якщо ви хочете продовжити користуватися наявним списком, вам треба зробити це додаткове об'єднане поле \nнеобов'язковим."
 
 msgid "Increased their giving in the last 3 months"
 msgstr "Збільшили свої пожертвування за остані 3 місяці"
@@ -420,11 +361,10 @@ msgid "Insights for "
 msgstr "Дані для"
 
 msgid "Joined my team in the last 3 months"
-msgstr ""
+msgstr "Приєднався до моєї команди за останні 3 місяці"
 
-#, fuzzy
 msgid "Jr."
-msgstr "Пан"
+msgstr "Мол."
 
 msgid "Language"
 msgstr "Мова"
@@ -447,29 +387,26 @@ msgstr "За останні три місяці"
 msgid "Last Two Months"
 msgstr "За останнні два місяці"
 
-#, fuzzy
 msgid "Last Two Years"
-msgstr "За останнні два місяці"
+msgstr "Два останні роки"
 
-#, fuzzy
 msgid "Last Week"
-msgstr "Наступного тижня"
+msgstr "Останній тиждень"
 
 msgid "Last Year"
-msgstr ""
+msgstr "Останній рік"
 
 msgid "Last month"
 msgstr "За останній місяць"
 
 msgid "Late By"
-msgstr ""
+msgstr "Запізнення на"
 
-#, fuzzy
 msgid "Least Likely"
-msgstr "Ймовірно"
+msgstr "Найменьш ймовірно"
 
 msgid "Less than 30 days late"
-msgstr ""
+msgstr "Запізнення меньш ніж 30 днів"
 
 msgid "Letter"
 msgstr "Лист"
@@ -478,34 +415,34 @@ msgid "Likely"
 msgstr "Ймовірно"
 
 msgid "Likely To Give"
-msgstr ""
+msgstr "Схильний до пожертвування"
 
 msgid "MPDX List: %{name}"
-msgstr ""
+msgstr "Список MPDX: %{name}"
 
 msgid "MPDX Support Team"
-msgstr ""
+msgstr "Команда підтримки MPDX "
 
 msgid "MPDX encountered errors while trying to import your %{source} contacts."
-msgstr ""
+msgstr "MPDX стикнулася з помилками під час імпорту ваших %{source} контактів."
 
 msgid "MPDX has finished importing your %{source} contacts."
-msgstr ""
+msgstr "MPDX завершив імпорт ваших %{source} контактів."
 
 msgid "MailChimp Integration Settings"
-msgstr ""
+msgstr "Налаштування MailChimp інтеграції."
 
 msgid "MailChimp subscriber email bounced"
-msgstr ""
+msgstr "Електроне повідомлення підписникові MailChimp повернулося"
 
 msgid "Mailchimp API Key no longer valid"
-msgstr ""
+msgstr "Ключ API MailChimp більше недоступний"
 
 msgid "Mailchimp List is requiring an additional merge field"
-msgstr ""
+msgstr "Список Mailchimp вимагає додаткового поля злиття"
 
 msgid "Mailing"
-msgstr ""
+msgstr "Поштовий"
 
 msgid "Mailing City"
 msgstr "Місто"
@@ -523,44 +460,43 @@ msgid "Mailing Street Address"
 msgstr "Поштова адреса"
 
 msgid "Manual entry"
-msgstr ""
+msgstr "Ручний ввод"
 
 msgid "Married"
 msgstr "Одружений/Заміжня"
 
 msgid "May take a few days to update"
-msgstr ""
+msgstr "Оновлення може забрати кілька днів"
 
 msgid "Metro Area"
 msgstr "Район метро"
 
 msgid "Min."
-msgstr ""
+msgstr "Miн."
 
 msgid "Minimum"
-msgstr ""
+msgstr "Мінімум"
 
 msgid "Miss"
 msgstr "Пані"
 
 msgid "Mobile"
-msgstr ""
+msgstr "Мобільний"
 
-#, fuzzy
 msgid "Mobile Phone"
-msgstr "Домашній телефон"
+msgstr "Мобільний телефон"
 
 msgid "Monthly"
 msgstr "Щомісяця"
 
 msgid "More than 30 days late"
-msgstr ""
+msgstr "Запізнення більше ніж 30 днів"
 
 msgid "More than 60 days late"
-msgstr ""
+msgstr "Запізнення більш ніж 60 днів"
 
 msgid "More than 90 days late"
-msgstr ""
+msgstr "Запізнення більш ніж 90 днів"
 
 msgid "Most Likely"
 msgstr "Ймовірно"
@@ -593,13 +529,13 @@ msgid "Newsletter"
 msgstr "Розсилка новин"
 
 msgid "Newsletter - Email"
-msgstr ""
+msgstr "Розсилка новин- Email"
 
 msgid "Newsletter - Physical"
-msgstr ""
+msgstr "Розсилка новин- фізично"
 
 msgid "Newsletter Recipients"
-msgstr ""
+msgstr "Отримувачі розсилки новин"
 
 msgid "Next Month"
 msgstr "Наступного місяця"
@@ -614,29 +550,28 @@ msgid "No"
 msgstr "Ні"
 
 msgid "No Date"
-msgstr "Без дати"
+msgstr "Немає дати"
 
 msgid "No Gifts"
-msgstr "Без подарунків"
+msgstr "Немає пожертв"
 
 msgid "No Incomplete Tasks"
-msgstr ""
+msgstr "Немає незавершених завдань"
 
 msgid "No Subject"
-msgstr ""
+msgstr "Немає теми"
 
-#, fuzzy
 msgid "No email addess on file"
-msgstr "У файлі відсутня поштова адреса"
+msgstr "У файлі відсутня електронна адреса"
 
 msgid "No mailing address on file"
 msgstr "У файлі відсутня поштова адреса"
 
 msgid "No mailing address or email addess on file"
-msgstr ""
+msgstr "У файлі відсутня поштова або електронна адреса"
 
 msgid "None"
-msgstr "Ні"
+msgstr "Жоден"
 
 msgid "Not Interested"
 msgstr "Не цікаво"
@@ -647,35 +582,29 @@ msgstr "Не отримано"
 msgid "Notes"
 msgstr "Примітки"
 
-#, fuzzy
 msgid "Nothing Selected"
-msgstr "Немає обраних"
+msgstr "Нічого не вибрано"
 
 msgid "Notifications from MPDX"
 msgstr "Повідомлення від MPDX"
 
 msgid "One of my donors, %{donor} has a new current address."
-msgstr ""
+msgstr "Один з моїх партнерів, %{donor},змінив поточну адресу."
 
 msgid "One or More Gifts"
-msgstr "Не менше одного подарунку"
+msgstr "Одна і більше пожертв"
 
 msgid "Other"
 msgstr "Інше"
 
 msgid "Other Email"
-msgstr ""
+msgstr "Інший Email"
 
-#, fuzzy
 msgid "Other Phone"
-msgstr "Домашній телефон"
+msgstr "Інший телефон"
 
-msgid "Outstanding"
-msgstr ""
-
-#, fuzzy
 msgid "Overdue"
-msgstr "В середньому"
+msgstr "Протерміновано"
 
 msgid "Partner"
 msgstr "Партнер"
@@ -689,82 +618,73 @@ msgstr "Молитовний партнер"
 msgid "Partner - Special"
 msgstr "Особливий партнер"
 
-msgid "Pending"
-msgstr ""
-
 msgid "Person"
 msgstr "Людина"
 
 msgid "Physical"
-msgstr ""
+msgstr "Фізично"
 
 msgid "Please try updating it here: %{link}"
-msgstr ""
+msgstr "Будь ласка, спробуйте це оновити тут: %{link}"
 
 msgid "Please update their address to"
-msgstr ""
+msgstr "Будь ласка, оновіть їх адресу"
 
 msgid "Pledge"
 msgstr "Обіцянка"
 
-#, fuzzy
-msgid "Pledge Status"
-msgstr "Статус партнера"
-
 msgid "Prayer Request"
-msgstr ""
+msgstr "Молитовне прохання"
 
 msgid "Pre Call Letter"
-msgstr ""
+msgstr "Лист перед дзвінком"
 
 msgid "Primary Email"
 msgstr "Основна адреса ел. пошти"
 
 msgid "Primary Phone"
-msgstr ""
+msgstr "Основний телефон"
 
 msgid "Quarterly"
-msgstr ""
+msgstr "Раз на квартал"
 
 msgid "REPLACE WITH NEW CITY, STATE, ZIP"
-msgstr ""
+msgstr "ЗМІНІТЬ МІСТО, РЕГІОН, ІНДЕКС"
 
 msgid "REPLACE WITH NEW STREET"
-msgstr ""
+msgstr "ЗМІНІТЬ ВУЛИЦЮ"
 
 msgid "Received"
 msgstr "Отримано"
 
-msgid "Received, but not Processed"
-msgstr ""
-
 msgid "Referrals"
 msgstr "Рекомендації"
 
-#, fuzzy
 msgid "Referrer"
-msgstr "Рекомендації"
+msgstr "Рекомендавець"
 
 msgid "Region"
-msgstr ""
+msgstr "Регіон"
 
 msgid "Reminder Letter"
-msgstr ""
+msgstr "Лист-нагадування"
 
 msgid "Research Abandoned"
-msgstr ""
+msgstr "Research Abandoned"
 
+#. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
-msgstr ""
+msgstr "Преп."
 
 msgid "Seasonal"
-msgstr ""
+msgstr "Сезонно"
 
 msgid "Separated"
-msgstr ""
+msgstr "Розділено"
 
+#. this is a relationship status
 msgid "Single"
-msgstr ""
+msgstr "Один/на"
 
 msgid "Sister"
 msgstr "Сестра"
@@ -773,28 +693,25 @@ msgid "Son"
 msgstr "Син"
 
 msgid "Spouse Email"
-msgstr ""
+msgstr "Ел.пошта подружжя"
 
 msgid "Spouse First Name"
-msgstr ""
+msgstr "Ім'я подружжя"
 
 msgid "Spouse Other Email"
-msgstr ""
+msgstr "Інша ел.пошта подружжя"
 
 msgid "Spouse Other Phone"
-msgstr ""
+msgstr "Інший телефон подружжя"
 
-#, fuzzy
 msgid "Spouse Phone"
-msgstr "Домашній телефон"
+msgstr "Телефон подружжя"
 
-#, fuzzy
 msgid "Sr."
-msgstr "Пан"
+msgstr "Sr."
 
-#, fuzzy
 msgid "Starred"
-msgstr "Одружений/Заміжня"
+msgstr "Starred"
 
 msgid "State"
 msgstr "Регіон"
@@ -803,16 +720,16 @@ msgid "Status"
 msgstr "Статус"
 
 msgid "Stopped giving for the last 2 months"
-msgstr ""
+msgstr "Перестав жертвувати останні 2 місяці"
 
 msgid "Support Letter"
-msgstr ""
+msgstr "Лист підтримки"
 
 msgid "Tags"
 msgstr "Теги"
 
 msgid "Talk to In Person"
-msgstr ""
+msgstr "Поговорити особисто"
 
 msgid "Task on MPDX"
 msgstr "Завдання в MPDX"
@@ -833,50 +750,16 @@ msgid "Thanks!"
 msgstr "Дякую!"
 
 msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
-msgstr ""
-
-msgid ""
-"The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n"
-"  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n"
-"  unable to sync your contacts to MailChimp."
-msgstr ""
+msgstr "Ця адреса ел. пошти відмічена як «більше недоступна». Відредагуйте дані людей, натиснувши на ім'я вище, і перевірте чи правильні дані. При зміні адреси ел. пошти він стане основним і буде синхронізований в MailChimp, еякщо цей користувач доданий до вашої поштової розсилки. якщо ви не хочете включати цю адресу в  MailChimp, видаліть її, обравши варіант «Виключити з розсилки новин» або зробіть основною іншу адресу."
 
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "Необхідно оновити з'єднання з вашим акаунтом на  LinkedIn."
 
-msgid ""
-"The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n"
-"  automatically sync with your Google account, please go to %{link}\n"
-"  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n"
-"  that you had set already."
-msgstr ""
-
-msgid ""
-"The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n"
-"  automatically push changes over to prayerletters.com, please go to\n"
-"  and click the 'Enable' button"
-msgstr ""
-
 msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
-msgstr ""
+msgstr "Необхідно оновити прив'язку до вашого облікового запису  Facebook. <a href=\"/auth/facebook\">Натисніть тут для повторного підключення  Facebook</a> і спробуйте наново зробити імпорт."
 
-msgid ""
-"The mailchimp API key associated with your MPDX account is no longer valid.\n"
-"If you would like Mailchimp syncronization to continue to work, please go to\n"
-" %{link} and update your API key."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
-msgstr ""
-
-msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
-msgstr ""
+msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
+msgstr "Ключ API MailChimp, прив'язаний до вашого облікового запису MPDX, більше недоступний.\nЯкщо ви хочете, щоб синхронізація MailChimp продовжила работу, перейдіть за адресою\n %{link} та оновіть ключ API."
 
 msgid "This Month"
 msgstr "За цей місяць"
@@ -888,7 +771,7 @@ msgid "This Year"
 msgstr "За цей рік"
 
 msgid "This donation was imported from Tnt."
-msgstr ""
+msgstr "Це пожертвування було імпортовано з Tnt."
 
 msgid "Timezone"
 msgstr "Часовий пояс"
@@ -909,11 +792,10 @@ msgid "Total"
 msgstr "Разом"
 
 msgid "Total (last month excluded from total)"
-msgstr ""
+msgstr "Всього (без врахування останнього місяця)"
 
-#, fuzzy
 msgid "Totals"
-msgstr "Разом"
+msgstr "Всього"
 
 msgid "Type"
 msgstr "Тип"
@@ -930,11 +812,8 @@ msgstr "Без відповіді"
 msgid "Upcoming"
 msgstr "Невдовзі"
 
-msgid ""
-"We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n"
-"  chosen one of the options above, please go back to %{link}\n"
-"  and update your MailChimp settings."
-msgstr ""
+msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
+msgstr "Ми тимчасово відключили список MailChimp від MPDX для запобігання подальших помилок. Як тільки ви оберете один з варінтів вище, будь ласка, поверніться до %{link} та оновіть налаштування MailChimp."
 
 msgid "Weekly"
 msgstr "Щотижня"
@@ -948,9 +827,8 @@ msgstr "Дружина"
 msgid "Work"
 msgstr "Робочий"
 
-#, fuzzy
 msgid "Work Phone"
-msgstr "Домашній телефон"
+msgstr "Робочий телефон"
 
 msgid "Yes"
 msgstr "Так"
@@ -958,54 +836,51 @@ msgstr "Так"
 msgid "Yesterday"
 msgstr "Вчора"
 
-msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
-msgstr ""
-
 msgid "You have no monthly recurring gift recommendations."
-msgstr ""
+msgstr "У вам немає рекомендацій щодо регулярних щомісячних пожертв."
 
 msgid "You must log in to MPDX again"
-msgstr ""
+msgstr "Вам треба знову зайти в MPDX"
 
 msgid "You must select at least 2 contacts to merge."
-msgstr ""
+msgstr "Ви мусите обрати принаймні 2 контакти для об'єднання."
 
 msgid "You've been invited to access an account on MPDX"
-msgstr ""
+msgstr "Вас запросили зайти в обліковий запис в MPDX"
 
 msgid "You've been invited to be a coach for an account on MPDX"
-msgstr ""
+msgstr "Вас запросили бути тренером для облікового запису в MPDX"
 
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
-msgstr ""
+msgstr "Ваш контакт MPDX «%{contact}» має людину <a href=\"%{edit_person_url}\">%{person_name}</a>, який був  синхронізований чи експортований в MailChimp з недійсною адресою  ел. пошти: %{email}"
 
 msgid "Your username and password are missing for this account."
-msgstr ""
+msgstr "Відсутні ваші логін та пароль для цього акаунту."
 
 msgid "Your username and password for %{org} are invalid."
-msgstr ""
+msgstr "Ваші ім'я та пароль недійсні для %{org}."
 
 msgid "[MPDX] Importing your %{source} contacts completed"
-msgstr ""
+msgstr "[MPDX] Імпорт ваших %{source} контактів завершено"
 
 msgid "[MPDX] Importing your %{source} contacts failed"
-msgstr ""
+msgstr "[MPDX] Імпорт ваших %{source} контактів невдався"
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
-msgstr ""
+msgstr "[MPDX] Ваші ім'я та пароль недійсні для %{source}"
 
 msgid "at the time of event"
-msgstr ""
+msgstr "Під час події"
 
 msgid "can not be blank"
-msgstr ""
+msgstr "не повинно бути пустим"
 
 msgid "converted as"
-msgstr ""
+msgstr "конвертовано як"
 
 msgid "of total"
-msgstr ""
+msgstr "всього"
 
-#, fuzzy
 msgid "prayerletters.com account needs to be refreshed"
-msgstr "Необхідно оновити обліковий запис Google"
+msgstr "Акаунт prayerletters.com необхідно оновити"
+

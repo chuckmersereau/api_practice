@@ -1,11 +1,15 @@
 require 'gettext_i18n_rails/string_interpolate_fix'
 text_domain = FastGettext.add_text_domain 'mpdx', path: 'locale', type: :po, report_warning: false
 FastGettext.default_text_domain = 'mpdx'
-I18n.config.available_locales = ['en', 'en-US','de','fr-FR', 'fr-CA', 'en', 'es-419', 'it', 'ko', 'pt-BR', 'ru', 'id', 'ar', 'zh-HANS-CH', 'tr', 'th', 'hy']
+I18n.config.available_locales = [
+  'en', 'en-US','de','fr-FR', 'fr-CA', 'en', 'es-419', 'it', 'ko', 'pt-BR', 'ru', 'id', 'ar',
+  'zh-HANS-CH', 'tr', 'th', 'hy', 'nl-NL'
+]
 FastGettext.default_available_locales = I18n.config.available_locales.map{ |locale| locale.to_s.tr('-', '_') }
 GettextI18nRails.translations_are_html_safe = true
 
-# Overwrite the find_files_in_locale_folders method to not check the locale with the limiting REGEX before fetching the file.module FastGettext.
+# Overwrite the find_files_in_locale_folders method to not check the locale with the limiting REGEX
+# before fetching the file.module FastGettext.
 # We need this for locales like es-419 which the REGEX check would prevent from being loaded.
 module FastGettext
   module TranslationRepository

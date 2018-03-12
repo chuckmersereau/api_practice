@@ -1,7 +1,9 @@
 LANGUAGES_CONSTANT = {
   'en-us'      => 'US English',
   'ar'         => 'Arabic',
+  'hy'         => 'Armenian',
   'zh-hans-cn' => 'Chinese (Simplified)',
+  'nl-nl'      => 'Dutch (Netherlands)',
   'fr-fr'      => 'French (France)',
   'fr-ca'      => 'French (Canadian)',
   'de'         => 'German',
@@ -14,6 +16,5 @@ LANGUAGES_CONSTANT = {
   'es-419'     => 'Spanish (Latin America)',
   'th'         => 'Thai',
   'tr'         => 'Turkish',
-  'uk'         => 'Ukranian',
-  'hy'         => 'Armenian'
+  'uk'         => 'Ukranian'
 }.freeze
