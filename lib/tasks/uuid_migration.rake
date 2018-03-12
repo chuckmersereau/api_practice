@@ -1,3 +1,4 @@
+# rubocop:disable BlockLength
 namespace :mpdx do
   task ensure_uuids: :environment do
     tables_for_uuid_fill = %w(activities activity_comments activity_contacts appeal_contacts appeal_excluded_appeal_contacts)
