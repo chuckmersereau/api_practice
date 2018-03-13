@@ -25,5 +25,14 @@ RSpec.describe Audited::AuditElastic, type: :model do
     it 'changes back a value' do
       expect { subject.undo }.to change { audited.reload.first_name }.to('Steve')
     end
+
+    it 'saves an audit with comment' do
+      allow_any_instance_of(audited.class).to receive(:system_auditing_enabled).and_return(true)
+      subject
+      comment = 'Test'
+
+      expect { subject.undo(comment) }.to change(AuditChangeWorker.jobs, :size).by(1)
+      expect(AuditChangeWorker.jobs.dig(-1, 'args', 0, 'comment')).to eq comment
+    end
   end
 end

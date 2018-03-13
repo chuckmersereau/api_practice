@@ -23,22 +23,27 @@ module Audited
       JSON.parse audited_changes.gsub('=>', ':').gsub('nil', 'null')
     end
 
-    def undo
-      model = auditable_type.constantize
+    def undo(comment = nil)
+      object = audited_object
+      object.audit_comment = comment
+
       if action == 'create'
         # destroys a newly created record
-        model.find(auditable_id).destroy!
+        object.destroy!
       elsif action == 'destroy'
         # creates a new record with the destroyed record attributes
-        model.create(parsed_audited_changes)
+        object.save
       else
         # changes back attributes
-        audited_object = model.find(auditable_id)
-        parsed_audited_changes.each do |k, v|
-          audited_object[k] = v[0]
-        end
-        audited_object.save
+        parsed_audited_changes.each { |attrs, changes| object[attrs] = changes[0] }
+        object.save
       end
+    end
+
+    def audited_object
+      model = auditable_type.constantize
+      return model.find(auditable_id) unless action == 'destroy'
+      auditable_type.constantize.new(parsed_audited_changes)
     end
 
     def user
