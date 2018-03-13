@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Contact::Filter::GaveMoreThanPledgedRange do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let!(:designation_account) { create(:designation_account, account_lists: [account_list]) }
 
   describe '#query' do

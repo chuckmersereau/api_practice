@@ -18,7 +18,7 @@ module Auth
 
     def current_account_list
       @account_list ||= current_user.account_lists
-                                    .find_by(uuid: session['account_list_id'])
+                                    .find_by(id: session['account_list_id'])
     end
   end
 end

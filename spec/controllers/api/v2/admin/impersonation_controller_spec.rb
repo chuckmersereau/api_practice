@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Api::V2::Admin::ImpersonationController do
-  let(:user) { create(:user_with_account, admin: true) }
-  let(:user_to_impersonate) { create(:user) }
-  let!(:relay_account) { create(:relay_account, user: user_to_impersonate) }
-  let(:account_list) { user.account_lists.first }
+  let!(:user) { create(:user_with_account, admin: true) }
+  let(:email) { 'bob@burgers.com' }
+  let!(:user_to_impersonate) { create(:user, email: email) }
+  let!(:relay_account) { create(:relay_account, user: user_to_impersonate, email: email) }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:given_resource_type) { :impersonation }
   let(:correct_attributes) { { reason: 'Reason' } }
   let(:response_data) { JSON.parse(response.body)['data'] }
@@ -23,7 +24,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
       expect(response.status).to eq(403)
     end
 
-    it 'returns a 404 when the user uuid does not exist' do
+    it 'returns a 404 when the user id does not exist' do
       full_correct_attributes[:data][:attributes][:user] = SecureRandom.uuid
       api_login(user)
       post :create, full_correct_attributes
@@ -38,11 +39,11 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
     end
 
     it 'returns a 200 when an admin is logged in and searches the user by ID' do
-      expect_admin_user_to_be_able_to_impersonate_with_id(user_to_impersonate.uuid)
+      expect_admin_user_to_be_able_to_impersonate_with_id(user_to_impersonate.id)
     end
 
     it 'returns a 200 when an admin is logged in and searches the user by email' do
-      expect_admin_user_to_be_able_to_impersonate_with_id(relay_account.email)
+      expect_admin_user_to_be_able_to_impersonate_with_id(email)
     end
 
     def expect_admin_user_to_be_able_to_impersonate_with_id(user_key)
@@ -55,7 +56,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
       expect(response.status).to eq(200)
       expect(response_data['attributes']['json_web_token']).to eq(
         JsonWebToken.encode(
-          user_uuid: user_to_impersonate.uuid,
+          user_id: user_to_impersonate.id,
           exp: 1.hour.from_now.utc.to_i
         )
       )

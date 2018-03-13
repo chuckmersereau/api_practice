@@ -7,7 +7,7 @@ resource 'Resets' do
   let(:admin_user) { create(:user, admin: true) }
   let(:reset_user) { create(:user_with_account) }
   let!(:key_account) { create(:key_account, person: reset_user) }
-  let(:account_list) { reset_user.account_lists.first }
+  let(:account_list) { reset_user.account_lists.order(:created_at).first }
   let(:request_type) { 'resets' }
   let(:form_data) do
     build_data(resetted_user_email: key_account.email,

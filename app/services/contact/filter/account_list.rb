@@ -1,6 +1,6 @@
 class Contact::Filter::AccountList < Contact::Filter::Base
   def execute_query(contacts, filters)
-    contacts.where(account_list_uuid: parse_list(filters[:account_list_id]))
+    contacts.where(account_list_id: parse_list(filters[:account_list_id]))
   end
 
   def title
@@ -12,6 +12,6 @@ class Contact::Filter::AccountList < Contact::Filter::Base
   end
 
   def custom_options
-    account_lists.collect { |account_list| { name: account_list.name, id: account_list.uuid } }
+    account_lists.collect { |account_list| { name: account_list.name, id: account_list.id } }
   end
 end

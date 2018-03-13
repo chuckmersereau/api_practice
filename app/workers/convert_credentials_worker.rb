@@ -27,7 +27,7 @@ class ConvertCredentialsWorker
     CSV.new(response, headers: :first_row).each do |line|
       organization_account.update(token: line['Token']) if line['Token']
     end
-  rescue => ex
+  rescue StandardError => ex
     Rollbar.error(ex, organization_account_id: organization_account.id)
   end
 

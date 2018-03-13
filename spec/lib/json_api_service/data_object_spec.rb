@@ -87,7 +87,7 @@ module JsonApiService
             account_list: {
               data: {
                 type: 'account_lists',
-                id: 'uuid-account-list'
+                id: 'id-account-list'
               }
             }
           }
@@ -111,7 +111,7 @@ module JsonApiService
       before do
         contact_data = {
           type: 'contacts',
-          id: 'uuid-contact',
+          id: 'id-contact',
           attributes: {
             first_name: 'Tony',
             last_name: 'Stark'
@@ -120,7 +120,7 @@ module JsonApiService
 
         email_data = {
           type: 'emails',
-          id: 'uuid-email',
+          id: 'id-email',
           attributes: {
             email: 'ironman@avengers.co'
           }
@@ -134,14 +134,14 @@ module JsonApiService
       it 'will fetch attributes from stored versions if they exist' do
         data = {
           type: 'contacts',
-          id: 'uuid-contact',
+          id: 'id-contact',
           attributes: {}, # empty on purpose
           relationships: {
             emails: {
               data: [
                 {
                   type: 'emails',
-                  id: 'uuid-email'
+                  id: 'id-email'
                 }
               ]
             }

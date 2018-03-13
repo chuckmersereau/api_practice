@@ -1,4 +1,3 @@
-# coding: utf-8
 require 'rails_helper'
 
 RSpec.describe 'Patch Requests', type: :request do
@@ -18,7 +17,7 @@ RSpec.describe 'Patch Requests', type: :request do
     {
       data: {
         type: 'users',
-        attributes: update_attributes.merge(updated_in_db_at: user.updated_at)
+        attributes: update_attributes.merge(overwrite: true)
       }
     }
   end
@@ -40,13 +39,13 @@ RSpec.describe 'Patch Requests', type: :request do
     end
 
     context 'with unsupported/forbidden parameters (403)' do
-      let(:account_list) { user.account_lists.first }
-      let(:id) { account_list.uuid }
+      let(:account_list) { user.account_lists.order(:created_at).first }
+      let(:id) { account_list.id }
       let(:update_attributes) { attributes_for(:account_list) }
       let(:full_update_attributes) do
         {
           data: {
-            id: account_list.uuid,
+            id: account_list.id,
             type: 'account_lists',
             attributes: update_attributes.merge(updated_in_db_at: account_list.updated_at)
           }
@@ -61,11 +60,11 @@ RSpec.describe 'Patch Requests', type: :request do
     end
 
     context 'against a resource that does not exist (404)' do
-      let(:mock_uuid) { SecureRandom.uuid }
+      let(:mock_id) { SecureRandom.uuid }
       let(:missing_resource_attributes) do
         {
           data: {
-            id: mock_uuid,
+            id: mock_id,
             type: 'contacts',
             attributes: {
               name: 'foo_bar',
@@ -76,7 +75,7 @@ RSpec.describe 'Patch Requests', type: :request do
       end
 
       it 'should return a not found status (404)' do
-        put api_v2_contact_path(mock_uuid), missing_resource_attributes.to_json, headers
+        put api_v2_contact_path(mock_id), missing_resource_attributes.to_json, headers
         expect(response.status).to eq(404), invalid_status_detail
       end
     end
@@ -98,13 +97,13 @@ RSpec.describe 'Patch Requests', type: :request do
       end
 
       it 'should return a not found status (404)' do
-        put api_v2_user_organization_account_path(user.uuid), missing_related_resource_attributes.to_json, headers
+        put api_v2_user_organization_account_path(user.id), missing_related_resource_attributes.to_json, headers
         expect(response.status).to eq(404), invalid_status_detail
       end
     end
 
     context 'in which the resource object’s type does not match the server’s endpoint (409)' do
-      let(:account_list) { user.account_lists.first }
+      let(:account_list) { user.account_lists.order(:created_at).first }
       let(:task) { create(:task, account_list: account_list) }
       let(:constrained_attributes) do
         {
@@ -118,19 +117,19 @@ RSpec.describe 'Patch Requests', type: :request do
         }
       end
       it 'should return a conflict status (409)' do
-        put api_v2_task_path(task.uuid), constrained_attributes.to_json, headers
+        put api_v2_task_path(task.id), constrained_attributes.to_json, headers
         expect(response.status).to eq(409), invalid_status_detail
       end
     end
 
     context 'in which the resource object’s id does not match the server’s endpoint (409)' do
-      let(:mock_uuid) { SecureRandom.uuid }
-      let(:account_list) { user.account_lists.first }
+      let(:mock_id) { SecureRandom.uuid }
+      let(:account_list) { user.account_lists.order(:created_at).first }
       let(:task) { create(:task, account_list: account_list) }
       let(:constrained_attributes) do
         {
           data: {
-            id: mock_uuid,
+            id: mock_id,
             type: 'account_lists',
             attributes: {
               updated_in_db_at: task.updated_at
@@ -139,19 +138,19 @@ RSpec.describe 'Patch Requests', type: :request do
         }
       end
       it 'should return a conflict status (409)' do
-        put api_v2_task_path(task.uuid), constrained_attributes.to_json, headers
+        put api_v2_task_path(task.id), constrained_attributes.to_json, headers
         expect(response.status).to eq(409), invalid_status_detail
       end
     end
   end
 
   context 'in which the resource is expired (409)' do
-    let(:account_list) { user.account_lists.first }
+    let(:account_list) { user.account_lists.order(:created_at).first }
     let(:task) { create(:task, account_list: account_list) }
     let(:expired_attributes) do
       {
         data: {
-          id: task.uuid,
+          id: task.id,
           type: 'tasks',
           attributes: {
             updated_in_db_at: Time.parse('2016-01-26')
@@ -160,7 +159,7 @@ RSpec.describe 'Patch Requests', type: :request do
       }
     end
     it 'should return a conflict status (409)' do
-      put api_v2_task_path(task.uuid), expired_attributes.to_json, headers
+      put api_v2_task_path(task.id), expired_attributes.to_json, headers
       expect(response.status).to eq(409), invalid_status_detail
     end
   end

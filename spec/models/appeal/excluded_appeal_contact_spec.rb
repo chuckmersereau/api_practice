@@ -6,7 +6,7 @@ RSpec.describe Appeal::ExcludedAppealContact, type: :model do
   it { is_expected.to belong_to(:contact) }
   it { is_expected.to validate_presence_of(:appeal) }
   it { is_expected.to validate_presence_of(:contact) }
-  it { is_expected.to validate_uniqueness_of(:contact_id).scoped_to(:appeal_id) }
+  it { is_expected.to validate_uniqueness_of(:contact_id).scoped_to(:appeal_id).case_insensitive }
 
   describe 'account list for appeal is not the same as contact' do
     let(:account_list) { create(:account_list) }

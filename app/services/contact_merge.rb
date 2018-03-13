@@ -94,17 +94,11 @@ class ContactMerge
                                                                   @other.send_newsletter)
 
       # If one of these is marked as a finanical partner, we want that status
-      if @winner.status != 'Partner - Financial' && @other.status == 'Partner - Financial'
-        @winner.status = 'Partner - Financial'
-      end
+      @winner.status = 'Partner - Financial' if @winner.status != 'Partner - Financial' && @other.status == 'Partner - Financial'
 
       # Make sure first and last donation dates are correct
-      if @winner.first_donation_date && @other.first_donation_date && @winner.first_donation_date > @other.first_donation_date
-        @winner.first_donation_date = @other.first_donation_date
-      end
-      if @winner.last_donation_date && @other.last_donation_date && @winner.last_donation_date < @other.last_donation_date
-        @winner.last_donation_date = @other.last_donation_date
-      end
+      @winner.first_donation_date = @other.first_donation_date if @winner.first_donation_date && @other.first_donation_date && @winner.first_donation_date > @other.first_donation_date
+      @winner.last_donation_date = @other.last_donation_date if @winner.last_donation_date && @other.last_donation_date && @winner.last_donation_date < @other.last_donation_date
 
       @winner.notes = [@winner.notes, @other.notes].compact.join("\n").strip if @other.notes.present?
 

@@ -4,20 +4,20 @@ RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller 
   let(:user) { create(:user) }
   let(:factory_type) { :organization_account }
   let!(:resource) { create(:organization_account, person: user) }
-  let!(:second_resource) { create(:organization_account, person: user) }
-  let(:id) { resource.uuid }
+  let!(:second_resource) { create(:organization_account, person: user, created_at: 1.week.from_now) }
+  let(:id) { resource.id }
   let(:unpermitted_relationships) do
     {
       person: {
         data: {
           type: 'people',
-          id: create(:user).uuid
+          id: create(:user).id
         }
       },
       organization: {
         data: {
           type: 'organizations',
-          id: create(:organization).uuid
+          id: create(:organization).id
         }
       }
     }
@@ -32,13 +32,13 @@ RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller 
       person: {
         data: {
           type: 'people',
-          id: user.uuid
+          id: user.id
         }
       },
       organization: {
         data: {
           type: 'organizations',
-          id: create(:organization).uuid
+          id: create(:organization).id
         }
       }
     }

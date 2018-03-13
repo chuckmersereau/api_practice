@@ -80,7 +80,7 @@ JsonWebToken.encode(user_id: 1)
 ```
 Therefore, when you're developing, you can quickly generate a token and send it in a curl request to the API by running a command like this:
 ```
-curl "http://localhost:3000/api/v2/user" -H "Authorization: `rails runner 'print JsonWebToken.encode(user_uuid: 1, exp: 1.year.from_now.to_i)'`"
+curl "http://localhost:3000/api/v2/user" -H "Authorization: `rails runner 'print JsonWebToken.encode(user_id: 1, exp: 1.year.from_now.to_i)'`"
 ```
 
 ### Login

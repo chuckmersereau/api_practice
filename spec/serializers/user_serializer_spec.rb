@@ -45,8 +45,8 @@ RSpec.describe UserSerializer, type: :serializer do
         expect(parsed_json['preferences']['setup']).to be_nil
       end
 
-      it 'default_account_list returns default_account_list.uuid' do
-        expect(parsed_json['preferences']['default_account_list']).to eq(account_list.uuid)
+      it 'default_account_list returns default_account_list.id' do
+        expect(parsed_json['preferences']['default_account_list']).to eq(account_list.id)
       end
     end
   end

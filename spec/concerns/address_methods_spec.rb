@@ -5,10 +5,13 @@ describe AddressMethods do
   let(:donor_account) { create(:donor_account) }
 
   context '#merge_addresses' do
+    let(:master_address_id_1) { SecureRandom.uuid }
+    let(:master_address_id_2) { SecureRandom.uuid }
+
     def expect_merge_addresses_works(addressable)
-      address1 = create(:address, street: '1 Way', master_address_id: 1)
-      address2 = create(:address, street: '1 Way', master_address_id: 1)
-      address3 = create(:address, street: '2 Way', master_address_id: 2)
+      address1 = create(:address, street: '1 Way', master_address_id: master_address_id_1)
+      address2 = create(:address, street: '1 Way', master_address_id: master_address_id_1)
+      address3 = create(:address, street: '2 Way', master_address_id: master_address_id_2)
       addressable.addresses << address1
       addressable.addresses << address2
       addressable.addresses << address3
@@ -81,18 +84,29 @@ describe AddressMethods do
   end
 
   context '#addresses' do
-    it 'gives a consistent first if none are primary and record order changes' do
-      contact = create(:contact)
-      addr1 = create(:address, street: '1', primary_mailing_address: false,
-                               city: 'b', addressable: contact)
-      create(:address, street: '2', primary_mailing_address: false, city: 'a',
-                       addressable: contact)
+    let(:contact) { create(:contact) }
+    let!(:addr1) do
+      create(:address,
+             street: '1',
+             primary_mailing_address: false,
+             city: 'b',
+             addressable: contact)
+    end
+    let!(:addr2) do
+      create(:address,
+             street: '2',
+             primary_mailing_address: false,
+             city: 'a',
+             addressable: contact,
+             created_at: 1.week.from_now)
+    end
 
+    it 'gives a consistent first if none are primary and record order changes' do
       # Check that we get the same address even if db record order changes
       Address.connection.execute('CLUSTER addresses USING index_addresses_on_lower_city')
-      expect(contact.addresses.first).to eq addr1
+      expect(contact.addresses.order(:created_at).first).to eq addr1
       Address.connection.execute('CLUSTER addresses USING addresses_pkey')
-      expect(contact.addresses.first).to eq addr1
+      expect(contact.addresses.order(:created_at).first).to eq addr1
     end
   end
 

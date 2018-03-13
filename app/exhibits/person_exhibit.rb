@@ -17,10 +17,10 @@ class PersonExhibit < DisplayCase::Exhibit
       begin
         url = primary_picture.image.url(size_to_load)
         return url if url
-      rescue
+      rescue StandardError
       end
     end
-    if facebook_account && facebook_account.remote_id.present?
+    if facebook_account&.remote_id.present?
       return "https://graph.facebook.com/#{facebook_account.remote_id}/picture?height=120&width=120" if size == :large_square
       return "https://graph.facebook.com/#{facebook_account.remote_id}/picture?type=#{size}"
     end

@@ -6,27 +6,19 @@ RSpec.shared_examples 'index_examples' do |options = {}|
   let(:active_record_association) { ActiveRecord::Relation }
 
   describe '#index' do
-    unless options[:except].include?(:includes)
-      include_examples 'including related resources examples', action: :index
-    end
+    include_examples 'including related resources examples', action: :index unless options[:except].include?(:includes)
 
-    unless options[:except].include?(:sparse_fieldsets)
-      include_examples 'sparse fieldsets examples', action: :index
-    end
+    include_examples 'sparse fieldsets examples', action: :index unless options[:except].include?(:sparse_fieldsets)
 
-    unless options[:except].include?(:sorting)
-      include_examples 'sorting examples', action: :index
-    end
+    include_examples 'sorting examples', action: :index unless options[:except].include?(:sorting)
 
-    unless options[:except].include?(:filtering)
-      include_examples 'filtering examples', action: :index
-    end
+    include_examples 'filtering examples', action: :index unless options[:except].include?(:filtering)
 
     it 'shows resources to users that are signed in' do
       api_login(user)
       get :index, parent_param_if_needed
       expect(response.status).to eq(200), invalid_status_detail
-      expect(response.body).to include(resource.class.first.send(reference_key).to_s) if reference_key
+      expect(response.body).to include(resource.class.order(:created_at).first.send(reference_key).to_s) if reference_key
     end
 
     it 'does not show resources that do not belong to the signed in user' do
@@ -52,7 +44,6 @@ RSpec.shared_examples 'index_examples' do |options = {}|
 
     it 'paginates differently when specified in params' do
       api_login(user)
-
       get :index, parent_param_if_needed.merge(per_page: 1, page: 2)
       expect(response.status).to eq(200), invalid_status_detail
       expect(JSON.parse(response.body)['data'].length).to eq(1)

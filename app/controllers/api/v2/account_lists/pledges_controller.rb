@@ -68,11 +68,11 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
   end
 
   def load_pledge
-    @pledge ||= Pledge.find_by!(uuid: params[:id])
+    @pledge ||= Pledge.find(params[:id])
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def load_pledges

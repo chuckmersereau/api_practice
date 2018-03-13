@@ -22,7 +22,7 @@ describe DonationReports::ReceivedDonations do
       donations_info = received_donations.donations
       expect(donations_info.size).to eq 1
       expect(donations_info.first.likelihood_type).to eq 'received'
-      expect(donations_info.first.contact_id).to eq contact.uuid
+      expect(donations_info.first.contact_id).to eq contact.id
       expect(donations_info.first.amount).to eq 2
       expect(donations_info.first.currency).to eq 'EUR'
     end

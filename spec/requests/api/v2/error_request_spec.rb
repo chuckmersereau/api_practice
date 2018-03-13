@@ -28,8 +28,7 @@ RSpec.describe 'Error Response Format', type: :request do
   end
 
   context 'ActiveRecord::RecordNotFound' do
-    let(:uuid) { SecureRandom.uuid }
-    let(:message) { "Couldn't find Contact with 'uuid'=#{uuid}" }
+    let(:id) { SecureRandom.uuid }
 
     let(:expected_error_data) do
       {
@@ -37,13 +36,13 @@ RSpec.describe 'Error Response Format', type: :request do
           {
             status: '404',
             title: 'Not Found',
-            detail: message
+            detail: "Couldn't find Contact with 'id'=#{id}"
           }
         ]
       }.deep_stringify_keys
     end
 
-    subject { get api_v2_contact_path(id: uuid), nil, headers }
+    subject { get api_v2_contact_path(id: id), nil, headers }
 
     it 'has a response body that contains error objects in json api format' do
       subject

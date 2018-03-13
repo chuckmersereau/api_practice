@@ -6,7 +6,7 @@ resource 'Contacts > Tags > Bulk' do
   doc_helper = DocumentationHelper.new(resource: [:contacts, :tags])
 
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:tag_one)   { 'tag_one' }
   let(:tag_two)   { 'tag_two' }
@@ -16,7 +16,7 @@ resource 'Contacts > Tags > Bulk' do
   let!(:contact_two)   { create(:contact, account_list: account_list, tag_list: [tag_one, tag_three]) }
   let!(:contact_three) { create(:contact, account_list: account_list, tag_list: [tag_two, tag_three]) }
 
-  let(:contact_ids) { [contact_one, contact_two].map(&:uuid).join(',') }
+  let(:contact_ids) { [contact_one, contact_two].map(&:id).join(',') }
 
   let(:form_data) do
     {

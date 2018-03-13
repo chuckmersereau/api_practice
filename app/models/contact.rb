@@ -94,7 +94,7 @@ class Contact < ApplicationRecord
     :timezone,
     :updated_at,
     :updated_in_db_at,
-    :uuid,
+    :id,
     :website,
     {
       addresses_attributes: [
@@ -103,6 +103,7 @@ class Contact < ApplicationRecord
         :country,
         :historic,
         :id,
+        :_client_id,
         :location,
         :master_address_id,
         :metro_area,
@@ -120,12 +121,14 @@ class Contact < ApplicationRecord
       contact_referrals_to_me_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :referred_by_id
       ],
       contact_referrals_by_me_attributes: [
         :_destroy,
         :id,
+        :_client_id,
         :overwrite,
         :referred_to_id
       ],
@@ -133,6 +136,7 @@ class Contact < ApplicationRecord
         :_destroy,
         :account_number,
         :id,
+        :_client_id,
         :organization_id,
         :overwrite
       ],
@@ -141,6 +145,7 @@ class Contact < ApplicationRecord
         :_destroy,
         :account_list_id,
         :id,
+        :_client_id,
         :name,
         :notes,
         :overwrite,
@@ -155,8 +160,7 @@ class Contact < ApplicationRecord
         :spouse_email,
         :spouse_first_name,
         :spouse_last_name,
-        :spouse_phone,
-        :uuid
+        :spouse_phone
       ],
       tag_list: []
     }
@@ -258,7 +262,7 @@ class Contact < ApplicationRecord
     unless new_person
       new_person = Person.clone(person)
       people << new_person
-      donor_account.people << new_person if donor_account
+      donor_account&.donor_account_people&.create(person: new_person)
     end
 
     new_person
@@ -362,9 +366,7 @@ class Contact < ApplicationRecord
                                else
                                  people.alive.find_by(gender: 'male') || people.alive.order('created_at').first
                                end
-    if @primary_or_first_person && @primary_or_first_person.new_record? && !new_record?
-      self.primary_person_id = @primary_or_first_person.id
-    end
+    self.primary_person_id = @primary_or_first_person.id if @primary_or_first_person&.new_record? && !new_record?
     @primary_or_first_person || Person.new
   end
 
@@ -387,7 +389,7 @@ class Contact < ApplicationRecord
   end
 
   def greeting
-    self[:greeting].present? ? self[:greeting] : generated_greeting
+    self[:greeting].presence || generated_greeting
   end
 
   def generated_greeting
@@ -398,7 +400,7 @@ class Contact < ApplicationRecord
   end
 
   def envelope_greeting
-    self[:envelope_greeting].present? ? self[:envelope_greeting] : generated_envelope_greeting
+    self[:envelope_greeting].presence || generated_envelope_greeting
   end
 
   def generated_envelope_greeting
@@ -465,7 +467,7 @@ class Contact < ApplicationRecord
   end
 
   def pledge_currency
-    self[:pledge_currency].present? ? self[:pledge_currency] : account_list.try(:default_currency)
+    self[:pledge_currency].presence || account_list.try(:default_currency)
   end
 
   def pledge_currency_symbol
@@ -557,7 +559,7 @@ class Contact < ApplicationRecord
   def find_timezone
     return unless primary_or_first_address
     primary_or_first_address.master_address.find_timezone
-  rescue
+  rescue StandardError
   end
 
   def primary_or_first_address
@@ -581,11 +583,11 @@ class Contact < ApplicationRecord
   end
 
   def last_six_donations
-    donations.limit(6)
+    donations.order(:created_at).limit(6)
   end
 
   def last_donation
-    donations.first
+    donations.order(:created_at).first
   end
 
   def last_monthly_total(except_payment_method: nil)
@@ -771,7 +773,7 @@ class Contact < ApplicationRecord
   def delete_people
     people.each do |person|
       # If this person isn't linked to any other contact, delete them
-      next if account_list.people.where("people.id = #{person.id} AND contact_people.contact_id <> #{id}").any?
+      next if account_list.people.where('people.id = ? AND contact_people.contact_id <> ?', person.id, id).any?
       person.destroy
     end
 

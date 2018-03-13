@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
   let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let!(:task_one) do
     create(:task, account_list: account_list, activity_type: 'Talk to In Person',
                   completed: true, completed_at: 6.days.ago)
@@ -22,7 +22,7 @@ RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
 
   let(:given_reference_key) { 'appointments' }
 
-  let(:parent_param) { { account_list_id: account_list.uuid } }
+  let(:parent_param) { { account_list_id: account_list.id } }
 
   include_examples 'show_examples', except: [:sparse_fieldsets]
 
@@ -34,7 +34,7 @@ RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
         filter: {
           date_range: range
         },
-        account_list_id: account_list.uuid
+        account_list_id: account_list.id
       }
     end
 

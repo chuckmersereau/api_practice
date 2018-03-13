@@ -1,16 +1,20 @@
 require 'rails_helper'
 
 describe Contact::DuplicatePairsFinder do
-  let!(:account_list) { create(:user_with_account).account_lists.first }
+  let!(:account_list) { create(:user_with_account).account_lists.order(:created_at).first }
 
   let!(:unique_contact_one) do
-    create(:contact, name: 'This contact should have no duplicates whatsoever', account_list: account_list).tap do |contact|
+    create(:contact,
+           name: 'This contact should have no duplicates whatsoever',
+           account_list: account_list).tap do |contact|
       contact.donor_accounts << create(:donor_account, account_number: '12134908719187349182374165192734283')
     end
   end
 
   let!(:unique_contact_two) do
-    create(:contact, name: 'Another contact that is totally a special snow flake', account_list: account_list).tap do |contact|
+    create(:contact,
+           name: 'Another contact that is totally a special snow flake',
+           account_list: account_list).tap do |contact|
       contact.donor_accounts << create(:donor_account, account_number: '08762912346125073571094871239487123')
     end
   end
@@ -31,7 +35,7 @@ describe Contact::DuplicatePairsFinder do
     pair_missing_record_one = DuplicateRecordPair.new(
       account_list: account_list,
       reason: 'Test',
-      record_one_id: contact.id + 1,
+      record_one_id: SecureRandom.uuid,
       record_one_type: 'Contact',
       record_two_id: contact.id,
       record_two_type: 'Contact'
@@ -43,7 +47,7 @@ describe Contact::DuplicatePairsFinder do
       reason: 'Test',
       record_one_id: contact.id,
       record_one_type: 'Contact',
-      record_two_id: contact.id + 2,
+      record_two_id: SecureRandom.uuid,
       record_two_type: 'Contact'
     )
     pair_missing_record_two.save(validate: false)
@@ -70,7 +74,8 @@ describe Contact::DuplicatePairsFinder do
 
     it 'finds and saves the DuplicateRecordPair' do
       expect { build_finder.find_and_save }.to change {
-        DuplicateRecordPair.type('Contact').where(reason: 'Similar names', record_one_id: contact_one.id,
+        DuplicateRecordPair.type('Contact').where(reason: 'Similar names',
+                                                  record_one_id: contact_one.id,
                                                   record_two_id: contact_two.id).count
       }.from(0).to(1)
       expect(DuplicateRecordPair.count).to eq(1)
@@ -82,7 +87,11 @@ describe Contact::DuplicatePairsFinder do
     let!(:contact_two) { create(:contact, name: 'john b. doe', account_list: account_list) }
 
     it 'finds and saves the DuplicateRecordPair' do
-      expect { build_finder.find_and_save }.to change { DuplicateRecordPair.where(reason: 'Similar names', record_one_id: contact_one.id, record_two_id: contact_two.id).count }.from(0).to(1)
+      expect { build_finder.find_and_save }.to change {
+        DuplicateRecordPair.where(reason: 'Similar names',
+                                  record_one_id: contact_one.id,
+                                  record_two_id: contact_two.id).count
+      }.from(0).to(1)
       expect(DuplicateRecordPair.count).to eq(1)
     end
   end
@@ -92,7 +101,11 @@ describe Contact::DuplicatePairsFinder do
     let!(:contact_two) { create(:contact, name: 'BIG Church ', account_list: account_list) }
 
     it 'finds and saves the DuplicateRecordPair' do
-      expect { build_finder.find_and_save }.to change { DuplicateRecordPair.where(reason: 'Similar names', record_one_id: contact_one.id, record_two_id: contact_two.id).count }.from(0).to(1)
+      expect { build_finder.find_and_save }.to change {
+        DuplicateRecordPair.where(reason: 'Similar names',
+                                  record_one_id: contact_one.id,
+                                  record_two_id: contact_two.id).count
+      }.from(0).to(1)
       expect(DuplicateRecordPair.count).to eq(1)
     end
   end
@@ -102,7 +115,11 @@ describe Contact::DuplicatePairsFinder do
     let!(:contact_two) { create(:contact, name: 'Doe, John', account_list: account_list) }
 
     it 'finds and saves the DuplicateRecordPair' do
-      expect { build_finder.find_and_save }.to change { DuplicateRecordPair.where(reason: 'Similar names', record_one_id: contact_one.id, record_two_id: contact_two.id).count }.from(0).to(1)
+      expect { build_finder.find_and_save }.to change {
+        DuplicateRecordPair.where(reason: 'Similar names',
+                                  record_one_id: contact_one.id,
+                                  record_two_id: contact_two.id).count
+      }.from(0).to(1)
       expect(DuplicateRecordPair.count).to eq(1)
     end
   end
@@ -123,7 +140,11 @@ describe Contact::DuplicatePairsFinder do
     let!(:contact_two) { create(:contact, name: 'Doe, Jane', account_list: account_list) }
 
     it 'finds and saves the DuplicateRecordPair' do
-      expect { build_finder.find_and_save }.to change { DuplicateRecordPair.where(reason: 'Similar names', record_one_id: contact_one.id, record_two_id: contact_two.id).count }.from(0).to(1)
+      expect { build_finder.find_and_save }.to change {
+        DuplicateRecordPair.where(reason: 'Similar names',
+                                  record_one_id: contact_one.id,
+                                  record_two_id: contact_two.id).count
+      }.from(0).to(1)
       expect(DuplicateRecordPair.count).to eq(1)
     end
   end
@@ -140,13 +161,27 @@ describe Contact::DuplicatePairsFinder do
   end
 
   context 'contacts with the same donor account number' do
-    let!(:contact_one) { create(:contact, name: 'John', account_list: account_list).tap { |contact| contact.donor_accounts << create(:donor_account, account_number: '1234') } }
-    let!(:contact_two) { create(:contact, name: 'Jane', account_list: account_list).tap { |contact| contact.donor_accounts << create(:donor_account, account_number: '1234') } }
+    let!(:contact_one) do
+      create(
+        :contact,
+        name: 'John',
+        account_list: account_list
+      ).tap { |contact| contact.donor_accounts << create(:donor_account, account_number: '1234') }
+    end
+    let!(:contact_two) do
+      create(
+        :contact,
+        name: 'Jane',
+        account_list: account_list
+      ).tap { |contact| contact.donor_accounts << create(:donor_account, account_number: '1234') }
+    end
 
     it 'finds and saves the DuplicateRecordPair' do
-      expect do
-        build_finder.find_and_save
-      end.to change { DuplicateRecordPair.where(reason: 'Same donor account number', record_one_id: contact_one.id, record_two_id: contact_two.id).count }.from(0).to(1)
+      expect { build_finder.find_and_save }.to change {
+        DuplicateRecordPair.where(reason: 'Same donor account number',
+                                  record_one_id: contact_one.id,
+                                  record_two_id: contact_two.id).count
+      }.from(0).to(1)
       expect(DuplicateRecordPair.count).to eq(1)
     end
   end
@@ -156,7 +191,11 @@ describe Contact::DuplicatePairsFinder do
     let!(:contact_two) { create(:contact, name: 'Doe,   John', account_list: account_list) }
 
     it 'finds and saves the DuplicateRecordPair' do
-      expect { build_finder.find_and_save }.to change { DuplicateRecordPair.where(reason: 'Similar names', record_one_id: contact_one.id, record_two_id: contact_two.id).count }.from(0).to(1)
+      expect { build_finder.find_and_save }.to change {
+        DuplicateRecordPair.where(reason: 'Similar names',
+                                  record_one_id: contact_one.id,
+                                  record_two_id: contact_two.id).count
+      }.from(0).to(1)
       expect(DuplicateRecordPair.count).to eq(1)
     end
   end

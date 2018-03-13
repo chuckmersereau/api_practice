@@ -56,12 +56,13 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
   end
 
   def load_notification_preference
-    @notification_preference ||= NotificationPreference.find_by_uuid_or_raise!(params[:id])
+    @notification_preference ||= NotificationPreference.find(params[:id])
   end
 
   def load_notification_preferences
     @notification_preferences ||= notification_preference_scope
                                   .where(filter_params)
+                                  .reorder(:created_at)
                                   .page(page_number_param)
                                   .per(per_page_param)
   end
@@ -89,7 +90,7 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def pundit_user

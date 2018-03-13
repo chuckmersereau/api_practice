@@ -4,7 +4,7 @@ class User::Option < ApplicationRecord
                           :overwrite,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid,
+                          :id,
                           :value].freeze
 
   belongs_to :user

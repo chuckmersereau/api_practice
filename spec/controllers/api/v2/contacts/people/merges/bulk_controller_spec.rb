@@ -1,21 +1,21 @@
 require 'rails_helper'
 
 describe Api::V2::Contacts::People::Merges::BulkController, type: :controller do
-  let!(:account_list)              { user.account_lists.first }
-  let!(:account_list_id)           { account_list.uuid }
+  let!(:account_list)              { user.account_lists.order(:created_at).first }
+  let!(:account_list_id)           { account_list.id }
   let!(:correct_attributes)        { attributes_for(:contact, name: 'Michael Bluth', account_list_id: account_list_id, tag_list: 'tag1') }
   let!(:factory_type)              { :contact }
-  let!(:id)                        { resource.uuid }
+  let!(:id)                        { resource.id }
   let!(:incorrect_attributes)      { attributes_for(:contact, name: nil, account_list_id: account_list_id) }
   let!(:contact)                   { create(:contact, account_list: account_list) }
   let!(:resource)                  { create(:person, contacts: [contact]) }
   let!(:second_resource)           { create(:person, contacts: [contact]) }
   let!(:third_resource)            { create(:person, contacts: [contact]) }
   let!(:fourth_resource)           { create(:person, contacts: [contact]) }
-  let(:winner_id)                  { resource.uuid }
-  let(:loser_id)                   { second_resource.uuid }
+  let(:winner_id)                  { resource.id }
+  let(:loser_id)                   { second_resource.id }
   let(:first_merge_attributes)     { { winner_id: winner_id, loser_id: loser_id } }
-  let(:second_merge_attributes)    { { winner_id: third_resource.uuid, loser_id: fourth_resource.uuid } }
+  let(:second_merge_attributes)    { { winner_id: third_resource.id, loser_id: fourth_resource.id } }
   let!(:user)                      { create(:user_with_account) }
 
   describe '#create' do

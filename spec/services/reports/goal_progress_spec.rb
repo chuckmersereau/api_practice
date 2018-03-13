@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Reports::GoalProgress, type: :model do
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
   let!(:report) { Reports::GoalProgress.new(account_list: account_list) }
   let!(:designation_account) { create(:designation_account, organization_id: account_list.salary_organization_id, balance: '9.99') }
 

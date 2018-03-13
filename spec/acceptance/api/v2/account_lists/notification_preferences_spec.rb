@@ -8,8 +8,8 @@ resource 'Account Lists > Notification Preferences' do
   let(:resource_type) { 'notification_preferences' }
   let(:user) { create(:user_with_account) }
 
-  let!(:account_list)              { user.account_lists.first }
-  let(:account_list_id)            { account_list.uuid }
+  let!(:account_list)              { user.account_lists.order(:created_at).first }
+  let(:account_list_id)            { account_list.id }
   let!(:notification_preferences) do
     [
       create(:notification_preference,
@@ -27,7 +27,7 @@ resource 'Account Lists > Notification Preferences' do
     ]
   end
   let(:notification_preference)    { notification_preferences.first }
-  let(:id)                         { notification_preference.uuid }
+  let(:id)                         { notification_preference.id }
 
   let(:notification_type) { create(:notification_type) }
   let(:notification_type_1) { create(:notification_type) }
@@ -42,7 +42,7 @@ resource 'Account Lists > Notification Preferences' do
       notification_type: {
         data: {
           type: 'notification_types',
-          id: notification_type_2.uuid
+          id: notification_type_2.id
         }
       }
     }

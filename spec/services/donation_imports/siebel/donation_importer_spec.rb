@@ -3,23 +3,66 @@ require 'rails_helper'
 RSpec.describe DonationImports::Siebel::DonationImporter do
   let!(:user) { create(:user_with_account) }
 
-  let(:organization_account) { user.organization_accounts.first }
+  let(:organization_account) { user.organization_accounts.order(:created_at).first }
   let(:organization) { organization_account.organization }
 
   let!(:donor_account) { create(:donor_account, account_number: 'donor_id_one', organization: organization) }
 
-  let(:designation_profile) { organization_account.designation_profiles.first }
-  let!(:designation_account) { create(:designation_account, designation_profiles: [designation_profile], designation_number: 'the_designation_number') }
+  let(:designation_profile) { organization_account.designation_profiles.order(:created_at).first }
+  let!(:designation_account) do
+    create(:designation_account,
+           designation_profiles: [designation_profile],
+           designation_number: 'the_designation_number')
+  end
 
   let(:mock_siebel_import) { double(:mock_siebel_import) }
   let(:donor_account) { create(:donor_account, organization: organization, account_number: 'donor_id_one') }
 
-  let!(:first_donation) { create(:donation, remote_id: 'id_one', donor_account: donor_account, designation_account: designation_account, amount: 400.00, donation_date: 1.week.ago) }
-  let!(:second_donation) { create(:donation, remote_id: 'id_five', donor_account: donor_account, designation_account: designation_account, amount: 500.00, donation_date: 1.week.ago) }
-  let!(:third_donation) { create(:donation, remote_id: 'id_seven', donor_account: donor_account, designation_account: designation_account, amount: 500.00, donation_date: 3.weeks.ago) }
-  let!(:fourth_donation) { create(:donation, remote_id: 'random_id_one', donor_account: donor_account, designation_account: designation_account, donation_date: 1.week.ago) }
-  let!(:fifth_donation) { create(:donation, remote_id: 'random_id_two', donor_account: donor_account, designation_account: designation_account, donation_date: 1.week.ago) }
-  let!(:sixth_donation) { create(:donation, remote_id: 'random_id_three', donor_account: donor_account, designation_account: designation_account, donation_date: 1.week.ago) }
+  let!(:first_donation) do
+    create(:donation,
+           remote_id: 'id_one',
+           donor_account: donor_account,
+           designation_account: designation_account,
+           amount: 400.00,
+           donation_date: 1.week.ago)
+  end
+  let!(:second_donation) do
+    create(:donation,
+           remote_id: 'id_five',
+           donor_account: donor_account,
+           designation_account: designation_account,
+           amount: 500.00,
+           donation_date: 1.week.ago)
+  end
+  let!(:third_donation) do
+    create(:donation,
+           remote_id: 'id_seven',
+           donor_account: donor_account,
+           designation_account: designation_account,
+           amount: 500.00,
+           donation_date: 3.weeks.ago)
+  end
+  let!(:fourth_donation) do
+    create(:donation,
+           remote_id: 'random_id_one',
+           donor_account: donor_account,
+           designation_account: designation_account,
+           donation_date: 1.week.ago)
+  end
+  let!(:fifth_donation) do
+    create(:donation,
+           remote_id: 'random_id_two',
+           donor_account: donor_account,
+           designation_account: designation_account,
+           donation_date: 1.week.ago)
+  end
+  let!(:sixth_donation) do
+    create(:donation,
+           remote_id: 'random_id_three',
+           donor_account: donor_account,
+           designation_account: designation_account,
+           donation_date: 1.week.ago)
+  end
 
   let(:mock_profile) { double(:mock_profile) }
 

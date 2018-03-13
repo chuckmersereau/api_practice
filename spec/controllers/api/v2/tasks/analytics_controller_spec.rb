@@ -5,7 +5,7 @@ RSpec.describe Api::V2::Tasks::AnalyticsController, type: :controller do
   let(:user) { create(:user_with_account) }
 
   # This MAY be required!
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   # This is required!
   let!(:resource) do
@@ -21,7 +21,7 @@ RSpec.describe Api::V2::Tasks::AnalyticsController, type: :controller do
     # Ex: /api/v2/:account_list_id/contacts/:contact_id/addresses/:id
     # --
     # Note: Don't include :id
-    # Example: { account_list_id: account_list.uuid }
+    # Example: { account_list_id: account_list.id }
     {}
   end
 

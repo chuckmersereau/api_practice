@@ -6,7 +6,7 @@ resource 'Contacts > Exports > Mailing' do
   documentation_scope = :contacts_api_exports
 
   let(:user) { create(:user_with_account) }
-  let!(:contact) { create(:contact, account_list: user.account_lists.first, addresses: [build(:address)]) }
+  let!(:contact) { create(:contact, account_list: user.account_lists.order(:created_at).first, addresses: [build(:address)]) }
 
   context 'authorized user' do
     before { api_login(user) }

@@ -11,7 +11,7 @@ resource 'Tasks > Analytics' do
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:alternate_account_list) do
     create(:account_list).tap do |account_list|
@@ -140,7 +140,7 @@ resource 'Tasks > Analytics' do
 
         example 'Analytics [GET]', document: documentation_scope do
           explanation "Viewing Analytical information for a specific Account Lists' Tasks"
-          do_request filter: { account_list_id: alternate_account_list.uuid }
+          do_request filter: { account_list_id: alternate_account_list.id }
 
           check_resource
           expect(resource_object.keys).to match_array expected_attribute_keys

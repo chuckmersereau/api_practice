@@ -5,7 +5,7 @@ RSpec.describe Api::V2::User::GoogleAccountsController, type: :controller do
   let(:factory_type) { :google_account }
   let!(:resource) { create(:google_account, person: user) }
   let!(:second_resource) { create(:google_account, person: user) }
-  let(:id) { resource.uuid }
+  let(:id) { resource.id }
   let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { { email: 'test@email.com' } }
   let(:incorrect_attributes) { nil }
@@ -16,7 +16,6 @@ RSpec.describe Api::V2::User::GoogleAccountsController, type: :controller do
         Person::GoogleAccount::ContactGroup.new(
           id: 'contact_group_id_0',
           title: 'System Group: My Family',
-          uuid: 'contact_group_id_0',
           created_at: Date.today,
           updated_at: Date.today
         )

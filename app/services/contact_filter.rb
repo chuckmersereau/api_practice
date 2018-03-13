@@ -12,13 +12,9 @@ class ContactFilter
     @contacts = filtered_contacts = contacts
 
     if filters.present?
-      if @filters[:ids].present?
-        filtered_contacts = filtered_contacts.where('contacts.id' => @filters[:ids].split(','))
-      end
+      filtered_contacts = filtered_contacts.where('contacts.id' => @filters[:ids].split(',')) if @filters[:ids].present?
 
-      if @filters[:not_ids]
-        filtered_contacts = filtered_contacts.where('contacts.id not in (?)', @filters[:not_ids])
-      end
+      filtered_contacts = filtered_contacts.where('contacts.id not in (?)', @filters[:not_ids]) if @filters[:not_ids]
 
       if @filters[:tags].present? && @filters[:tags].first != ''
         filtered_contacts = filtered_contacts.tagged_with(@filters[:tags].split(','))
@@ -26,12 +22,13 @@ class ContactFilter
 
       if @filters[:name_like]
         # See if they've typed a first and last name
-        filtered_contacts = if @filters[:name_like].split(/\s+/).length > 1
-                              filtered_contacts.where("concat(first_name,' ',last_name) like ? ", "%#{@filters[:name_like]}%")
-                            else
-                              filtered_contacts.where('first_name like :search OR last_name like :search',
-                                                      search: "#{@filters[:name_like]}%")
-                            end
+        filtered_contacts =
+          if @filters[:name_like].split(/\s+/).length > 1
+            filtered_contacts.where("concat(first_name,' ',last_name) like ? ", "%#{@filters[:name_like]}%")
+          else
+            filtered_contacts.where('first_name like :search OR last_name like :search',
+                                    search: "#{@filters[:name_like]}%")
+          end
       end
 
       filtered_contacts = city(filtered_contacts)
@@ -64,75 +61,61 @@ class ContactFilter
   end
 
   def city(filtered_contacts)
-    if @filters[:city].present? && @filters[:city].first != ''
-      filtered_contacts = filtered_contacts.where('addresses.city' => @filters[:city], 'addresses.historic' => @filters[:address_historic] || false)
-                                           .includes(:addresses)
-                                           .references('addresses')
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:city].present? && @filters[:city].first != ''
+    filtered_contacts.where('addresses.city' => @filters[:city],
+                            'addresses.historic' => @filters[:address_historic] || false)
+                     .includes(:addresses)
+                     .references('addresses')
   end
 
   def church(filtered_contacts)
-    if @filters[:church].present? && @filters[:church].first != ''
-      filtered_contacts = filtered_contacts.where('contacts.church_name' => @filters[:church])
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:church].present? && @filters[:church].first != ''
+    filtered_contacts.where('contacts.church_name' => @filters[:church])
   end
 
   def state(filtered_contacts)
-    if @filters[:state].present? && @filters[:state].first != ''
-      filtered_contacts = filtered_contacts.where('addresses.state' => @filters[:state], 'addresses.historic' => @filters[:address_historic] || false)
-                                           .includes(:addresses)
-                                           .references('addresses')
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:state].present? && @filters[:state].first != ''
+    filtered_contacts.where('addresses.state' => @filters[:state],
+                            'addresses.historic' => @filters[:address_historic] || false)
+                     .includes(:addresses)
+                     .references('addresses')
   end
 
   def region(filtered_contacts)
-    if @filters[:region].present? && @filters[:region].first != ''
-      filtered_contacts = filtered_contacts.where('addresses.region' => @filters[:region], 'addresses.historic' => @filters[:address_historic] || false)
-                                           .includes(:addresses)
-                                           .references('addresses')
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:region].present? && @filters[:region].first != ''
+    filtered_contacts.where('addresses.region' => @filters[:region],
+                            'addresses.historic' => @filters[:address_historic] || false)
+                     .includes(:addresses)
+                     .references('addresses')
   end
 
   def metro_area(filtered_contacts)
-    if @filters[:metro_area].present? && @filters[:metro_area].first != ''
-      filtered_contacts = filtered_contacts.where('addresses.metro_area' => @filters[:metro_area], 'addresses.historic' => @filters[:address_historic] || false)
-                                           .includes(:addresses)
-                                           .references('addresses')
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:metro_area].present? && @filters[:metro_area].first != ''
+    filtered_contacts.where('addresses.metro_area' => @filters[:metro_area],
+                            'addresses.historic' => @filters[:address_historic] || false)
+                     .includes(:addresses)
+                     .references('addresses')
   end
 
   def country(filtered_contacts)
-    if @filters[:country].present? && @filters[:country].first != ''
-      filtered_contacts = filtered_contacts.where('addresses.country' => @filters[:country],
-                                                  'addresses.historic' => @filters[:address_historic] || false)
-                                           .includes(:addresses)
-                                           .references('addresses')
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:country].present? && @filters[:country].first != ''
+    filtered_contacts.where('addresses.country' => @filters[:country],
+                            'addresses.historic' => @filters[:address_historic] || false)
+                     .includes(:addresses)
+                     .references('addresses')
   end
 
   def likely(filtered_contacts)
-    if @filters[:likely].present? && @filters[:likely].first != ''
-      filtered_contacts = filtered_contacts.where(likely_to_give: @filters[:likely])
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:likely].present? && @filters[:likely].first != ''
+    filtered_contacts.where(likely_to_give: @filters[:likely])
   end
 
   def status(filtered_contacts)
     if @filters[:status].present? && @filters[:status].first != ''
       unless @filters[:status].include? '*'
-        if (@filters[:status].include? '') && !@filters[:status].include?('null')
-          @filters[:status] << 'null'
-        end
+        @filters[:status] << 'null' if @filters[:status].include?('') && !@filters[:status].include?('null')
 
-        if (@filters[:status].include? 'null') && !@filters[:status].include?('')
-          @filters[:status] << ''
-        end
+        @filters[:status] << '' if @filters[:status].include?('null') && !@filters[:status].include?('')
 
         filtered_contacts = if @filters[:status].include? 'null'
                               filtered_contacts.where('status is null OR status in (?)', @filters[:status])
@@ -147,87 +130,72 @@ class ContactFilter
   end
 
   def referrer(filtered_contacts)
-    if @filters[:referrer].present? && @filters[:referrer].first != ''
-      filtered_contacts = if @filters[:referrer].first == '*'
-                            filtered_contacts.joins(:contact_referrals_to_me).where('contact_referrals.referred_by_id is not null').uniq
-                          else
-                            filtered_contacts.joins(:contact_referrals_to_me).where('contact_referrals.referred_by_id' => @filters[:referrer]).uniq
-                          end
+    return filtered_contacts unless @filters[:referrer].present? && @filters[:referrer].first != ''
+    if @filters[:referrer].first == '*'
+      filtered_contacts.joins(:contact_referrals_to_me)
+                       .where('contact_referrals.referred_by_id is not null').uniq
+    else
+      filtered_contacts.joins(:contact_referrals_to_me)
+                       .where('contact_referrals.referred_by_id' => @filters[:referrer]).uniq
     end
-    filtered_contacts
   end
 
   def newsletter(filtered_contacts)
-    if @filters[:newsletter].present?
-      filtered_contacts = case @filters[:newsletter]
-                          when 'none'
-                            filtered_contacts.where("send_newsletter is null OR send_newsletter = ''")
-                          when 'address'
-                            filtered_contacts.where(send_newsletter: %w(Physical Both))
-                          when 'email'
-                            filtered_contacts.where(send_newsletter: %w(Email Both))
-                          else
-                            filtered_contacts.where("send_newsletter is not null AND send_newsletter <> ''")
-                          end
-      filtered_contacts = filtered_contacts.uniq unless filtered_contacts.to_sql.include?('DISTINCT')
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:newsletter].present?
+    filtered_contacts = case @filters[:newsletter]
+                        when 'none'
+                          filtered_contacts.where("send_newsletter is null OR send_newsletter = ''")
+                        when 'address'
+                          filtered_contacts.where(send_newsletter: %w(Physical Both))
+                        when 'email'
+                          filtered_contacts.where(send_newsletter: %w(Email Both))
+                        else
+                          filtered_contacts.where("send_newsletter is not null AND send_newsletter <> ''")
+                        end
+    filtered_contacts.uniq unless filtered_contacts.to_sql.include?('DISTINCT')
   end
 
   def contact_name(filtered_contacts)
-    if @filters[:name].present?
-      filtered_contacts = filtered_contacts.where('lower(contacts.name) like ?', "%#{@filters[:name].downcase}%")
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:name].present?
+    filtered_contacts.where('lower(contacts.name) like ?', "%#{@filters[:name].downcase}%")
   end
 
   def timezone(filtered_contacts)
-    if @filters[:timezone].present? && @filters[:timezone].first != ''
-      filtered_contacts = filtered_contacts.where('contacts.timezone' => @filters[:timezone])
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:timezone].present? && @filters[:timezone].first != ''
+    filtered_contacts.where('contacts.timezone' => @filters[:timezone])
   end
 
   def pledge_currency(filtered_contacts, account_list)
-    if @filters[:pledge_currency].present? && @filters[:pledge_currency].first != ''
-      filtered_contacts = if @filters[:pledge_currency].include?(account_list.default_currency)
-                            filtered_contacts.where(pledge_currency: [@filters[:pledge_currency], '', nil])
-                          else
-                            filtered_contacts.where(pledge_currency: @filters[:pledge_currency])
-                          end
+    return filtered_contacts unless @filters[:pledge_currency].present? && @filters[:pledge_currency].first != ''
+    if @filters[:pledge_currency].include?(account_list.default_currency)
+      filtered_contacts.where(pledge_currency: [@filters[:pledge_currency], '', nil])
+    else
+      filtered_contacts.where(pledge_currency: @filters[:pledge_currency])
     end
-    filtered_contacts
   end
 
   def locale(filtered_contacts, _account_list)
-    if @filters[:locale].present? && @filters[:locale].first != ''
-      locales = @filters[:locale].map { |l| l == 'null' ? nil : l }
-      filtered_contacts.where('contacts.locale' => locales)
-    else
-      filtered_contacts
-    end
+    return filtered_contacts unless @filters[:locale].present? && @filters[:locale].first != ''
+    locales = @filters[:locale].map { |l| l == 'null' ? nil : l }
+    filtered_contacts.where('contacts.locale' => locales)
   end
 
   def related_task_action(filtered_contacts)
-    if @filters[:relatedTaskAction].present? && @filters[:relatedTaskAction].first != ''
-      if @filters[:relatedTaskAction].first == 'null'
-        contacts_with_activities = filtered_contacts.where('activities.completed' => false)
-                                                    .includes(:activities).map(&:id)
-        filtered_contacts = filtered_contacts.where('contacts.id not in (?)', contacts_with_activities)
-      else
-        filtered_contacts = filtered_contacts.where('activities.activity_type' => @filters[:relatedTaskAction])
-                                             .where('activities.completed' => false)
-                                             .includes(:activities)
-      end
+    return filtered_contacts unless @filters[:relatedTaskAction].present? && @filters[:relatedTaskAction].first != ''
+    if @filters[:relatedTaskAction].first == 'null'
+      contacts_with_activities = filtered_contacts.where('activities.completed' => false)
+                                                  .includes(:activities).map(&:id)
+      filtered_contacts.where('contacts.id not in (?)', contacts_with_activities)
+    else
+      filtered_contacts.where('activities.activity_type' => @filters[:relatedTaskAction])
+                       .where('activities.completed' => false)
+                       .includes(:activities)
     end
-    filtered_contacts
   end
 
   def appeal(filtered_contacts)
-    if @filters[:appeal].present? && @filters[:appeal].first != ''
-      filtered_contacts = filtered_contacts.where('appeal_contacts.appeal_id' => @filters[:appeal]).includes(:appeals).uniq
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:appeal].present? && @filters[:appeal].first != ''
+    filtered_contacts.where('appeal_contacts.appeal_id' => @filters[:appeal]).includes(:appeals).uniq
   end
 
   def contact_type(filtered_contacts)
@@ -241,36 +209,34 @@ class ContactFilter
   end
 
   def wildcard_search(filtered_contacts)
-    if @filters[:wildcard_search].present? && @filters[:wildcard_search] != 'null'
-      if @filters[:wildcard_search].include?(',')
-        last_name, first_name = @filters[:wildcard_search].split(',')
-      else
-        first_name, last_name = @filters[:wildcard_search].split
-      end
-
-      if first_name.present? && last_name.present?
-        first_name = first_name.downcase.strip
-        last_name = last_name.downcase.strip
-        person_search = ' OR (lower(people.first_name) like :first_name AND lower(people.last_name) like :last_name)'
-      else
-        person_search = ''
-      end
-
-      filtered_contacts = filtered_contacts.where(
-        'lower(email_addresses.email) like :search '\
-          'OR lower(contacts.name) like :search '\
-          'OR lower(donor_accounts.account_number) like :search '\
-          'OR lower(phone_numbers.number) like :search' + person_search,
-        search: "%#{@filters[:wildcard_search].downcase}%", first_name: first_name, last_name: last_name
-      )
-                                           .includes(people: :email_addresses)
-                                           .references('email_addresses')
-                                           .includes(:donor_accounts)
-                                           .references('donor_accounts')
-                                           .includes(people: :phone_numbers)
-                                           .references('phone_numbers')
+    return filtered_contacts unless @filters[:wildcard_search].present? && @filters[:wildcard_search] != 'null'
+    if @filters[:wildcard_search].include?(',')
+      last_name, first_name = @filters[:wildcard_search].split(',')
+    else
+      first_name, last_name = @filters[:wildcard_search].split
     end
-    filtered_contacts
+
+    if first_name.present? && last_name.present?
+      first_name = first_name.downcase.strip
+      last_name = last_name.downcase.strip
+      person_search = ' OR (lower(people.first_name) like :first_name AND lower(people.last_name) like :last_name)'
+    else
+      person_search = ''
+    end
+
+    filtered_contacts.where(
+      'lower(email_addresses.email) like :search '\
+        'OR lower(contacts.name) like :search '\
+        'OR lower(donor_accounts.account_number) like :search '\
+        'OR lower(phone_numbers.number) like :search' + person_search,
+      search: "%#{@filters[:wildcard_search].downcase}%", first_name: first_name, last_name: last_name
+    )
+                     .includes(people: :email_addresses)
+                     .references('email_addresses')
+                     .includes(:donor_accounts)
+                     .references('donor_accounts')
+                     .includes(people: :phone_numbers)
+                     .references('phone_numbers')
   end
 
   def pledge_freq(filtered_contacts)
@@ -284,10 +250,8 @@ class ContactFilter
   end
 
   def pledge_received(filtered_contacts)
-    if @filters[:pledge_received].present?
-      filtered_contacts = filtered_contacts.where(pledge_received: @filters[:pledge_received])
-    end
-    filtered_contacts
+    return filtered_contacts unless @filters[:pledge_received].present?
+    filtered_contacts.where(pledge_received: @filters[:pledge_received])
   end
 
   def contact_info_email(filtered_contacts)
@@ -351,12 +315,8 @@ class ContactFilter
       # & is intersection
       return filtered_contacts.where(id: contacts_with_mobile_phone_ids & contacts_with_home_phone_ids)
     end
-    if filter_home_phone == 'Yes' && filter_mobile_phone == 'No'
-      return filtered_contacts.where(id: contacts_with_home_phone_ids - contacts_with_mobile_phone_ids)
-    end
-    if filter_home_phone == 'No' && filter_mobile_phone == 'Yes'
-      return filtered_contacts.where(id: contacts_with_mobile_phone_ids - contacts_with_home_phone_ids)
-    end
+    return filtered_contacts.where(id: contacts_with_home_phone_ids - contacts_with_mobile_phone_ids) if filter_home_phone == 'Yes' && filter_mobile_phone == 'No'
+    return filtered_contacts.where(id: contacts_with_mobile_phone_ids - contacts_with_home_phone_ids) if filter_home_phone == 'No' && filter_mobile_phone == 'Yes'
     if filter_home_phone == 'No' && filter_mobile_phone == 'No'
       # | is union
       return filtered_contacts.where.not(id: contacts_with_mobile_phone_ids | contacts_with_home_phone_ids)

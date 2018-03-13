@@ -9,7 +9,7 @@ resource 'User > Google Accounts' do
   let(:resource_type) { 'google_accounts' }
 
   let!(:google_account) { create(:google_account, person: user) }
-  let(:id)              { google_account.uuid }
+  let(:id)              { google_account.id }
 
   let(:new_google_account) do
     attributes_for(:google_account)
@@ -22,7 +22,7 @@ resource 'User > Google Accounts' do
       person: {
         data: {
           type: 'people',
-          id: user.uuid
+          id: user.id
         }
       }
     }

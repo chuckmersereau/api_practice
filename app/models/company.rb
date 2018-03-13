@@ -15,9 +15,7 @@ class Company < ApplicationRecord
   private
 
   def find_master_company
-    unless master_company_id
-      self.master_company_id = MasterCompany.find_or_create_for_company(self).id
-    end
+    self.master_company_id = MasterCompany.find_or_create_for_company(self).id unless master_company_id
   end
 
   def clean_up_master_company

@@ -34,7 +34,9 @@ describe Person::OrganizationAccount do
 
       context 'organization cannot be found' do
         it 'raise error' do
-          expect { described_class.find_or_create_from_auth('abc', 'fake_url', user) }.to raise_error
+          expect { described_class.find_or_create_from_auth('abc', 'fake_url', user) }.to(
+            raise_error(ActiveRecord::RecordNotFound)
+          )
         end
       end
     end

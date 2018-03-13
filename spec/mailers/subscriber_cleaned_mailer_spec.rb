@@ -20,6 +20,6 @@ describe SubscriberCleanedMailer do
     expect(mail.subject).to eq('MailChimp subscriber email bounced')
     expect(mail.to).to eq([user_email.email])
     expect(mail.from).to eq(['support@mpdx.org'])
-    expect(mail.body.raw_source).to include("https://mpdx.org/contacts/#{contact.uuid}?personId=#{person.uuid}")
+    expect(mail.body.raw_source).to include("https://mpdx.org/contacts/#{contact.id}?personId=#{person.id}")
   end
 end

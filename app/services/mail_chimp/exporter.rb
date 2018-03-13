@@ -40,7 +40,6 @@ class MailChimp::Exporter
     merge_variables_to_add.each do |merge_variable|
       merge_field_adder.add_merge_field(merge_variable)
     end
-
     batcher.subscribe_contacts(contacts)
   end
 
@@ -67,9 +66,7 @@ class MailChimp::Exporter
   def fetch_contacts_to_export(contact_ids)
     relevant_contact_scope = mail_chimp_account.relevant_contacts(contact_ids, true)
                                                .includes(primary_contact_person: :person, people: :primary_email_address)
-    relevant_contact_scope.find_each.map do |contact|
-      contact if contact_changed_or_new?(contact)
-    end.compact
+    relevant_contact_scope.find_each.select { |contact| contact_changed_or_new?(contact) }.sort_by(&:created_at)
   end
 
   def statuses_from_contacts(contacts)

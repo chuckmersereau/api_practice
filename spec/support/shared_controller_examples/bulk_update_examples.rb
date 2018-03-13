@@ -11,21 +11,21 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
           {
             data: {
               type: resource_type,
-              id: resource.uuid,
+              id: resource.id,
               attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
             }.merge!(relationships: relationships)
           },
           {
             data: {
               type: resource_type,
-              id: second_resource.uuid,
+              id: second_resource.id,
               attributes: incorrect_attributes
             }.merge!(relationships: relationships)
           },
           {
             data: {
               type: resource_type,
-              id: third_resource.uuid,
+              id: third_resource.id,
               attributes: correct_attributes.merge(updated_in_db_at: third_resource.updated_at)
             }.merge!(relationships: relationships)
           }
@@ -52,16 +52,16 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
           put :update, bulk_update_attributes
         end.to change { resource.reload.updated_at }.and change { third_resource.reload.updated_at }
       end.to_not change { second_resource.updated_at }
-      expect(response_body.detect { |hash| hash.dig('data', 'id') == resource.uuid }['errors']).to be_blank
-      expect(response_body.detect { |hash| hash.dig('id') == second_resource.uuid }['errors']).to be_present
-      expect(response_body.detect { |hash| hash.dig('data', 'id') == third_resource.uuid }['errors']).to be_blank
+      expect(response_body.detect { |hash| hash.dig('data', 'id') == resource.id }['errors']).to be_blank
+      expect(response_body.detect { |hash| hash.dig('id') == second_resource.id }['errors']).to be_present
+      expect(response_body.detect { |hash| hash.dig('data', 'id') == third_resource.id }['errors']).to be_blank
     end
 
     it 'returns error objects for resources that were not updated, but belonged to user' do
       expect do
         put :update, bulk_update_attributes
       end.to_not change { second_resource.reload.send(reference_key) }
-      response_with_errors = response_body.detect { |hash| hash.dig('id') == second_resource.uuid }
+      response_with_errors = response_body.detect { |hash| hash.dig('id') == second_resource.id }
       expect(response_with_errors['errors']).to be_present
       expect(response_with_errors['errors'].detect { |hash| hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}" }).to be_present
     end
@@ -89,21 +89,21 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
             {
               data: {
                 type: resource_type,
-                id: resource.uuid,
+                id: resource.id,
                 attributes: correct_attributes.merge(overwrite: true)
               }
             },
             {
               data: {
                 type: resource_type,
-                id: second_resource.uuid,
+                id: second_resource.id,
                 attributes: incorrect_attributes
               }
             },
             {
               data: {
                 type: resource_type,
-                id: unauthorized_resource.uuid,
+                id: unauthorized_resource.id,
                 attributes: correct_attributes.merge(overwrite: true)
               }
             }
@@ -126,19 +126,19 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
             {
               data: {
                 type: resource_type,
-                id: resource.uuid,
+                id: resource.id,
                 attributes: correct_attributes.merge(overwrite: true)
               }
             },
             {
               data: {
                 type: resource_type,
-                id: second_resource.uuid,
+                id: second_resource.id,
                 attributes: correct_attributes.merge(overwrite: true),
                 relationships: {
                   account_list: {
                     data: {
-                      id: create(:account_list).uuid,
+                      id: create(:account_list).id,
                       type: 'account_lists'
                     }
                   }
@@ -148,7 +148,7 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
             {
               data: {
                 type: resource_type,
-                id: third_resource.uuid,
+                id: third_resource.id,
                 attributes: correct_attributes.merge(overwrite: true)
               }
             }
@@ -157,7 +157,7 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
       end
 
       it 'does not update resources that do not belong to current user' do
-        put :update, data: [{ data: { type: resource_type, id: unauthorized_resource.uuid, attributes: { reference_key => reference_value } } }]
+        put :update, data: [{ data: { type: resource_type, id: unauthorized_resource.id, attributes: { reference_key => reference_value } } }]
 
         expect(unauthorized_resource.reload.send(reference_key)).to_not eq(reference_value)
         expect(response.status).to eq(404), invalid_status_detail

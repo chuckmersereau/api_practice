@@ -31,12 +31,13 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
   def load_users
     @users = user_scope.where(filter_params)
                        .reorder(sorting_param)
+                       .order(:created_at)
                        .page(page_number_param)
                        .per(per_page_param)
   end
 
   def load_user
-    @user ||= User.find_by_uuid_or_raise!(params[:id])
+    @user ||= User.find(params[:id])
   end
 
   def render_user
@@ -56,7 +57,7 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def pundit_user

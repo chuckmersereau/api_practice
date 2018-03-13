@@ -129,7 +129,7 @@ RSpec.describe 'Server Responsibilites', type: :request do
       context 'with a correct json web token' do
         it 'should return a succes status (200)' do
           json_web_token = JsonWebToken.encode(
-            user_uuid: user.uuid,
+            user_id: user.id,
             exp: 24.hours.from_now.utc.to_i
           )
 
@@ -164,7 +164,7 @@ RSpec.describe 'Server Responsibilites', type: :request do
       context 'with a json web token that is expired' do
         it 'should return an unauthorized status (401)' do
           json_web_token = JsonWebToken.encode(
-            user_uuid: user.uuid,
+            user_id: user.id,
             exp: 10.minutes.ago.utc
           )
 
@@ -184,7 +184,7 @@ RSpec.describe 'Server Responsibilites', type: :request do
 
         it 'should return an unauthorized status (401)' do
           json_web_token = JsonWebToken.encode(
-            user_uuid: user.uuid
+            user_id: user.id
           )
 
           headers = {

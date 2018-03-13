@@ -86,7 +86,7 @@ class TntImport::TasksImport
     if task.contacts.empty? || task.contacts.any? { |c| c.id == contact_id }
       task
     else
-      task.dup.tap { |t| t.uuid = nil }
+      task.dup.tap { |t| t.id = nil }
     end
   end
 

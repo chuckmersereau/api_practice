@@ -2,14 +2,14 @@ require 'rails_helper'
 
 describe DesignationAccountSerializer do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:designation_account) { create(:designation_account, account_lists: [account_list]) }
 
   let(:serializer) { DesignationAccountSerializer.new(designation_account, scope: user) }
 
   it 'balances list' do
     expect(serializer.as_json).to include :balances
-    expect(serializer.as_json[:balances][0][:id]).to eq(designation_account.balances[0].uuid)
+    expect(serializer.as_json[:balances][0][:id]).to eq(designation_account.balances[0].id)
   end
 
   describe '#currency_symbol' do

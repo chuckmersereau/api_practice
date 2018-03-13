@@ -20,7 +20,7 @@ resource 'Background Batches' do
   let!(:background_batch) { create(:background_batch, user: user) }
   let(:resource_type)     { 'background_batches' }
   let(:excluded)          { 0 }
-  let(:id)                { background_batch.uuid }
+  let(:id)                { background_batch.id }
 
   let(:form_data) do
     attributes = attributes_for(:background_batch).except(:user_id)
@@ -95,7 +95,7 @@ resource 'Background Batches' do
 
         expect(response_status).to eq(201), invalid_status_detail
 
-        background_batch = BackgroundBatch.find_by(uuid: json_response['data']['id'])
+        background_batch = BackgroundBatch.find_by(id: json_response['data']['id'])
         expect(background_batch.requests.length).to eq(1)
       end
     end

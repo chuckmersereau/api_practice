@@ -4,13 +4,9 @@ RSpec.shared_examples 'show_examples' do |options = {}|
   include_context 'common_variables'
 
   describe '#show' do
-    unless options[:except].include?(:includes)
-      include_examples 'including related resources examples', action: :show
-    end
+    include_examples 'including related resources examples', action: :show unless options[:except].include?(:includes)
 
-    unless options[:except].include?(:sparse_fieldsets)
-      include_examples 'sparse fieldsets examples', action: :show
-    end
+    include_examples 'sparse fieldsets examples', action: :show unless options[:except].include?(:sparse_fieldsets)
 
     it 'shows resource to users that are signed in' do
       api_login(user)

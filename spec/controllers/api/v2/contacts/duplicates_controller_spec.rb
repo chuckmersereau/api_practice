@@ -4,7 +4,9 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
   let(:factory_type) { :duplicate_contacts_pair }
 
   let!(:duplicate_record_pair) { create(:duplicate_contacts_pair) }
-  let!(:second_duplicate_record_pair) { create(:duplicate_contacts_pair, account_list: duplicate_record_pair.account_list) }
+  let!(:second_duplicate_record_pair) do
+    create(:duplicate_contacts_pair, account_list: duplicate_record_pair.account_list, created_at: 1.week.from_now)
+  end
 
   let(:account_list) { duplicate_record_pair.account_list }
   let(:user) { create(:user).tap { |user| account_list.users << user } }
@@ -12,7 +14,7 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
   let(:resource) { duplicate_record_pair }
   let(:second_resource) { second_duplicate_record_pair }
 
-  let(:id) { duplicate_record_pair.uuid }
+  let(:id) { duplicate_record_pair.id }
 
   let(:correct_attributes) do
     {
@@ -26,18 +28,18 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
       account_list: {
         data: {
           type: 'account_lists',
-          id: account_list.uuid
+          id: account_list.id
         }
       },
       records: {
         data: [
           {
             type: 'contact',
-            id: account_list.contacts.first.uuid
+            id: account_list.contacts.first.id
           },
           {
             type: 'contact',
-            id: account_list.contacts.second.uuid
+            id: account_list.contacts.second.id
           }
         ]
       }
@@ -49,7 +51,7 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
       account_list: {
         data: {
           type: 'account_lists',
-          id: create(:account_list).uuid
+          id: create(:account_list).id
         }
       }
     }

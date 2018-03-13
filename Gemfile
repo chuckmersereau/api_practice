@@ -42,7 +42,6 @@ gem 'gmail', git: 'https://github.com/gmailgem/gmail.git', ref: '4f78039e9821340
 gem 'google-api-client', '~> 0.13.1'
 gem 'google_contacts_api', git: 'https://github.com/CruGlobal/google_contacts_api'
 gem 'google_timezone', '~> 0.0.5'
-gem 'graphql', '~> 1.4.2'
 gem 'iniparse', '~> 1.1.6'
 gem 'inky-rb', '~> 1.3.7', require: 'inky'
 gem 'jwt', '~> 1.5.6'
@@ -133,7 +132,7 @@ group :test do
   gem 'growl', '~> 1.0.3'
   gem 'mock_redis', '~> 0.17.0'
   gem 'rb-fsevent', require: false
-  gem 'roo', '~> 1.13.2'
+  gem 'roo', '~> 2.7.1'
   gem 'rspec-sidekiq', '~>3.0.3'
   gem 'rspec-retry', '~> 0.5.5'
   gem 'rubocop', '~> 0.49.0', require: false

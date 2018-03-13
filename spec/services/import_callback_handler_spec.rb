@@ -38,7 +38,7 @@ describe ImportCallbackHandler do
         expect_any_instance_of(AccountList).to receive(:queue_sync_with_google_contacts).and_raise(StandardError)
         expect(ImportMailer).to_not receive(:delay)
         ImportCallbackHandler.new(import).handle_success
-      rescue
+      rescue StandardError
       end
     end
 
@@ -78,7 +78,7 @@ describe ImportCallbackHandler do
           expect_any_instance_of(AccountList).to receive(:async_merge_contacts).and_raise(StandardError)
           expect { ImportCallbackHandler.new(import).handle_complete }.to change { import.reload.importing }.from(true).to(false)
             .and change { import.import_completed_at&.to_i }.from(nil).to(Time.current.to_i)
-        rescue
+        rescue StandardError
         end
       end
     end

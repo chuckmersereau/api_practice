@@ -16,7 +16,7 @@ class DonationReports::DonationInfo < ActiveModelSerializers::Model
   def self.from_donation(donation, converted_currency = 'USD')
     new(
       amount: donation.amount,
-      contact_id: donation.loaded_contact.try(:uuid),
+      contact_id: donation.loaded_contact.try(:id),
       contact_name: donation.loaded_contact.try(:name),
       converted_amount: CurrencyRate.convert_on_date(
         amount: donation.amount,
@@ -27,7 +27,7 @@ class DonationReports::DonationInfo < ActiveModelSerializers::Model
       converted_currency: converted_currency,
       currency: donation.currency,
       donation_date: donation.donation_date,
-      donation_id: donation.uuid,
+      donation_id: donation.id,
       likelihood_type: 'received'
     )
   end

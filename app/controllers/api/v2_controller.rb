@@ -10,7 +10,6 @@ class Api::V2Controller < ApiController
   include PunditHelpers
   include ResourceType
   include Sorting
-  include UuidToIdTransformer
 
   rescue_from Pundit::NotAuthorizedError, with: :render_403_from_exception
 
@@ -45,14 +44,16 @@ class Api::V2Controller < ApiController
 
   private
 
+  # The check for user_uuid should be removed 30 days after the following PR is merged to master
+  # https://github.com/CruGlobal/mpdx_api/pull/993
   def fetch_current_user
     # See JsonWebToken::Middleware and application.rb where the middleware is initialized
 
     jwt_payload = request.env['auth.jwt_payload']
 
-    return unless jwt_payload.try(:[], 'user_uuid') && jwt_payload.try(:[], 'exp')
+    return unless (jwt_payload.try(:[], 'user_id') || jwt_payload.try(:[], 'user_uuid')) && jwt_payload.try(:[], 'exp')
 
-    User.find_by(uuid: jwt_payload['user_uuid'])
+    User.find_by(id: jwt_payload['user_id'] || jwt_payload['user_uuid'])
   end
 
   def authenticate!
@@ -63,22 +64,16 @@ class Api::V2Controller < ApiController
     {
       pagination: pagination_meta_params(resources),
       sort: sorting_param_applied_to_query,
-      filter: permitted_filter_params_with_uuids
+      filter: permitted_filter_params_with_ids
     }
   end
 
-  def permitted_filter_params_with_uuids
+  def permitted_filter_params_with_ids
     @original_params[:filter]&.slice(*filter_params.keys) || {}
   end
 
   def persistence_context
     action_name == 'update' ? :update_from_controller : :create
-  end
-
-  def transform_id_param_to_uuid_attribute
-    return unless params[:data] && params[:data][:id] && params[:data][:attributes]
-
-    data_attributes[:uuid] = params[:data][:id]
   end
 
   def data_attributes
@@ -106,9 +101,7 @@ class Api::V2Controller < ApiController
   end
 
   def verify_primary_id_placement
-    if params.dig(:data, :attributes, :id)
-      render_403(title: 'A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`')
-    end
+    render_403(title: 'A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`') if params.dig(:data, :attributes, :id)
   end
 
   def scope_request_to_time_zone(&block)

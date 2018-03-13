@@ -59,7 +59,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
         decoded_web_token = JsonWebToken.decode(json_web_token)
 
         expect(json_web_token).to be_present
-        expect(User.find_by(uuid: decoded_web_token['user_uuid']).id).to eq user.id
+        expect(User.find_by(id: decoded_web_token['user_id']).id).to eq user.id
         expect(decoded_web_token['exp']).to eq 30.days.from_now.utc.to_i
       end
 

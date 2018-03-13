@@ -10,7 +10,7 @@ module Auth
       session['redirect_to'] = params[:redirect_to]
       session['account_list_id'] = params[:account_list_id]
       if params[:provider] == 'donorhub'
-        organization = Organization.find_by!(uuid: params[:organization_id])
+        organization = Organization.find(params[:organization_id])
         redirect_to "/auth/donorhub?oauth_url=#{URI.encode(organization.oauth_url)}"
       elsif params[:provider] == 'sidekiq'
         raise AuthenticationError unless current_user.developer
@@ -32,8 +32,10 @@ module Auth
       raise AuthenticationError
     end
 
+    # The check for user_uuid should be removed 30 days after the following PR is merged to master
+    # https://github.com/CruGlobal/mpdx_api/pull/993
     def user_id_in_token?
-      http_token && jwt_payload && jwt_payload['user_uuid']
+      http_token && jwt_payload && (jwt_payload['user_id'].present? || jwt_payload['user_uuid'].present?)
     end
 
     def http_token
@@ -49,8 +51,10 @@ module Auth
       @jwt_payload ||= JsonWebToken.decode(http_token) if http_token
     end
 
+    # The check for user_uuid should be removed 30 days after the following PR is merged to master
+    # https://github.com/CruGlobal/mpdx_api/pull/993
     def fetch_current_user
-      @current_user ||= User.find_by_uuid_or_raise!(jwt_payload['user_uuid']) if jwt_payload
+      @current_user ||= User.find(jwt_payload['user_id'] || jwt_payload['user_uuid']) if jwt_payload
     end
   end
 end

@@ -21,6 +21,7 @@ class Api::V2::Coaching::AccountListsController < Api::V2Controller
   def load_account_lists
     @account_lists = account_lists_scope.where(filter_params)
                                         .reorder(sorting_param)
+                                        .order(:created_at)
                                         .page(page_number_param)
                                         .per(per_page_param)
   end
@@ -30,7 +31,7 @@ class Api::V2::Coaching::AccountListsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:id])
+    @account_list ||= AccountList.find(params[:id])
   end
 
   def authorize_account_list

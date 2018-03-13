@@ -12,7 +12,7 @@ describe AccountListInviteMailer do
         expect(mail.subject).to eq('You\'ve been invited to be a coach for an account on MPDX')
         expect(mail.to).to eq(['joe@example.com'])
         expect(mail.from).to eq(['support@mpdx.org'])
-        expect(mail.body.raw_source).to include("https://mpdx.org/account_lists/#{invite.account_list.uuid}/accept_invite/#{invite.uuid}?code=#{invite.code}")
+        expect(mail.body.raw_source).to include("https://mpdx.org/account_lists/#{invite.account_list.id}/accept_invite/#{invite.id}?code=#{invite.code}")
         expect(mail.body.raw_source).to include('You are getting this email because an MPDX user has invited you to be a coach for an account they manage.')
       end
     end
@@ -25,7 +25,7 @@ describe AccountListInviteMailer do
         expect(mail.subject).to eq('You\'ve been invited to access an account on MPDX')
         expect(mail.to).to eq(['joe@example.com'])
         expect(mail.from).to eq(['support@mpdx.org'])
-        expect(mail.body.raw_source).to include("https://mpdx.org/account_lists/#{invite.account_list.uuid}/accept_invite/#{invite.uuid}?code=#{invite.code}")
+        expect(mail.body.raw_source).to include("https://mpdx.org/account_lists/#{invite.account_list.id}/accept_invite/#{invite.id}?code=#{invite.code}")
         expect(mail.body.raw_source).to include('You are getting this email because an MPDX user has invited you to access an account they manage.')
       end
     end

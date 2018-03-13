@@ -43,12 +43,13 @@ class Api::V2::ContactsController < Api::V2Controller
     @contacts = ::Contact::Filterer.new(filter_params)
                                    .filter(scope: contact_scope, account_lists: account_lists)
                                    .reorder(sorting_param)
+                                   .order(:created_at)
                                    .page(page_number_param)
                                    .per(per_page_param)
   end
 
   def load_contact
-    @contact ||= Contact.find_by_uuid_or_raise!(params[:id])
+    @contact ||= Contact.find(params[:id])
   end
 
   def authorize_contact

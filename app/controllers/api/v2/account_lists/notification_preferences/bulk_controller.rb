@@ -49,7 +49,7 @@ class Api::V2::AccountLists::NotificationPreferences::BulkController < Api::V2::
   def build_empty_notification_preferences
     @notification_preferences +=
       params.require(:data).select { |data| data['notification_preference']['id'].nil? }.map do |data|
-        notification_preference_scope.build(uuid: data['notification_preference']['uuid'])
+        notification_preference_scope.build(id: data['notification_preference']['id'])
       end
   end
 
@@ -68,7 +68,7 @@ class Api::V2::AccountLists::NotificationPreferences::BulkController < Api::V2::
     params
       .require(:data)
       .find_index do |notification_preference_data|
-        notification_preference_data[:notification_preference][:uuid] == notification_preference.uuid
+        notification_preference_data[:notification_preference][:id] == notification_preference.id
       end
   end
 
@@ -78,6 +78,6 @@ class Api::V2::AccountLists::NotificationPreferences::BulkController < Api::V2::
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 end

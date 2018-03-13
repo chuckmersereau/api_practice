@@ -8,11 +8,11 @@ resource 'Contacts > Addresses' do
   let!(:user) { create(:user_with_full_account) }
   let(:resource_type) { 'addresses' }
 
-  let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id) { contact.uuid }
+  let(:contact)    { create(:contact, account_list: user.account_lists.order(:created_at).first) }
+  let(:contact_id) { contact.id }
 
   let!(:address) { create(:address, addressable: contact) }
-  let(:id) { address.uuid }
+  let(:id) { address.id }
 
   let(:new_address) do
     attributes_for(:address, addressable: contact)

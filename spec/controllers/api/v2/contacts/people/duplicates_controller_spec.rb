@@ -12,7 +12,7 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
   let(:resource) { duplicate_record_pair }
   let(:second_resource) { second_duplicate_record_pair }
 
-  let(:id) { duplicate_record_pair.uuid }
+  let(:id) { duplicate_record_pair.id }
 
   let(:correct_attributes) do
     {
@@ -26,18 +26,18 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
       account_list: {
         data: {
           type: 'account_lists',
-          id: account_list.uuid
+          id: account_list.id
         }
       },
       records: {
         data: [
           {
             type: 'person',
-            id: account_list.people.first.uuid
+            id: account_list.people.first.id
           },
           {
             type: 'person',
-            id: account_list.people.second.uuid
+            id: account_list.people.second.id
           }
         ]
       }
@@ -49,7 +49,7 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
       account_list: {
         data: {
           type: 'account_lists',
-          id: create(:account_list).uuid
+          id: create(:account_list).id
         }
       }
     }

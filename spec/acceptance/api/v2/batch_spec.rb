@@ -6,7 +6,7 @@ resource 'Batch' do
   documentation_scope = :requests
 
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   context 'authorized user' do
     before { api_login(user) }
@@ -33,10 +33,10 @@ resource 'Batch' do
                     'a batch request.'
 
         do_request requests: [
-          { method: 'GET', path: "/api/v2/account_lists/#{account_list.uuid}/donations" },
-          { method: 'PATCH', path: "/api/v2/tasks/#{task.uuid}", body: {
+          { method: 'GET', path: "/api/v2/account_lists/#{account_list.id}/donations" },
+          { method: 'PATCH', path: "/api/v2/tasks/#{task.id}", body: {
             data: {
-              id: task.uuid,
+              id: task.id,
               type: 'tasks',
               attributes: {
                 subject: 'Random Task Subject',

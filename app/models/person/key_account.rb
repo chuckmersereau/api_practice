@@ -15,7 +15,7 @@ class Person::KeyAccount < ApplicationRecord
                           :remote_id,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   def self.find_or_create_from_auth(auth_hash, person)
     relation_scope   = person.key_accounts
@@ -39,9 +39,7 @@ class Person::KeyAccount < ApplicationRecord
       relation_scope: relation_scope
     )
 
-    if person.organization_accounts.where(organization_id: Organization.cru_usa.id).empty?
-      account.find_or_create_org_account
-    end
+    account.find_or_create_org_account if person.organization_accounts.where(organization_id: Organization.cru_usa.id).empty?
 
     account
   end

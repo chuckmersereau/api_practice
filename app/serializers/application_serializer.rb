@@ -4,10 +4,6 @@ class ApplicationSerializer < ActiveModel::Serializer
              :updated_at,
              :updated_in_db_at
 
-  def id
-    object.uuid
-  end
-
   def self.collection_serialize(resources)
     ActiveModelSerializers::SerializableResource.new(resources, each_serializer: self)
   end

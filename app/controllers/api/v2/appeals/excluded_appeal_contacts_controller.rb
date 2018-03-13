@@ -35,7 +35,7 @@ class Api::V2::Appeals::ExcludedAppealContactsController < Api::V2Controller
   end
 
   def load_excluded_appeal_contact
-    @excluded_appeal_contact ||= excluded_appeal_contact_scope.find_by_uuid_or_raise!(params[:id])
+    @excluded_appeal_contact ||= excluded_appeal_contact_scope.find(params[:id])
   end
 
   def excluded_appeal_contact_scope
@@ -54,7 +54,7 @@ class Api::V2::Appeals::ExcludedAppealContactsController < Api::V2Controller
   end
 
   def load_appeal
-    @appeal ||= Appeal.find_by_uuid_or_raise!(params[:appeal_id])
+    @appeal ||= Appeal.find(params[:appeal_id])
   end
 
   def pundit_user

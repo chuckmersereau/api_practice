@@ -8,11 +8,11 @@ resource 'Contacts' do
   let(:resource_type) { 'contacts' }
   let!(:user)         { create(:user_with_account) }
 
-  let(:account_list)    { user.account_lists.first }
-  let(:account_list_id) { account_list.uuid }
+  let(:account_list)    { user.account_lists.order(:created_at).first }
+  let(:account_list_id) { account_list.id }
 
   let!(:contact) { create(:contact, account_list: account_list) }
-  let(:id)       { contact.uuid }
+  let(:id)       { contact.id }
 
   let(:new_contact) do
     attributes_for(:contact)
@@ -45,7 +45,7 @@ resource 'Contacts' do
       account_list: {
         data: {
           type: 'account_lists',
-          id: account_list.uuid
+          id: account_list.id
         }
       }
     }

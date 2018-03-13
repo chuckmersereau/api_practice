@@ -8,7 +8,9 @@ RSpec.describe Contact::DupContactsMerge, type: :model do
 
   describe 'initialize' do
     it 'initializes' do
-      expect(Contact::DupContactsMerge.new(account_list: account_list, contact: contact)).to be_a(Contact::DupContactsMerge)
+      expect(
+        Contact::DupContactsMerge.new(account_list: account_list, contact: contact)
+      ).to be_a(Contact::DupContactsMerge)
     end
   end
 
@@ -49,11 +51,17 @@ RSpec.describe Contact::DupContactsMerge, type: :model do
       end
 
       context 'contacts share addresses' do
+        let(:master_address_id_1) { SecureRandom.uuid }
+        let(:master_address_id_2) { SecureRandom.uuid }
+
         before do
-          contact_one.addresses << build(:address, master_address_id: 1)
-          contact_two.addresses << build(:address, master_address_id: 1)
-          contact_three.addresses << build(:address, master_address_id: 2, city: 'Somewhere Else', postal_code: '1234asdf')
-          contact_four.addresses << build(:address, master_address_id: 1)
+          contact_one.addresses << build(:address, master_address_id: master_address_id_1)
+          contact_two.addresses << build(:address, master_address_id: master_address_id_1)
+          contact_three.addresses << build(:address,
+                                           master_address_id: master_address_id_2,
+                                           city: 'Somewhere Else',
+                                           postal_code: '1234asdf')
+          contact_four.addresses << build(:address, master_address_id: master_address_id_1)
         end
 
         it 'finds a duplicate contact' do
@@ -104,11 +112,17 @@ RSpec.describe Contact::DupContactsMerge, type: :model do
       end
 
       context 'contacts share addresses' do
+        let(:master_address_id_1) { SecureRandom.uuid }
+        let(:master_address_id_2) { SecureRandom.uuid }
+
         before do
-          contact_one.addresses << build(:address, master_address_id: 1)
-          contact_two.addresses << build(:address, master_address_id: 1)
-          contact_three.addresses << build(:address, master_address_id: 2, city: 'Somewhere Else', postal_code: '1234asdf')
-          contact_four.addresses << build(:address, master_address_id: 1)
+          contact_one.addresses << build(:address, master_address_id: master_address_id_1)
+          contact_two.addresses << build(:address, master_address_id: master_address_id_1)
+          contact_three.addresses << build(:address,
+                                           master_address_id: master_address_id_2,
+                                           city: 'Somewhere Else',
+                                           postal_code: '1234asdf')
+          contact_four.addresses << build(:address, master_address_id: master_address_id_1)
         end
 
         it 'merges contacts' do

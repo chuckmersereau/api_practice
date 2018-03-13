@@ -8,8 +8,7 @@ class DesignationProfileAccount < ApplicationRecord
 
   def create_account_list_entry
     account_list = designation_profile.account_list
-    if account_list && !account_list.designation_accounts.include?(designation_account)
-      account_list.designation_accounts << designation_account
-    end
+    return unless account_list && !account_list.designation_accounts.include?(designation_account)
+    account_list.designation_accounts << designation_account
   end
 end

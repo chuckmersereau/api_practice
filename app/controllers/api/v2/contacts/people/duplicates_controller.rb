@@ -44,12 +44,13 @@ class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
   def load_duplicates
     @duplicates = duplicates_scope.where(filter_params)
                                   .reorder(sorting_param)
+                                  .order(:created_at)
                                   .page(page_number_param)
                                   .per(per_page_param)
   end
 
   def load_duplicate
-    @duplicate = DuplicateRecordPair.type('Person').find_by_uuid_or_raise!(params[:id])
+    @duplicate = DuplicateRecordPair.type('Person').find(params[:id])
   end
 
   def build_duplicate

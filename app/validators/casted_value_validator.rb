@@ -5,9 +5,7 @@ module CastedValueValidator
   DATE_FIELD_ENDINGS ||= %w(_at _date _range).freeze
 
   def validate!(attribute:, value:)
-    if DATE_FIELD_ENDINGS.any? { |ending| attribute.to_s.end_with?(ending) }
-      ensure_date_formatting(value)
-    end
+    ensure_date_formatting(value) if DATE_FIELD_ENDINGS.any? { |ending| attribute.to_s.end_with?(ending) }
   end
 
   private

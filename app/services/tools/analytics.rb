@@ -14,7 +14,7 @@ class Tools::Analytics < ActiveModelSerializers::Model
   def counts_by_type
     account_lists.map do |account_list|
       {
-        id: account_list.uuid,
+        id: account_list.id,
         counts: counts_by_type_for_account_list(account_list)
       }
     end

@@ -51,7 +51,7 @@ module Person::Account
     end
 
     def find_authenticated_user(auth_hash)
-      User.find_by(id: authenticated.where(remote_id: auth_hash.uid).pluck(:person_id).first)
+      User.find_by(id: authenticated.where(remote_id: auth_hash.uid).order(:created_at).pluck(:person_id).first)
     end
 
     def one_per_user?

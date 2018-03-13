@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ApplicationDuplicatePairsFinder do
-  let!(:account_list) { create(:user_with_account).account_lists.first }
+  let!(:account_list) { create(:user_with_account).account_lists.order(:created_at).first }
 
   context 'valid type' do
     before do
@@ -33,7 +33,7 @@ describe ApplicationDuplicatePairsFinder do
       error = nil
       begin
         ApplicationDuplicatePairsFinder.new(account_list)
-      rescue => e
+      rescue StandardError => e
         error = e
       end
       expect(error).to be_present

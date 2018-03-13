@@ -44,8 +44,8 @@ RSpec.describe Tools::Analytics do
       allow(DuplicateRecordPair).to receive(:type).with('Person').and_return(dup_person_pairs_double)
     end
 
-    it 'returns the account_list uuid for each account_list' do
-      expect(counts_by_type.first[:id]).to eq(account_list.uuid)
+    it 'returns the account_list id for each account_list' do
+      expect(counts_by_type.first[:id]).to eq(account_list.id)
     end
 
     it 'returns the list of counts by type for each account list' do

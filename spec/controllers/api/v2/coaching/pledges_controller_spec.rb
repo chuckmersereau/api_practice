@@ -6,16 +6,16 @@ describe Api::V2::Coaching::PledgesController, type: :controller do
   let(:user) { create(:user, locale: :en) }
 
   let(:owner) { create(:user_with_account) }
-  let(:account_list) { owner.account_lists.first }
+  let(:account_list) { owner.account_lists.order(:created_at).first }
 
   let(:contact) { create :contact, account_list: account_list }
   let(:appeal) { create :appeal, account_list: account_list }
 
   let!(:pledge_1) { create_pledge amount: 20, expected_date: 2.days.from_now }
-  let!(:pledge_2) { create_pledge amount: 30, expected_date: 3.days.from_now }
-  let!(:pledge_3) { create_pledge amount: 40, expected_date: 4.days.from_now }
+  let!(:pledge_2) { create_pledge amount: 30, expected_date: 3.days.from_now, created_at: 1.week.from_now }
+  let!(:pledge_3) { create_pledge amount: 40, expected_date: 4.days.from_now, created_at: 2.weeks.from_now }
 
-  let(:id) { pledge_1.uuid }
+  let(:id) { pledge_1.id }
 
   let!(:coaches) { create_list(:user_coach, 2) }
   before do

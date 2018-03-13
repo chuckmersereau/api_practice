@@ -13,7 +13,7 @@ class AccountListUser < ApplicationRecord
   def duplicate_notification_preferences
     account_list.notification_preferences.where(user_id: nil).find_each do |notification_preference|
       notification_preference.dup.tap do |user_notification_preference|
-        user_notification_preference.uuid = nil
+        user_notification_preference.id = nil
         user_notification_preference.user = user
         user_notification_preference.email = true
         user_notification_preference.save!
@@ -27,7 +27,6 @@ class AccountListUser < ApplicationRecord
 
   def change_user_default_account_list_if_needed
     return unless user && user.default_account_list == account_list_id
-
-    user.update(default_account_list: user.account_lists.reload.ids.first)
+    user.update(default_account_list: user.account_lists.reload.order(:created_at).map(&:id).first)
   end
 end

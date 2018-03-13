@@ -16,7 +16,7 @@ class Person::FacebookAccount < ApplicationRecord
                           :updated_at,
                           :updated_in_db_at,
                           :username,
-                          :uuid].freeze
+                          :id].freeze
 
   validates :username, presence: true, uniqueness: { scope: :person_id }
 
@@ -85,7 +85,7 @@ class Person::FacebookAccount < ApplicationRecord
     if tries.zero? && token && (!token_expires_at || token_expires_at < Time.now)
       begin
         refresh_token
-      rescue; end
+      rescue StandardError; end
       token_missing_or_expired?(1)
     else
       token.blank? || !token_expires_at || token_expires_at < Time.now
@@ -97,7 +97,7 @@ class Person::FacebookAccount < ApplicationRecord
     self.token = info['access_token']
     begin
       self.token_expires_at = Time.at(info['expires'].to_i)
-    rescue => e
+    rescue StandardError => e
       raise e.message + ': ' + info.inspect
     end
     save

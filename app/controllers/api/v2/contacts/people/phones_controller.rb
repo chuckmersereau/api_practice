@@ -58,11 +58,11 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   end
 
   def current_contact
-    @contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def current_person
-    @person ||= current_contact.people.find_by_uuid_or_raise!(params[:person_id])
+    @person ||= current_contact.people.find(params[:person_id])
   end
 
   def authorize_index
@@ -80,12 +80,13 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   end
 
   def load_phone
-    @phone ||= phone_scope.find_by_uuid_or_raise!(params[:id])
+    @phone ||= phone_scope.find(params[:id])
   end
 
   def load_phones
     @phones = phone_scope.where(filter_params)
                          .reorder(sorting_param)
+                         .order(:created_at)
                          .page(page_number_param)
                          .per(per_page_param)
   end

@@ -25,7 +25,7 @@ class WebRouter
   end
 
   def self.account_list_invite_url(invite)
-    "#{base_url}/account_lists/#{invite.account_list.uuid}/accept_invite/#{invite.uuid}?code=#{invite.code}"
+    "#{base_url}/account_lists/#{invite.account_list.id}/accept_invite/#{invite.id}?code=#{invite.code}"
   end
 
   def self.integration_preferences_url(integration_name)
@@ -37,7 +37,7 @@ class WebRouter
   end
 
   def self.contact_url(contact, tab = nil)
-    "#{base_url}/contacts/#{contact.uuid}#{"/#{tab}" if tab}"
+    "#{base_url}/contacts/#{contact.id}#{"/#{tab}" if tab}"
   end
 
   def self.tasks_url
@@ -45,7 +45,7 @@ class WebRouter
   end
 
   def self.person_url(person)
-    "#{base_url}/contacts/#{person.contact.uuid}?personId=#{person.uuid}"
+    "#{base_url}/contacts/#{person.contact.id}?personId=#{person.id}"
   end
 
   def self.logout_url

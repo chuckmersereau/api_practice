@@ -9,7 +9,7 @@ class DuplicateRecordPair < ApplicationRecord
     :record_two_id,
     :updated_at,
     :updated_in_db_at,
-    :uuid
+    :id
   ].freeze
 
   TYPES = %w(Contact Person).freeze
@@ -46,7 +46,7 @@ class DuplicateRecordPair < ApplicationRecord
   # It doesn't matter whether a record is in record_one or record_two.
   # We sort the record ids so that the db index can enforce uniqueness across both ids.
   def sort_record_ids
-    self.record_one_id, self.record_two_id = ids.sort
+    self.record_one_id, self.record_two_id = (records.compact.sort_by(&:created_at).map(&:id) + ids).uniq
   end
 
   def records_have_the_same_type_validation

@@ -16,7 +16,7 @@ class CsvImportContactWorker
     begin
       CsvRowContactBuilder.new(csv_row: csv_row, import: import).build.save!
 
-    rescue => exception
+    rescue StandardError => exception
       if retryable_exception?(exception)
         Rollbar.error(exception)
         @retries += 1

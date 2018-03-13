@@ -5,9 +5,9 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
   let(:resource_type) { :imports }
 
   let!(:user) { create(:user_with_account) }
-  let!(:account_list) { user.account_lists.first }
-  let!(:account_list_id) { account_list.uuid }
-  let!(:id) { import.uuid }
+  let!(:account_list) { user.account_lists.order(:created_at).first }
+  let!(:account_list_id) { account_list.id }
+  let!(:id) { import.id }
   let!(:parent_param) { { account_list_id: account_list_id } }
   let!(:imports) do
     create_list(
@@ -81,13 +81,13 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       account_list: {
         data: {
           type: 'account_lists',
-          id: account_list.uuid
+          id: account_list.id
         }
       },
       user: {
         data: {
           type: 'users',
-          id: user.uuid
+          id: user.id
         }
       }
     }
@@ -133,7 +133,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
     it 'does not return an import if it does not have source csv' do
       tnt_import = create(:tnt_import, account_list: account_list, user: user)
       api_login(user)
-      get :show, parent_param.merge(id: tnt_import.uuid)
+      get :show, parent_param.merge(id: tnt_import.id)
       expect(response.status).to eq(404)
     end
   end
@@ -145,7 +145,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
         post :create, full_correct_attributes
       end.to change { resource.class.count }.by(1)
       expect(response.status).to eq(201)
-      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      import = Import.find_by_id(JSON.parse(response.body)['data']['id'])
       expect(import.file).to be_present
       expect(import.file.path).to end_with("uploads/import/file/#{import.id}/sample_csv_to_import.csv")
     end
@@ -155,7 +155,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       post :create, full_correct_attributes.tap { |params|
         params[:data][:attributes][:source] = 'twitter'
       }
-      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      import = Import.find_by_id(JSON.parse(response.body)['data']['id'])
       expect(import.source).to eq 'csv'
     end
 
@@ -164,7 +164,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       post :create, full_correct_attributes.tap { |params|
         params[:data][:attributes].delete([:in_preview, 'in_preview'])
       }
-      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      import = Import.find_by_id(JSON.parse(response.body)['data']['id'])
       expect(import.in_preview?).to eq true
     end
 
@@ -172,7 +172,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       api_login(user)
       full_correct_attributes[:data][:relationships].delete(:user)
       post :create, full_correct_attributes
-      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      import = Import.find_by_id(JSON.parse(response.body)['data']['id'])
       expect(import.user_id).to eq user.id
     end
 
@@ -181,7 +181,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       post :create, full_correct_attributes.tap { |params|
         params[:data][:attributes].delete([:in_preview, 'in_preview'])
       }
-      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      import = Import.find_by_id(JSON.parse(response.body)['data']['id'])
       expect(import.file_headers).to be_present
       expect(import.file_headers).to be_a Hash
       expect(import.file_constants).to be_present

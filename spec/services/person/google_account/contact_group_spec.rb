@@ -21,14 +21,12 @@ RSpec.describe Person::GoogleAccount::ContactGroup do
       described_class.new(
         id: 'contact_group_id_0',
         title: 'contact_group_title_0',
-        uuid: 'contact_group_id_0',
         created_at: Date.today,
         updated_at: Date.today
       ),
       described_class.new(
         id: 'contact_group_id_1',
         title: 'contact_group_title_1',
-        uuid: 'contact_group_id_1',
         created_at: Date.today,
         updated_at: Date.today
       )

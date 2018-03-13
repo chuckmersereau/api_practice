@@ -12,7 +12,6 @@ class FacebookImport
 
   def import_contacts
     return false unless @import.source_account_id
-
     facebook_account = @user.facebook_accounts.find(@import.source_account_id)
     begin
       facebook_account.update_column(:downloading, true)
@@ -74,7 +73,7 @@ class FacebookImport
           rescue ActiveRecord::RecordNotUnique
           end
 
-        rescue => e
+        rescue StandardError => e
           Rollbar.raise_or_notify(e)
           next
         end
@@ -103,12 +102,9 @@ class FacebookImport
     fb_person = account_list.people.includes(:facebook_account).find_by('person_facebook_accounts.remote_id' => friend.identifier)
 
     # If we can't find a contact with this fb account, see if we have a contact with the same name and no fb account
-    unless fb_person
-      fb_person = account_list.people.includes(:facebook_account).find_by('person_facebook_accounts.remote_id' => nil,
+    fb_person ||= account_list.people.includes(:facebook_account).find_by('person_facebook_accounts.remote_id' => nil,
                                                                           'people.first_name' => friend.first_name,
                                                                           'people.last_name' => friend.last_name)
-
-    end
 
     if fb_person
       fb_person.update_attributes(person_attributes)

@@ -54,7 +54,7 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
   end
 
   def build_empty_tasks
-    @tasks = params.require(:data).map { |data| Task.new(uuid: data['task']['uuid']) }
+    @tasks = params.require(:data).map { |data| Task.new(id: data['task']['id']) }
   end
 
   def build_tasks
@@ -71,7 +71,7 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
   def data_attribute_index(task)
     params
       .require(:data)
-      .find_index { |task_data| task_data[:task][:uuid] == task.uuid }
+      .find_index { |task_data| task_data[:task][:id] == task.id }
   end
 
   def task_params(attributes)

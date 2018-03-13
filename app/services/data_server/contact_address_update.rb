@@ -2,9 +2,7 @@ DataServer::ContactAddressUpdate = Struct.new(:contact, :donor_account) do
   def update_from_donor_account
     return if contact_already_has_latest?
     Contact.transaction do
-      if contact.primary_address&.source == 'DataServer'
-        contact.primary_address.update!(primary_mailing_address: false)
-      end
+      contact.primary_address.update!(primary_mailing_address: false) if contact.primary_address&.source == 'DataServer'
       if latest_donor_address
         contact.copy_address(address: latest_donor_address, source: 'DataServer',
                              source_donor_account_id: latest_donor_address.addressable_id)

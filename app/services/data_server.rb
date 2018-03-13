@@ -205,9 +205,7 @@ class DataServer
 
   def check_credentials!
     return unless requires_credentials?
-    unless org_account.username && org_account.password || org_account.token
-      raise_missing_credentials
-    end
+    raise_missing_credentials unless org_account.username && org_account.password || org_account.token
     unless org_account.valid_credentials?
       raise Person::OrganizationAccount::InvalidCredentialsError,
             _('Your credentials for %{org} are invalid.').localize % { org: org }
@@ -236,13 +234,10 @@ class DataServer
   end
 
   def profiles_with_designation_numbers
-    unless @profiles_with_designation_numbers
-      @profiles_with_designation_numbers = profiles.map do |profile|
-        { designation_numbers: designation_numbers(profile[:code]) }
-          .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
-      end
+    @profiles_with_designation_numbers ||= profiles.map do |profile|
+      { designation_numbers: designation_numbers(profile[:code]) }
+        .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
     end
-    @profiles_with_designation_numbers
   end
 
   protected
@@ -371,17 +366,13 @@ class DataServer
     end
 
     # look for a redirect
-    if lines[1] && lines[1].include?('RedirectQueryIni')
-      raise Errors::UrlChanged, lines[1].split('=')[1]
-    end
+    raise Errors::UrlChanged, lines[1].split('=')[1] if lines[1]&.include?('RedirectQueryIni')
 
     response
   end
 
   def raise_invalid_credentials
-    if org_account.valid_credentials? && !org_account.new_record?
-      org_account.update_column(:valid_credentials, false)
-    end
+    org_account.update_column(:valid_credentials, false) if org_account.valid_credentials? && !org_account.new_record?
 
     raise Person::OrganizationAccount::InvalidCredentialsError,
           _('Your credentials for %{org} are invalid.').localize % { org: org }

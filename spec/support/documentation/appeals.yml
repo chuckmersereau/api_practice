@@ -31,7 +31,7 @@ relationships: &rels
       id:
         description:
           The `id` of the Account List that the Appeal belongs to
-        type: UUID string
+        type: id string
         required: true
 
   contacts:
@@ -67,7 +67,7 @@ parameters:
       account_list_id:
         description:
           Filter by Account List; accepts an Account List `id`; this is required if you want the Contact included on Donations.
-        type: UUID string
+        type: id string
       excluded:
         description:
           Filter by excluded Contacts

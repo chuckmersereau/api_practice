@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User::Authenticate, type: :model do
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
   let(:resource) { User::Authenticate.new(user: user) }
 
   it 'initializes' do
@@ -15,7 +15,7 @@ RSpec.describe User::Authenticate, type: :model do
 
     it 'returns a json_web_token which decodes to the same user id' do
       expect(subject).to be_present
-      expect(User.find_by(uuid: JsonWebToken.decode(subject)['user_uuid']).id).to eq user.id
+      expect(User.find_by(id: JsonWebToken.decode(subject)['user_id']).id).to eq user.id
     end
   end
 end

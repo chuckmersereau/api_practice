@@ -4,7 +4,7 @@ RSpec.describe Api::V2::Tasks::Tags::BulkController, type: :controller do
   let(:resource_type) { :tags }
 
   let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:first_tag)  { 'tag_one' }
   let(:second_tag) { 'tag_two' }
@@ -58,7 +58,7 @@ RSpec.describe Api::V2::Tasks::Tags::BulkController, type: :controller do
       let(:filter_params) do
         {
           filter: {
-            task_ids: task_two.uuid
+            task_ids: task_two.id
           }
         }
       end

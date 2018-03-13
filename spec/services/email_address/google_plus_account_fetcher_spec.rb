@@ -46,7 +46,7 @@ RSpec.describe EmailAddress::GooglePlusAccountFetcher do
 
       it 'does not raise an error' do
         expect { google_plus_account_fetcher.fetch_google_plus_account }
-          .not_to raise_error(URI::InvalidURIError)
+          .not_to raise_error
       end
     end
   end

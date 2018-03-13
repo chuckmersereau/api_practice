@@ -42,7 +42,7 @@ class GoogleContactsIntegrator
   rescue Person::GoogleAccount::MissingRefreshToken
     # Don't log this exception as we expect it to happen from time to time.
     # Person::GoogleAccount will turn off the contacts integration and send the user an email to refresh their Google login.
-  rescue => e
+  rescue StandardError => e
     Rollbar.raise_or_notify(e)
   end
   alias sync_contacts sync_data
@@ -137,7 +137,7 @@ class GoogleContactsIntegrator
       raise format('HTTP %p returned. Could not clean up inactive contact (after %d tries): %p',
                    status, num_retries, g_contact)
     end
-  rescue => e
+  rescue StandardError => e
     Rollbar.raise_or_notify(e)
   end
 
@@ -233,7 +233,7 @@ class GoogleContactsIntegrator
     else
       save_g_contacts_then_links(contact, g_contacts_to_save, g_contacts_and_links)
     end
-  rescue => e
+  rescue StandardError => e
     Rollbar.raise_or_notify(e, parameters: { contact_id: contact.id, last_batch_xml: api_user.last_batch_xml })
   end
 
@@ -314,7 +314,7 @@ class GoogleContactsIntegrator
             end
           rescue LowerRetryWorker::RetryJobButNoRollbarError => e
             raise e
-          rescue => e
+          rescue StandardError => e
             # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
             Rollbar.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
                                                      batch_xml: api_user.last_batch_xml })

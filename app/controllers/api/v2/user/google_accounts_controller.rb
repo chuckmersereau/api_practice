@@ -44,7 +44,7 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
   end
 
   def load_google_account
-    @google_account ||= Person::GoogleAccount.find_by_uuid_or_raise!(params[:id])
+    @google_account ||= Person::GoogleAccount.find(params[:id])
   end
 
   def render_google_account

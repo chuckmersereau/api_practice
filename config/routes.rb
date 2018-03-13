@@ -13,8 +13,6 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    post :graphql, to: 'graphql#create'
-
     api_version(module: 'V2', path: { value: 'v2' }) do
       constraints(id: UUID_REGEX) do
         namespace :admin do

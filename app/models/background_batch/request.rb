@@ -49,6 +49,6 @@ class BackgroundBatch::Request < ApplicationRecord
   protected
 
   def default_account_list_id
-    @default_account_list_id ||= AccountList.find_by(id: background_batch_user.try(:default_account_list)).try(:uuid)
+    @default_account_list_id ||= AccountList.find_by(id: background_batch_user.try(:default_account_list)).try(:id)
   end
 end

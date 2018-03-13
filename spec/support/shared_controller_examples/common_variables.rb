@@ -41,7 +41,7 @@ RSpec.shared_examples 'common_variables' do
           account_list: {
             data: {
               type: 'account_lists',
-              id: account_list.uuid
+              id: account_list.id
             }
           }
         }

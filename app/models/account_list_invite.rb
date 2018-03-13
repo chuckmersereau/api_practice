@@ -17,7 +17,7 @@ class AccountListInvite < ApplicationRecord
                           :invite_user_as,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   def accept(accepting_user)
     return false if cancelled?

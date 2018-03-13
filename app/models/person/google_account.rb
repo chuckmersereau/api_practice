@@ -15,7 +15,7 @@ class Person::GoogleAccount < ApplicationRecord
                           :remote_id,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :id].freeze
 
   def self.find_or_create_from_auth(auth_hash, person)
     Rails.logger.debug(auth_hash)

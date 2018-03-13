@@ -1,7 +1,7 @@
 # The source of this model's data is loaded from the BI tool into the data warehouse.
 # From their a view has been created on the staging and prod instances of the MPDX database.
 # Migrations exist for this model for testing and development purposes.
-class DonationAmountRecommendation::Remote < ActiveRecord::Base
+class DonationAmountRecommendation::Remote < ApplicationRecord
   self.table_name = 'wv_donation_amt_recommendation'
 
   belongs_to :organization

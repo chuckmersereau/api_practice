@@ -24,12 +24,13 @@ class Api::V2::AccountListsController < Api::V2Controller
   def load_account_lists
     @account_lists = account_list_scope.where(filter_params)
                                        .reorder(sorting_param)
+                                       .order(:created_at)
                                        .page(page_number_param)
                                        .per(per_page_param)
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:id])
+    @account_list ||= AccountList.find(params[:id])
   end
 
   def render_account_list

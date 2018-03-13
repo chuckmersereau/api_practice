@@ -1,14 +1,16 @@
 require 'rails_helper'
 
 describe GoogleImport do
-  before do
-    @user = create(:user)
-    @account = create(:google_account, person_id: @user.id)
-    @account_list = create(:account_list, creator: @user)
-    @contact = create(:contact, account_list: @account_list)
-    @import = create(:import, source: 'google', source_account_id: @account.id, account_list: @account_list, user: @user)
-    @google_import = GoogleImport.new(@import)
+  let!(:user) { create(:user) }
+  let!(:account) { create(:google_account, person_id: user.id) }
+  let!(:account_list) { create(:account_list, creator: user) }
+  let!(:contact) { create(:contact, account_list: account_list) }
+  let!(:import) do
+    create(:import, source: 'google', source_account_id: account.id, account_list: account_list, user: user)
+  end
+  subject! { GoogleImport.new(import) }
 
+  before do
     stub_g_contacts('spec/fixtures/google_contacts.json')
     stub_g_contact_photo
     stub_smarty_and_cloudinary
@@ -16,13 +18,13 @@ describe GoogleImport do
 
   def stub_g_contacts(file)
     stub_request(:get, 'https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=100000&v=3')
-      .with(headers: { 'Authorization' => "Bearer #{@account.token}" })
+      .with(headers: { 'Authorization' => "Bearer #{account.token}" })
       .to_return(body: File.new(Rails.root.join(file)).read)
   end
 
   def stub_g_contact_photo
     stub_request(:get, 'https://www.google.com/m8/feeds/photos/media/test.user@cru.org/6b70f8bb0372c?v=3')
-      .with(headers: { 'Authorization' => "Bearer #{@account.token}" })
+      .with(headers: { 'Authorization' => "Bearer #{account.token}" })
       .to_return(body: 'photo data', headers: { 'content-type' => 'image/jpeg' })
   end
 
@@ -47,10 +49,10 @@ describe GoogleImport do
   describe 'when importing contacts' do
     it 'matches an existing person on my list' do
       person = create(:person)
-      @contact.people << person
+      contact.people << person
       expect do
-        expect(@google_import).to receive(:create_or_update_person).and_return(person)
-        @google_import.import
+        expect(subject).to receive(:create_or_update_person).and_return(person)
+        subject.import
       end.to_not change(Contact, :count)
     end
 
@@ -58,50 +60,50 @@ describe GoogleImport do
       # note the json file has a blank contact record which should be ignored, so the count changes by 1 only
       expect do
         expect do
-          expect(@google_import).to receive(:create_or_update_person).and_return(create(:person))
-          @google_import.import
+          expect(subject).to receive(:create_or_update_person).and_return(create(:person))
+          subject.import
         end.to change(Person, :count).by(1)
       end.to change(Contact, :count).by(1)
     end
 
     it 'adds tags from the import' do
-      expect(@google_import).to receive(:create_or_update_person).and_return(create(:person))
+      expect(subject).to receive(:create_or_update_person).and_return(create(:person))
 
-      @import.update_column(:tags, 'hi, mom')
-      @google_import.import
-      expect(Contact.last.tag_list.sort).to eq(%w(hi mom))
+      import.update_column(:tags, 'hi, mom')
+      subject.import
+      expect(Contact.order(:created_at).last.tag_list.sort).to eq(%w(hi mom))
     end
   end
 
   describe 'create_or_update_person' do
-    before do
-      @google_contact = OpenStruct.new(given_name: 'John', family_name: 'Doe',
-                                       emails_full: [], phone_numbers_full: [], organizations: [],
-                                       websites: [], id: Time.zone.now.to_i.to_s)
+    let(:google_contact) do
+      OpenStruct.new(given_name: 'John', family_name: 'Doe',
+                     emails_full: [], phone_numbers_full: [], organizations: [],
+                     websites: [], id: Time.zone.now.to_i.to_s)
     end
 
     it 'updates the person if they already exist by google remote_id if override set' do
-      @import.override = true
+      import.override = true
       person = create(:person, first_name: 'Not-John')
-      create(:google_contact, person: person, remote_id: @google_contact.id)
-      @contact.people << person
+      create(:google_contact, person: person, remote_id: google_contact.id)
+      contact.people << person
       expect do
-        @google_import.send(:create_or_update_person, @google_contact)
+        subject.send(:create_or_update_person, google_contact)
         expect(person.reload.first_name).to eq('John')
       end.to_not change(Person, :count)
     end
 
     it 'does not create a new person if their name matches' do
-      @contact.people << create(:person, first_name: 'John', last_name: 'Doe')
+      contact.people << create(:person, first_name: 'John', last_name: 'Doe')
       expect do
-        @google_import.send(:create_or_update_person, @google_contact)
+        subject.send(:create_or_update_person, google_contact)
       end.to_not change(Person, :count)
     end
 
     it "creates a person and master person if we can't find a match" do
       expect do
         expect do
-          @google_import.send(:create_or_update_person, @google_contact)
+          subject.send(:create_or_update_person, google_contact)
         end.to change(Person, :count)
       end.to change(MasterPerson, :count)
     end
@@ -113,18 +115,18 @@ describe GoogleImport do
       json = JSON.parse(File.new(Rails.root.join(file)).read)
       json['feed']['entry'][0]['gContact$relation'] = [{ 'rel' => 'spouse', '$t' => spouse }]
       stub_request(:get, 'https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=100000&v=3')
-        .with(headers: { 'Authorization' => "Bearer #{@account.token}" })
+        .with(headers: { 'Authorization' => "Bearer #{account.token}" })
         .to_return(body: json.to_json)
     end
 
     it 'does not import a spouse if none specified' do
-      @google_import.import
+      subject.import
       contact = Contact.find_by(name: 'Google, John')
       expect(contact.people.count).to eq(1)
     end
 
     def import_and_expect_names(contact_name, person1_name, person2_name)
-      @google_import.import
+      subject.import
       contact = Contact.find_by(name: contact_name)
       people_names = contact.people.map { |p| [p.first_name, p.last_name] }
       expect(people_names.size).to eq(2)
@@ -148,17 +150,17 @@ describe GoogleImport do
     end
 
     it 'does not import spouse or change contact name if spouse person already exists in contact' do
-      @contact.update(name: 'Google, John')
+      contact.update(name: 'Google, John')
       john = create(:person, first_name: 'John', last_name: 'Google')
       jane = create(:person, first_name: 'Jane', last_name: 'Google', middle_name: 'Already there')
-      @contact.people << john
-      @contact.people << jane
+      contact.people << john
+      contact.people << jane
 
       stub_g_contacts_with_spouse('Jane')
-      @google_import.import
+      subject.import
       expect(Contact.count).to eq(1)
       contact = Contact.first
-      expect(contact).to eq(@contact)
+      expect(contact).to eq(contact)
       expect(contact.people).to include(john)
       expect(contact.people).to include(jane)
       expect(contact.people.map(&:middle_name)).to include('Already there')
@@ -168,7 +170,7 @@ describe GoogleImport do
   describe 'overall import results' do
     # rubocop:disable Metrics/AbcSize
     def check_imported_data
-      contacts = @account_list.contacts.where(name: 'Google, John')
+      contacts = account_list.contacts.where(name: 'Google, John')
       expect(contacts.to_a.size).to eq(1)
       contact = contacts.first
 
@@ -228,81 +230,83 @@ describe GoogleImport do
 
       expect(person.pictures.count).to eq(1)
       picture = person.pictures.first
-      expect(picture.image.url).to eq("https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      expect(picture.image.url).to eq(
+        "https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg"
+      )
       expect(picture.primary).to be true
 
       expect(person.google_contacts.count).to eq(1)
       google_contact = person.google_contacts.first
-      expect(google_contact.google_account).to eq(@account)
+      expect(google_contact.google_account).to eq(account)
       expect(google_contact.picture_etag).to eq('dxt2DAEZfCp7ImA-AV4zRxBoPG4UK3owXBM.')
       expect(google_contact.picture).to eq(picture)
       expect(google_contact.contact).to eq(contact)
     end
 
     it 'imports correct person data if no people exist and be the same for repeat imports' do
-      @google_import.import
+      subject.import
       check_imported_data
 
       # Repeat the import and make sure the data is the same
-      @google_import.import
+      subject.import
       check_imported_data
     end
 
     it 'handles the case when the Google auth token cannot be refreshed' do
       expect_any_instance_of(Person::GoogleAccount).to receive(:contacts_api_user)
         .at_least(1).times.and_raise(Person::GoogleAccount::MissingRefreshToken)
-      expect { @google_import.import }.to raise_error(Import::UnsurprisingImportError)
-      expect(@account_list.contacts.count).to eq(1)
+      expect { subject.import }.to raise_error(Import::UnsurprisingImportError)
+      expect(account_list.contacts.count).to eq(1)
     end
   end
 
   describe 'import override/non-override behavior for primary contact info' do
+    let(:person) { build(:person, first_name: 'John', last_name: 'Google') }
     before do
-      @contact.addresses_attributes = [{
+      contact.addresses_attributes = [{
         street: '1 Way', city: 'Town', state: 'IL', postal_code: '22222',
         country: 'United States', location: 'Home', primary_mailing_address: true
       }]
-      @contact.save
-      @person = build(:person, first_name: 'John', last_name: 'Google')
-      @person.email_address = { email: 'existing_primary@example.com', primary: true }
-      @person.phone_number = { number: '414-555-5555', primary: true }
-      @person.save
-      Person::Website.create(url: 'original.example.com', primary: true, person: @person)
-      @contact.people << @person
+      contact.save
+      person.email_address = { email: 'existing_primary@example.com', primary: true }
+      person.phone_number = { number: '414-555-5555', primary: true }
+      person.save
+      Person::Website.create(url: 'original.example.com', primary: true, person: person)
+      contact.people << person
     end
 
     it 'makes imported phone/email/address primary if set to override (and marked as primary in imported data)' do
-      @import.override = true
-      @google_import.import
+      import.override = true
+      subject.import
 
-      @contact.reload
-      expect(@contact.primary_address.street).to eq('2345 Long Dr. #232')
+      contact.reload
+      expect(contact.primary_address.street).to eq('2345 Long Dr. #232')
 
-      @person.reload
-      expect(@person.primary_email_address.email).to eq('johnsmith@example.com')
-      expect(@person.primary_phone_number.number).to eq('+12133345158')
-      expect(@person.website.url).to eq('www.example.com')
+      person.reload
+      expect(person.primary_email_address.email).to eq('johnsmith@example.com')
+      expect(person.primary_phone_number.number).to eq('+12133345158')
+      expect(person.website.url).to eq('www.example.com')
     end
 
     it 'does not not make imported phone/email/address primary if not set to override' do
-      @import.override = false
-      @google_import.import
+      import.override = false
+      subject.import
 
-      @contact.reload
-      expect(@contact.primary_address.street).to eq('1 Way')
+      contact.reload
+      expect(contact.primary_address.street).to eq('1 Way')
 
-      @person.reload
-      expect(@person.primary_email_address.email).to eq('existing_primary@example.com')
-      expect(@person.primary_phone_number.number).to eq('+14145555555')
-      expect(@person.website.url).to eq('original.example.com')
+      person.reload
+      expect(person.primary_email_address.email).to eq('existing_primary@example.com')
+      expect(person.primary_phone_number.number).to eq('+14145555555')
+      expect(person.website.url).to eq('original.example.com')
     end
   end
 
   it 'assigns the last website a primary role if no websites existed before and none imported are marked as primary' do
     person = create(:person, last_name: 'Doe')
-    @contact.people << person
+    contact.people << person
     g_contact = double(websites: [{ href: 'example.com' }, { href: 'other.example.com' }])
-    @google_import.update_person_websites(person, g_contact)
+    subject.update_person_websites(person, g_contact)
     person.reload
     expect(person.websites.count).to eq(2)
     website1 = person.websites.order(:url).first
@@ -314,128 +318,141 @@ describe GoogleImport do
   end
 
   describe 'import override behavior for basic fields' do
+    let!(:existing_contact) { create(:contact, account_list: account_list, notes: 'Original notes') }
+    let!(:existing_person) do
+      create(
+        :person, first_name: 'Not-John', last_name: 'Not-Doe',
+                 middle_name: 'Not-Henry', title: 'Not-Mr', suffix: 'Not-III'
+      )
+    end
+    let!(:remote_id) { 'http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/6b70f8bb0372c' }
+    let!(:original_picture) { create(:picture, picture_of: existing_person, primary: true) }
+
     before do
-      @existing_contact = create(:contact, account_list: @account_list, notes: 'Original notes')
-      @existing_person = create(:person, first_name: 'Not-John', last_name: 'Not-Doe',
-                                         middle_name: 'Not-Henry', title: 'Not-Mr', suffix: 'Not-III')
-      remote_id = 'http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/6b70f8bb0372c'
-      @existing_person.google_contacts << create(:google_contact, remote_id: remote_id)
-      @original_picture = create(:picture, picture_of: @existing_person, primary: true)
-      @existing_person.pictures << @original_picture
-      @existing_contact.people << @existing_person
+      existing_person.google_contacts << create(:google_contact, remote_id: remote_id)
+      existing_person.pictures << original_picture
+      existing_contact.people << existing_person
     end
 
     it 'updates fields if set to override' do
-      @import.override = true
-      @google_import.import
-      @existing_person.reload
-      @existing_contact.reload
-      expect(@existing_contact.notes).to eq("Original notes \n \nNotes here")
-      expect(@existing_person.first_name).to eq('John')
-      expect(@existing_person.last_name).to eq('Google')
-      expect(@existing_person.middle_name).to eq('Henry')
-      expect(@existing_person.title).to eq('Mr')
-      expect(@existing_person.suffix).to eq('III')
+      import.override = true
+      subject.import
+      existing_person.reload
+      existing_contact.reload
+      expect(existing_contact.notes).to eq("Original notes \n \nNotes here")
+      expect(existing_person.first_name).to eq('John')
+      expect(existing_person.last_name).to eq('Google')
+      expect(existing_person.middle_name).to eq('Henry')
+      expect(existing_person.title).to eq('Mr')
+      expect(existing_person.suffix).to eq('III')
 
-      @original_picture.reload
-      expect(@original_picture.primary).to be false
-      expect(@existing_person.pictures.count).to eq(2)
-      expect(@existing_person.primary_picture.image.url).to eq("https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      original_picture.reload
+      expect(original_picture.primary).to be false
+      expect(existing_person.pictures.count).to eq(2)
+      expect(existing_person.primary_picture.image.url).to eq(
+        "https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg"
+      )
     end
 
     it 'does not append the contact notes twice' do
-      @import.override = true
-      @google_import.import
-      @existing_contact.reload
-      expect(@existing_contact.notes).to eq("Original notes \n \nNotes here")
-      @google_import.import
-      @existing_contact.reload
-      expect(@existing_contact.notes).to eq("Original notes \n \nNotes here")
+      import.override = true
+      subject.import
+      existing_contact.reload
+      expect(existing_contact.notes).to eq("Original notes \n \nNotes here")
+      subject.import
+      existing_contact.reload
+      expect(existing_contact.notes).to eq("Original notes \n \nNotes here")
     end
 
     it 'does not not update fields if not set to override (except for notes)' do
-      @import.override = false
-      @google_import.import
-      @existing_person.reload
-      @existing_contact.reload
-      expect(@existing_contact.notes).to eq("Original notes \n \nNotes here")
-      expect(@existing_person.first_name).to eq('Not-John')
-      expect(@existing_person.last_name).to eq('Not-Doe')
-      expect(@existing_person.middle_name).to eq('Not-Henry')
-      expect(@existing_person.title).to eq('Not-Mr')
-      expect(@existing_person.suffix).to eq('Not-III')
+      import.override = false
+      subject.import
+      existing_person.reload
+      existing_contact.reload
+      expect(existing_contact.notes).to eq("Original notes \n \nNotes here")
+      expect(existing_person.first_name).to eq('Not-John')
+      expect(existing_person.last_name).to eq('Not-Doe')
+      expect(existing_person.middle_name).to eq('Not-Henry')
+      expect(existing_person.title).to eq('Not-Mr')
+      expect(existing_person.suffix).to eq('Not-III')
 
-      @original_picture.reload
+      original_picture.reload
 
       # Check that it does add the picture but doesn't set it to primary
-      expect(@original_picture.primary).to be true
-      expect(@existing_person.pictures.count).to eq(2)
-      expect(@existing_person.primary_picture.image.url).to be_nil
+      expect(original_picture.primary).to be true
+      expect(existing_person.pictures.count).to eq(2)
+      expect(existing_person.primary_picture.image.url).to be_nil
     end
 
     it 'updates notes fields if they were blank even if set to not override' do
-      @existing_contact.update notes: ''
-      @existing_person.pictures.first.destroy
-      @import.override = false
-      @google_import.import
-      @existing_person.reload
-      @existing_contact.reload
-      expect(@existing_contact.notes).to eq('Notes here')
+      existing_contact.update notes: ''
+      existing_person.pictures.first.destroy
+      import.override = false
+      subject.import
+      existing_person.reload
+      existing_contact.reload
+      expect(existing_contact.notes).to eq('Notes here')
 
-      expect(@existing_person.pictures.count).to eq(1)
-      expect(@existing_person.primary_picture.image.url).to eq("https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      expect(existing_person.pictures.count).to eq(1)
+      expect(existing_person.primary_picture.image.url).to eq(
+        "https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg"
+      )
     end
   end
 
   it "doesn't import a picture if the person has an associated facebook account" do
     person = build(:person)
-    @contact.people << person
+    contact.people << person
     create(:facebook_account, person: person)
-    @google_import.import
+    subject.import
     expect(person.pictures.count).to eq(0)
   end
 
   describe 'import by group' do
     it 'does nothing if no groups specified' do
-      @import.import_by_group = true
-      @import.save
+      import.import_by_group = true
+      import.save
       expect do
-        @google_import.import
+        subject.import
       end.to_not change(Contact, :count)
     end
 
     it 'imports a specified group' do
-      @import.import_by_group = true
+      import.import_by_group = true
       group_url = 'http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6'
-      @import.groups = [group_url]
-      @import.group_tags = {
+      import.groups = [group_url]
+      import.group_tags = {
         'http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6' => 'more, tags'
       }
-      @import.tags = 'hi, mom'
-      @import.save
+      import.tags = 'hi, mom'
+      import.save
 
-      stub_request(:get, "https://www.google.com/m8/feeds/contacts/default/full?alt=json&group=#{URI.escape(group_url)}&max-results=100000&v=3")
-        .with(headers: { 'Authorization' => "Bearer #{@account.token}" })
+      stub_request(
+        :get,
+        'https://www.google.com/m8/feeds/contacts/default/full?alt=json&group='\
+        "#{URI.escape(group_url)}&max-results=100000&v=3"
+      )
+        .with(headers: { 'Authorization' => "Bearer #{account.token}" })
         .to_return(body: File.new(Rails.root.join('spec/fixtures/google_contacts.json')).read)
         .times(1)
 
       expect do
-        @google_import.import
+        subject.import
       end.to change(Contact, :count).by(1)
 
-      expect(Contact.last.tag_list.sort).to eq(%w(hi mom more tags))
+      expect(Contact.order(:created_at).last.tag_list.sort).to eq(%w(hi mom more tags))
     end
 
     it 'handles the case when the Google auth token cannot be refreshed' do
       expect_any_instance_of(Person::GoogleAccount).to receive(:contacts_api_user)
         .at_least(1).times.and_raise(Person::GoogleAccount::MissingRefreshToken)
-      expect { @google_import.import }.to raise_error(Import::UnsurprisingImportError)
-      expect(@account_list.contacts.count).to eq(1)
+      expect { subject.import }.to raise_error(Import::UnsurprisingImportError)
+      expect(account_list.contacts.count).to eq(1)
     end
   end
 
   describe 'import primary field default' do
-    it "'assigns one arbitrary address/email/phone/website as primary if MPDX and Google didn't specify primary" do
+    it "assigns one arbitrary address/email/phone/website as primary if MPDX and Google didn't specify primary" do
       WebMock.reset!
 
       stub_g_contacts('spec/fixtures/google_contacts_no_primary.json')
@@ -443,10 +460,10 @@ describe GoogleImport do
       stub_smarty_and_cloudinary
       stub_google_geocoder
 
-      @import.override = false
-      @google_import.import
+      import.override = false
+      subject.import
 
-      contact = @account_list.contacts.where(name: 'Doe, John').first
+      contact = account_list.contacts.where(name: 'Doe, John').first
       person = contact.people.first
 
       expect(person.websites.to_a.size).to eq(2)

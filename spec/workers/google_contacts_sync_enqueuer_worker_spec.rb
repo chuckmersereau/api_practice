@@ -7,7 +7,7 @@ describe GoogleContactsSyncEnqueuerWorker do
       create(:google_integration,
              calendar_integration: false,
              contacts_integration: true,
-             account_list: user.account_lists.first)
+             account_list: user.account_lists.order(:created_at).first)
     end
 
     it 'queues the sync with Google contacts for the account list' do

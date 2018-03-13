@@ -20,7 +20,7 @@ class DonationImports::Base
     private
 
     def mergeable_attributes
-      @attributes_to_look_at ||= (Donation.attribute_names - %w(id created_at updated_at uuid)).map(&:to_sym)
+      @attributes_to_look_at ||= (Donation.attribute_names - %w(id created_at updated_at)).map(&:to_sym)
     end
 
     def find_attributes_from_all_donations

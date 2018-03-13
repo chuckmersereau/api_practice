@@ -68,12 +68,13 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   def load_invites
     @invites = invite_scope.where(filter_params)
                            .reorder(sorting_param)
+                           .order(:created_at)
                            .page(page_number_param)
                            .per(per_page_param)
   end
 
   def load_invite
-    @invite ||= AccountListInvite.find_by_uuid_or_raise!(params[:id])
+    @invite ||= AccountListInvite.find(params[:id])
   end
 
   def render_invite
@@ -107,20 +108,14 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+    @account_list ||= AccountList.find(params[:account_list_id])
   end
 
   def load_account_list_invite
-    @invite ||= AccountListInvite.find_by!(uuid: params[:id], account_list: load_account_list)
+    @invite ||= AccountListInvite.find_by!(id: params[:id], account_list: load_account_list)
   end
 
   def pundit_user
     PunditContext.new(current_user, account_list: load_account_list)
-  end
-
-  def transform_uuid_attributes_params_to_ids
-    change_specific_param_id_key_to_uuid(params[:data][:attributes], :accepted_by_user_id, User)
-    change_specific_param_id_key_to_uuid(params[:data][:attributes], :cancelled_by_user_id, User)
-    super
   end
 end

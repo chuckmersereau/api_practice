@@ -14,7 +14,7 @@ relationships: &rels
       id:
         description:
           The `id` of the Account List
-        type: UUID string
+        type: id string
         required: true
   records:
     data:
@@ -41,7 +41,7 @@ parameters:
       account_list_id:
         description:
           Filter by Account List; accepts an Account List `id`
-        type: UUID string
+        type: id string
       ignore:
         description:
           Filter by ignored duplicate pairs

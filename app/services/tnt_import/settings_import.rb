@@ -19,9 +19,7 @@ class TntImport::SettingsImport
         mail_chimp_key = row['PropValue']
       end
 
-      if mail_chimp_list_id && mail_chimp_key
-        import_mail_chimp(@account_list, mail_chimp_list_id, mail_chimp_key)
-      end
+      import_mail_chimp(@account_list, mail_chimp_list_id, mail_chimp_key) if mail_chimp_list_id && mail_chimp_key
     end
     @account_list.save
   end

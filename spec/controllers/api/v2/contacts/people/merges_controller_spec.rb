@@ -5,7 +5,7 @@ RSpec.describe Api::V2::Contacts::People::MergesController, type: :controller do
   let(:user) { create(:user_with_account) }
 
   # This MAY be required!
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   # This is required!
   let(:factory_type) do
@@ -30,7 +30,7 @@ RSpec.describe Api::V2::Contacts::People::MergesController, type: :controller do
   end
 
   let(:parent_param) do
-    { contact_id: contact.uuid }
+    { contact_id: contact.id }
   end
 
   # This is required!
@@ -44,13 +44,13 @@ RSpec.describe Api::V2::Contacts::People::MergesController, type: :controller do
       winner: {
         data: {
           type: 'people',
-          id: winner.uuid
+          id: winner.id
         }
       },
       loser: {
         data: {
           type: 'people',
-          id: loser.uuid
+          id: loser.id
         }
       }
     }

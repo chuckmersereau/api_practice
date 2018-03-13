@@ -6,7 +6,7 @@ resource 'Contacts > Exports' do
   doc_helper = DocumentationHelper.new(resource: [:contacts, :exports])
 
   let!(:user) { create(:user_with_account) }
-  let!(:contact) { create(:contact_with_person, account_list: user.account_lists.first) }
+  let!(:contact) { create(:contact_with_person, account_list: user.account_lists.order(:created_at).first) }
 
   context 'authorized user' do
     before { api_login(user) }

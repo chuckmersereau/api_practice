@@ -7,7 +7,7 @@ resource 'Impersonation' do
   let(:admin_user) { create(:user_with_account, admin: true) }
   let(:impersonated_user) { create(:user) }
   let(:request_type) { 'impersonation' }
-  let(:form_data) { build_data(reason: 'Reason', user: impersonated_user.uuid) }
+  let(:form_data) { build_data(reason: 'Reason', user: impersonated_user.id) }
 
   context 'authorized user' do
     before { api_login(admin_user) }

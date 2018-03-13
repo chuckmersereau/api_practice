@@ -21,13 +21,13 @@ class Contact::Filter::Referrer < Contact::Filter::Base
       account_lists.map { |account_list| account_list.contacts.with_referrals.order('name') }
                    .flatten
                    .uniq
-                   .collect { |c| { name: c.name, id: c.uuid } }
+                   .collect { |c| { name: c.name, id: c.id } }
   end
 
   private
 
   def contact_referrer_ids(filters)
-    contact_referrer_ids = Contact.where(uuid: filters - ['none']).ids
+    contact_referrer_ids = Contact.where(id: filters - ['none']).ids
     contact_referrer_ids << nil if filters.include?('none')
     contact_referrer_ids
   end

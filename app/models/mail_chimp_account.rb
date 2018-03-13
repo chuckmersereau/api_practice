@@ -9,7 +9,7 @@ class MailChimpAccount < ApplicationRecord
   has_one :mail_chimp_appeal_list, dependent: :destroy
   has_many :mail_chimp_members, dependent: :destroy
 
-  attr_reader :validation_error, :gibbon_wrapper
+  attr_reader :validation_error
 
   delegate :appeal_open_rate,
            :lists,
@@ -38,7 +38,7 @@ class MailChimpAccount < ApplicationRecord
     :primary_list_id,
     :updated_at,
     :updated_in_db_at,
-    :uuid
+    :id
   ].freeze
 
   def newsletter_emails
@@ -90,8 +90,6 @@ class MailChimpAccount < ApplicationRecord
     hash[list_id][attribute] = value
     send("#{key}=", hash)
   end
-
-  private
 
   def gibbon_wrapper
     @gibbon_wrapper ||= MailChimp::GibbonWrapper.new(self)

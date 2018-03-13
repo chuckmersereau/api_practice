@@ -2,18 +2,18 @@ require 'rails_helper'
 require 'securerandom'
 
 describe ApplicationRecord do
-  let(:contact) { create(:contact, uuid: nil) }
+  let(:contact) { create(:contact, id: nil) }
 
   describe '#before_save on create' do
-    let(:given_uuid) { SecureRandom.uuid }
-    let(:contact_with_uuid) { create(:contact, uuid: given_uuid) }
+    let(:given_id) { SecureRandom.uuid }
+    let(:contact_with_id) { create(:contact, id: given_id) }
 
-    it 'generates a new uuid when the uuid field is set to nil' do
-      expect(contact.uuid.length).to eq(36)
+    it 'generates a new id when the id field is set to nil' do
+      expect(contact.id.length).to eq(36)
     end
 
-    it 'does not generate a uuid when the uuid field is given' do
-      expect(contact_with_uuid.uuid).to eq(given_uuid)
+    it 'does not generate a id when the id field is given' do
+      expect(contact_with_id.id).to eq(given_id)
     end
   end
 
@@ -78,37 +78,6 @@ describe ApplicationRecord do
       contact.updated_in_db_at = new_time
       expect(contact.updated_in_db_at).to be_a(Time)
       expect(contact.updated_in_db_at.iso8601).to eq(new_time)
-    end
-  end
-
-  describe '::find_by_uuid_or_raise' do
-    context 'when a record exists by that UUID' do
-      let!(:contact) { create(:contact) }
-      let!(:uuid)    { contact.uuid }
-
-      it 'find that record by the UUID' do
-        expect(Contact.find_by_uuid_or_raise!(uuid)).to eq contact
-      end
-    end
-
-    context "when a record doesn't exist by a UUID" do
-      let(:uuid) { SecureRandom.uuid }
-
-      it 'raises an ActiveRecord::RecordNotFound error' do
-        expect { Contact.find_by_uuid_or_raise!(uuid) }
-          .to raise_error(ActiveRecord::RecordNotFound)
-          .with_message("Couldn't find Contact with 'uuid'=#{uuid}")
-      end
-    end
-
-    context 'when the UUID passed is `nil`' do
-      let(:uuid) { nil }
-
-      it 'raises an ActiveRecord::RecordNotFound error' do
-        expect { Contact.find_by_uuid_or_raise!(uuid) }
-          .to raise_error(ActiveRecord::RecordNotFound)
-          .with_message("Couldn't find Contact with 'uuid'=#{uuid}")
-      end
     end
   end
 

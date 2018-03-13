@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe DonationImports::Siebel::ProfileImporter do
   let!(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
+  let(:account_list) { user.account_lists.order(:created_at).first }
 
   let(:organization_account) { user.organization_accounts.first }
   let(:organization) { organization_account.organization }
@@ -73,7 +73,7 @@ RSpec.describe DonationImports::Siebel::ProfileImporter do
         .and change { designation_profile.reload.balance_updated_at }
 
       expect(designation_account.balance).to eq(2000.00)
-      expect(DesignationProfile.last.balance).to eq(2000.00)
+      expect(DesignationProfile.order(:created_at).last.balance).to eq(2000.00)
     end
   end
 end

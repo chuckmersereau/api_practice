@@ -2,9 +2,9 @@ RSpec.shared_examples 'bulk_create_examples' do
   include_context 'common_variables'
 
   describe '#create' do
-    let(:first_uuid) { SecureRandom.uuid }
-    let(:second_uuid) { SecureRandom.uuid }
-    let(:third_uuid) { SecureRandom.uuid }
+    let(:first_id) { SecureRandom.uuid }
+    let(:second_id) { SecureRandom.uuid }
+    let(:third_id) { SecureRandom.uuid }
 
     let(:unauthorized_resource) { create(factory_type) }
     let(:bulk_create_attributes) do
@@ -13,21 +13,21 @@ RSpec.shared_examples 'bulk_create_examples' do
           {
             data: {
               type: resource_type,
-              id: first_uuid,
+              id: first_id,
               attributes: correct_attributes
             }.merge!(relationships: relationships)
           },
           {
             data: {
               type: resource_type,
-              id: second_uuid,
+              id: second_id,
               attributes: incorrect_attributes
             }.merge!(relationships: relationships)
           },
           {
             data: {
               type: resource_type,
-              id: third_uuid,
+              id: third_id,
               attributes: correct_attributes
             }.merge!(relationships: relationships)
           }
@@ -57,9 +57,9 @@ RSpec.shared_examples 'bulk_create_examples' do
       expect do
         post :create, bulk_create_attributes
       end.to change { resource.class.count }.by(2)
-      expect(response_body.detect { |hash| hash.dig('data', 'id') == first_uuid }['errors']).to be_blank
-      expect(response_body.detect { |hash| hash.dig('id') == second_uuid }['errors']).to be_present
-      expect(response_body.detect { |hash| hash.dig('data', 'id') == third_uuid }['errors']).to be_blank
+      expect(response_body.detect { |hash| hash.dig('data', 'id') == first_id }['errors']).to be_blank
+      expect(response_body.detect { |hash| hash.dig('id') == second_id }['errors']).to be_present
+      expect(response_body.detect { |hash| hash.dig('data', 'id') == third_id }['errors']).to be_blank
     end
 
     it 'returns error objects for resources that were not created, but belonged to user' do
@@ -67,7 +67,7 @@ RSpec.shared_examples 'bulk_create_examples' do
         put :create, bulk_create_attributes
       end.to_not change { second_resource.reload.send(reference_key) }
 
-      response_with_errors = response_body.detect { |hash| hash.dig('id') == second_uuid }
+      response_with_errors = response_body.detect { |hash| hash.dig('id') == second_id }
       expect(response_with_errors['errors']).to be_present
       expect(response_with_errors['errors'].detect { |hash| hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}" }).to be_present
     end
@@ -79,21 +79,21 @@ RSpec.shared_examples 'bulk_create_examples' do
             {
               data: {
                 type: resource_type,
-                id: first_uuid,
+                id: first_id,
                 attributes: correct_attributes
               }.merge(relationships: relationships)
             },
             {
               data: {
                 type: resource_type,
-                id: second_uuid,
+                id: second_id,
                 attributes: correct_attributes
               }.merge(relationships: found_forbidden_relationships)
             },
             {
               data: {
                 type: resource_type,
-                id: third_uuid,
+                id: third_id,
                 attributes: correct_attributes
               }.merge(relationships: relationships)
             }
@@ -109,7 +109,7 @@ RSpec.shared_examples 'bulk_create_examples' do
         {
           account_list: {
             data: {
-              id: create(:account_list).uuid,
+              id: create(:account_list).id,
               type: 'account_lists'
             }
           }

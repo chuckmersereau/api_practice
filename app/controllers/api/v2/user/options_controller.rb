@@ -69,6 +69,7 @@ class Api::V2::User::OptionsController < Api::V2Controller
     @options = option_scope
                .where(filter_params)
                .reorder(sorting_param)
+               .order(:created_at)
                .page(page_number_param)
                .per(per_page_param)
   end

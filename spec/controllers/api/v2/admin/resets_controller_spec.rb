@@ -4,7 +4,7 @@ RSpec.describe Api::V2::Admin::ResetsController do
   let(:admin_user) { create(:user, admin: true) }
   let(:reset_user) { create(:user_with_account) }
   let!(:key_account) { create(:key_account, person: reset_user) }
-  let(:account_list) { reset_user.account_lists.first }
+  let(:account_list) { reset_user.account_lists.order(:created_at).first }
   let(:given_resource_type) { :resets }
   let(:correct_attributes) do
     {

@@ -12,7 +12,7 @@ def backup_mc_account(mc_account)
   }.to_json
   filename = "mc_backup/#{mc_account.id}.json"
   File.open(filename, 'w') { |file| file.write(json) }
-rescue => e
+rescue StandardError => e
   puts e
 end
 

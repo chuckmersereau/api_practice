@@ -80,19 +80,16 @@ describe PrayerLettersAccount do
     end
 
     it 'calls the prayer letters api to create a contact and sets cached params value' do
-      params[:external_id] = params[:external_id].to_s
       stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts/c1')
              .with(body: params, headers: { 'Authorization' => 'Bearer MyString' }).to_return(status: 204)
 
       pla.update_contact(contact)
       expect(contact.prayer_letters_id).to eq('c1')
-      params[:external_id] = params[:external_id].to_i
       expect(contact.prayer_letters_params).to eq(params)
       expect(stub).to have_been_requested
     end
 
     it 'does not call the api if the contact params are the same as the cached value' do
-      params[:external_id] = params[:external_id].to_i
       contact.update(prayer_letters_params: params)
       expect(pla).to_not receive(:get_response)
       pla.update_contact(contact)
@@ -124,7 +121,6 @@ describe PrayerLettersAccount do
     it 'calls the prayer letters api to create a contact and sets cached params value' do
       contact.addresses << create(:address)
 
-      params[:external_id] = params[:external_id].to_s
       stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts')
              .with(body: params, headers: { 'Authorization' => 'Bearer MyString' })
              .to_return(body: '{"contact_id": "c1"}')
@@ -132,7 +128,6 @@ describe PrayerLettersAccount do
       pla.create_contact(Contact.find(contact.id))
       contact.reload
       expect(contact.prayer_letters_id).to eq('c1')
-      params[:external_id] = params[:external_id].to_i
       expect(contact.prayer_letters_params).to eq(params)
       contact.reload_mailing_address
       expect(pla.contact_params(contact)).to eq(params)
@@ -161,7 +156,7 @@ describe PrayerLettersAccount do
       expect(contact.people.count).to eq(0)
 
       contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John",'\
-        '"external_id":' + contact.id.to_s + ',"company":"","contact_id":"1",'\
+        '"external_id":"' + contact.id + '","company":"","contact_id":"1",'\
         '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
         '"country":""}}]}'
 
@@ -192,7 +187,7 @@ describe PrayerLettersAccount do
                                             postal_code: '94539', country: 'United States')
       contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John","contact_id":"c1",'\
         '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
-        '"country":""},"external_id":' + contact.id.to_s + '}]}'
+        '"country":""},"external_id":"' + contact.id + '"}]}'
 
       stub = stub_request(:get, 'https://www.prayerletters.com/api/v1/contacts')
              .with(headers: { 'Authorization' => 'Bearer MyString' }).to_return(body: contacts_body)
