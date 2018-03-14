@@ -226,4 +226,50 @@ describe Task do
       end
     end
   end
+
+  describe '.all_result_options' do
+    it 'returns all results' do
+      expect(described_class.all_result_options).to eq(
+        'Appointment' => %w[Completed Attempted],
+        'Call' => ['Attempted - Left Message', 'Attempted', 'Completed', 'Received'],
+        'Email' => %w[Completed Received],
+        'Facebook Message' => %w[Completed Received],
+        'Letter' => %w[Completed Received],
+        'Pre Call Letter' => %w[Completed Received],
+        'Reminder Letter' => %w[Completed Received],
+        'Support Letter' => %w[Completed Received],
+        'Talk to In Person' => ['Completed'],
+        'Text Message' => %w[Completed Received],
+        'Thank' => %w[Completed Received],
+        'default' => ['Done']
+      )
+    end
+  end
+
+  describe '.all_next_action_options' do
+    it 'returns next actions' do
+      expect(described_class.all_next_action_options).to eq(
+        'Appointment' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'Appointment',
+                          'Prayer Request', 'Thank'],
+        'Call' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'Appointment',
+                   'Prayer Request', 'Thank'],
+        'Email' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'Appointment',
+                    'Prayer Request', 'Thank'],
+        'Facebook Message' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'Appointment',
+                               'Prayer Request', 'Thank'],
+        'Letter' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'None'],
+        'Prayer Request' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'Appointment',
+                             'Prayer Request', 'Thank'],
+        'Pre Call Letter' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'None'],
+        'Reminder Letter' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'None'],
+        'Support Letter' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'None'],
+        'Talk to In Person' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'Appointment',
+                                'Prayer Request', 'Thank'],
+        'Text Message' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'Appointment',
+                           'Prayer Request', 'Thank'],
+        'Thank' => ['Call', 'Email', 'Text Message', 'Facebook Message', 'Talk to In Person', 'None'],
+        'default' => ['None']
+      )
+    end
+  end
 end

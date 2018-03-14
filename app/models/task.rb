@@ -153,8 +153,8 @@ class Task < Activity
     'Thank'
   ].freeze
 
-  PRE_CALL_LETTER_RESULTS = %w(Completed Received).freeze
-  PRE_CALL_LETTER_NEXT_ACTIONS = [
+  LETTER_RESULTS = %w(Completed Received).freeze
+  LETTER_NEXT_ACTIONS = [
     'Call',
     'Email',
     'Text Message',
@@ -163,15 +163,30 @@ class Task < Activity
     'None'
   ].freeze
 
-  REMINDER_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
-  SUPPORT_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
+  PRE_CALL_LETTER_RESULTS = LETTER_RESULTS
+  PRE_CALL_LETTER_NEXT_ACTIONS = LETTER_NEXT_ACTIONS
+
+  REMINDER_LETTER_RESULTS = LETTER_RESULTS
+  REMINDER_LETTER_NEXT_ACTIONS = LETTER_NEXT_ACTIONS
+
+  SUPPORT_LETTER_RESULTS = LETTER_RESULTS
+  SUPPORT_LETTER_NEXT_ACTIONS = LETTER_NEXT_ACTIONS
+
+  THANK_RESULTS = LETTER_RESULTS
+  THANK_NEXT_ACTIONS = LETTER_NEXT_ACTIONS
 
   STANDRD_NEXT_ACTIONS = [_('None')].freeze
 
   MESSAGE_RESULTS = [_('Done'), _('Received')].freeze
   STANDARD_RESULTS = [_('Done')].freeze
 
-  ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS + TALK_TO_IN_PERSON_RESULTS + PRAYER_REQUEST_RESULTS + PRE_CALL_LETTER_RESULTS
+  ALL_RESULTS = STANDARD_RESULTS +
+                APPOINTMENT_RESULTS +
+                CALL_RESULTS +
+                MESSAGE_RESULTS +
+                TALK_TO_IN_PERSON_RESULTS +
+                PRAYER_REQUEST_RESULTS +
+                PRE_CALL_LETTER_RESULTS
 
   TASK_ACTIVITIES = [
     'Call',
@@ -263,8 +278,16 @@ class Task < Activity
       TALK_TO_IN_PERSON_RESULTS
     when 'Prayer Request'
       PRAYER_REQUEST_RESULTS
+    when 'Letter'
+      LETTER_RESULTS
     when 'Pre Call Letter'
       PRE_CALL_LETTER_RESULTS
+    when 'Reminder Letter'
+      REMINDER_LETTER_RESULTS
+    when 'Support Letter'
+      REMINDER_LETTER_RESULTS
+    when 'Thank'
+      THANK_RESULTS
     else
       STANDARD_RESULTS
     end
@@ -286,12 +309,16 @@ class Task < Activity
       TALK_TO_IN_PERSON_NEXT_ACTIONS
     when 'Prayer Request'
       PRAYER_REQUEST_NEXT_ACTIONS
+    when 'Letter'
+      LETTER_NEXT_ACTIONS
     when 'Pre Call Letter'
       PRE_CALL_LETTER_NEXT_ACTIONS
     when 'Reminder Letter'
       REMINDER_LETTER_NEXT_ACTIONS
     when 'Support Letter'
       SUPPORT_LETTER_NEXT_ACTIONS
+    when 'Thank'
+      THANK_NEXT_ACTIONS
     else
       STANDRD_NEXT_ACTIONS
     end
@@ -306,9 +333,11 @@ class Task < Activity
     options['Text Message'] = TEXT_NEXT_ACTIONS
     options['Talk to In Person'] = TALK_TO_IN_PERSON_NEXT_ACTIONS
     options['Prayer Request'] = PRAYER_REQUEST_NEXT_ACTIONS
+    options['Letter'] = LETTER_NEXT_ACTIONS
     options['Pre Call Letter'] = PRE_CALL_LETTER_NEXT_ACTIONS
     options['Reminder Letter'] = REMINDER_LETTER_NEXT_ACTIONS
     options['Support Letter'] = SUPPORT_LETTER_NEXT_ACTIONS
+    options['Thank'] = THANK_NEXT_ACTIONS
     options['default'] = STANDRD_NEXT_ACTIONS
     options
   end
@@ -321,8 +350,11 @@ class Task < Activity
     options['Facebook Message'] = FACEBOOK_MESSAGE_RESULTS
     options['Text Message'] = TEXT_RESULTS
     options['Talk to In Person'] = TALK_TO_IN_PERSON_RESULTS
-    options['Prayer Request'] = PRAYER_REQUEST_RESULTS
+    options['Letter'] = LETTER_RESULTS
     options['Pre Call Letter'] = PRE_CALL_LETTER_RESULTS
+    options['Reminder Letter'] = REMINDER_LETTER_RESULTS
+    options['Support Letter'] = SUPPORT_LETTER_RESULTS
+    options['Thank'] = THANK_RESULTS
     options['default'] = STANDARD_RESULTS
     options
   end
