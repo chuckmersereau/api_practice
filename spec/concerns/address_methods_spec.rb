@@ -104,9 +104,9 @@ describe AddressMethods do
     it 'gives a consistent first if none are primary and record order changes' do
       # Check that we get the same address even if db record order changes
       Address.connection.execute('CLUSTER addresses USING index_addresses_on_lower_city')
-      expect(contact.addresses.order(:created_at).first).to eq addr1
+      expect(contact.addresses.reorder(:created_at).first).to eq addr1
       Address.connection.execute('CLUSTER addresses USING addresses_pkey')
-      expect(contact.addresses.order(:created_at).first).to eq addr1
+      expect(contact.addresses.reorder(:created_at).first).to eq addr1
     end
   end
 
