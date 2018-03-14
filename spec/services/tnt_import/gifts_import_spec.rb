@@ -175,6 +175,7 @@ describe TntImport::GiftsImport do
     end
 
     it 'updates an existing donation by remote_id' do
+      @import.update(override: true)
       expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
       Donation.where(tnt_id: '1-M84S3J').first.update!(tnt_id: nil, remote_id: '1-M84S3J', amount: 1)
       expect { @tnt_import.import }.to_not change(Donation, :count).from(2)
@@ -183,6 +184,7 @@ describe TntImport::GiftsImport do
     end
 
     it 'updates an existing donation by tnt_id' do
+      @import.update(override: true)
       expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
       Donation.where(tnt_id: '1-M84S3J').first.update!(remote_id: nil, amount: 1)
       expect { @tnt_import.import }.to_not change(Donation, :count).from(2)
@@ -195,6 +197,19 @@ describe TntImport::GiftsImport do
       # Set the tnt_id and remote_id to nil, to force the import to find by donor, amount, and date.
       Donation.update_all(tnt_id: nil, remote_id: nil)
       expect { @tnt_import.import }.to_not change(Donation, :count).from(2)
+    end
+
+    it 'matches a donation on a different donor account if remote_id matches' do
+      @tnt_import.import
+
+      donation = Donation.last
+      other_contact = create(:contact, account_list: @account_list)
+      other_donor_account = create(:donor_account, organization: @offline_org)
+      other_contact.donor_accounts << other_donor_account
+      donation.update!(donor_account: other_donor_account)
+
+      expect { @tnt_import.import }.to_not change(Donation, :count)
+      expect(donation.reload.donor_account).to eq other_donor_account
     end
 
     it 'creates new donations by donor, amount, and date, if there is no tnt_id or remote_id' do

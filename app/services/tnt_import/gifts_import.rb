@@ -53,23 +53,26 @@ class TntImport::GiftsImport
     donation_date = parse_date(row['GiftDate'], @import.user).to_date
     currency = currency_code_for_id(row['CurrencyID'])
 
-    donation   = donor_account.donations.find_by(tnt_id: row['OrgGiftCode']) if row['OrgGiftCode']
-    donation ||= donor_account.donations.find_by(remote_id: row['OrgGiftCode']) if row['OrgGiftCode']
+    donation   = account_list.donations.find_by(tnt_id: row['OrgGiftCode']) if row['OrgGiftCode']
+    donation ||= account_list.donations.find_by(remote_id: row['OrgGiftCode']) if row['OrgGiftCode']
+    found_exact_match = donation.present?
     donation ||= donor_account.donations.find_or_initialize_by(tnt_id: nil,
                                                                donor_account_id: donor_account.id,
                                                                amount: row['Amount'],
                                                                donation_date: donation_date)
 
-    donation.update(
+    updated_attributes = {
       amount: row['Amount'],
       designation_account: designation_account_for_donation(donation),
       donation_date: donation_date,
       donor_account_id: donor_account.id,
       tendered_amount: row['Amount'],
       currency: currency_code_for_id(row['BaseCurrencyID']),
-      tendered_currency: currency,
-      tnt_id: row['OrgGiftCode']
-    )
+      tendered_currency: currency
+    }
+    donation.assign_attributes(updated_attributes) if !found_exact_match || @import.override?
+    donation.tnt_id = row['OrgGiftCode']
+    donation.save
 
     add_donation_to_first_appeal_and_add_other_appeals_to_memo(donation, row, donor_account)
 
