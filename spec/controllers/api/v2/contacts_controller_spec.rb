@@ -89,6 +89,8 @@ describe Api::V2::ContactsController, type: :controller do
 
   describe 'Nested Creating / Updating of Resources' do
     describe 'Created a nested Referral with an Account List' do
+      lock_time_around
+
       let(:generated_id) { SecureRandom.uuid }
 
       let(:params) do

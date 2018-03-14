@@ -8,13 +8,13 @@ class MailChimp::Exporter
     @list_id = list_id || mail_chimp_account.primary_list_id
   end
 
-  def export_contacts(contact_ids = nil)
+  def export_contacts(contact_ids = nil, ignore_status = false)
     MailChimp::ConnectionHandler.new(mail_chimp_account)
-                                .call_mail_chimp(self, :export_contacts!, contact_ids)
+                                .call_mail_chimp(self, :export_contacts!, contact_ids, ignore_status)
   end
 
-  def export_contacts!(contact_ids)
-    contacts_to_export = fetch_contacts_to_export(contact_ids)
+  def export_contacts!(contact_ids, ignore_status)
+    contacts_to_export = fetch_contacts_to_export(contact_ids, ignore_status)
 
     # on non-primary lists, all of the subscriptions should be manual, so they shouldn't be auto-cleaned
     emails_of_members_to_remove = fetch_emails_of_members_to_remove if primary_list?
@@ -63,8 +63,8 @@ class MailChimp::Exporter
     relevant_mail_chimp_members.pluck(:email).map(&:downcase).uniq - mail_chimp_account.newsletter_emails
   end
 
-  def fetch_contacts_to_export(contact_ids)
-    relevant_contact_scope = mail_chimp_account.relevant_contacts(contact_ids, true)
+  def fetch_contacts_to_export(contact_ids, ignore_status)
+    relevant_contact_scope = mail_chimp_account.relevant_contacts(contact_ids, ignore_status)
                                                .includes(primary_contact_person: :person, people: :primary_email_address)
     relevant_contact_scope.find_each.select { |contact| contact_changed_or_new?(contact) }.sort_by(&:created_at)
   end

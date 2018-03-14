@@ -43,7 +43,7 @@ describe MailChimp::Exporter do
   context '#export_contacts' do
     it 'uses the connection handler and export_contacts! is called' do
       expect(MailChimp::ConnectionHandler).to receive(:new).and_return(mock_connection_handler)
-      expect(mock_connection_handler).to receive(:call_mail_chimp).with(subject, :export_contacts!, nil)
+      expect(mock_connection_handler).to receive(:call_mail_chimp).with(subject, :export_contacts!, nil, false)
 
       subject.export_contacts
     end
@@ -76,7 +76,7 @@ describe MailChimp::Exporter do
 
       expect(mock_batcher).to receive(:subscribe_contacts).with(contacts)
       expect(mock_batcher).to receive(:unsubscribe_members).with([contact.people.first.primary_email_address.email])
-      subject.export_contacts!(contacts.map(&:id))
+      subject.export_contacts!(contacts.map(&:id), true)
     end
   end
 end

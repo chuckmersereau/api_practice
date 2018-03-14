@@ -28,6 +28,15 @@ describe MailChimpAccount do
       send_newsletter: 'Physical'
     )]
   end
+  let(:hidden_contacts) do
+    [create(
+      :contact,
+      people: [create(:person, email_addresses: [build(:email_address)])],
+      account_list: account_list_with_mailchimp,
+      send_newsletter: 'None',
+      status: 'Unresponsive'
+    )]
+  end
 
   it 'validates the format of an api key' do
     expect(MailChimpAccount.new(account_list_id: account_list.id, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
@@ -76,7 +85,7 @@ describe MailChimpAccount do
   end
 
   context 'email generating methods' do
-    let(:contacts) { newsletter_contacts + non_newsletter_contacts }
+    let(:contacts) { newsletter_contacts + non_newsletter_contacts + hidden_contacts }
     let(:contact_ids) { contacts.map(&:id) }
 
     before do

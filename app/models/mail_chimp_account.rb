@@ -46,12 +46,8 @@ class MailChimpAccount < ApplicationRecord
   end
 
   def relevant_contacts(contact_ids = nil, force_sync = false)
-    return active_contacts_with_emails(contact_ids) if contact_ids && force_sync
+    return contacts_with_email_addresses(contact_ids) if contact_ids && force_sync
     newsletter_contacts_with_emails(contact_ids)
-  end
-
-  def active_contacts_with_emails(contact_ids)
-    contacts_with_email_addresses(contact_ids).active
   end
 
   def newsletter_contacts_with_emails(contact_ids)

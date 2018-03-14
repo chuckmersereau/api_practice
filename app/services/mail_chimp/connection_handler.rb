@@ -20,7 +20,7 @@ class MailChimp::ConnectionHandler
   # you can include require_primary: false as an argument when calling
   # this to prevent it from returning when primary_list_id is blank
   def call_mail_chimp(object, method, *args)
-    require_primary = args.last&.delete(:require_primary)
+    require_primary = args.last.delete(:require_primary) if args.last.is_a? Hash
     args.pop if args.last == {}
     return if inactive_account? || (primary_list_id.blank? && require_primary != false)
 

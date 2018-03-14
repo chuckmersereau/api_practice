@@ -33,7 +33,10 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
   end
 
   def export_to_mail_chimp
-    MailChimp::ExportContactsWorker.perform_async(@mail_chimp_account.id, params[:mail_chimp_list_id], contact_ids)
+    MailChimp::ExportContactsWorker.perform_async(@mail_chimp_account.id,
+                                                  params[:mail_chimp_list_id],
+                                                  contact_ids,
+                                                  true)
   end
 
   def contact_ids
