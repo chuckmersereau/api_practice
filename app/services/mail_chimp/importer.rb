@@ -1,10 +1,6 @@
 class MailChimp::Importer
   attr_reader :mail_chimp_account, :account_list, :gibbon_wrapper
 
-  # this is currently the reason that Mailchimp lists if MPDX removed the contact from the list
-  # We do not want to mark someone as opt-out if they were unsubscibed by the user or our system somehow.
-  ADMIN_UNSUBSCRIBE_REASON = 'N/A (Unsubscribed by an admin)'.freeze
-
   def initialize(mail_chimp_account)
     @mail_chimp_account = mail_chimp_account
     @account_list = mail_chimp_account.account_list
@@ -112,7 +108,8 @@ class MailChimp::Importer
   end
 
   def person_opt_out_value(person, member_info)
-    return person.optout_enewsletter if member_info[:unsubscribe_reason] == ADMIN_UNSUBSCRIBE_REASON
+    # We do not want to mark someone as opt-out if they were unsubscribed by the user or our system somehow.
+    return person.optout_enewsletter if MailChimpMember.mpdx_unsubscribe?(member_info)
 
     member_info[:status] == 'unsubscribed'
   end

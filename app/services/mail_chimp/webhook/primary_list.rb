@@ -19,10 +19,9 @@ module MailChimp::Webhook
         wrapper = MailChimp::GibbonWrapper.new(mail_chimp_account)
         member = wrapper.list_member_info(mail_chimp_account.primary_list_id, email).first
         return unless member
-        mpdx_unsubscribe = member['unsubscribe_reason'] == 'N/A (Unsubscribed by an admin)'
 
         # don't trigger the opt-out update if mpdx or the list manager unsubscribed them
-        return if member['status'] == 'subscribed' || mpdx_unsubscribe
+        return if member['status'] == 'subscribed' || MailChimpMember.mpdx_unsubscribe?(member)
       end
 
       people = account_list.people.joins(:email_addresses).where(email_addresses: { email: email, primary: true })

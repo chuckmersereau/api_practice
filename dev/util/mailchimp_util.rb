@@ -71,9 +71,8 @@ class MailChimpReport
 
   def add_to_list(list, member)
     @report[list] ||= { subscribed: [], unsubscribed: [], manual_unsubscribed: [], cleaned: [], pending: [] }
-    mpdx_unsubscribe = member['unsubscribe_reason'] == 'N/A (Unsubscribed by an admin)'
     status = member['status'].to_sym
-    status = :manual_unsubscribed if status == :unsubscribed && !mpdx_unsubscribe
+    status = :manual_unsubscribed if status == :unsubscribed && !MailChimpMember.mpdx_unsubscribe?(member)
     @report[list][status] << member
   end
 
