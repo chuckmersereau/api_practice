@@ -15,15 +15,15 @@ class Task::Filter::WildcardSearch < Task::Filter::Base
   end
 
   def tagged_task_ids
-    @tasks.tagged_with(@filters[:wildcard_search].split(',').flatten, wild: true, any: true).ids
+    @tasks.tagged_with(@filters[:wildcard_search].split(',').flatten, wild: true, any: true).reorder(:id).ids
   end
 
   def task_ids_with_relevant_contact_name
-    @tasks.joins(:contacts).where('contacts.name ilike ?', wildcard_string).ids
+    @tasks.joins(:contacts).where('contacts.name ilike ?', wildcard_string).reorder(:id).ids
   end
 
   def task_ids_with_relevant_comment
-    @tasks.joins(:comments).where('activity_comments.body ilike ?', wildcard_string).ids
+    @tasks.joins(:comments).where('activity_comments.body ilike ?', wildcard_string).reorder(:id).ids
   end
 
   def wildcard_string
