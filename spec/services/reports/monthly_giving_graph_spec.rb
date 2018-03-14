@@ -13,11 +13,11 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     create(:donation, donor_account: donor_account,
                       designation_account: designation_account,
                       donation_date: Date.parse('2099-03-04'),
-                      amount: '1200')
+                      amount: '1100')
   end
   let(:time_now) { Time.zone.parse('2099-06-22 12:34:56') }
 
-  subject { Reports::MonthlyGivingGraph.new(account_list: account_list) }
+  subject { described_class.new(account_list: account_list) }
 
   def mock_time
     allow(Time).to receive(:current).and_return(time_now)
@@ -53,8 +53,16 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
 
   describe '#monthly_average' do
     it { expect(subject.monthly_average).to be_a Numeric }
-    it do
+    it 'averages donations in the period requested' do
       mock_time
+      expect(subject.monthly_average).to eq 100
+    end
+    it 'does not include donations made in the current month' do
+      mock_time
+      create(:donation, donor_account: donor_account,
+                        designation_account: designation_account,
+                        donation_date: Date.parse('2099-06-04'),
+                        amount: '100')
       expect(subject.monthly_average).to eq 100
     end
   end
@@ -91,9 +99,23 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
 
   describe '#number_of_months_in_range' do
     it { expect(subject.send(:number_of_months_in_range)).to be_a Numeric }
-    it do
+    it 'excludes last month if that month is the current month' do
       mock_time
-      expect(subject.send(:number_of_months_in_range)).to eq 12
+      expect(subject.send(:number_of_months_in_range)).to eq 11
+    end
+    context 'has filter_params where end date is not in current month' do
+      before { mock_time }
+      subject do
+        described_class.new(account_list: account_list,
+                            filter_params: {
+                              donation_date: (Date.today - 14.months)...(Date.today - 2.months)
+                            })
+      end
+
+      it 'includes last month' do
+        mock_time
+        expect(subject.send(:number_of_months_in_range)).to eq 13
+      end
     end
   end
 end

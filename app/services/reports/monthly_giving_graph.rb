@@ -9,8 +9,7 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
 
   def initialize(attributes)
     super
-
-    after_initialize
+    self.filter_params ||= {}
   end
 
   def totals
@@ -24,8 +23,7 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
   end
 
   def monthly_average
-    total_converted = totals.map { |t| t[:total_converted] }.sum
-    (total_converted / number_of_months_in_range.to_f).to_i
+    total_converted.sum.fdiv(number_of_months_in_range).to_i
   end
 
   def months_to_dates
@@ -52,8 +50,23 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
 
   protected
 
+  def total_converted
+    return total_converted_by_month_excluding_last_month if end_date == Date.today.end_of_month
+    total_converted_by_month
+  end
+
+  def total_converted_by_month_excluding_last_month
+    totals.map { |t| t[:month_totals][0...-1].map { |m| m[:converted] }.sum }
+  end
+
+  def total_converted_by_month
+    totals.map { |t| t[:total_converted] }
+  end
+
   def number_of_months_in_range
-    (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month) + 1
+    (end_date.year * 12 + end_date.month) -
+      (start_date.year * 12 + start_date.month) +
+      (end_date == Date.today.end_of_month ? 0 : 1)
   end
 
   def start_date
@@ -101,11 +114,5 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
 
   def donation_scope
     account_list.donations.where(filter_params)
-  end
-
-  private
-
-  def after_initialize
-    self.filter_params ||= {}
   end
 end
