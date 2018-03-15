@@ -6,6 +6,12 @@ class DonationAmountRecommendation::Remote < ApplicationRecord
 
   belongs_to :organization
 
+  # a kludge that deals with the remote id's being in the old int id format
+  def organization
+    return Organization.cru_usa if organization_id.to_i == 48
+    super
+  end
+
   def designation_account
     return unless organization
     organization.designation_accounts.find_by(designation_number: designation_number)
