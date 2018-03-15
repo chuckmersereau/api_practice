@@ -23,7 +23,7 @@ RSpec.describe Audited::AuditSearch, type: :model do
         "max_score": 1,
         "hits": [
           {
-            "_index": 'mpdx-test-2018.02.20',
+            "_index": 'mpdx-uuid-test-2018.02.20',
             "_type": 'audit_elastic',
             "_id": '-Dals2EBy3eIl0ogkDQ5',
             "_score": 1,
@@ -35,7 +35,7 @@ RSpec.describe Audited::AuditSearch, type: :model do
   end
 
   before do
-    stub_request(:get, 'http://example.com:9200/mpdx-test-*/_search?scroll=5m&size=100&sort=_doc')
+    stub_request(:get, 'http://example.com:9200/mpdx-uuid-test-*/_search?scroll=5m&size=100&sort=_doc')
       .with(body: '{"query":{"bool":{"must":[{"match":{"auditable_type":"Person"}}]}},"sort":["_doc"]}')
       .to_return(status: 200, body: resp_body.to_json, headers: { 'content-type': 'application/json; charset=UTF-8' })
   end

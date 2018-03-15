@@ -4,7 +4,7 @@ module Audited
   class AuditSearch < Audited::AuditElastic
     include Elasticsearch::Persistence::Model
 
-    index_name ['mpdx', Rails.env, '*'].join('-')
+    index_name [Audited::AuditElastic::INDEX_BASE, '*'].join('-')
 
     def self.dump(klass)
       search_by(
