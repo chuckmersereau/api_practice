@@ -357,7 +357,12 @@ class DataServer
     first_line = lines.first.to_s.upcase
     first_two_lines = first_line + lines[1].to_s
 
-    if first_two_lines =~ /password|not registered|not authorized|oauth_token is not recognized/i
+    # provid?ed is necessary because there is a typo in the error message
+    invalid_creds_errors = ['password', 'not registered', 'not authorized',
+                            'oauth_token is not recognized', 'oauth_token is expired',
+                            'No client_id was provid?ed']
+    invalid_creds_regex = Regexp.new invalid_creds_errors.join('|'), true
+    if first_two_lines =~ invalid_creds_regex
       raise_invalid_credentials
     elsif first_two_lines =~ /not found/i
       raise_missing_credentials
