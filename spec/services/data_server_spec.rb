@@ -605,13 +605,22 @@ describe DataServer do
         .to eq('Agapé')
     end
 
-    it 'should raise a DataServerError if the remote server has bad SSL configuration' do
+    it 'raises a DataServerError if the remote server has bad SSL configuration' do
       allow_any_instance_of(RestClient::Request).to receive(:execute)
         .and_raise(OpenSSL::SSL::SSLError,
                    'SSL_connect SYSCALL returned=5 errno=0 state=SSLv2/v3 read server hello A')
       expect do
         data_server.send(:get_response, 'http://example.com', {})
       end.to raise_error(DataServerError, 'Could not securely connect to host "example.com". Reason: SSL_connect SYSCALL returned=5 errno=0 state=SSLv2/v3 read server hello A')
+    end
+
+    it 'raises a RetryJobButNoRollbarError if there is a timeout' do
+      data_server_body = "﻿ERROR\rTimeout expired.  The timeout period elapsed prior to..."
+      stub_request(:post, 'http://example.com').to_return(body: data_server_body)
+
+      expect do
+        data_server.send(:get_response, 'http://example.com', {})
+      end.to raise_error(LowerRetryWorker::RetryJobButNoRollbarError)
     end
   end
 

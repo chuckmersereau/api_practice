@@ -361,6 +361,9 @@ class DataServer
       raise_invalid_credentials
     elsif first_two_lines =~ /not found/i
       raise_missing_credentials
+    elsif first_two_lines =~ /Timeout expired/i
+      # if we encounter a network timeout, retry but don't alert rollbar
+      raise LowerRetryWorker::RetryJobButNoRollbarError
     elsif first_line.include?('ERROR') || first_line.include?('HTML')
       raise DataServerError, response
     end
