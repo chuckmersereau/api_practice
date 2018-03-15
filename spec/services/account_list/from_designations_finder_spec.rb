@@ -12,9 +12,13 @@ describe AccountList::FromDesignationsFinder, '#account_list' do
     org2 = create(:organization)
     da1 = create(:designation_account, designation_number: '1', organization: org1)
     da2 = create(:designation_account, designation_number: '2', organization: org1)
-    da3 = create(:designation_account, designation_number: '3', organization: org2)
+    da3 = create(:designation_account,
+                 designation_number: '3',
+                 organization: org1,
+                 name: 'Sarah Johnson (Imported from TntConnect)')
+    da4 = create(:designation_account, designation_number: '4', organization: org2)
     account_list = create(:account_list)
-    account_list.designation_accounts << [da1, da2, da3]
+    account_list.designation_accounts << [da1, da2, da3, da4]
     finder = AccountList::FromDesignationsFinder.new(%w(1 2), org1.id)
 
     expect(finder.account_list).to eq account_list

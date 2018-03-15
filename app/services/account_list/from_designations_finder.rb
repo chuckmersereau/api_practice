@@ -20,8 +20,12 @@ class AccountList::FromDesignationsFinder
   # designations from multiple organizations merged into them (e.g. for staff
   # with multiple currencies and accounts in different countries)
   def no_other_designations_for_org?(account_list)
-    account_list.designation_accounts.where(organization_id: @organization_id)
-                .pluck(:id).sort == designation_ids
+    comparator = account_list.designation_accounts
+                             .where(organization_id: @organization_id)
+                             .where("name NOT LIKE '%(Imported from TntConnect)'")
+                             .pluck(:id)
+                             .sort
+    comparator == designation_ids
   end
 
   # Returns the account lists that contain all of the designations
