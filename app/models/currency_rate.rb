@@ -36,7 +36,8 @@ class CurrencyRate < ApplicationRecord
     end
 
     def rate_on_date(currency_code:, date:)
-      return 1.0 if currency_code == 'USD'
+      currency_code = currency_code&.upcase
+      return 1.0 if usd?(currency_code)
       @cached_rates ||= {}
       @cached_rates[currency_code] ||= {}
       @cached_rates[currency_code][date] ||= find_rate_on_date(
@@ -45,7 +46,7 @@ class CurrencyRate < ApplicationRecord
     end
 
     def cache_rates_for_dates(currency_code:, from_date:, to_date:)
-      return if currency_code == 'USD'
+      return if usd?(currency_code)
       return if cached_rates_for_date_range?(currency_code, from_date, to_date)
 
       (from_date..to_date).each do |date|
@@ -58,6 +59,10 @@ class CurrencyRate < ApplicationRecord
     end
 
     private
+
+    def usd?(currency_code)
+      %w(USD USS USN).include?(currency_code)
+    end
 
     def find_rate_on_date(currency_code:, date:)
       return 1.0 if currency_code.blank?

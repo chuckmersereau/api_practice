@@ -23,6 +23,13 @@ describe CurrencyRate do
       expect(Rollbar).to_not receive(:error)
       expect(CurrencyRate.latest_for(nil)).to eq 1.0
     end
+
+    it 'returns 1.0 for USS despite no db entry' do
+      expect(CurrencyRate.exists?(code: 'USS')).to be false
+      expect(Rollbar).to_not receive(:error)
+
+      expect(CurrencyRate.latest_for('USS')).to eq 1.0
+    end
   end
 
   context '.latest_for_pair' do
