@@ -21,7 +21,7 @@ class TntImport::ContactImport
 
     # Look for more ways to link a contact
     contact ||= Retryable.retryable do
-      @account_list.contacts.where(name: row['FileAs']).first_or_create
+      @account_list.contacts.where(name: row['FileAs']).first_or_initialize
     end
 
     # add additional data to contact
@@ -61,10 +61,15 @@ class TntImport::ContactImport
   end
 
   def update_contact_basic_fields(contact, row)
+    # we should set value either way if the contact is new because the values are defaulted
+    contact.direct_deposit = true?(row['DirectDeposit']) if @override || !contact.persisted?
+    contact.magazine = true?(row['Magazine']) if @override || !contact.persisted?
+    contact.is_organization = true?(row['IsOrganization']) if @override || !contact.persisted?
+
     contact.name = row['FileAs'] if @override || contact.name.blank?
     contact.full_name = row['FullName'] if @override || contact.full_name.blank?
     contact.greeting = row['Greeting'] if @override || contact.greeting.blank?
-    contact.envelope_greeting = extract_envelope_greeting_from_row(row) if @override || contact.envelope_greeting.blank?
+    contact.envelope_greeting = extract_envelope_greeting_from_row(row) if @override || contact.attributes['envelope_greeting'].blank?
     contact.website = row['WebPage'] if @override || contact.website.blank?
     contact.church_name = row['ChurchName'] if @override || contact.church_name.blank?
     contact.updated_at = parse_date(row['LastEdit'], @import.user) if @override
@@ -72,11 +77,8 @@ class TntImport::ContactImport
 
     add_notes(contact, row)
 
-    contact.direct_deposit = true?(row['DirectDeposit']) if @override || contact.direct_deposit.nil?
-    contact.magazine = true?(row['Magazine']) if @override || contact.magazine.nil?
     contact.tnt_id = row['id']
     contact.addresses.build(TntImport::AddressesBuilder.build_address_array(row, contact, @override))
-    contact.is_organization = true?(row['IsOrganization']) if @override || contact.is_organization.nil?
   end
 
   def update_contact_pledge_fields(contact, row)
