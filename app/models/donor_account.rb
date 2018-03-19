@@ -2,6 +2,8 @@ require_dependency 'address_methods'
 class DonorAccount < ApplicationRecord
   include AddressMethods
 
+  audited associated_with: :organization, except: [:total_donations, :updated_at, :last_donation_date]
+
   belongs_to :organization
   belongs_to :master_company
   has_many :master_person_donor_accounts, dependent: :destroy

@@ -4,6 +4,8 @@ class ContactDonorAccount < ApplicationRecord
 
   validate :ensure_one_contact_per_donor_account_number
 
+  audited associated_with: :contact
+
   def ensure_one_contact_per_donor_account_number
     if contact.account_list.donor_accounts.where(account_number: donor_account.account_number).any?
       contact.errors.add(:base, _("Another contact on your account already has the donor account number you've tried to assign to this contact."))
