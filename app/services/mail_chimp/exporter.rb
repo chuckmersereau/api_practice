@@ -44,7 +44,47 @@ class MailChimp::Exporter
   end
 
   def export_deletes(emails_of_members_to_remove)
-    batcher.unsubscribe_members(emails_of_members_to_remove)
+    emails_with_reasons = emails_of_members_to_remove.each_with_object({}) do |email, hash|
+      reason = unsubscribe_reason(email)
+      hash[email] = reason
+    end
+
+    batcher.unsubscribe_members(emails_with_reasons)
+  end
+
+  def unsubscribe_reason(email)
+    # newsletter: none/physical
+    return 'email on contact with newsletter set to None or Physical' if active_contact_emails.exists?(email: email)
+    # status: hidden
+    return 'email on contact with a hidden status' if non_opt_out_people_emails.exists?(email: email)
+    # opt-out
+    return "email on person marked as 'Opt-out of Email Newsletter'" if primary_emails.exists?(email: email)
+    # non-primary
+    return 'email marked as non-primary' if active_emails.exists?(email: email)
+    # historic email
+    return 'email marked as historic' if mpdx_email_addresses.exists?(email: email)
+    # not in mpdx
+    'email not in MPDX'
+  end
+
+  def mpdx_email_addresses
+    EmailAddress.joins(person: [:contacts]).where(contacts: { account_list_id: mail_chimp_account.account_list.id })
+  end
+
+  def active_emails
+    mpdx_email_addresses.where(historic: false)
+  end
+
+  def primary_emails
+    active_emails.where(primary: true)
+  end
+
+  def non_opt_out_people_emails
+    primary_emails.where(people: { optout_enewsletter: false })
+  end
+
+  def active_contact_emails
+    non_opt_out_people_emails.where(contacts: { status: Contact::ACTIVE_STATUSES + [nil, ''] })
   end
 
   def group_adder

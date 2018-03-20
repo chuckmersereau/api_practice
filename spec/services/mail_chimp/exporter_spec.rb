@@ -59,6 +59,7 @@ describe MailChimp::Exporter do
         email: contact.people.first.primary_email_address.email
       )
     end
+    let(:unsubscribed_email) { contact.people.first.primary_email_address.email }
 
     before do
       allow_any_instance_of(MailChimp::GibbonWrapper).to receive(:list_emails).and_return(['email@gmail.com'])
@@ -75,8 +76,75 @@ describe MailChimp::Exporter do
       expect(mock_merge_field_adder).to receive(:add_merge_field).with('GREETING')
 
       expect(mock_batcher).to receive(:subscribe_contacts).with(contacts)
-      expect(mock_batcher).to receive(:unsubscribe_members).with([contact.people.first.primary_email_address.email])
+      unsubscribe_reason = 'email on contact with newsletter set to None or Physical'
+      expect(mock_batcher).to receive(:unsubscribe_members).with(unsubscribed_email => unsubscribe_reason)
       subject.export_contacts!(contacts.map(&:id), true)
+    end
+
+    context 'unsubscribe reason' do
+      before do
+        allow(mock_group_adder).to receive(:add_status_interests).with(['Partner - Financial', 'Partner - Pray'])
+        allow(mock_group_adder).to receive(:add_tags_interests).with(['tag'])
+        allow(mock_merge_field_adder).to receive(:add_merge_field).with('GREETING')
+        allow(mock_batcher).to receive(:subscribe_contacts).with([contact])
+      end
+
+      it 'generates reason when send_newsletter is nil' do
+        contact.update(send_newsletter: nil)
+
+        unsubscribe_reason = 'email on contact with newsletter set to None or Physical'
+        expect(mock_batcher).to receive(:unsubscribe_members).with(unsubscribed_email => unsubscribe_reason)
+
+        subject.export_contacts!([contact.id], false)
+      end
+
+      it 'generates reason when contact status is Not Interested' do
+        contact.update!(status: 'Not Interested')
+
+        unsubscribe_reason = 'email on contact with a hidden status'
+        expect(mock_batcher).to receive(:unsubscribe_members).with(unsubscribed_email => unsubscribe_reason)
+
+        subject.export_contacts!([contact.id], false)
+      end
+
+      it 'generates reason when person is opted out' do
+        contact.people.first.update(optout_enewsletter: true)
+
+        unsubscribe_reason = "email on person marked as 'Opt-out of Email Newsletter'"
+        expect(mock_batcher).to receive(:unsubscribe_members).with(unsubscribed_email => unsubscribe_reason)
+
+        subject.export_contacts!([contact.id], false)
+      end
+
+      it 'generates reason when email is not primary' do
+        old_email = unsubscribed_email
+        contact.people.first.email_addresses.create(email: 'test_primary@gmail.com', primary: true)
+
+        unsubscribe_reason = 'email marked as non-primary'
+        expect(mock_batcher).to receive(:unsubscribe_members).with(old_email => unsubscribe_reason)
+
+        subject.export_contacts!([contact.id], false)
+      end
+
+      it 'generates reason when email is historic' do
+        old_email = unsubscribed_email
+        contact.people.first.primary_email_address.update(historic: true)
+
+        unsubscribe_reason = 'email marked as historic'
+        expect(mock_batcher).to receive(:unsubscribe_members).with(old_email => unsubscribe_reason)
+
+        subject.export_contacts!([contact.id], false)
+      end
+
+      it 'generates reason when email no longer on account' do
+        old_email = unsubscribed_email
+        contact.people.first.primary_email_address.destroy!
+
+        unsubscribe_reason = 'email not in MPDX'
+        expect(mock_batcher).to receive(:unsubscribe_members).with(old_email => unsubscribe_reason)
+
+        subject.export_contacts!([contact.id], false)
+      end
     end
   end
 end

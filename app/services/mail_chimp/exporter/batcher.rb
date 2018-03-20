@@ -19,22 +19,33 @@ class MailChimp::Exporter
       create_member_records(members_params)
     end
 
-    def unsubscribe_members(emails_of_members_to_remove)
-      return if emails_of_members_to_remove.none?
+    def unsubscribe_members(emails_with_reasons)
+      return if emails_with_reasons.none?
 
-      operations = emails_of_members_to_remove.map do |email|
-        {
-          method: 'PATCH',
-          path: "/lists/#{list_id}/members/#{email_hash(email)}",
-          body: { status: 'unsubscribed' }.to_json
-        }
-      end
+      operations = emails_with_reasons.map do |email, reason|
+        [unsubscribe_operation(email), note_reason_operation(email, reason)]
+      end.flatten.compact
 
       send_batch_operations(operations)
-      delete_member_records(emails_of_members_to_remove)
+      delete_member_records(emails_with_reasons.keys)
     end
 
-    private
+    def unsubscribe_operation(email)
+      {
+        method: 'PATCH',
+        path: "/lists/#{list_id}/members/#{email_hash(email)}",
+        body: { status: 'unsubscribed' }.to_json
+      }
+    end
+
+    def note_reason_operation(email, reason)
+      return unless reason.present?
+      {
+        method: 'POST',
+        path: "/lists/#{list_id}/members/#{email_hash(email)}/notes",
+        body: { note: "Unsubscribed by MPDX: #{reason}" }.to_json
+      }
+    end
 
     def fetch_member_params_from_contacts(contacts)
       relevant_people = Person.joins(:contact_people, :primary_email_address)

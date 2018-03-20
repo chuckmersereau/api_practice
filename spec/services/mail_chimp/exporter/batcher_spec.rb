@@ -6,6 +6,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
 
   let(:mock_gibbon_wrapper) { double(:mock_gibbon_wrapper) }
   let(:list_id) { 'list_one' }
+  let(:email_hash) { '1919bfc4fa95c7f6b231e583da677a17' }
 
   subject { described_class.new(mail_chimp_account, mock_gibbon_wrapper, list_id) }
 
@@ -23,7 +24,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
   before do
     allow(mock_gibbon_wrapper).to receive(:gibbon_list_object).and_return(mock_gibbon_list_object)
     allow(mock_gibbon_wrapper).to receive(:batches).and_return(mock_gibbon_batches)
-    allow(mock_gibbon_list_object).to receive(:lists).and_return('list_one')
+    allow(mock_gibbon_list_object).to receive(:lists).and_return(list_id)
     allow(mock_gibbon_list_object).to receive(:interest_categories).and_return(mock_interest_categories)
     allow(mock_interest_categories).to receive(:interests).and_return(mock_interests)
     allow(mock_interests).to receive(:retrieve).and_return(
@@ -52,7 +53,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
       [
         {
           method: 'PUT',
-          path: '/lists/list_one/members/1919bfc4fa95c7f6b231e583da677a17',
+          path: "/lists/#{list_id}/members/#{email_hash}",
           body: person_operation_body.to_json
         }
       ]
@@ -134,20 +135,20 @@ RSpec.describe MailChimp::Exporter::Batcher do
       create(:mail_chimp_member,
              mail_chimp_account: mail_chimp_account,
              email: 'email@gmail.com',
-             list_id: 'list_one')
+             list_id: list_id)
     end
 
     let!(:second_mail_chimp_member) do
       create(:mail_chimp_member,
              mail_chimp_account: mail_chimp_account,
-             list_id: 'list_one')
+             list_id: list_id)
     end
 
     let(:operations_body) do
       [
         {
           method: 'PATCH',
-          path: '/lists/list_one/members/1919bfc4fa95c7f6b231e583da677a17',
+          path: "/lists/#{list_id}/members/#{email_hash}",
           body: { status: 'unsubscribed' }.to_json
         }
       ]
@@ -156,14 +157,26 @@ RSpec.describe MailChimp::Exporter::Batcher do
     it 'unsubscribes the members based on the emails provided' do
       expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body).and_return(mock_batch_response)
 
-      subject.unsubscribe_members([mail_chimp_member.email])
+      subject.unsubscribe_members(mail_chimp_member.email => nil)
+    end
+
+    it 'sends provided unsubscribe reason to mailchimp' do
+      reason = 'Test Reason'
+      operations_body << {
+        method: 'POST',
+        path: "/lists/#{list_id}/members/#{email_hash}/notes",
+        body: { note: "Unsubscribed by MPDX: #{reason}" }.to_json
+      }
+
+      expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body).and_return(mock_batch_response)
+      subject.unsubscribe_members(mail_chimp_member.email => reason)
     end
 
     it 'destroys associated mail chimp members' do
       allow(mock_gibbon_batches).to receive(:create).and_return(mock_batch_response)
 
       expect do
-        subject.unsubscribe_members([mail_chimp_member.email])
+        subject.unsubscribe_members(mail_chimp_member.email => nil)
       end.to change(MailChimpMember, :count).by(-1)
     end
   end
