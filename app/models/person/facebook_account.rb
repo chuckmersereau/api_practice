@@ -66,6 +66,12 @@ class Person::FacebookAccount < ApplicationRecord
     self.username = self.class.username_from_url(value) unless remote_id
   end
 
+  def username=(value)
+    new_remote_id = self.class.id_from_url(value)
+    self.remote_id = new_remote_id if new_remote_id
+    super(self.class.username_from_url(value) || value)
+  end
+
   def self.id_from_url(url)
     return unless url.present? && url.include?('id=')
     url.split('id=').last.split('&').first

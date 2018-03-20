@@ -92,4 +92,35 @@ describe Person::FacebookAccount do
       expect(account.token_missing_or_expired?).to be false
     end
   end
+
+  describe '#username=' do
+    subject { described_class.new }
+    context 'only name' do
+      let(:username) { 'tony.stark' }
+      it 'does not set remote id' do
+        expect { subject.username = username }.to_not change { subject.remote_id }
+      end
+      it 'persists value as-is' do
+        expect { subject.username = username }.to change { subject.username }.to(username)
+      end
+    end
+    context 'url with id' do
+      let(:username) { 'http://facebook.com/profile.php?id=1234345' }
+      it 'saves remote id' do
+        expect { subject.username = username }.to change { subject.remote_id }.to(1_234_345)
+      end
+      it 'persists path as username' do
+        expect { subject.username = username }.to change { subject.username }.to('profile.php?id=1234345')
+      end
+    end
+    context 'url with name' do
+      let(:username) { 'https://facebook.com/tony.stark' }
+      it 'does not set remote id' do
+        expect { subject.username = username }.to_not change { subject.remote_id }
+      end
+      it 'persists name as username' do
+        expect { subject.username = username }.to change { subject.username }.to('tony.stark')
+      end
+    end
+  end
 end
