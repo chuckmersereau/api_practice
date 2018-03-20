@@ -6,8 +6,10 @@ module Concerns
       def import_comments_for_task(task:, notes: nil, tnt_task_type_id: nil)
         task.comments.where(body: notes.strip).first_or_create if notes.present?
 
-        if ::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES.keys.include?(tnt_task_type_id)
-          task.comments.where(body: _(%(This task was given the type "#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}" in TntConnect.))).first_or_create
+        unsupported_type_name = ::TntImport::TntCodes.unsupported_task_type(tnt_task_type_id)
+        if unsupported_type_name
+          comment_body = _(%(This task was given the type "#{unsupported_type_name}" in TntConnect.))
+          task.comments.where(body: comment_body).first_or_create
         end
 
         task.comments

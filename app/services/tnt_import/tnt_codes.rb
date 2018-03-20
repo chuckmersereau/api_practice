@@ -26,7 +26,9 @@ class TntImport::TntCodes
   ].freeze
 
   UNSUPPORTED_TNT_TASK_CODES = {
-    160 => 'Present'
+    160 => 'Present',
+    170 => 'MailChimp',
+    180 => 'WhatsApp'
   }.freeze
 
   TNT_TASK_CODES_MAPPED_TO_MPDX_TASK_TYPES = {
@@ -74,6 +76,10 @@ class TntImport::TntCodes
   class << self
     def task_type(task_type_id)
       TNT_TASK_CODES_MAPPED_TO_MPDX_TASK_TYPES[task_type_id.to_i]
+    end
+
+    def unsupported_task_type(task_type_id)
+      UNSUPPORTED_TNT_TASK_CODES[task_type_id.to_i]
     end
 
     def import_task_type?(task_type_id)

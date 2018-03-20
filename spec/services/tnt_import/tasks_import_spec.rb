@@ -4,7 +4,12 @@ describe TntImport::TasksImport do
   let(:user) { create(:user) }
   let(:tnt_import) { create(:tnt_import, override: true, user: user) }
   let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
-  let(:contact_ids) { {} }
+  let(:contacts) do
+    xml.tables['TaskContact'].map do |row|
+      create(:contact, tnt_id: row['ContactID'])
+    end
+  end
+  let(:contact_ids) { Hash[contacts.map { |c| [c.tnt_id.to_s, c.id] }] }
   subject { described_class.new(tnt_import, contact_ids, xml) }
 
   before do
@@ -14,6 +19,8 @@ describe TntImport::TasksImport do
   describe '#import' do
     context 'no xml task data' do
       let(:xml) { double(tables: {}) }
+      let(:contact_ids) { {} }
+
       it 'returns empty hash' do
         expect(subject.import).to eq(nil)
       end
@@ -29,19 +36,37 @@ describe TntImport::TasksImport do
       end
     end
 
+    context 'with WhatsApp task type' do
+      before do
+        xml.tables['Task'].first['TaskTypeID'] = '180'
+      end
+
+      it 'includes a comment' do
+        expect { subject.import }.to change { Task.count }.from(0).to(1)
+        task = Task.last
+        expect(task.activity_type).to eq 'Text Message'
+        expect(Task.last.comments.pluck(:body)).to include 'This task was given the type "WhatsApp" in TntConnect.'
+      end
+    end
+
+    context 'with Present task type' do
+      before do
+        xml.tables['Task'].first['TaskTypeID'] = '160'
+      end
+
+      it 'includes a comment' do
+        expect { subject.import }.to change { Task.count }.from(0).to(1)
+        task = Task.last
+        expect(task.activity_type).to eq nil
+        expect(Task.last.comments.pluck(:body)).to include 'This task was given the type "Present" in TntConnect.'
+      end
+    end
+
     context 'with multiple task contacts per task' do
       let(:tnt_import) do
         create(:tnt_import_with_multiple_task_contacts, override: true,
                                                         user: user)
       end
-
-      let(:contacts) do
-        xml.tables['TaskContact'].map do |row|
-          create(:contact, tnt_id: row['ContactID'])
-        end
-      end
-
-      let(:contact_ids) { Hash[contacts.map { |c| [c.tnt_id.to_s, c.id] }] }
 
       it 'creates one for each contact' do
         expect { subject.import }.to change { Task.count }.by(contacts.size)

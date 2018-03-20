@@ -37,8 +37,8 @@ class TntImport::TasksImport
   attr_reader :xml_tables, :contact_ids_by_tnt_contact_id
 
   def build_tasks
-    xml_tables['Task'].map    { |r| build_task_from_row(r) }
-                      .select { |t| TntImport::TntCodes.import_task_type?(t.activity_type) }
+    task_rows = xml_tables['Task'].select { |row| TntImport::TntCodes.import_task_type?(row['TaskTypeID']) }
+    task_rows.map { |r| build_task_from_row(r) }
   end
 
   def build_task_from_row(row)

@@ -25,6 +25,12 @@ describe TntImport::TntCodes do
     end
   end
 
+  describe '.unsupported_task_type' do
+    it 'returns mapped value' do
+      expect(described_class.unsupported_task_type('170')).to eq 'MailChimp'
+    end
+  end
+
   describe '.import_task_type?' do
     it 'returns false' do
       expect(described_class.import_task_type?('190')).to eq(false)
