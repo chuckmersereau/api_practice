@@ -18,7 +18,7 @@ describe TntImport::ContactImport do
   let(:tags) { %w(tag1 tag2) }
   let(:import) do
     donor_accounts = []
-    TntImport::ContactImport.new(tnt_import, tags, donor_accounts)
+    TntImport::ContactImport.new(tnt_import, tags, donor_accounts, xml.tables['NewsletterLang'])
   end
 
   before { stub_smarty_streets }
@@ -98,12 +98,32 @@ describe TntImport::ContactImport do
       end
     end
 
+    context 'has newsletter language field' do
+      let(:file) { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
+
+      it 'adds supported language to contact field' do
+        # language in xml is French
+        contact = import.import_contact(tnt_import_parsed_xml_sample_contact_row)
+
+        expect(contact.locale).to eq 'fr'
+      end
+
+      it 'adds unsupported language to the contact notes' do
+        # language spoken in Wakanda
+        xml.find('NewsletterLang', '557339175')['Description'] = 'Xhosa'
+
+        tags_list = import.import_contact(tnt_import_parsed_xml_sample_contact_row).tag_list
+
+        expect(tags_list).to include('xhosa')
+      end
+    end
+
     context 'importing send_newsletter' do
       it 'supports overriding' do
         row = tnt_import_parsed_xml_sample_contact_row
 
         tnt_import.override = false
-        import = TntImport::ContactImport.new(tnt_import, tags, [])
+        import = TntImport::ContactImport.new(tnt_import, tags, [], [])
 
         expect(import.import_contact(row).send_newsletter).to eq('Both')
 
@@ -111,7 +131,7 @@ describe TntImport::ContactImport do
         expect(import.import_contact(row).send_newsletter).to eq('Both')
 
         tnt_import.override = true
-        import = TntImport::ContactImport.new(tnt_import, tags, [])
+        import = TntImport::ContactImport.new(tnt_import, tags, [], [])
         expect(import.import_contact(row).send_newsletter).to eq('None')
       end
     end
@@ -126,7 +146,7 @@ describe TntImport::ContactImport do
     account_list = create(:account_list)
     tnt_import = double(user: build(:user), account_list: account_list,
                         override?: true)
-    import = TntImport::ContactImport.new(tnt_import, [], [])
+    import = TntImport::ContactImport.new(tnt_import, [], [], [])
     row = load_yaml_row(:bad_phone_valid_email_row)
 
     expect do

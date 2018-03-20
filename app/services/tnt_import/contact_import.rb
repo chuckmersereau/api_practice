@@ -1,12 +1,14 @@
 class TntImport::ContactImport
   include Concerns::TntImport::DateHelpers
+  include LocalizationHelper
 
-  def initialize(import, tags, donor_accounts)
+  def initialize(import, tags, donor_accounts, languages)
     @import = import
     @account_list = import.account_list
     @user = import.user
     @tags = tags
     @donor_accounts = donor_accounts || []
+    @languages = languages || []
     @override = import.override?
   end
 
@@ -52,6 +54,7 @@ class TntImport::ContactImport
     update_contact_pledge_fields(contact, row)
     update_contact_date_fields(contact, row)
     update_contact_send_newsletter_field(contact, row)
+    update_locale(contact, row)
 
     @tags.each { |tag| contact.tag_list.add(tag) }
 
@@ -120,6 +123,16 @@ class TntImport::ContactImport
       end
     else
       contact.send_newsletter = 'None'
+    end
+  end
+
+  def update_locale(contact, row)
+    newsletter_lang = @languages.find { |r| r['id'] == row['NewsletterLangID'] }.try(:[], 'Description')
+    locale = supported_locales.key(newsletter_lang)
+    if locale
+      contact.locale = locale
+    elsif newsletter_lang.present? && newsletter_lang != 'Unknown'
+      contact.tag_list.add(newsletter_lang)
     end
   end
 

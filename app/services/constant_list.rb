@@ -1,5 +1,6 @@
 class ConstantList < ActiveModelSerializers::Model
   include DisplayCase::ExhibitsHelper
+  include LocalizationHelper
 
   CURRENCY_CODES_NOT_NEEDED = %w(ADP AFA).freeze
 
@@ -29,7 +30,7 @@ class ConstantList < ActiveModelSerializers::Model
   end
 
   def locales
-    @locales ||= locales_hash.invert.sort_by(&:first)
+    @locales ||= supported_locales.invert.sort_by(&:first)
   end
 
   def notifications
@@ -94,12 +95,6 @@ class ConstantList < ActiveModelSerializers::Model
 
   def contact
     @contact ||= Contact.new
-  end
-
-  def locales_hash
-    TwitterCldr::Shared::Languages
-      .all
-      .select { |k, _| TwitterCldr.supported_locales.include?(k) }
   end
 
   def notifications_hash

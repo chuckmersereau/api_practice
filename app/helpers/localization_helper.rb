@@ -33,6 +33,12 @@ module LocalizationHelper
     info ? info[:symbol] : currency_code
   end
 
+  def supported_locales
+    TwitterCldr::Shared::Languages
+      .all
+      .select { |k, _| TwitterCldr.supported_locales.include?(k) }
+  end
+
   private
 
   def format_with_currency_options(value, options)
