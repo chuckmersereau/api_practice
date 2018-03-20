@@ -49,6 +49,22 @@ describe Api::V2::ContactsController, type: :controller do
 
   include_examples 'index_examples'
 
+  describe 'sorting' do
+    let!(:sorting_user) { create(:user_with_account) }
+    let!(:sorting_account_list) { sorting_user.account_lists.first }
+    let!(:contact_1) { create(:contact, name: 'Chan, Emily', account_list: sorting_account_list) }
+    let!(:contact_2) { create(:contact, name: 'Chang, Edward', account_list: sorting_account_list) }
+    let!(:contact_3) { create(:contact, name: 'Chan, Gene', account_list: sorting_account_list) }
+    before { api_login(sorting_user) }
+    let(:response_body) { JSON.parse(response.body) }
+
+    it 'sorts name field using C database collation' do
+      get :index, sort: 'name'
+      expect(response.status).to eq(200), invalid_status_detail
+      expect(response_body['data'].map { |c| c['id'] }).to eq [contact_1.id, contact_3.id, contact_2.id]
+    end
+  end
+
   include_examples 'show_examples'
 
   include_examples 'create_examples'

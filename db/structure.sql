@@ -463,7 +463,7 @@ CREATE TABLE contact_referrals (
 
 CREATE TABLE contacts (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
-    name character varying,
+    name character varying COLLATE pg_catalog."C",
     account_list_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -5042,4 +5042,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180209020330');
 INSERT INTO schema_migrations (version) VALUES ('20180214193958');
 
 INSERT INTO schema_migrations (version) VALUES ('20180227044343');
+
+INSERT INTO schema_migrations (version) VALUES ('20180302023505');
 
