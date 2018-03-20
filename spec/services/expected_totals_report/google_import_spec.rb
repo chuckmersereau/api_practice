@@ -183,7 +183,7 @@ describe GoogleImport do
       expect(person.first_name).to eq('John')
       expect(person.last_name).to eq('Google')
       expect(person.middle_name).to eq('Henry')
-      expect(person.title).to eq('Mr')
+      expect(person.title).to eq('Mr.')
       expect(person.suffix).to eq('III')
       expect(person.birthday_year).to eq(1988)
       expect(person.birthday_month).to eq(5)
@@ -343,7 +343,7 @@ describe GoogleImport do
       expect(existing_person.first_name).to eq('John')
       expect(existing_person.last_name).to eq('Google')
       expect(existing_person.middle_name).to eq('Henry')
-      expect(existing_person.title).to eq('Mr')
+      expect(existing_person.title).to eq('Mr.')
       expect(existing_person.suffix).to eq('III')
 
       original_picture.reload

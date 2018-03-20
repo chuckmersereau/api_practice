@@ -481,6 +481,24 @@ class Person < ApplicationRecord
     end
   end
 
+  def title=(value)
+    value_with_trail = "#{value}."
+    if Person::TITLES.include?(value_with_trail)
+      super value_with_trail
+    else
+      super value
+    end
+  end
+
+  def suffix=(value)
+    value_with_trail = "#{value}."
+    if Person::SUFFIXES.include?(value_with_trail)
+      super value_with_trail
+    else
+      super value
+    end
+  end
+
   def merge(other)
     Person.transaction(requires_new: true) do
       # This is necessary in case this is executed in a loop of merges which could cause the master_person

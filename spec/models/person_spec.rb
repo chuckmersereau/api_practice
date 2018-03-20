@@ -433,4 +433,58 @@ describe Person do
       person.update(last_name: 'Boykin')
     end
   end
+
+  describe 'title=' do
+    context 'blank title' do
+      it 'clears title' do
+        expect { person.title = '' }.to change { person.title }.to('')
+        expect { person.title = nil }.to change { person.title }.to(nil)
+      end
+    end
+
+    context 'title with period' do
+      it 'saves as-is' do
+        expect { person.title = 'Ms.' }.to change { person.title }.to('Ms.')
+      end
+    end
+
+    context 'title missing period' do
+      it 'adds trailing period' do
+        expect { person.title = 'Mr' }.to change { person.title }.to('Mr.')
+      end
+    end
+
+    context 'title not matching pre-defined' do
+      it 'saves as-is' do
+        expect { person.title = 'Pastor' }.to change { person.title }.to('Pastor')
+      end
+    end
+  end
+
+  describe 'suffix=' do
+    context 'blank suffix' do
+      it 'clears suffix' do
+        expect { person.suffix = '' }.to change { person.suffix }.to('')
+        expect { person.suffix = nil }.to change { person.suffix }.to(nil)
+      end
+    end
+
+    context 'suffix with period' do
+      it 'saves as-is' do
+        expect { person.suffix = 'Jr.' }.to change { person.suffix }.to('Jr.')
+      end
+    end
+
+    context 'suffix missing period' do
+      it 'adds trailing period' do
+        expect { person.suffix = 'Sr' }.to change { person.suffix }.to('Sr.')
+      end
+    end
+
+    context 'suffix not matching pre-defined' do
+      it 'saves as-is' do
+        expect { person.suffix = 'III' }.to change { person.suffix }.to('III')
+      end
+    end
+  end
 end
