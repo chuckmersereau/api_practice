@@ -83,8 +83,12 @@ class Person::KeyAccount < ApplicationRecord
 
   def find_or_create_org_account
     return if Rails.env.development? && ENV['DEV_SIEBEL_ORG_ACCOUNT'].blank?
-    return unless SiebelDonations::Profile.find(ssoGuid: remote_id).present?
-
+    begin
+      return unless SiebelDonations::Profile.find(ssoGuid: remote_id).present?
+    rescue RestClient::Exception => ex
+      return if person.organization_accounts.count.positive?
+      raise ex
+    end
     org = Organization.cru_usa
 
     # we need to create an organization account if we don't already have one
