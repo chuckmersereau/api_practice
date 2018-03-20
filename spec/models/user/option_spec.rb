@@ -8,7 +8,7 @@ RSpec.describe User::Option, type: :model do
   it { is_expected.to validate_presence_of(:key) }
   it { is_expected.to validate_uniqueness_of(:key).scoped_to(:user_id) }
   it { is_expected.to have_db_column(:key).of_type(:string) }
-  it { is_expected.to have_db_column(:value).of_type(:string) }
+  it { is_expected.to have_db_column(:value).of_type(:text) }
   it { is_expected.to have_db_column(:user_id).of_type(:uuid) }
   it { is_expected.to have_db_column(:id).of_type(:uuid) }
   it { is_expected.to have_db_index([:key, :user_id]).unique(true) }

@@ -1335,7 +1335,7 @@ CREATE TABLE person_linkedin_accounts (
 CREATE TABLE person_options (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     key character varying NOT NULL,
-    value character varying,
+    value text,
     user_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -5042,6 +5042,8 @@ INSERT INTO schema_migrations (version) VALUES ('20180209020330');
 INSERT INTO schema_migrations (version) VALUES ('20180214193958');
 
 INSERT INTO schema_migrations (version) VALUES ('20180227044343');
+
+INSERT INTO schema_migrations (version) VALUES ('20180228233310');
 
 INSERT INTO schema_migrations (version) VALUES ('20180302023505');
 
