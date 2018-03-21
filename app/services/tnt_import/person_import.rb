@@ -37,16 +37,27 @@ class TntImport::PersonImport
   end
 
   def update_person_attributes(person, row, prefix = '')
-    person.attributes = { first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'], middle_name: row[prefix + 'MiddleName'],
-                          title: row[prefix + 'Title'], suffix: row[prefix + 'Suffix'], gender: prefix.present? ? 'female' : 'male',
-                          profession: prefix.present? ? nil : row['Profession'],
-                          birthday_month: row[prefix + 'BirthdayMonth'],
-                          birthday_day: row[prefix + 'BirthdayDay'],
-                          birthday_year: get_four_digit_year_from_value(row[prefix + 'BirthdayYear']),
-                          anniversary_month: row[prefix + 'AnniversaryMonth'],
-                          anniversary_day: row[prefix + 'AnniversaryDay'],
-                          anniversary_year: get_four_digit_year_from_value(row[prefix + 'AnniversaryYear']),
-                          deceased: (row['Deceased'] == 'true') }
+    new_attributes = { first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'],
+                       middle_name: row[prefix + 'MiddleName'],
+                       title: row[prefix + 'Title'], suffix: row[prefix + 'Suffix'],
+                       gender: prefix.present? ? 'female' : 'male',
+                       profession: row[prefix + 'Profession'],
+                       employer: row[prefix + 'BusinessName'],
+                       birthday_month: row[prefix + 'BirthdayMonth'],
+                       birthday_day: row[prefix + 'BirthdayDay'],
+                       birthday_year: get_four_digit_year_from_value(row[prefix + 'BirthdayYear']),
+                       anniversary_month: row[prefix + 'AnniversaryMonth'],
+                       anniversary_day: row[prefix + 'AnniversaryDay'],
+                       anniversary_year: get_four_digit_year_from_value(row[prefix + 'AnniversaryYear']),
+                       deceased: (row['Deceased'] == 'true') }
+
+    person.attributes = if !person.persisted?
+                          new_attributes
+                        elsif @override
+                          person.attributes.symbolize_keys.merge(new_attributes)
+                        else
+                          new_attributes.merge(person.attributes.symbolize_keys)
+                        end
 
     update_person_phones(person, row, prefix)
     update_person_emails(person, row, prefix)

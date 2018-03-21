@@ -172,7 +172,7 @@ describe TntImport::PersonImport do
   end
 
   context '#update_person_attributes' do
-    it 'imports a phone number for a person' do
+    it 'imports basic fields for a person' do
       contact_row = {
         'PreferredPhoneType' => '0',
         'PhoneIsValidMask' => '4385',
@@ -186,7 +186,11 @@ describe TntImport::PersonImport do
         'BirthdayYear' => '1989',
         'AnniversaryMonth' => '11',
         'AnniversaryDay' => '4',
-        'AnniversaryYear' => '1994'
+        'AnniversaryYear' => '1994',
+        'Profession' => 'Janitor',
+        'SpouseProfession' => 'Custodian',
+        'BusinessName' => 'Business A',
+        'SpouseBusinessName' => 'Business 1'
       }
       person = Person.new
       expect do
@@ -198,6 +202,8 @@ describe TntImport::PersonImport do
       expect(person.anniversary_month).to eq(11)
       expect(person.anniversary_day).to eq(4)
       expect(person.anniversary_year).to eq(1994)
+      expect(person.profession).to eq('Janitor')
+      expect(person.employer).to eq('Business A')
     end
 
     context 'override == true' do
@@ -214,6 +220,18 @@ describe TntImport::PersonImport do
         import.import
         expect(contact.reload.primary_person.first_name).to eq 'Bob'
       end
+
+      it 'overrides values previously set' do
+        import.import
+        TntImport::PersonImport.new(row, contact, 'Spouse', true).import
+        spouse = contact.people.find { |p| p.id != contact.primary_person_id }
+
+        spouse.update(profession: 'Architect')
+
+        expect do
+          TntImport::PersonImport.new(row, contact, 'Spouse', override).import
+        end.to change { spouse.reload.profession }.to("Helen's Profession")
+      end
     end
 
     context 'override == false' do
@@ -229,6 +247,18 @@ describe TntImport::PersonImport do
 
         import.import
         expect(contact.reload.primary_person.first_name).to eq 'Helen'
+      end
+
+      it 'does not change values previously set' do
+        import.import
+        TntImport::PersonImport.new(row, contact, 'Spouse', true).import
+        spouse = contact.people.find { |p| p.id != contact.primary_person_id }
+
+        spouse.update(profession: 'Architect')
+
+        expect do
+          TntImport::PersonImport.new(row, contact, 'Spouse', override).import
+        end.to_not change { spouse.reload.profession }
       end
     end
   end
