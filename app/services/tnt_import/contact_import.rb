@@ -192,6 +192,12 @@ class TntImport::ContactImport
 
     contact.add_to_notes("IM Address: #{row['IMAddress']}") if row['IMAddress'].present?
     contact.add_to_notes("Spouse IM Address: #{row['SpouseIMAddress']}") if row['SpouseIMAddress'].present?
+
+    contact.add_to_notes("Interests: #{row['Interests']}") if row['Interests'].present?
+    contact.add_to_notes("Spouse Interests: #{row['SpouseInterests']}") if row['SpouseInterests'].present?
+
+    contact.add_to_notes("Nickname: #{row['Nickname']}") if row['Nickname'].present?
+    contact.add_to_notes("Spouse Nickname: #{row['SpouseNickname']}") if row['SpouseNickname'].present?
   end
 
   def extract_envelope_greeting_from_row(row)

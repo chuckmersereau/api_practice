@@ -24,6 +24,10 @@
         <Salutation>Dear John and Jane,</Salutation>
         <SalutationIsCustom>false</SalutationIsCustom>
         <Children>Mark and Robert</Children>
+        <Interests>Working Out, Bowling, Solving Crimes</Interests>
+        <Nickname>BobsNickname</Nickname>
+        <SpouseInterests>HelensInterests</SpouseInterests>
+        <SpouseNickname>Helen&apos;s Nickname</SpouseNickname>
         <ShortName>John and Jane Smith</ShortName>
         <ShortNameIsCustom>false</ShortNameIsCustom>
         <MailingAddressBlock>John and Jane Smith

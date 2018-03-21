@@ -26,19 +26,24 @@ describe TntImport::ContactImport do
   describe '#update_contact' do
     let(:contact) { create(:contact, notes: 'Another note') }
 
+    let(:expected_note) do
+      "Principal\nHas run into issues with Campus Crusade. \n \nChildren: Mark and Robert " \
+      "\n \nUser Status: Custom user status \n \nCategories: Custom category one, Category two " \
+      "\n \nInterests: Working Out, Bowling, Solving Crimes \n \nSpouse Interests: HelensInterests " \
+      "\n \nNickname: BobsNickname \n \nSpouse Nickname: Helen's Nickname"
+    end
+
     it 'updates notes correctly' do
       contact = Contact.new
       import.send(:update_contact, contact, contact_rows.first)
-      expect(contact.notes).to eq("Principal\nHas run into issues with Campus Crusade. \n \nChildren: Mark and Robert " \
-                                  "\n \nUser Status: Custom user status \n \nCategories: Custom category one, Category two")
+      expect(contact.notes).to eq(expected_note)
     end
 
     it 'doesnt add the children and tnt notes twice to notes' do
       contact = Contact.new
       import.send(:update_contact, contact, contact_rows.first)
       import.send(:update_contact, contact, contact_rows.first)
-      expect(contact.notes).to eq("Principal\nHas run into issues with Campus Crusade. \n \nChildren: Mark and Robert " \
-                                  "\n \nUser Status: Custom user status \n \nCategories: Custom category one, Category two")
+      expect(contact.notes).to eq(expected_note)
     end
 
     it 'updates newsletter preferences correctly' do
