@@ -86,9 +86,4 @@ module ApplicationHelper
   def currency_code_and_symbol(code)
     code + ' (' + currency_symbol(code) + ')'
   end
-
-  def show_insights?
-    $rollout.active?(:insights, current_account_list) &&
-      current_user.organization_accounts.where(organization: Organization.cru_usa).any?
-  end
 end
