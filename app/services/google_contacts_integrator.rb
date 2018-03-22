@@ -133,6 +133,12 @@ class GoogleContactsIntegrator
       # For 412 Etags Mismatch, remove the cached Google contact and retry the operation again
       @cache.remove_g_contact(g_contact)
       cleanup_inactive_g_contact(g_contact_link, num_retries - 1)
+    when 400
+      # HEADS UP!
+      # Blindly covering up failures!
+      # We currently aren't invested in fixing Google Contact sync,
+      # so when 400 errors occur we can ignore them.
+      return
     else
       raise format('HTTP %p returned. Could not clean up inactive contact (after %d tries): %p',
                    status, num_retries, g_contact)
