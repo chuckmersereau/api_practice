@@ -22,5 +22,11 @@ RSpec.describe PledgeDonation do
 
       expect(pledge).to be_processed
     end
+
+    it 'can be destroyed if pledge is nil' do
+      pledge = PledgeDonation.create
+
+      expect { pledge.destroy }.to_not raise_exception
+    end
   end
 end

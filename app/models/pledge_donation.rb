@@ -8,5 +8,5 @@ class PledgeDonation < ApplicationRecord
   after_save :set_processed, if: :donation_id_changed?
   after_destroy :set_processed
 
-  delegate :set_processed, to: :pledge
+  delegate :set_processed, to: :pledge, allow_nil: true
 end
