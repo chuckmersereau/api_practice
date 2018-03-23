@@ -1,4 +1,6 @@
 class ImportMailer < ApplicationMailer
+  layout 'inky'
+
   def success(import, successes = nil)
     user = import.user
     return unless user&.email
