@@ -85,8 +85,8 @@ class Person::KeyAccount < ApplicationRecord
     return if Rails.env.development? && ENV['DEV_SIEBEL_ORG_ACCOUNT'].blank?
     begin
       return unless SiebelDonations::Profile.find(ssoGuid: remote_id).present?
-    rescue RestClient::Exception => ex
-      return if person.organization_accounts.count.positive?
+    rescue RestClient::Exception, RuntimeError => ex
+      return if person.organization_accounts.count.positive? || ex.message.match?('503')
       raise ex
     end
     org = Organization.cru_usa
