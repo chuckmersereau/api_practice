@@ -1,5 +1,5 @@
 ---
-fr:
+fr-CA:
   date:
     abbr_day_names:
     - dim
@@ -97,7 +97,7 @@ fr:
       minute: Minute
       month: Mois
       second: Seconde
-      year: Année
+      year: An
   errors:
     format: "%{attribute} %{message}"
     messages:
