@@ -49,6 +49,8 @@ class DonationImports::Base
     # un-associated to a DesignationProfile, we need to also look at those 'placeholder' accounts
     def searchable_designation_ids
       profile_accounts = designation_profile.designation_accounts.pluck(:id)
+      # include specified designation if account is specified
+      profile_accounts = (profile_accounts + [attributes[:designation_account_id]]).compact.uniq
 
       account_list = designation_profile.account_list
       return profile_accounts unless account_list

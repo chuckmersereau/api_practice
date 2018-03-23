@@ -68,5 +68,14 @@ RSpec.describe DonationImports::Base::FindDonation do
         expect([d1, d2]).to include(finder.find_and_merge)
       end.to change { Donation.count }.from(2).to(1)
     end
+
+    it 'looks on the provided designation account' do
+      designation_profile.designation_profile_accounts.where(designation_account: des_account2).first.destroy
+      d1 = create(:donation, remote_id: '1234', tnt_id: nil, designation_account: des_account2)
+      attributes[:remote_id] = '1234'
+      attributes[:designation_account_id] = des_account2.id
+
+      expect(finder.find_and_merge).to eq d1
+    end
   end
 end
