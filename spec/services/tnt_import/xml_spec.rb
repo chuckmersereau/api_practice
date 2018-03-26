@@ -33,7 +33,8 @@ describe TntImport::Xml do
                                        Task
                                        TaskContact
                                        TaskReason
-                                       TaskType)
+                                       TaskType
+                                       Currency)
     end
   end
 

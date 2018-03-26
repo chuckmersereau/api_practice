@@ -18,7 +18,7 @@ describe TntImport::ContactImport do
   let(:tags) { %w(tag1 tag2) }
   let(:import) do
     donor_accounts = []
-    TntImport::ContactImport.new(tnt_import, tags, donor_accounts, xml.tables['NewsletterLang'])
+    TntImport::ContactImport.new(tnt_import, tags, donor_accounts, xml)
   end
 
   before { stub_smarty_streets }
@@ -128,7 +128,7 @@ describe TntImport::ContactImport do
         row = tnt_import_parsed_xml_sample_contact_row
 
         tnt_import.override = false
-        import = TntImport::ContactImport.new(tnt_import, tags, [], [])
+        import = TntImport::ContactImport.new(tnt_import, tags, [], xml)
 
         expect(import.import_contact(row).send_newsletter).to eq('Both')
 
@@ -136,7 +136,7 @@ describe TntImport::ContactImport do
         expect(import.import_contact(row).send_newsletter).to eq('Both')
 
         tnt_import.override = true
-        import = TntImport::ContactImport.new(tnt_import, tags, [], [])
+        import = TntImport::ContactImport.new(tnt_import, tags, [], xml)
         expect(import.import_contact(row).send_newsletter).to eq('None')
       end
     end
@@ -151,7 +151,7 @@ describe TntImport::ContactImport do
     account_list = create(:account_list)
     tnt_import = double(user: build(:user), account_list: account_list,
                         override?: true)
-    import = TntImport::ContactImport.new(tnt_import, [], [], [])
+    import = TntImport::ContactImport.new(tnt_import, [], [], xml)
     row = load_yaml_row(:bad_phone_valid_email_row)
 
     expect do
@@ -262,6 +262,10 @@ describe TntImport::ContactImport do
         {
           attribute_name: :next_ask_amount, first_value: 1234.56, expected_first_value: 1234.56.to_d,
           second_value: 7890, tnt_row_key: 'NextAskAmount'
+        },
+        {
+          attribute_name: :pledge_currency, first_value: '1828601813', expected_first_value: 'USD',
+          second_value: '997892546', tnt_row_key: 'PledgeCurrencyID'
         }
       ]
     end

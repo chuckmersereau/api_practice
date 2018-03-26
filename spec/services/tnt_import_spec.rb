@@ -25,7 +25,7 @@ describe TntImport do
       expect(import.xml).to be_a TntImport::Xml
       expect(import.xml.tables.keys).to eq %w(Appeal Contact Designation Group GroupContact History HistoryContact
                                               HistoryResult LikelyToGive Login LoginProfile LoginProfileDesignation PendingAction Picture Property Region
-                                              RegionLocation Task TaskContact TaskReason TaskType)
+                                              RegionLocation Task TaskContact TaskReason TaskType Currency)
       expect(import.xml.version).to eq 3.0
     end
   end

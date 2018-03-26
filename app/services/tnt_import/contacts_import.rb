@@ -44,7 +44,7 @@ class TntImport::ContactsImport
   end
 
   def import_contact(row, tags, donor_accounts)
-    TntImport::ContactImport.new(@import, tags, donor_accounts, languages)
+    TntImport::ContactImport.new(@import, tags, donor_accounts, @xml)
                             .import_contact(row)
   end
 
@@ -56,9 +56,5 @@ class TntImport::ContactsImport
   def orgs_by_tnt_id
     TntImport::OrgsFinder
       .orgs_by_tnt_id(@xml, @designation_profile.try(:organization))
-  end
-
-  def languages
-    @xml.tables['NewsletterLang']
   end
 end

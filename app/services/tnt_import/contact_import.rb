@@ -2,13 +2,13 @@ class TntImport::ContactImport
   include Concerns::TntImport::DateHelpers
   include LocalizationHelper
 
-  def initialize(import, tags, donor_accounts, languages)
+  def initialize(import, tags, donor_accounts, xml)
     @import = import
     @account_list = import.account_list
     @user = import.user
     @tags = tags
     @donor_accounts = donor_accounts || []
-    @languages = languages || []
+    @xml = xml
     @override = import.override?
   end
 
@@ -94,6 +94,7 @@ class TntImport::ContactImport
     contact.no_appeals = true?(row['NeverAsk']) if @override || contact.no_appeals.nil?
     contact.estimated_annual_pledge_amount = row['EstimatedAnnualCapacity'] if @override || contact.estimated_annual_pledge_amount.nil?
     contact.next_ask_amount = row['NextAskAmount'] if @override || contact.next_ask_amount.nil?
+    contact.pledge_currency = pledge_currency(row) if @override || contact.pledge_currency.nil?
   end
 
   def update_contact_date_fields(contact, row)
@@ -127,7 +128,7 @@ class TntImport::ContactImport
   end
 
   def update_locale(contact, row)
-    newsletter_lang = @languages.find { |r| r['id'] == row['NewsletterLangID'] }.try(:[], 'Description')
+    newsletter_lang = @xml.find('NewsletterLang', row['NewsletterLangID']).try(:[], 'Description')
     locale = supported_locales.key(newsletter_lang)
     if locale
       contact.locale = locale
@@ -205,6 +206,12 @@ class TntImport::ContactImport
     block = row['MailingAddressBlock']
     envelope_greeting = block&.split("\n")&.detect(&:present?) # Find the first non-blank line of the string.
     envelope_greeting.presence || row['FullName']
+  end
+
+  def pledge_currency(row)
+    currency_id = row['PledgeCurrencyID']
+    return unless currency_id
+    @xml.find('Currency', currency_id).try(:[], 'Code')
   end
 
   def true?(val)
