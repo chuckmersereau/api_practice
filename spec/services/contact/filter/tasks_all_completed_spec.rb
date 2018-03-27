@@ -46,19 +46,27 @@ RSpec.describe Contact::Filter::TasksAllCompleted do
 
     context 'filter by tasks_all_completed true' do
       it 'returns only contacts that have no incomplete tasks' do
-        expect(described_class.query(contacts, { tasks_all_completed: 'true' }, nil).to_a).to match_array [contact_two, contact_four]
+        result = described_class.query(contacts, { tasks_all_completed: 'true' }, nil).to_a
+        expect(result).to match_array [contact_two, contact_four]
+
         contact_one.tasks.update_all(completed: true)
-        expect(described_class.query(contacts, { tasks_all_completed: 'true' }, nil).to_a).to match_array [contact_one, contact_two, contact_four]
+        result = described_class.query(contacts, { tasks_all_completed: 'true' }, nil).to_a
+        expect(result).to match_array [contact_one, contact_two, contact_four]
+
         contact_four.tasks << create(:task, completed: false)
-        expect(described_class.query(contacts, { tasks_all_completed: 'true' }, nil).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { tasks_all_completed: 'true' }, nil).to_a
+        expect(result).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by tasks_all_completed false' do
       it 'does not filter' do
-        expect(described_class.query(contacts, { tasks_all_completed: 'false' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        result = described_class.query(contacts, { tasks_all_completed: 'false' }, nil).to_a
+        expect(result).to match_array [contact_one, contact_two, contact_three, contact_four]
+
         contact_five = create(:contact, account_list_id: account_list.id)
-        expect(described_class.query(contacts, { tasks_all_completed: 'false' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four, contact_five]
+        result = described_class.query(contacts, { tasks_all_completed: 'false' }, nil).to_a
+        expect(result).to match_array [contact_one, contact_two, contact_three, contact_four, contact_five]
       end
     end
   end

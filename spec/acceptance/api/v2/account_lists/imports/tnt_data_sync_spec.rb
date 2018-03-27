@@ -22,8 +22,9 @@ resource 'Account Lists > Imports > from TNT Data Sync' do
   let(:id) { import.id }
 
   let(:new_import) do
+    fixture_file = Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_data_sync_no_org_lowercase_fields.tntmpd')
     attrs = {
-      file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_data_sync_no_org_lowercase_fields.tntmpd'))
+      file: Rack::Test::UploadedFile.new(fixture_file)
     }
 
     attributes_for(:import)
@@ -124,9 +125,12 @@ resource 'Account Lists > Imports > from TNT Data Sync' do
       end
 
       example 'TNT Data Sync Import [CREATE]', document: documentation_scope do
-        explanation 'Creates a new TNT Data Sync Import associated with the Account List. This endpoint expects a .tntmpd file to be uploaded using Content-Type ' \
-                    '"multipart/form-data", this makes the endpoint unique in that it does not expect JSON content. Unless otherwise specified, the Import will be created with ' \
-                    '"in_preview" set to false, which will cause the import to begin after being created (the import runs asynchronously as a background job).'
+        explanation 'Creates a new TNT Data Sync Import associated with the Account List. This ' \
+                    'endpoint expects a .tntmpd file to be uploaded using Content-Type ' \
+                    '"multipart/form-data", this makes the endpoint unique in that it does not ' \
+                    'expect JSON content. Unless otherwise specified, the Import will be created ' \
+                    'with "in_preview" set to false, which will cause the import to begin after ' \
+                    'being created (the import runs asynchronously as a background job).'
         do_request data: form_data
         expect(response_status).to eq(201), invalid_status_detail
         check_resource(['relationships'])

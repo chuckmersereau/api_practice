@@ -26,11 +26,12 @@ RSpec.describe Contact::Filter::MetroArea do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' },
+                 { name: '-- None --', id: 'none' },
+                 { name: 'My Metro', id: 'My Metro' }]
       expect(described_class.config([account_list])).to include(multiple: true,
                                                                 name: :metro_area,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                          { name: '-- None --', id: 'none' },
-                                                                          { name: 'My Metro', id: 'My Metro' }],
+                                                                options: options,
                                                                 parent: 'Contact Location',
                                                                 title: 'Metro Area',
                                                                 type: 'multiselect',
@@ -52,28 +53,38 @@ RSpec.describe Contact::Filter::MetroArea do
 
     context 'filter by no metro_area' do
       it 'returns only contacts that have no metro_area' do
-        expect(described_class.query(contacts, { metro_area: 'none' }, nil).to_a).to match_array [contact_three, contact_four]
+        result = described_class.query(contacts, { metro_area: 'none' }, nil).to_a
+
+        expect(result).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by metro_area' do
       it 'filters multiple metro_areas' do
-        expect(described_class.query(contacts, { metro_area: 'My Metro, My Metro' }, nil).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { metro_area: 'My Metro, My Metro' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two]
       end
       it 'filters a single metro_area' do
-        expect(described_class.query(contacts, { metro_area: 'My Metro' }, nil).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { metro_area: 'My Metro' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two]
       end
     end
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { metro_area: 'My Metro, none' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        result = described_class.query(contacts, { metro_area: 'My Metro, none' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
 
     context 'address historic' do
       it 'returns contacts matching the metro_area with historic addresses' do
-        expect(described_class.query(contacts, { metro_area: 'My Metro', address_historic: 'true' }, nil).to_a).to eq [contact_five]
+        result = described_class.query(contacts, { metro_area: 'My Metro', address_historic: 'true' }, nil).to_a
+
+        expect(result).to eq [contact_five]
       end
     end
   end

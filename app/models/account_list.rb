@@ -242,15 +242,15 @@ class AccountList < ApplicationRecord
   def people_with_birthdays(start_date, end_date)
     start_month = start_date.month
     end_month = end_date.month
-    if start_month == end_month
-      people_with_birthdays = people.where('people.birthday_month = ?', start_month)
+    people_with_birthdays = if start_month == end_month
+                              people.where('people.birthday_month = ?', start_month)
                                     .where('people.birthday_day BETWEEN ? AND ?', start_date.day, end_date.day)
-    else
-      people_with_birthdays = people.where("(people.birthday_month = ? AND people.birthday_day >= ?)
+                            else
+                              people.where("(people.birthday_month = ? AND people.birthday_day >= ?)
                                            OR (people.birthday_month = ? AND people.birthday_day <= ?)",
                                            start_month, start_date.day, end_month, end_date.day)
 
-    end
+                            end
 
     people_with_birthdays.alive
                          .order('people.birthday_month, people.birthday_day')
@@ -263,16 +263,16 @@ class AccountList < ApplicationRecord
 
     contacts_with_anniversaries = active_contacts.includes(:people)
 
-    if start_month == end_month
-      contacts_with_anniversaries = contacts_with_anniversaries
-                                    .where('people.anniversary_month = ?', start_month)
-                                    .where('people.anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
-    else
-      contacts_with_anniversaries = contacts_with_anniversaries
-                                    .where("(people.anniversary_month = ? AND people.anniversary_day >= ?)
-               OR (people.anniversary_month = ? AND people.anniversary_day <= ?)",
-                                           start_month, start_date.day, end_month, end_date.day)
-    end
+    contacts_with_anniversaries = if start_month == end_month
+                                    contacts_with_anniversaries
+                                      .where('people.anniversary_month = ?', start_month)
+                                      .where('people.anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
+                                  else
+                                    contacts_with_anniversaries
+                                      .where("(people.anniversary_month = ? AND people.anniversary_day >= ?)
+                                             OR (people.anniversary_month = ? AND people.anniversary_day <= ?)",
+                                             start_month, start_date.day, end_month, end_date.day)
+                                  end
 
     contacts_with_anniversaries
       .order('people.anniversary_month, people.anniversary_day')

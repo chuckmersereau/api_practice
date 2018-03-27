@@ -609,9 +609,11 @@ describe DataServer do
       allow_any_instance_of(RestClient::Request).to receive(:execute)
         .and_raise(OpenSSL::SSL::SSLError,
                    'SSL_connect SYSCALL returned=5 errno=0 state=SSLv2/v3 read server hello A')
+      expected_messasge = 'Could not securely connect to host "example.com". '\
+                          'Reason: SSL_connect SYSCALL returned=5 errno=0 state=SSLv2/v3 read server hello A'
       expect do
         data_server.send(:get_response, 'http://example.com', {})
-      end.to raise_error(DataServerError, 'Could not securely connect to host "example.com". Reason: SSL_connect SYSCALL returned=5 errno=0 state=SSLv2/v3 read server hello A')
+      end.to raise_error(DataServerError, expected_messasge)
     end
 
     it 'raises a RetryJobButNoRollbarError if there is a timeout' do

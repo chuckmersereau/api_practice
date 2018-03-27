@@ -9,8 +9,17 @@ describe ContactSuggestedChangesUpdaterWorker do
   let!(:donor_account_two) { create(:donor_account) }
   let!(:designation_account_one) { create(:designation_account) }
   let!(:designation_account_two) { create(:designation_account) }
-  let!(:donation_one) { create(:donation, donation_date: 1.day.ago, designation_account: designation_account_one, donor_account: donor_account_one) }
-  let!(:donation_two) { create(:donation, donation_date: 1.day.ago, designation_account: designation_account_two, donor_account: donor_account_two, created_at: 2.years.ago) }
+  let!(:donation_one) do
+    create(:donation, donation_date: 1.day.ago,
+                      designation_account: designation_account_one,
+                      donor_account: donor_account_one)
+  end
+  let!(:donation_two) do
+    create(:donation, donation_date: 1.day.ago,
+                      designation_account: designation_account_two,
+                      donor_account: donor_account_two,
+                      created_at: 2.years.ago)
+  end
 
   let(:user) { account_list.users.first }
 
@@ -27,7 +36,9 @@ describe ContactSuggestedChangesUpdaterWorker do
       .to change { contact_two.reload.suggested_changes }
       .from({})
       .to(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
-    expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
+
+    suggested_changes = contact_one.reload.suggested_changes
+    expect(suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
   end
 
   context 'only updating contacts with updated donations' do
@@ -40,7 +51,8 @@ describe ContactSuggestedChangesUpdaterWorker do
         .to_not change { contact_two.reload.suggested_changes }
         .from(pledge_frequency: nil)
 
-      expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
+      suggested_changes = contact_one.reload.suggested_changes
+      expect(suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
     end
   end
 end

@@ -85,7 +85,8 @@ module GoogleContactSync
     person.employer = employer
     person.occupation = occupation
 
-    if field_of_first(g_contact_orgs, :org_name) != employer || field_of_first(g_contact_orgs, :org_title) != occupation
+    if field_of_first(g_contact_orgs, :org_name) != employer ||
+       field_of_first(g_contact_orgs, :org_title) != occupation
       g_contact.prep_changes(organizations: g_contact_organizations_for(employer, occupation))
     end
   end
@@ -297,7 +298,9 @@ module GoogleContactSync
 
   def compare_websites_for_sync(g_contact, person, g_contact_link)
     last_sync_websites = g_contact_link.last_data[:websites].map { |websites| websites[:href] }
-    compare_normalized_for_sync(last_sync_websites, person.websites.pluck(:url), g_contact.websites.map { |w| w[:href] },
+    compare_normalized_for_sync(last_sync_websites,
+                                person.websites.pluck(:url),
+                                g_contact.websites.map { |w| w[:href] },
                                 method(:normalize_website))
   end
 
@@ -437,7 +440,8 @@ module GoogleContactSync
     end
 
     # From https://developers.google.com/gdata/docs/2.0/elements#gdPhoneNumber
-    allowed_rels = %w(assistant callback car company_main fax home home_fax isdn main mobile other other_fax pager radio telex tty_tdd work work_fax work_mobile work_pager)
+    allowed_rels = %w(assistant callback car company_main fax home home_fax isdn main mobile other
+                      other_fax pager radio telex tty_tdd work work_fax work_mobile work_pager)
     { number: number, primary: phone.primary, rel: phone.location.in?(allowed_rels) ? phone.location : 'other' }
   end
 

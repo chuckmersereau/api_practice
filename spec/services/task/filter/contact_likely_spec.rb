@@ -33,7 +33,9 @@ RSpec.describe Task::Filter::ContactLikely do
 
     context 'filter by likely to give' do
       it 'filters multiple likely to give' do
-        expect(described_class.query(tasks, { contact_likely: 'Least Likely, Likely' }, account_list).to_a).to match_array [task_one, task_two]
+        result = described_class.query(tasks, { contact_likely: 'Least Likely, Likely' }, account_list).to_a
+
+        expect(result).to match_array [task_one, task_two]
       end
       it 'filters a single likely to give' do
         expect(described_class.query(tasks, { contact_likely: 'Most Likely' }, account_list).to_a).to eq [task_three]
@@ -42,7 +44,9 @@ RSpec.describe Task::Filter::ContactLikely do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(tasks, { contact_likely: 'none, Most Likely, Likely' }, account_list).to_a).to match_array [task_two, task_three, task_four]
+        result = described_class.query(tasks, { contact_likely: 'none, Most Likely, Likely' }, account_list).to_a
+
+        expect(result).to match_array [task_two, task_three, task_four]
       end
     end
   end

@@ -45,7 +45,9 @@ RSpec.describe Task::Filter::ContactInfoWorkPhone do
 
     context 'filter by no mobile phone' do
       it 'returns only tasks with contacts that have no mobile home phone' do
-        expect(described_class.query(tasks, { contact_info_work_phone: 'No' }, account_list).to_a).to match_array [task_two, task_three, task_four]
+        result = described_class.query(tasks, { contact_info_work_phone: 'No' }, account_list).to_a
+
+        expect(result).to match_array [task_two, task_three, task_four]
       end
     end
 

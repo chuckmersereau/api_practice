@@ -61,8 +61,10 @@ resource 'Account Lists > Imports' do
   before do
     stub_request(:get, "https://graph.facebook.com/#{fb_account.remote_id}/friends?access_token=#{fb_account.token}")
       .to_return(body: '{"data": [{"name": "David Hylden","id": "120581"}]}')
+    spouse_expected_response = '{"id": "120581", "first_name": "John", "last_name": "Doe", '\
+                               '"relationship_status": "Married", "significant_other":{"id":"120582"}}'
     stub_request(:get, "https://graph.facebook.com/120581?access_token=#{fb_account.token}")
-      .to_return(body: '{"id": "120581", "first_name": "John", "last_name": "Doe", "relationship_status": "Married", "significant_other":{"id":"120582"}}')
+      .to_return(body: spouse_expected_response)
     stub_request(:get, "https://graph.facebook.com/120582?access_token=#{fb_account.token}")
       .to_return(body: '{"id": "120582", "first_name": "Jane", "last_name": "Doe"}')
   end
@@ -91,9 +93,12 @@ resource 'Account Lists > Imports' do
       end
 
       example 'Import [GET]', document: documentation_scope do
-        explanation 'Creates a new Import associated with the Account List. This endpoint accepts a file to be uploaded using Content-Type ' \
-                    '"multipart/form-data", this makes the endpoint unique in that it does not only accept JSON content. Unless otherwise specified, the Import will be created with ' \
-                    '"in_preview" set to false, which will cause the import to begin after being created (the import runs asynchronously as a background job).'
+        explanation 'Creates a new Import associated with the Account List. This endpoint accepts ' \
+                    'a file to be uploaded using Content-Type "multipart/form-data", this makes ' \
+                    'the endpoint unique in that it does not only accept JSON content. Unless ' \
+                    'otherwise specified, the Import will be created with "in_preview" set to ' \
+                    'false, which will cause the import to begin after being created ' \
+                    '(the import runs asynchronously as a background job).'
         do_request
         check_resource(['relationships'])
         expect(response_status).to eq 200

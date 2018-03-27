@@ -11,9 +11,12 @@ RSpec.describe Contact::Filter::PledgeAmount do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' },
+                 { name: 1.0, id: 1.0 },
+                 { name: 100.0, id: 100.0 }]
       expect(described_class.config([account_list])).to include(multiple: true,
                                                                 name: :pledge_amount,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: 1.0, id: 1.0 }, { name: 100.0, id: 100.0 }],
+                                                                options: options,
                                                                 parent: 'Commitment Details',
                                                                 title: 'Commitment Amount',
                                                                 type: 'multiselect',
@@ -35,9 +38,14 @@ RSpec.describe Contact::Filter::PledgeAmount do
 
     context 'filter by amounts' do
       it 'returns only contacts with a pledge amount in the filters' do
-        expect(described_class.query(contacts, { pledge_amount: '100.0' }, nil).to_a).to match_array [contact_one, contact_two]
-        expect(described_class.query(contacts, { pledge_amount: '1' }, nil).to_a).to eq [contact_three]
-        expect(described_class.query(contacts, { pledge_amount: '100.0, 1.0, 200.0' }, nil).to_a).to match_array [contact_one, contact_two, contact_three]
+        result = described_class.query(contacts, { pledge_amount: '100.0' }, nil).to_a
+        expect(result).to match_array [contact_one, contact_two]
+
+        result = described_class.query(contacts, { pledge_amount: '1' }, nil).to_a
+        expect(result).to eq [contact_three]
+
+        result = described_class.query(contacts, { pledge_amount: '100.0, 1.0, 200.0' }, nil).to_a
+        expect(result).to match_array [contact_one, contact_two, contact_three]
       end
     end
   end

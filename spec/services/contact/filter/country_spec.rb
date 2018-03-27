@@ -26,11 +26,12 @@ RSpec.describe Contact::Filter::Country do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' },
+                 { name: '-- None --', id: 'none' },
+                 { name: 'United States', id: 'United States' }]
       expect(described_class.config([account_list])).to include(multiple: true,
                                                                 name: :country,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                          { name: '-- None --', id: 'none' },
-                                                                          { name: 'United States', id: 'United States' }],
+                                                                options: options,
                                                                 parent: 'Contact Location',
                                                                 title: 'Country',
                                                                 type: 'multiselect',
@@ -52,28 +53,38 @@ RSpec.describe Contact::Filter::Country do
 
     context 'filter by no country' do
       it 'returns only contacts that have no country' do
-        expect(described_class.query(contacts, { country: 'none' }, nil).to_a).to match_array [contact_three, contact_four]
+        result = described_class.query(contacts, { country: 'none' }, nil).to_a
+
+        expect(result).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by country' do
       it 'filters multiple countries' do
-        expect(described_class.query(contacts, { country: 'United States, United States' }, nil).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { country: 'United States, United States' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two]
       end
       it 'filters a single country' do
-        expect(described_class.query(contacts, { country: 'United States' }, nil).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { country: 'United States' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two]
       end
     end
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { country: 'United States, none' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        result = described_class.query(contacts, { country: 'United States, none' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
 
     context 'address historic' do
       it 'returns contacts matching the country with historic addresses' do
-        expect(described_class.query(contacts, { country: 'United States', address_historic: 'true' }, nil).to_a).to eq [contact_five]
+        result = described_class.query(contacts, { country: 'United States', address_historic: 'true' }, nil).to_a
+
+        expect(result).to eq [contact_five]
       end
     end
   end

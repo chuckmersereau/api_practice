@@ -41,16 +41,21 @@ module BatchRequestHandler
       private
 
       def validate_request!(rack_request)
-        raise InvalidBatchRequestError, message: "HTTP method `#{rack_request.request_method}` is not allowed in a batch request", status: 405 unless allowed_method?(rack_request)
-        raise InvalidBatchRequestError, message: 'The `path` key must be provided as part of a request object in a batch request' unless path_present?(rack_request)
+        allowed_method?(rack_request)
+        path_present?(rack_request)
       end
 
       def allowed_method?(rack_request)
-        rack_request.request_method.in?(VALID_BATCH_METHODS)
+        return if rack_request.request_method.in?(VALID_BATCH_METHODS)
+        raise InvalidBatchRequestError,
+              message: "HTTP method `#{rack_request.request_method}` is not allowed in a batch request",
+              status: 405
       end
 
       def path_present?(rack_request)
-        rack_request.path.present?
+        return if rack_request.path.present?
+        raise InvalidBatchRequestError,
+              message: 'The `path` key must be provided as part of a request object in a batch request'
       end
 
       def invalid_batch_request_error_response(error, rack_request)

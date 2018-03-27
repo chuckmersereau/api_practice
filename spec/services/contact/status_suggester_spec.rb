@@ -91,7 +91,10 @@ RSpec.describe Contact::StatusSuggester, type: :model do
 
     context 'partner special' do
       before do
-        create(:donation, donor_account: donor_account, designation_account: designation_account, tendered_amount: 20, donation_date: pledge_frequency_in_days.days.ago)
+        create(:donation, donor_account: donor_account,
+                          designation_account: designation_account,
+                          tendered_amount: 20,
+                          donation_date: pledge_frequency_in_days.days.ago)
       end
 
       it "makes accurate suggestions for donations at pledge frequency #{pledge_frequency}" do

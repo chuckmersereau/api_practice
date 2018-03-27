@@ -15,12 +15,13 @@ RSpec.describe Contact::Filter::Referrer do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' },
+                 { name: '-- None --', id: 'none' },
+                 { name: '-- Has referrer --', id: 'any' },
+                 { name: contact_one.name, id: contact_one.id }]
       expect(described_class.config([account_list])).to include(multiple: true,
                                                                 name: :referrer,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                          { name: '-- None --', id: 'none' },
-                                                                          { name: '-- Has referrer --', id: 'any' },
-                                                                          { name: contact_one.name, id: contact_one.id }],
+                                                                options: options,
                                                                 parent: nil,
                                                                 title: 'Referrer',
                                                                 type: 'multiselect',
@@ -41,28 +42,38 @@ RSpec.describe Contact::Filter::Referrer do
 
     context 'filter by no referrer' do
       it 'returns only contacts that have no referrer' do
-        expect(described_class.query(contacts, { referrer: 'none' }, nil).to_a).to match_array [contact_one, contact_three, contact_four]
+        result = described_class.query(contacts, { referrer: 'none' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_three, contact_four]
       end
     end
 
     context 'filter by any referrer' do
       it 'returns only contacts that have a referrer' do
-        expect(described_class.query(contacts, { referrer: 'any' }, nil).to_a).to eq [contact_two]
+        result = described_class.query(contacts, { referrer: 'any' }, nil).to_a
+
+        expect(result).to eq [contact_two]
       end
     end
 
     context 'filter by referrer' do
       it 'filters multiple referrers' do
-        expect(described_class.query(contacts, { referrer: "#{contact_one.id}, #{contact_one.id}" }, nil).to_a).to eq [contact_two]
+        result = described_class.query(contacts, { referrer: "#{contact_one.id}, #{contact_one.id}" }, nil).to_a
+
+        expect(result).to eq [contact_two]
       end
       it 'filters a single referrer' do
-        expect(described_class.query(contacts, { referrer: contact_one.id.to_s }, nil).to_a).to eq [contact_two]
+        result = described_class.query(contacts, { referrer: contact_one.id.to_s }, nil).to_a
+
+        expect(result).to eq [contact_two]
       end
     end
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { referrer: "#{contact_one.id}, none" }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        result = described_class.query(contacts, { referrer: "#{contact_one.id}, none" }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
   end

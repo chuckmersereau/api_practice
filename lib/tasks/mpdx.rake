@@ -3,8 +3,8 @@ require 'rspec_doc_combiner'
 namespace :mpdx do
   task set_special: :environment do
     AccountList.find_each do |al|
-      al.contacts.includes(:donor_accounts).find_each do |contact|
-        contact.update_attributes(status: 'Partner - Special') if contact.status.blank? && contact.donor_accounts.present?
+      al.contacts.includes(:donor_accounts).where.not(donor_accounts: { id: nil }).find_each do |contact|
+        contact.update_attributes(status: 'Partner - Special') if contact.status.blank?
       end
     end
   end
@@ -34,10 +34,18 @@ namespace :mpdx do
 
   task merge_donor_accounts: :environment do
     def merge_donor_accounts
-      account_numbers_query = "select account_number, organization_id from donor_accounts where account_number <> '' group by account_number, organization_id having count(*) > 1"
+      account_numbers_query =
+        <<~HEREDOC
+          select account_number, organization_id from donor_accounts
+          where account_number <> ''
+          group by account_number, organization_id
+          having count(*) > 1
+        HEREDOC
       account_numbers = DonorAccount.connection.select_values(account_numbers_query)
       DonorAccount.where(account_number: account_numbers).order('created_at').each do |al|
-        other_account = DonorAccount.where(account_number: al.account_number, organization_id: al.organization_id).where("id <> #{al.id}").first
+        other_account = DonorAccount.where(account_number: al.account_number, organization_id: al.organization_id)
+                                    .where.not(id: al.id)
+                                    .first
         next unless other_account
         puts other_account.account_number
         al.merge(other_account)
@@ -50,8 +58,11 @@ namespace :mpdx do
   end
 
   task address_cleanup: :environment do
-    us_address = "addresses.id is not null AND (addresses.country is null or addresses.country = 'United States' or addresses.country = '' or addresses.country = 'United States of America')"
-    Contact.joins(:addresses).where(us_address).find_each(&:merge_addresses)
+    us_address = [nil, '', 'United States', 'United States of America']
+    Contact.joins(:addresses)
+           .where.not(addresses: { id: nil })
+           .where(addresses: { country: us_address })
+           .find_each(&:merge_addresses)
   end
 
   task address_primary_fixes: :environment do
@@ -70,10 +81,12 @@ namespace :mpdx do
   end
 
   task timezones: :environment do
-    Contact.joins(addresses: :master_address).preload(addresses: :master_address).where(
-      "master_addresses.id is not null AND (addresses.country is null or addresses.country = 'United States' or
-       addresses.country = '' or addresses.country = 'United States of America')"
-    ).find_each do |c|
+    us_address = [nil, '', 'United States', 'United States of America']
+    us_contacts = Contact.joins(addresses: :master_address)
+                         .preload(addresses: :master_address)
+                         .where.not(master_addresses: { id: nil })
+                         .where(master_addresses: { country: us_address })
+    us_contacts.find_each do |c|
       addresses = c.addresses
 
       # Find the contact's home address, or grab primary/first address
@@ -88,7 +101,9 @@ namespace :mpdx do
       meta = smarty.first['metadata']
 
       # Convert the smarty time zone to a rails time zone
-      zone = ActiveSupport::TimeZone.us_zones.find { |tz| tz.tzinfo.current_period.offset.utc_offset / 3600 == meta['utc_offset'] }
+      zone = ActiveSupport::TimeZone.us_zones.find do |tz|
+        tz.tzinfo.current_period.offset.utc_offset / 3600 == meta['utc_offset']
+      end
 
       next unless zone
 

@@ -13,7 +13,9 @@ module BatchRequestHandler
       def around_perform_request(env)
         rack_request = Rack::Request.new(env)
         @request_index += 1
-        Rails.logger.info("Started #{rack_request.request_method} \"#{rack_request.path}\" as part of batch (#{@request_index}/#{@request_count}) for #{rack_request.ip} at #{Time.now}")
+        Rails.logger.info("Started #{rack_request.request_method} \"#{rack_request.path}\" as "\
+                          "part of batch (#{@request_index}/#{@request_count}) for "\
+                          "#{rack_request.ip} at #{Time.now}")
         yield env
       end
     end

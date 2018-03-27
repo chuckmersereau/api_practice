@@ -44,28 +44,39 @@ RSpec.describe Task::Filter::ContactCountry do
 
     context 'filter by no country' do
       it 'returns only tasks with contacts that have no country' do
-        expect(described_class.query(tasks, { contact_country: 'none' }, account_list).to_a).to match_array [task_three, task_four]
+        result = described_class.query(tasks, { contact_country: 'none' }, account_list).to_a
+
+        expect(result).to match_array [task_three, task_four]
       end
     end
 
     context 'filter by country' do
       it 'filters tasks with contacts by multiple countries' do
-        expect(described_class.query(tasks, { contact_country: 'United States, United States' }, account_list).to_a).to match_array [task_one, task_two]
+        result = described_class.query(tasks, { contact_country: 'United States, United States' }, account_list).to_a
+
+        expect(result).to match_array [task_one, task_two]
       end
       it 'filters tasks with contacts by a single country' do
-        expect(described_class.query(tasks, { contact_country: 'United States' }, account_list).to_a).to match_array [task_one, task_two]
+        result = described_class.query(tasks, { contact_country: 'United States' }, account_list).to_a
+
+        expect(result).to match_array [task_one, task_two]
       end
     end
 
     context 'multiple filters' do
       it 'returns tasks with contacts matching multiple filters' do
-        expect(described_class.query(tasks, { contact_country: 'United States, none' }, account_list).to_a).to match_array [task_one, task_two, task_three, task_four]
+        result = described_class.query(tasks, { contact_country: 'United States, none' }, account_list).to_a
+
+        expect(result).to match_array [task_one, task_two, task_three, task_four]
       end
     end
 
     context 'address historic' do
       it 'returns tasks with contacts matching the country with historic addresses' do
-        expect(described_class.query(tasks, { contact_country: 'United States', address_historic: 'true' }, account_list).to_a).to eq [task_five]
+        query = { contact_country: 'United States', address_historic: 'true' }
+        result = described_class.query(tasks, query, account_list).to_a
+
+        expect(result).to eq [task_five]
       end
     end
   end

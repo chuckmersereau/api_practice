@@ -26,9 +26,12 @@ RSpec.describe Contact::Filter::State do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' },
+                 { name: '-- None --', id: 'none' },
+                 { name: 'CA', id: 'CA' }]
       expect(described_class.config([account_list])).to include(multiple: true,
                                                                 name: :state,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: '-- None --', id: 'none' }, { name: 'CA', id: 'CA' }],
+                                                                options: options,
                                                                 parent: 'Contact Location',
                                                                 title: 'State',
                                                                 type: 'multiselect',
@@ -50,28 +53,38 @@ RSpec.describe Contact::Filter::State do
 
     context 'filter by no state' do
       it 'returns only contacts that have no state' do
-        expect(described_class.query(contacts, { state: 'none' }, nil).to_a).to match_array [contact_three, contact_four]
+        result = described_class.query(contacts, { state: 'none' }, nil).to_a
+
+        expect(result).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by state' do
       it 'filters multiple states' do
-        expect(described_class.query(contacts, { state: 'CA, CA' }, nil).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { state: 'CA, CA' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two]
       end
       it 'filters a single state' do
-        expect(described_class.query(contacts, { state: 'CA' }, nil).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { state: 'CA' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two]
       end
     end
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { state: 'CA, none' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        result = described_class.query(contacts, { state: 'CA, none' }, nil).to_a
+
+        expect(result).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
 
     context 'address historic' do
       it 'returns contacts matching the state with historic addresses' do
-        expect(described_class.query(contacts, { state: 'CA', address_historic: 'true' }, nil).to_a).to eq [contact_five]
+        result = described_class.query(contacts, { state: 'CA', address_historic: 'true' }, nil).to_a
+
+        expect(result).to eq [contact_five]
       end
     end
   end

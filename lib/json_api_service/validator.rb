@@ -47,7 +47,8 @@ module JsonApiService
     def foreign_key_present_detail(reference_array)
       pointer_ref = "/#{reference_array.join('/')}"
 
-      "Foreign keys SHOULD NOT be referenced in the #attributes of a JSONAPI resource object. Reference: #{pointer_ref}"
+      'Foreign keys SHOULD NOT be referenced in the #attributes of a JSONAPI resource object. '\
+      "Reference: #{pointer_ref}"
     end
 
     def foreign_key_present_error(reference_array)
@@ -58,10 +59,9 @@ module JsonApiService
       actual   = "/#{reference_array[0..-2].join('/')}/id"
       expected = "/#{reference_array[0..-3].join('/')}/id"
 
-      [
-        'A primary key, if sent in a request, CANNOT be referenced in the #attributes of a JSONAPI resource object.',
-        "It must instead be sent as a top level member of the resource's `data` object. Reference: `#{actual}`. Expected `#{expected}`"
-      ].join(' ')
+      'A primary key, if sent in a request, CANNOT be referenced in the #attributes of a JSONAPI '\
+      "resource object. It must instead be sent as a top level member of the resource's `data` "\
+      "object. Reference: `#{actual}`. Expected `#{expected}`"
     end
 
     def invalid_primary_key_placement_error(reference_array)
@@ -73,7 +73,8 @@ module JsonApiService
     end
 
     def invalid_resource_type_detail
-      "'#{resource_type_from_params}' is not a valid resource type for this endpoint. Expected '#{context.resource_type}' instead"
+      "'#{resource_type_from_params}' is not a valid resource type for this endpoint. "\
+      "Expected '#{context.resource_type}' instead"
     end
 
     def missing_resource_type_error(reference_array)
@@ -83,7 +84,8 @@ module JsonApiService
     def missing_resource_type_detail(reference_array)
       pointer_ref = "/#{reference_array.join('/')}/type"
 
-      "JSONAPI resource objects MUST contain a `type` top-level member of its hash for POST and PATCH requests. Expected to find a `type` member at #{pointer_ref}"
+      'JSONAPI resource objects MUST contain a `type` top-level member of its hash for POST and '\
+      "PATCH requests. Expected to find a `type` member at #{pointer_ref}"
     end
 
     def resource_type_from_params?
@@ -95,7 +97,8 @@ module JsonApiService
     end
 
     def verify_resource_type!
-      raise InvalidTypeError, invalid_resource_type_detail if (resource_type_from_params.to_s != context.resource_type.to_s) && resource_type_from_params?
+      matching_resource_type = resource_type_from_params.to_s == context.resource_type.to_s
+      raise InvalidTypeError, invalid_resource_type_detail if !matching_resource_type && resource_type_from_params?
     end
 
     def verify_absence_of_invalid_keys_in_attributes!

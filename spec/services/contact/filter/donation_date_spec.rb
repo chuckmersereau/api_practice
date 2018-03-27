@@ -7,16 +7,22 @@ RSpec.describe Contact::Filter::DonationDate do
   let!(:contact_one) { create(:contact, account_list_id: account_list.id) }
   let!(:donor_account_one) { create(:donor_account) }
   let!(:designation_account_one) { create(:designation_account) }
-  let!(:donation_one) { create(:donation, donor_account: donor_account_one, designation_account: designation_account_one) }
+  let!(:donation_one) do
+    create(:donation, donor_account: donor_account_one, designation_account: designation_account_one)
+  end
 
   let!(:contact_two) { create(:contact, account_list_id: account_list.id) }
   let!(:donor_account_two) { create(:donor_account) }
   let!(:designation_account_two) { create(:designation_account) }
-  let!(:donation_two) { create(:donation, donor_account: donor_account_two, designation_account: designation_account_two) }
+  let!(:donation_two) do
+    create(:donation, donor_account: donor_account_two, designation_account: designation_account_two)
+  end
 
   let!(:contact_three) { create(:contact, account_list_id: account_list.id) }
   let!(:donor_account_three) { create(:donor_account) }
-  let!(:donation_three) { create(:donation, donor_account: donor_account_three, designation_account_id: nil) }
+  let!(:donation_three) do
+    create(:donation, donor_account: donor_account_three, designation_account_id: nil)
+  end
 
   before do
     account_list.designation_accounts << designation_account_one
@@ -55,8 +61,15 @@ RSpec.describe Contact::Filter::DonationDate do
 
     context 'filter by end and start date' do
       it 'returns only contacts with a donation after the start date and before the end date' do
-        expect(described_class.query(contacts, { donation_date: Range.new(1.year.ago, 1.year.from_now) }, [account_list]).to_a).to match_array [contact_one, contact_two]
-        expect(described_class.query(contacts, { donation_date: Range.new(1.day.ago, 2.months.from_now) }, [account_list]).to_a).to eq [contact_two]
+        options = { donation_date: Range.new(1.year.ago, 1.year.from_now) }
+        result = described_class.query(contacts, options, [account_list]).to_a
+
+        expect(result).to match_array [contact_one, contact_two]
+
+        options = { donation_date: Range.new(1.day.ago, 2.months.from_now) }
+        result = described_class.query(contacts, options, [account_list]).to_a
+
+        expect(result).to eq [contact_two]
       end
     end
   end

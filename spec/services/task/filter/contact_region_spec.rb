@@ -44,28 +44,37 @@ RSpec.describe Task::Filter::ContactRegion do
 
     context 'filter by no region' do
       it 'returns only tasks with contacts that have no region' do
-        expect(described_class.query(tasks, { contact_region: 'none' }, account_list).to_a).to match_array [task_three, task_four]
+        result = described_class.query(tasks, { contact_region: 'none' }, account_list).to_a
+
+        expect(result).to match_array [task_three, task_four]
       end
     end
 
     context 'filter by region' do
       it 'filters multiple regions' do
-        expect(described_class.query(tasks, { contact_region: 'My Region, My Region' }, account_list).to_a).to match_array [task_one, task_two]
+        result = described_class.query(tasks, { contact_region: 'My Region, My Region' }, account_list).to_a
+
+        expect(result).to match_array [task_one, task_two]
       end
       it 'filters a single region' do
-        expect(described_class.query(tasks, { contact_region: 'My Region' }, account_list).to_a).to match_array [task_one, task_two]
+        result = described_class.query(tasks, { contact_region: 'My Region' }, account_list).to_a
+
+        expect(result).to match_array [task_one, task_two]
       end
     end
 
     context 'multiple filters' do
       it 'returns tasks with contacts matching multiple filters' do
-        expect(described_class.query(tasks, { contact_region: 'My Region, none' }, account_list).to_a).to match_array [task_one, task_two, task_three, task_four]
+        result = described_class.query(tasks, { contact_region: 'My Region, none' }, account_list).to_a
+        expect(result).to match_array [task_one, task_two, task_three, task_four]
       end
     end
 
     context 'address historic' do
       it 'returns tasks with contacts matching the region with historic addresses' do
-        expect(described_class.query(tasks, { contact_region: 'My Region', address_historic: 'true' }, account_list).to_a).to eq [task_five]
+        query = { contact_region: 'My Region', address_historic: 'true' }
+        result = described_class.query(tasks, query, account_list).to_a
+        expect(result).to eq [task_five]
       end
     end
   end

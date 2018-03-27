@@ -17,7 +17,9 @@ describe ImportCallbackHandler do
   describe '#handle_start' do
     it 'updates import' do
       travel_to Time.current do
-        expect { ImportCallbackHandler.new(import).handle_start }.to change { import.reload.importing }.from(false).to(true)
+        expect do
+          ImportCallbackHandler.new(import).handle_start
+        end.to change { import.reload.importing }.from(false).to(true)
           .and change { import.import_started_at&.to_i }.from(nil).to(Time.current.to_i)
       end
     end
@@ -44,7 +46,9 @@ describe ImportCallbackHandler do
 
     it 'sets the Import error to nil' do
       import.update_column(:error, 'ERROR')
-      expect { ImportCallbackHandler.new(import).handle_success }.to change { import.reload.error }.from('ERROR').to(nil)
+      expect do
+        ImportCallbackHandler.new(import).handle_success
+      end.to change { import.reload.error }.from('ERROR').to(nil)
     end
   end
 
@@ -57,7 +61,9 @@ describe ImportCallbackHandler do
     it 'sets the Import error' do
       import.update_column(:error, nil)
       exception = StandardError.new('Just testing!')
-      expect { ImportCallbackHandler.new(import).handle_failure(exception: exception) }.to change { import.reload.error }.from(nil).to('StandardError: Just testing!')
+      expect do
+        ImportCallbackHandler.new(import).handle_failure(exception: exception)
+      end.to change { import.reload.error }.from(nil).to('StandardError: Just testing!')
     end
   end
 
@@ -67,7 +73,9 @@ describe ImportCallbackHandler do
       expect_any_instance_of(AccountList).to receive(:async_merge_contacts).once
       expect(ContactSuggestedChangesUpdaterWorker).to receive(:perform_async)
       travel_to Time.current do
-        expect { ImportCallbackHandler.new(import).handle_complete }.to change { import.reload.importing }.from(true).to(false)
+        expect do
+          ImportCallbackHandler.new(import).handle_complete
+        end.to change { import.reload.importing }.from(true).to(false)
           .and change { import.import_completed_at&.to_i }.from(nil).to(Time.current.to_i)
       end
     end
@@ -76,7 +84,9 @@ describe ImportCallbackHandler do
       travel_to Time.current do
         begin
           expect_any_instance_of(AccountList).to receive(:async_merge_contacts).and_raise(StandardError)
-          expect { ImportCallbackHandler.new(import).handle_complete }.to change { import.reload.importing }.from(true).to(false)
+          expect do
+            ImportCallbackHandler.new(import).handle_complete
+          end.to change { import.reload.importing }.from(true).to(false)
             .and change { import.import_completed_at&.to_i }.from(nil).to(Time.current.to_i)
         rescue StandardError
         end

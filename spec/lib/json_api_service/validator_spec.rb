@@ -557,17 +557,21 @@ module JsonApiService
     end
 
     def foreign_key_error(pointer_ref)
-      "Foreign keys SHOULD NOT be referenced in the #attributes of a JSONAPI resource object. Reference: #{pointer_ref}"
+      'Foreign keys SHOULD NOT be referenced in the #attributes '\
+      "of a JSONAPI resource object. Reference: #{pointer_ref}"
     end
 
     def missing_type_error(pointer_ref)
-      "JSONAPI resource objects MUST contain a `type` top-level member of its hash for POST and PATCH requests. Expected to find a `type` member at #{pointer_ref}"
+      'JSONAPI resource objects MUST contain a `type` top-level member of its hash for POST and '\
+      "PATCH requests. Expected to find a `type` member at #{pointer_ref}"
     end
 
     def invalid_primary_key_placement(actual_pointer_ref, expected_pointer_ref)
       [
-        'A primary key, if sent in a request, CANNOT be referenced in the #attributes of a JSONAPI resource object.',
-        "It must instead be sent as a top level member of the resource's `data` object. Reference: `#{actual_pointer_ref}`. Expected `#{expected_pointer_ref}`"
+        'A primary key, if sent in a request, CANNOT be referenced',
+        'in the #attributes of a JSONAPI resource object.',
+        "It must instead be sent as a top level member of the resource's `data` object.",
+        "Reference: `#{actual_pointer_ref}`. Expected `#{expected_pointer_ref}`"
       ].join(' ')
     end
   end

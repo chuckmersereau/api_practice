@@ -26,9 +26,15 @@ RSpec.describe Contact::Filter::City do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [
+        { name: '-- Any --', id: '', placeholder: 'None' },
+        { name: '-- None --', id: 'none' },
+        { name: 'Fremont', id: 'Fremont' }
+      ]
+
       expect(described_class.config([account_list])).to include(multiple: true,
                                                                 name: :city,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: '-- None --', id: 'none' }, { name: 'Fremont', id: 'Fremont' }],
+                                                                options: options,
                                                                 parent: 'Contact Location',
                                                                 title: 'City',
                                                                 type: 'multiselect',
@@ -50,28 +56,38 @@ RSpec.describe Contact::Filter::City do
 
     context 'filter by no city' do
       it 'returns only contacts that have no city' do
-        expect(described_class.query(contacts, { city: 'none' }, nil).to_a).to include(contact_three, contact_four)
+        result = described_class.query(contacts, { city: 'none' }, nil).to_a
+
+        expect(result).to include(contact_three, contact_four)
       end
     end
 
     context 'filter by city' do
       it 'filters multiple cities' do
-        expect(described_class.query(contacts, { city: 'Fremont, Fremont' }, nil).to_a).to include(contact_one, contact_two)
+        result = described_class.query(contacts, { city: 'Fremont, Fremont' }, nil).to_a
+
+        expect(result).to include(contact_one, contact_two)
       end
       it 'filters a single cities' do
-        expect(described_class.query(contacts, { city: 'Fremont' }, nil).to_a).to include(contact_one, contact_two)
+        result = described_class.query(contacts, { city: 'Fremont' }, nil).to_a
+
+        expect(result).to include(contact_one, contact_two)
       end
     end
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { city: 'Fremont, none' }, nil).to_a).to include(contact_one, contact_two, contact_three, contact_four)
+        result = described_class.query(contacts, { city: 'Fremont, none' }, nil).to_a
+
+        expect(result).to include(contact_one, contact_two, contact_three, contact_four)
       end
     end
 
     context 'address historic' do
       it 'returns contacts matching the city with historic addresses' do
-        expect(described_class.query(contacts, { city: 'Fremont', address_historic: 'true' }, nil).to_a).to include(contact_five)
+        result = described_class.query(contacts, { city: 'Fremont', address_historic: 'true' }, nil).to_a
+
+        expect(result).to include(contact_five)
       end
     end
   end

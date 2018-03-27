@@ -124,9 +124,12 @@ resource 'Account Lists > Imports > from TNT XML' do
       end
 
       example 'TNT XML Import [CREATE]', document: documentation_scope do
-        explanation 'Creates a new TNT XML Import associated with the Account List. This endpoint expects a TNT file to be uploaded using Content-Type ' \
-                    '"multipart/form-data", this makes the endpoint unique in that it does not expect JSON content. Unless otherwise specified, the Import will be created with ' \
-                    '"in_preview" set to false, which will cause the import to begin after being created (the import runs asynchronously as a background job).'
+        explanation 'Creates a new TNT XML Import associated with the Account List. This endpoint ' \
+                    'expects a TNT file to be uploaded using Content-Type "multipart/form-data", ' \
+                    'this makes the endpoint unique in that it does not expect JSON content. Unless ' \
+                    'otherwise specified, the Import will be created with "in_preview" set to false, ' \
+                    'which will cause the import to begin after being created ' \
+                    '(the import runs asynchronously as a background job).'
         do_request data: form_data
         expect(response_status).to eq(201), invalid_status_detail
         check_resource(['relationships'])

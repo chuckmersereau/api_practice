@@ -1,5 +1,9 @@
 RSpec.shared_examples 'sorting examples' do |options|
-  let(:sorting_param) { described_class.new.send(:permitted_sorting_params).first || described_class::PERMITTED_SORTING_PARAM_DEFAULTS.second }
+  UNSUPPORTED_SORT_MESSAGE = 'Sorting by id is not supported for this endpoint.'.freeze
+
+  let(:sorting_param) do
+    described_class.new.send(:permitted_sorting_params).first || described_class::PERMITTED_SORTING_PARAM_DEFAULTS.second
+  end
 
   let(:permit_multiple_sorting_params?) { described_class::PERMIT_MULTIPLE_SORTING_PARAMS }
 
@@ -10,7 +14,8 @@ RSpec.shared_examples 'sorting examples' do |options|
   before do
     resource.update_column(sorting_param, 1.day.ago) if sorting_param.ends_with?('_at')
     unless sorting_param.include?('.') || resource.class.where.not(sorting_param => resource.send(sorting_param)).exists?
-      raise "To test sorting, there should be a resource with attribute #{sorting_param} NOT equal to #{resource.send(sorting_param)}"
+      raise 'To test sorting, there should be a resource with '\
+            "attribute #{sorting_param} NOT equal to #{resource.send(sorting_param)}"
     end
   end
 
@@ -29,7 +34,7 @@ RSpec.shared_examples 'sorting examples' do |options|
     api_login(user)
     get options[:action], parent_param_if_needed.merge(sort: 'id')
     expect(response.status).to eq(400)
-    expect(JSON.parse(response.body)['errors'].first['detail']).to eq('Sorting by id is not supported for this endpoint.')
+    expect(JSON.parse(response.body)['errors'].first['detail']).to eq(UNSUPPORTED_SORT_MESSAGE)
   end
 
   context 'sorting nulls' do
@@ -37,8 +42,11 @@ RSpec.shared_examples 'sorting examples' do |options|
       next if sorting_param.include?('.') || !sorting_param_nullable?
 
       resource.update_column(sorting_param, nil)
-      raise "To test sorting by null values, there should be a resource with attribute #{sorting_param} as null" unless resource.class.where(sorting_param => nil).exists?
-      raise "To test sorting by null values, there should be a resource with attribute #{sorting_param} as NOT null" unless resource.class.where.not(sorting_param => nil).exists?
+      message = "To test sorting by null values, there should be a resource with attribute #{sorting_param} as null"
+      raise message unless resource.class.where(sorting_param => nil).exists?
+
+      message = "To test sorting by null values, there should be a resource with attribute #{sorting_param} as NOT null"
+      raise message unless resource.class.where.not(sorting_param => nil).exists?
     end
 
     it 'sorts resources based on null values first or last' do
@@ -72,7 +80,8 @@ RSpec.shared_examples 'sorting examples' do |options|
       api_login(user)
       get options[:action], parent_param_if_needed.merge(sort: 'id,id')
       expect(response.status).to eq(400)
-      expect(JSON.parse(response.body)['errors'].first['detail']).to eq('This endpoint does not support multiple sorting parameters.')
+      expected_error = 'This endpoint does not support multiple sorting parameters.'
+      expect(JSON.parse(response.body)['errors'].first['detail']).to eq expected_error
     end
   end
 
@@ -96,7 +105,7 @@ RSpec.shared_examples 'sorting examples' do |options|
       api_login(user)
       get options[:action], parent_param_if_needed.merge(sort: 'created_at,id')
       expect(response.status).to eq(400)
-      expect(JSON.parse(response.body)['errors'].first['detail']).to eq('Sorting by id is not supported for this endpoint.')
+      expect(JSON.parse(response.body)['errors'].first['detail']).to eq(UNSUPPORTED_SORT_MESSAGE)
     end
   end
 end

@@ -21,10 +21,14 @@ describe AccountList::EmailCollection do
 
     it 'selects the data by normalized emails without the deleted emails' do
       collection = AccountList::EmailCollection.new(account_list)
-      expect(collection.select_by_email(email_address_1.email)).to match_array([{ contact_id: contact_1.id, person_id: person_1.id, email: email_address_1.email }])
-      expect(collection.select_by_email(" #{email_address_1.email.upcase} ")).to match_array([{ contact_id: contact_1.id, person_id: person_1.id, email: email_address_1.email }])
-      expect(collection.select_by_email(email_address_2.email)).to match_array([{ contact_id: contact_2.id, person_id: person_2.id, email: email_address_2.email },
-                                                                                { contact_id: contact_2.id, person_id: person_3.id, email: email_address_3.email }])
+
+      person1_hash = { contact_id: contact_1.id, person_id: person_1.id, email: email_address_1.email }
+      expect(collection.select_by_email(email_address_1.email)).to match_array([person1_hash])
+      expect(collection.select_by_email(" #{email_address_1.email.upcase} ")).to match_array([person1_hash])
+
+      person2_hash = { contact_id: contact_2.id, person_id: person_2.id, email: email_address_2.email }
+      person3_hash = { contact_id: contact_2.id, person_id: person_3.id, email: email_address_3.email }
+      expect(collection.select_by_email(email_address_2.email)).to match_array([person2_hash, person3_hash])
     end
 
     it 'handles a nil argument' do

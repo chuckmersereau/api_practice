@@ -20,7 +20,9 @@ class DocumentationHelper
         type: 'ISO8601 timestamp'
       },
       'attributes.updated_in_db_at': {
-        description: 'This is to be used as a reference for the last time the resource was updated in the remote database - specifically for when data is updated while the client is offline.',
+        description: 'This is to be used as a reference for the last time the resource was '\
+                     'updated in the remote database - specifically for when data is updated '\
+                     'while the client is offline.',
         type: 'ISO8601 timestamp',
         required: true
       }
@@ -30,7 +32,9 @@ class DocumentationHelper
   def additional_update_parameter_attributes
     @additional_update_parameter_attributes ||= {
       'attributes.overwrite': {
-        description: "Only used for updating a record where you want to ignore the server's `updated_in_db_at` value and _force overwrite_ the values for the record. Must be `true` to work.",
+        description: "Only used for updating a record where you want to ignore the server's '\
+                     '`updated_in_db_at` value and _force overwrite_ the values for the record. '\
+                     'Must be `true` to work.",
         type: 'boolean'
       }
     }

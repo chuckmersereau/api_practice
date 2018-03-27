@@ -28,9 +28,12 @@ RSpec.describe Contact::Filter::ContactInfoPhone do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' },
+                 { name: 'Yes', id: 'Yes' },
+                 { name: 'No', id: 'No' }]
       expect(described_class.config([account_list])).to include(multiple: false,
                                                                 name: :contact_info_phone,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: 'Yes', id: 'Yes' }, { name: 'No', id: 'No' }],
+                                                                options: options,
                                                                 parent: 'Contact Information',
                                                                 title: 'Home Phone',
                                                                 type: 'radio',
@@ -52,13 +55,17 @@ RSpec.describe Contact::Filter::ContactInfoPhone do
 
     context 'filter by no mobile phone' do
       it 'returns only contacts that have no mobile phone' do
-        expect(described_class.query(contacts, { contact_info_phone: 'No' }, nil).to_a).to match_array [contact_two, contact_three, contact_four]
+        result = described_class.query(contacts, { contact_info_phone: 'No' }, nil).to_a
+
+        expect(result).to match_array [contact_two, contact_three, contact_four]
       end
     end
 
     context 'filter by mobile phone' do
       it 'returns only contacts that have a mobile phone' do
-        expect(described_class.query(contacts, { contact_info_phone: 'Yes' }, nil).to_a).to match_array [contact_one]
+        result = described_class.query(contacts, { contact_info_phone: 'Yes' }, nil).to_a
+
+        expect(result).to match_array [contact_one]
       end
     end
   end
