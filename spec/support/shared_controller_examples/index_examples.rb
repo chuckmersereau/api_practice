@@ -46,12 +46,13 @@ RSpec.shared_examples 'index_examples' do |options = {}|
       api_login(user)
       get :index, parent_param_if_needed.merge(per_page: 1, page: 2)
       expect(response.status).to eq(200), invalid_status_detail
-      expect(JSON.parse(response.body)['data'].length).to eq(1)
-      expect(JSON.parse(response.body)['data'].first['id']).to_not eq(resource.id)
-      expect(JSON.parse(response.body)['meta']['pagination']['per_page']).to eq('1')
-      expect(JSON.parse(response.body)['meta']['pagination']['page']).to eq('2')
-      expect(JSON.parse(response.body)['meta']['pagination']['total_count']).not_to be_nil
-      expect(JSON.parse(response.body)['meta']['pagination']['total_pages']).not_to be_nil
+      json_body = JSON.parse(response.body)
+      expect(json_body['data'].length).to eq(1)
+      expect(json_body['data'].first['id']).to_not eq(resource.id)
+      expect(json_body['meta']['pagination']['per_page']).to eq('1')
+      expect(json_body['meta']['pagination']['page']).to eq('2')
+      expect(json_body['meta']['pagination']['total_count']).not_to be_nil
+      expect(json_body['meta']['pagination']['total_pages']).not_to be_nil
     end
   end
 end

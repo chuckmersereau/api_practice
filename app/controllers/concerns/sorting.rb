@@ -21,19 +21,25 @@ module Sorting
   end
 
   def raise_error_if_multiple_sorting_params_are_not_permitted
-    raise Exceptions::BadRequestError, 'This endpoint does not support multiple sorting parameters.' if multiple_sorting_params? && !self.class::PERMIT_MULTIPLE_SORTING_PARAMS
+    exception = Exceptions::BadRequestError, 'This endpoint does not support multiple sorting parameters.'
+    raise(*exception) if multiple_sorting_params? && !self.class::PERMIT_MULTIPLE_SORTING_PARAMS
   end
 
   def raise_error_unless_sorting_param_allowed
-    raise Exceptions::BadRequestError, "Sorting by #{unpermitted_sorting_params.to_sentence} is not supported for this endpoint." if unpermitted_sorting_params.present?
+    exception = Exceptions::BadRequestError, "Sorting by #{unpermitted_sorting_params.to_sentence} is not supported for this endpoint."
+    raise(*exception) if unpermitted_sorting_params.present?
   end
 
   def sorting_param
-    return nil unless params[:sort]
+    return default_sort_param unless params[:sort]
 
     raise_error_if_multiple_sorting_params_are_not_permitted
     raise_error_unless_sorting_param_allowed
     convert_sorting_params_to_sql
+  end
+
+  def default_sort_param
+    permitted_sorting_params_with_defaults.include?('created_at') ? 'created_at' : nil
   end
 
   def sorting_join
