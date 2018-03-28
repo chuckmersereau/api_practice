@@ -182,7 +182,6 @@ class Person < ApplicationRecord
     :occupation,
     :optout_enewsletter,
     :overwrite,
-    :profession,
     :suffix,
     :title,
     :updated_at,
@@ -497,6 +496,10 @@ class Person < ApplicationRecord
     else
       super value
     end
+  end
+
+  def profession=(value)
+    self.occupation ||= value
   end
 
   def merge(other)

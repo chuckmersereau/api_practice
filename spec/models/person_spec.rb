@@ -487,4 +487,22 @@ describe Person do
       end
     end
   end
+
+  describe 'profession=' do
+    context 'blank occupation' do
+      before { person.occupation = nil }
+
+      it 'updates occupation field' do
+        expect { person.profession = 'qwer' }.to change { person.occupation }
+      end
+    end
+
+    context 'occupation is set' do
+      before { person.occupation = 'asdf' }
+
+      it 'does not update occupation field' do
+        expect { person.profession = 'qwer' }.to_not change { person.occupation }
+      end
+    end
+  end
 end

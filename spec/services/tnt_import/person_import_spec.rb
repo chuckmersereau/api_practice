@@ -218,7 +218,7 @@ describe TntImport::PersonImport do
       expect(person.anniversary_month).to eq(11)
       expect(person.anniversary_day).to eq(4)
       expect(person.anniversary_year).to eq(1994)
-      expect(person.profession).to eq('Janitor')
+      expect(person.occupation).to eq('Janitor')
       expect(person.employer).to eq('Business A')
     end
 
@@ -242,11 +242,11 @@ describe TntImport::PersonImport do
         TntImport::PersonImport.new(row, contact, 'Spouse', true).import
         spouse = contact.people.find { |p| p.id != contact.primary_person_id }
 
-        spouse.update(profession: 'Architect')
+        spouse.update(occupation: 'Architect')
 
         expect do
           TntImport::PersonImport.new(row, contact, 'Spouse', override).import
-        end.to change { spouse.reload.profession }.to("Helen's Profession")
+        end.to change { spouse.reload.occupation }.to("Helen's Profession")
       end
     end
 
@@ -270,11 +270,11 @@ describe TntImport::PersonImport do
         TntImport::PersonImport.new(row, contact, 'Spouse', true).import
         spouse = contact.people.find { |p| p.id != contact.primary_person_id }
 
-        spouse.update(profession: 'Architect')
+        spouse.update(occupation: 'Architect')
 
         expect do
           TntImport::PersonImport.new(row, contact, 'Spouse', override).import
-        end.to_not change { spouse.reload.profession }
+        end.to_not change { spouse.reload.occupation }
       end
     end
   end

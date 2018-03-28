@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.5
--- Dumped by pg_dump version 9.6.5
+-- Dumped from database version 10.1
+-- Dumped by pg_dump version 10.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1226,7 +1226,6 @@ CREATE TABLE people (
     master_person_id uuid NOT NULL,
     middle_name character varying,
     access_token character varying(32),
-    profession text,
     deceased boolean DEFAULT false NOT NULL,
     subscribed_to_updates boolean,
     optout_enewsletter boolean DEFAULT false,
@@ -5046,4 +5045,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180227044343');
 INSERT INTO schema_migrations (version) VALUES ('20180228233310');
 
 INSERT INTO schema_migrations (version) VALUES ('20180302023505');
+
+INSERT INTO schema_migrations (version) VALUES ('20180321203714');
 

@@ -41,7 +41,7 @@ class TntImport::PersonImport
                        middle_name: row[prefix + 'MiddleName'],
                        title: row[prefix + 'Title'], suffix: row[prefix + 'Suffix'],
                        gender: prefix.present? ? 'female' : 'male',
-                       profession: row[prefix + 'Profession'],
+                       occupation: row[prefix + 'Profession'],
                        employer: row[prefix + 'BusinessName'],
                        birthday_month: row[prefix + 'BirthdayMonth'],
                        birthday_day: row[prefix + 'BirthdayDay'],
