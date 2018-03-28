@@ -114,6 +114,7 @@ class TntImport::PersonImport
 
   def update_person_social_media_accounts(person, row, prefix)
     facebook = row["#{prefix}SocialWeb1"]
+    facebook = Person::FacebookAccount.username_from_url(facebook) || facebook
     person.facebook_accounts.find_or_initialize_by(username: facebook) if facebook
 
     linkedin = row["#{prefix}SocialWeb2"]

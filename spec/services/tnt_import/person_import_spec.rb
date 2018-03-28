@@ -143,6 +143,22 @@ describe TntImport::PersonImport do
         expect(person.websites.size).to eq 0
       end
     end
+
+    context 'full facebook url' do
+      before do
+        row['SocialWeb1'] = 'https://www.facebook.com/bobfacebook'
+      end
+
+      it 'condenses url before attempting to create' do
+        expect { import.import }.to change { Person.count }.from(0).to(1)
+        person = Person.last
+        expect(person.facebook_accounts.size).to eq 1
+        expect(person.facebook_accounts.order(:created_at).first.username).to eq 'bobfacebook'
+
+        # re-run import to see if it tries to override the facebook account
+        expect { import.import }.to_not change(Person::FacebookAccount, :count)
+      end
+    end
   end
 
   context '#tnt_email_preferred?' do
