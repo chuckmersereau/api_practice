@@ -50,9 +50,19 @@ class TntImport::TasksImport
       start_at: parse_date("#{row['TaskDate']} #{row['TaskTime'].split(' ').second}", @user)
     }
 
+    add_assigned_to_as_tag(task, row)
+
     task.completed = TntImport::TntCodes.task_status_completed?(row['Status'])
     task.completed_at = parse_date(row['LastEdit'], @user) if task.completed
     task
+  end
+
+  def add_assigned_to_as_tag(task, row)
+    assigned_to_id = row['AssignedToUserID']
+    return unless assigned_to_id
+
+    username = @xml.find('User', assigned_to_id).try(:[], 'UserName')
+    task.tag_list.add username
   end
 
   def create_task_for_contact!(contact_row, tasks)

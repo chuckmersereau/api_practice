@@ -3,6 +3,7 @@ require 'rails_helper'
 describe TntImport::TasksImport do
   let(:user) { create(:user) }
   let(:tnt_import) { create(:tnt_import, override: true, user: user) }
+  let(:tnt3_2_xml) { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
   let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
   let(:contacts) do
     xml.tables['TaskContact'].map do |row|
@@ -59,6 +60,21 @@ describe TntImport::TasksImport do
         task = Task.last
         expect(task.activity_type).to eq nil
         expect(Task.last.comments.pluck(:body)).to include 'This task was given the type "Present" in TntConnect.'
+      end
+    end
+
+    context 'with task assigned to' do
+      before do
+        tnt_import.file = tnt3_2_xml
+        # only one task
+        xml.tables['Task'] = xml.tables['Task'][0..0]
+        xml.tables['Task'].first['AssignedToUserID'] = xml.tables['User'].first['id']
+      end
+
+      it 'includes a tag' do
+        expect { subject.import }.to change { Task.count }
+        task = Task.last
+        expect(task.tag_list).to include xml.tables['User'].first['UserName'].downcase
       end
     end
 
