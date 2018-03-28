@@ -77,6 +77,7 @@ resource 'Donations' do
       contact
       designation_account
       donor_account
+      pledge
     )
   end
 

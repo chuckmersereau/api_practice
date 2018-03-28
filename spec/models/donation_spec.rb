@@ -164,4 +164,20 @@ describe Donation do
       expect(contact.reload.total_donations).to eq(0)
     end
   end
+
+  describe '#pledge' do
+    let(:appeal)   { create(:appeal) }
+    let(:pledge1)  { create(:pledge, amount: 100.00, appeal: appeal) }
+    let(:pledge2)  { create(:pledge, amount: 100.00) }
+    let(:donation) { create(:donation, appeal: appeal) }
+
+    before do
+      pledge1.donations << donation
+      pledge2.donations << donation
+    end
+
+    it 'returns first pledge' do
+      expect(donation.pledge).to eq pledge1
+    end
+  end
 end

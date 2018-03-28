@@ -21,6 +21,7 @@ class DonationSerializer < ApplicationSerializer
   belongs_to :contact
   belongs_to :designation_account
   belongs_to :donor_account
+  has_one    :pledge
 
   def contact
     return unless scope&.[](:account_list)

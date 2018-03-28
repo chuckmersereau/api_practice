@@ -9,6 +9,12 @@ class Donation < ApplicationRecord
   has_many :pledge_donations, dependent: :destroy
   has_many :pledges, through: :pledge_donations
 
+  # Our current business rules state that donations should only be attached to one pledge.
+  # We would like to do away with the many-to-many PledgeDonation relationship, but in the meantime
+  # these will return the first row.
+  has_one  :pledge_donation
+  has_one  :pledge, through: :pledge_donation
+
   validates :amount, :donation_date, presence: { message: _('can not be blank') }
 
   scope :for, -> (designation_account) { where(designation_account_id: designation_account.id) }
