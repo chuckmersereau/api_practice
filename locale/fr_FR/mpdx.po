@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-03-19 19:05+0000\n"
+"PO-Revision-Date: 2018-03-19 19:05+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -150,6 +150,9 @@ msgstr "Solde : %{balance}"
 msgid "Both"
 msgstr "Les deux"
 
+msgid "Both Only"
+msgstr "Les deux seulement"
+
 msgid "Brother"
 msgstr "Frère"
 
@@ -190,7 +193,7 @@ msgid "Company"
 msgstr "Entreprise"
 
 msgid "Completed"
-msgstr "Terminé"
+msgstr "Effectué"
 
 msgid "Contact Church"
 msgstr "Église du contact"
@@ -265,7 +268,7 @@ msgid "Divorced"
 msgstr "Divorcé(e)"
 
 msgid "Done"
-msgstr "Terminé"
+msgstr "Effectué"
 
 msgid "Donor system"
 msgstr "Système de dons"
@@ -278,6 +281,18 @@ msgstr "Échéance"
 
 msgid "Email"
 msgstr "E-mail"
+
+msgid "Email 1"
+msgstr "E-mail 1"
+
+msgid "Email 2"
+msgstr "E-mail 2"
+
+msgid "Email Only"
+msgstr "E-mail seulement"
+
+msgid "Email and Both"
+msgstr "E-mail et les deux"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
@@ -672,8 +687,23 @@ msgstr "En attente"
 msgid "Person"
 msgstr "Personne"
 
+msgid "Phone 1"
+msgstr "Téléphone 1"
+
+msgid "Phone 2"
+msgstr "Téléphone 2"
+
+msgid "Phone 3"
+msgstr "Téléphone 3"
+
 msgid "Physical"
 msgstr "Papier"
+
+msgid "Physical Only"
+msgstr "Papier seulement"
+
+msgid "Physical and Both"
+msgstr "Papier et les deux"
 
 msgid "Please try updating it here: %{link}"
 msgstr "Essayez de le modifier ici : %{link}"

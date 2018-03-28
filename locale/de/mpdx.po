@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-03-15 19:34+0000\n"
+"PO-Revision-Date: 2018-03-15 19:34+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -21,13 +21,13 @@ msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT
 msgstr "%(Dieser Aufgabe wurde in TntConnect der Typ \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" gegeben.)"
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
-msgstr "%{contact_name} hat in einem Monat ein erwartetes Geschenk. Zur Nachfrage kontaktieren."
+msgstr "%{contact_name} hat in einem Monat eine erwartete Spende. Zur Nachfrage kontaktieren."
 
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
-msgstr "%{contact_name} gab gerade das erste Geschenk. Senden Sie ein Dankeschön."
+msgstr "%{contact_name} hat erstmals gespendet. Bitte bedanken!"
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
-msgstr "%{contact_name} scheint ein verpasstes Geschenk zu haben. Zur Nachverfolgung anrufen."
+msgstr "%{contact_name} hat die letzte Spende versäumt? Klären: erst Buchhaltung, dann Spender."
 
 msgid "%{number_of_failed_contacts} contacts failed to import."
 msgstr "%{number_of_failed_contacts} Kontakte konnten nicht importiert werden."
@@ -51,19 +51,19 @@ msgid "-- All Hidden --"
 msgstr "-- Alle ausgeblendet ---"
 
 msgid "-- Any --"
-msgstr "-- Alle --"
+msgstr "-- Ein Tag od. Mehrere --"
 
 msgid "-- Do not ask --"
 msgstr "-- Nicht fragen --"
 
 msgid "-- Has referrer --"
-msgstr "-- Hat empfohlen --"
+msgstr "-- Empfohlen von --"
 
 msgid "-- None --"
 msgstr "-- Keine --"
 
 msgid "-- Unspecified --"
-msgstr "-- Nicht spezifiziert --"
+msgstr "-- Unbestimmt --"
 
 msgid "1 day before"
 msgstr "1 Tag vorher"
@@ -90,7 +90,7 @@ msgid "5 minutes before"
 msgstr "5 Minuten vorher"
 
 msgid "Account List"
-msgstr "Kontoliste"
+msgstr "Kontenliste"
 
 msgid "Action"
 msgstr "Aktion"
@@ -114,22 +114,22 @@ msgid "Annual"
 msgstr "Jährlich"
 
 msgid "Another contact in your organization already has the donor account number you've tried to assign to this contact.  Please make it more unique."
-msgstr "Ein anderer Kontakt in Ihrer Organisation hat bereits die Spender-Kontonummer, die Sie diesem Kontakt zuzuweisen versuchen. Bitte gestalten Sie sie einzigartiger."
+msgstr "Ein anderer Kontakt in Ihrer Organisation hat bereits die Spendernummer, die Du diesem Kontakt geben möchtest. Bitte wähle eine andere."
 
 msgid "Another contact on your account already has the donor account number you've tried to assign to this contact."
-msgstr "Ein anderer Kontakt in Ihrem Konto hat bereits die Spender-Kontonummer, die Sie diesem Kontakt zuzuweisen versuchen."
+msgstr "Ein anderer Kontakt in Deiner Kostenstelle hat bereits die Spendernummer, die Du diesem Kontakt geben möchtest."
 
 msgid "Appeal"
-msgstr "Aufruf"
+msgstr "Spendenaufruf"
 
 msgid "Appointment"
-msgstr "Termin"
+msgstr "Treffen"
 
 msgid "Appointment Scheduled"
-msgstr "Geplante Termine"
+msgstr "Geplantes Treffen"
 
 msgid "Are marked as do not ask for appeals"
-msgstr "Sind als „Bei Aufrufen nicht fragen“ markiert"
+msgstr "Sind als „Bei Spendenaufrufen nicht fragen“ markiert"
 
 msgid "Ask in Future"
 msgstr "Zukünftig fragen"
@@ -150,6 +150,9 @@ msgstr "Kontostand: %{balance}"
 msgid "Both"
 msgstr "Beide"
 
+msgid "Both Only"
+msgstr "Nur beide"
+
 msgid "Brother"
 msgstr "Bruder"
 
@@ -160,7 +163,7 @@ msgid "Call"
 msgstr "Anruf"
 
 msgid "Call for Decision"
-msgstr "Aufforderung zur Entscheidung"
+msgstr "Anruf wegen Entscheidung"
 
 msgid "Church"
 msgstr "Kirche"
@@ -172,19 +175,19 @@ msgid "Commitment"
 msgstr "Zusage"
 
 msgid "Commitment Amount"
-msgstr "Zusagebetrag"
+msgstr "Zugesagter Betrag"
 
 msgid "Commitment Currency"
-msgstr "Zusagenwährung"
+msgstr "Währung der Spendenzusage"
 
 msgid "Commitment Details"
-msgstr "Zusagendetails"
+msgstr "Details der Zusage"
 
 msgid "Commitment Frequency"
-msgstr "Zusagehäufigkeit"
+msgstr "Spendenrhythmus"
 
 msgid "Commitment Received"
-msgstr "Zusage erhalten"
+msgstr "Spendenzusage erhalten"
 
 msgid "Company"
 msgstr "Firma"
@@ -202,7 +205,7 @@ msgid "Contact Details"
 msgstr "Kontaktdetails"
 
 msgid "Contact Gift Details"
-msgstr "Kontakt-Geschenkdetails"
+msgstr "Kontakt-Spendendetails"
 
 msgid "Contact Information"
 msgstr "Kontaktinformationen"
@@ -232,7 +235,7 @@ msgid "Contact Type"
 msgstr "Kontakttyp"
 
 msgid "Contact for Appointment"
-msgstr "Für Termin kontaktieren"
+msgstr "Für Treffen kontaktieren"
 
 msgid "Contacts"
 msgstr "Kontakte"
@@ -267,8 +270,11 @@ msgstr "Geschieden"
 msgid "Done"
 msgstr "Fertig"
 
+msgid "Donor"
+msgstr "Spender"
+
 msgid "Donor system"
-msgstr "Spendersystem"
+msgstr "Spendensystem"
 
 msgid "Dr."
 msgstr "Dr."
@@ -279,13 +285,25 @@ msgstr "Fälligkeitsdatum"
 msgid "Email"
 msgstr "E-Mail"
 
+msgid "Email 1"
+msgstr "E-Mail-Adresse 1"
+
+msgid "Email 2"
+msgstr "E-Mail-Adresse 2"
+
+msgid "Email Only"
+msgstr "Nur E-Mail"
+
+msgid "Email and Both"
+msgstr "E-Mail an Beide"
+
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "Verlobt"
 
 #. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
-msgstr "Umschlaggruß"
+msgstr "Gruß für Briefunmschlag"
 
 msgid "Every 2 Months"
 msgstr "Alle 2 Monate"
@@ -303,7 +321,7 @@ msgid "Every 6 Months"
 msgstr "Alle 6 Monate"
 
 msgid "Exact Gift Amount"
-msgstr "Genauer Geschenkbetrag"
+msgstr "Genauer Spendenbetrag"
 
 msgid "Expired Referral"
 msgstr "Abgelaufene Empfehlung"
@@ -318,13 +336,16 @@ msgid "Father"
 msgstr "Vater"
 
 msgid "First Gift"
-msgstr "Erstes Geschenk"
+msgstr "Erste Spende"
 
 msgid "First Name"
 msgstr "Vorname"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "Für die MailChimp-Integration empfehlen wir Ihnen, eine neue Liste auf MailChimp einzurichten (nicht ein neues Konto, nur eine neue Liste) und behalten Sie alle MailChimp-Voreinstellungen für diese Liste. Wenn Sie sie mit einer neuen Liste einrichten, werden alle, die Ihren Newsletter erhalten haben, automatisch kopiert und ab dann können Sie alle Aktualisierungen von MPDX aus verwalten (d. h. wenn Sie eine E-Mail-Adresse in MPDX ändern, wird sie in MailChimp aktualisiert)."
+
+msgid "Full Name"
+msgstr "vollständiger Name"
 
 msgid "Future"
 msgstr "Zukunft"
@@ -336,19 +357,19 @@ msgid "Gift Amount Higher Than or Equal To"
 msgstr "Geschenkbetrag höher oder gleich"
 
 msgid "Gift Amount Less Than or Equal To"
-msgstr "Geschenkbetrag weniger oder gleich"
+msgstr "Spende niedriger oder gleich"
 
 msgid "Gift Amount Range"
-msgstr "Bereich des Geschenkbetrags"
+msgstr "Bereich des Spenden"
 
 msgid "Gift Date"
-msgstr "Geschenkdatum"
+msgstr "Spendendatum"
 
 msgid "Gift Details"
-msgstr "Geschenkdetails"
+msgstr "Spendendetails"
 
 msgid "Gift Options"
-msgstr "Geschenkoptionen"
+msgstr "Spendenoptionen"
 
 msgid "Google Integration Settings"
 msgstr "Einstellungen für Google-Integration"
@@ -394,16 +415,16 @@ msgid "Husband"
 msgstr "Ehemann"
 
 msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
-msgstr "Wenn Sie bei Ihrer bestehenden Liste bleiben möchten, müssen Sie diesen zusätzlichen Platzhalter zu einem nicht erforderlichen Feld machen."
+msgstr "Wenn Sie bei Ihrer bestehenden Liste bleiben möchten, müssen Sie diesens extra Feld zu einem nicht erforderlichen Feld machen."
 
 msgid "Increase Gift Recommendation"
-msgstr "Geschenkempfehlung erhöhen"
+msgstr "Spendenempfehlung erhöhen"
 
 msgid "Increased their giving in the last 3 months"
 msgstr "Erhöhte die Spenden in den letzten 3 Monaten"
 
 msgid "Insights for "
-msgstr "Einsichten für "
+msgstr "Einblick für "
 
 msgid "Joined my team in the last 3 months"
 msgstr "Trat meinem Team in den letzten 3 Monaten bei"
@@ -418,7 +439,7 @@ msgid "Last 30 Days"
 msgstr "Letzte 30 Tage"
 
 msgid "Last Gift"
-msgstr "Letztes Geschenk"
+msgstr "Letzte Spende"
 
 msgid "Last Month"
 msgstr "Letzter Monat"
@@ -460,7 +481,7 @@ msgid "Likely"
 msgstr "Wahrscheinlich"
 
 msgid "Likely To Give"
-msgstr "Gibt wahrscheinlich"
+msgstr "Spendet wahrscheinlich"
 
 msgid "MPDX List: %{name}"
 msgstr "MPDX-Liste: %{name}"
@@ -490,13 +511,13 @@ msgid "Mailing"
 msgstr "Mailing"
 
 msgid "Mailing City"
-msgstr "Versandstadt"
+msgstr "Versandort"
 
 msgid "Mailing Country"
 msgstr "Versandland"
 
 msgid "Mailing Postal Code"
-msgstr "Versandpostleitzahl"
+msgstr "Postleitzahl Versand"
 
 msgid "Mailing State"
 msgstr "Versandstaat"
@@ -511,7 +532,7 @@ msgid "Married"
 msgstr "Verheiratet"
 
 msgid "May take a few days to update"
-msgstr "Könnte wenige Tage für Aktualisierung benötigen"
+msgstr "Könnte einige Tage für Aktualisierung benötigen"
 
 msgid "Metro Area"
 msgstr "Ballungsraum"
@@ -562,25 +583,25 @@ msgid "Nephew"
 msgstr "Neffe"
 
 msgid "Never Ask"
-msgstr "Nie fragen"
+msgstr "Nie anfragen"
 
 msgid "Never Contacted"
-msgstr "Nie kontaktiert"
+msgstr "Noch nicht kontaktiert"
 
 msgid "New Donation"
 msgstr "Neue Spende"
 
 msgid "Newsletter"
-msgstr "Newsletter"
+msgstr "Freundesbrief"
 
 msgid "Newsletter - Email"
-msgstr "Newsletter - E-Mail"
+msgstr "Freundesbrief - E-Mail"
 
 msgid "Newsletter - Physical"
-msgstr "Newsletter - physikalisch"
+msgstr "Freundesbrief - Papier"
 
 msgid "Newsletter Recipients"
-msgstr "Newsletter-Empfänger"
+msgstr "Freundesbrief Empfänger"
 
 msgid "Next Month"
 msgstr "Nächster Monat"
@@ -598,10 +619,10 @@ msgid "No Date"
 msgstr "Kein Datum"
 
 msgid "No Gifts"
-msgstr "Keine Geschenke"
+msgstr "Keine Spenden"
 
 msgid "No Incomplete Tasks"
-msgstr "Keine nicht abgeschlossenen Aufgaben"
+msgstr "Keine offenen Aufgaben"
 
 msgid "No Subject"
 msgstr "Kein Betreff"
@@ -637,7 +658,7 @@ msgid "One of my donors, %{donor} has a new current address."
 msgstr "Einer meiner Spender, %{donor} hat eine neue aktuelle Adresse."
 
 msgid "One or More Gifts"
-msgstr "Ein oder mehr Geschenke"
+msgstr "Eine oder mehrere Spenden"
 
 msgid "Other"
 msgstr "Sonstige"
@@ -664,7 +685,7 @@ msgid "Partner - Pray"
 msgstr "Partner - Gebet"
 
 msgid "Partner - Special"
-msgstr "Partner - Besonders"
+msgstr "Partner - Spezial"
 
 msgid "Pending"
 msgstr "Ausstehend"
@@ -672,8 +693,23 @@ msgstr "Ausstehend"
 msgid "Person"
 msgstr "Person"
 
+msgid "Phone 1"
+msgstr "Telefon 1"
+
+msgid "Phone 2"
+msgstr "Telefon 2"
+
+msgid "Phone 3"
+msgstr "Telefon 3"
+
 msgid "Physical"
-msgstr "Physisch"
+msgstr "Papier"
+
+msgid "Physical Only"
+msgstr "Nur Papier"
+
+msgid "Physical and Both"
+msgstr "Papier an Beide"
 
 msgid "Please try updating it here: %{link}"
 msgstr "Bitte versuchen Sie hier die Aktualisierung: %{link}"
@@ -688,25 +724,25 @@ msgid "Pledge Status"
 msgstr "Zusagestatus"
 
 msgid "Prayer Request"
-msgstr "Gebetsanfrage"
+msgstr "Gebetsanliegen"
 
 msgid "Pre Call Letter"
 msgstr "Brief vor Anruf"
 
 msgid "Primary Email"
-msgstr "Vorrangige E-Mail-Adresse"
+msgstr "Bevorzugte E-Mail-Adresse"
 
 msgid "Primary Phone"
-msgstr "Primäre Telefonnummer"
+msgstr "Bevorzugte Telefonnummer"
 
 msgid "Quarterly"
 msgstr "Vierteljährlich"
 
 msgid "REPLACE WITH NEW CITY, STATE, ZIP"
-msgstr "MIT NEUER STADT, BUNDESLAND, POSTLEITZAHL ERSETZEN"
+msgstr "DURCH NEUE STADT, BUNDESLAND, POSTLEITZAHL ERSETZEN"
 
 msgid "REPLACE WITH NEW STREET"
-msgstr "MIT NEUER STRASSE ERSETZEN"
+msgstr "DURCH NEUE STRASSE ERSETZEN"
 
 msgid "Received"
 msgstr "Erhalten"
@@ -716,6 +752,9 @@ msgstr "Erhalten, aber nicht verarbeitet"
 
 msgid "Referrals"
 msgstr "Empfehlungen"
+
+msgid "Referred By"
+msgstr "Empfohlen von"
 
 msgid "Referrer"
 msgstr "Empfehlender"
@@ -736,6 +775,9 @@ msgstr "Pastor"
 msgid "Seasonal"
 msgstr "Jahreszeitlich"
 
+msgid "Send Appeals?"
+msgstr "Spendenaufrufe senden?"
+
 msgid "Separated"
 msgstr "Getrennt"
 
@@ -754,6 +796,9 @@ msgstr "E-Mail-Adresse des Ehepartners"
 
 msgid "Spouse First Name"
 msgstr "Vorname des Ehepartners"
+
+msgid "Spouse Last Name"
+msgstr "Nachname des Ehepartners"
 
 msgid "Spouse Other Email"
 msgstr "Andere E-Mail-Adresse des Ehepartners"
@@ -779,6 +824,9 @@ msgstr "Status"
 msgid "Stopped giving for the last 2 months"
 msgstr "Hat in den letzten 2 Monaten nicht gespendet"
 
+msgid "Street"
+msgstr "Straße"
+
 msgid "Support Letter"
 msgstr "Unterstützungsbrief"
 
@@ -789,7 +837,7 @@ msgid "Talk to In Person"
 msgstr "Persönliches Gespräch"
 
 msgid "Task on MPDX"
-msgstr "Aufgabe auf MPDX"
+msgstr "Aufgabe in MPDX"
 
 msgid "Tasks"
 msgstr "Aufgaben"
@@ -801,13 +849,13 @@ msgid "Text Message"
 msgstr "Textnachricht"
 
 msgid "Thank"
-msgstr "Danke"
+msgstr "Dank"
 
 msgid "Thanks!"
 msgstr "Danke!"
 
 msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
-msgstr "Diese E-Mail-Adresse wurde als „nicht mehr gültig“ markiert. Bitte bearbeiten Sie die Details der Person, indem Sie oben auf ihren Namen klicken und überprüfen, ob ihre Informationen korrekt sind. Wenn diese Person eine andere gültige E-Mail-Adresse hat, wird diese primär und mit MailChimp synchronisiert, wenn sie auf Ihrem E-Mail-Newsletter ist. Wenn Sie diese E-Mail-Adresse nicht in MailChimp haben möchten, entfernen Sie sie bitte, indem Sie \"E-Mail-Newsletter abwählen\" auswählen oder machen Sie eine andere E-Mail-Adresse primär."
+msgstr "Diese E-Mail-Adresse wurde als „nicht mehr gültig“ markiert. Bitte bearbeiten Sie die Details der Person, indem Sie oben auf ihren Namen klicken und überprüfen, ob ihre Informationen korrekt sind. Wenn diese Person eine andere gültige E-Mail-Adresse hat, wird diese bevorzugt und mit MailChimp synchronisiert, wenn sie auf Ihrem E-Mail-Newsletter ist. Wenn Sie diese E-Mail-Adresse nicht in MailChimp haben möchten, entfernen Sie sie bitte, indem Sie \"E-Mail-Newsletter abwählen\" auswählen oder machen Sie eine andere E-Mail-Adresse bevorzugt."
 
 msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
 msgstr "Die MailChimp-Mailingliste, die Sie mit Ihrem MPDX-Konto verknüpft haben, hat einen zusätzlichen Platzhalter, den Sie erstellt und markiert haben. MPDX weiß nicht, wie Sie Ihren benutzerdefinierten Platzhalter füllen und ist daher nicht in der Lage, Ihre Kontakte mit MailChimp zu synchronisieren."
@@ -825,7 +873,7 @@ msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/
 msgstr "Die Verbindung zu Ihrem Facebook-Konto muss aktualisiert werden. <a href=\"/auth/facebook\">Hier klicken, um erneut zu Facebook zu verbinden.</a> Versuchen Sie dann Ihren Import erneut."
 
 msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
-msgstr "Der MailChimp-API-Schlüsse, der mit Ihrem MPDX-Konto verbunden ist, ist nicht mehr gültig.\nWenn die MailChimp-Synchronisierung weiterhin funktionieren soll, gehen Sie bitte zu %{link} und aktualisieren Sie Ihren API-Schlüssel."
+msgstr "Der MailChimp-API-Schlüssel, der mit Ihrem MPDX-Konto verbunden ist, ist nicht mehr gültig.\nWenn die MailChimp-Synchronisierung weiterhin funktionieren soll, gehen Sie bitte zu %{link} und aktualisieren Sie Ihren API-Schlüssel."
 
 msgid "There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
 msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der Fehlschlag kann oft an einem vorübergehenden Netzwerkproblem liegen. Bitte probieren Sie den Import erneut. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org und wir werden untersuchen, was schiefgelaufen ist."
@@ -834,7 +882,7 @@ msgid "There are a number of reasons an import can fail. Often the failure is a 
 msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der Fehlschlag liegt oft an einem vorübergehenden Problem bei Facebook, was außerhalb unserer Kontrolle ist. Bitte probieren Sie den Import erneut. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org und wir werden untersuchen, was schiefgelaufen ist."
 
 msgid "There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly help us in trying to determine why the import failed."
-msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der häufigste Grund ist ein vorübergehenden Problem. Bitte probieren Sie den Import erneut. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org mit Ihrem Tnt-Export als Anhang. Wenn uns die Datei vorliegt, die Sie zu importieren versuchen, hilft uns das festzustellen, warum der Import fehlschlug."
+msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der häufigste Grund ist ein vorübergehendes Problem. Bitte probieren Sie den Import erneut. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org mit Ihrem Tnt-Export als Anhang. Wenn uns die Datei vorliegt, die Sie zu importieren versuchen, hilft uns das festzustellen, warum der Import fehlschlug."
 
 msgid "There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. First Name is a required field on CSV import. We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong."
 msgstr "Es gibt mehrere Gründe, warum ein Import fehlschlagen kann. Der häufigste Grund für einen fehlgeschlagenen CSV-Import ist der Vorname. Der Vorname ist beim CSV-Import ein erforderliches Feld. Wir haben eine CSV-Datei an diese E-Mail angehängt, die die Zeilen enthält, bei denen der Import fehlschlug.Die erste Spalte in dieser CSV-Datei enthält eine Fehlermeldung über die Zeile. Bitte laden Sie diese CSV-Datei herunter, beheben Sie die Probleme darin und versuchen Sie dann den Import erneut. Sie müssen die Kontakte nicht erneut importieren, die zuvor erfolgreich importiert wurden. Wenn er wieder fehlschlägt, senden Sie uns eine E-Mail an support@mpdx.org und wir werden untersuchen, was schiefgegangen ist."
@@ -885,13 +933,16 @@ msgid "Unknown"
 msgstr "Unbekannt"
 
 msgid "Unresponsive"
-msgstr "Nicht reagierend"
+msgstr "Reagiert nicht"
 
 msgid "Upcoming"
 msgstr "Anstehend"
 
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "Wir haben Ihre MailChimp-Liste vorübergehend von MPDX getrennt, um weitere Fehler zu vermeiden. Sobald Sie eine der oben genannten Optionen gewählt haben, gehen Sie bitte zurück zu %{link} und aktualisieren Sie Ihre MailChimp-Einstellungen."
+
+msgid "Website"
+msgstr "Website"
 
 msgid "Weekly"
 msgstr "Wöchentlich"
@@ -906,7 +957,7 @@ msgid "Work"
 msgstr "Arbeit"
 
 msgid "Work Phone"
-msgstr "Telefon (Arbeitsplatz)"
+msgstr "Telefon Arbeit"
 
 msgid "Yes"
 msgstr "Ja"
@@ -918,7 +969,7 @@ msgid "You are getting this notification from MPDX because you checked the email
 msgstr "Sie erhalten diese Benachrichtigung von MPDX, weil Sie in Ihren Voreinstellungen für diese Art von Benachrichtigung die E-Mail-Einstellung aktiviert haben. Sie können sie <a href=\"%{preferences_url}\">hier</a> ändern."
 
 msgid "You have no monthly recurring gift recommendations."
-msgstr "Sie haben keine monatlich wiederkehrenden Geschenkempfehlungen."
+msgstr "Sie haben keine monatlich wiederkehrenden Spendenempfehlungen."
 
 msgid "You must log in to MPDX again"
 msgstr "Sie müssen sich erneut bei MPDX anmelden."
@@ -935,8 +986,17 @@ msgstr "Sie wurden als Betreuer für ein Konto auf MPDX eingeladen."
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "Ihr MPDX-Kontakt „%{contact}“ hat eine Person <a href=\"%{edit_person_url}\">%{person_name}</a> zu MailChimp synchronisiert oder exportiert, aber jetzt ist sind E-Mails nicht zustellbar: %{email}"
 
+msgid "Your credentials are missing for this account."
+msgstr "Ihre Anmeldedaten fehlen für diese Account"
+
+msgid "Your credentials for %{org} are invalid."
+msgstr "Ihre Anmeldedaten für %{org} sind ungültig."
+
+msgid "Zip"
+msgstr "Postleitzahl"
+
 msgid "Your username and password are missing for this account."
-msgstr "Benutzername oder Passwort fehlen für dieses Konto."
+msgstr "Benutzername und Passwort fehlen für diesen Account."
 
 msgid "Your username and password for %{org} are invalid."
 msgstr "Ihr Benutzername und Passwort für %{org} sind ungültig."
@@ -946,6 +1006,9 @@ msgstr "[MPDX] Import Ihrer %{source}-Kontakte abgeschlossen"
 
 msgid "[MPDX] Importing your %{source} contacts failed"
 msgstr "[MPDX] Import Ihrer %{source}-Kontakte fehlgeschlagen"
+
+msgid "[MPDX] Your credentials for %{source} are invalid"
+msgstr "[MPDX] Ihre Anmeldedaten für %{source} sind ungültig"
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] Ihr Benutzername und Passwort für  %{source} sind ungültig."
@@ -957,7 +1020,7 @@ msgid "can not be blank"
 msgstr "darf nicht leer sein"
 
 msgid "converted as"
-msgstr "umgerechnet zu"
+msgstr "umgewandelt zu"
 
 msgid "of total"
 msgstr "von insgesamt"

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-03-15 19:35+0000\n"
+"PO-Revision-Date: 2018-03-15 19:35+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: zh_Hans_CN\n"
@@ -279,6 +279,15 @@ msgstr "截止日期"
 msgid "Email"
 msgstr "电子邮件"
 
+msgid "Email 1"
+msgstr "电子邮件 1"
+
+msgid "Email 2"
+msgstr "电子邮件 2"
+
+msgid "Email Only"
+msgstr "仅电子邮件"
+
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "订婚"
@@ -325,6 +334,9 @@ msgstr "名"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "对于MailChimp集成，我们建议您在MailChimp上设置一个新列表以供使用（不是新帐户，只是一个新的列表），并留下该列表的所有MailChimp默认值。如果您使用新的列表进行设置，则设置为接收您的代祷信的每个人都将被自动复制。您可以管理MPDX的所有更新（即当您更改MPDX上的电子邮件地址时mailchimp也会更新）。"
+
+msgid "Full Name"
+msgstr "全名"
 
 msgid "Future"
 msgstr "未来"
@@ -672,8 +684,20 @@ msgstr "待定"
 msgid "Person"
 msgstr "人"
 
+msgid "Phone 1"
+msgstr "电话 1"
+
+msgid "Phone 2"
+msgstr "电话 2"
+
+msgid "Phone 3"
+msgstr "电话 3"
+
 msgid "Physical"
 msgstr "纸质的"
+
+msgid "Physical Only"
+msgstr "仅纸张信"
 
 msgid "Please try updating it here: %{link}"
 msgstr "请尝试在此更新：%{link}"
@@ -736,6 +760,9 @@ msgstr "牧师"
 msgid "Seasonal"
 msgstr "即节的"
 
+msgid "Send Appeals?"
+msgstr "发送筹款需求？"
+
 msgid "Separated"
 msgstr "分居"
 
@@ -753,6 +780,9 @@ msgid "Spouse Email"
 msgstr "配偶的电子邮件"
 
 msgid "Spouse First Name"
+msgstr "配偶姓"
+
+msgid "Spouse Last Name"
 msgstr "配偶姓"
 
 msgid "Spouse Other Email"
@@ -778,6 +808,9 @@ msgstr "状态"
 
 msgid "Stopped giving for the last 2 months"
 msgstr "过去2个月停止支持"
+
+msgid "Street"
+msgstr "街道"
 
 msgid "Support Letter"
 msgstr "支持信"
@@ -893,6 +926,9 @@ msgstr "即将到来"
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "我们暂时将您的MailChimp列表与MPDX断开，以防止进一步的错误。 一旦您选择上述选项之一，请返回 %{link}您的MailChimp设置。"
 
+msgid "Website"
+msgstr "网页"
+
 msgid "Weekly"
 msgstr "每周"
 
@@ -934,6 +970,9 @@ msgstr "您被邀请成为MPDX帐户的辅导"
 
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "您的MPDX联系人\"%{contact}\"已经同步或导出到MailChimp的人<a href=\"%{edit_person_url}\">%{person_name}</a> ，但现在有一个无法投递的电子邮件：%{email}"
+
+msgid "Zip"
+msgstr "压缩"
 
 msgid "Your username and password are missing for this account."
 msgstr "此帐户缺少您的用户名和密码。"
