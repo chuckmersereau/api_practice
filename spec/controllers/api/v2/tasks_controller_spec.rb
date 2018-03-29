@@ -54,6 +54,20 @@ RSpec.describe Api::V2::TasksController, type: :controller do
 
   include_examples 'index_examples'
 
+  describe 'default sorting' do
+    before { api_login(user) }
+
+    it 'orders results by completed and start_at' do
+      third_resource = create(:task, account_list: account_list, completed: true)
+      forth_resource = create(:task, account_list: account_list, start_at: 2.days.from_now)
+
+      get :index
+
+      ids = response_json['data'].map { |obj| obj['id'] }
+      expect(ids).to eq [resource.id, second_resource.id, forth_resource.id, third_resource.id]
+    end
+  end
+
   describe 'filtering' do
     before { api_login(user) }
 
