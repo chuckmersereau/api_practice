@@ -12,11 +12,11 @@ class TntImport::GiftsImport
     @xml_tables                    = xml.tables
     @import                        = import
     @user                          = import&.user
-    @organization                  = account_list&.organization_accounts&.first&.organization
+    @organization                  = organizations.first
   end
 
   def import
-    return {} unless account_list.organization_accounts.count == 1 && xml_tables['Gift'].present?
+    return {} unless organizations.count == 1 && xml_tables['Gift'].present?
 
     xml_tables['Gift'].each do |row|
       tnt_contact_id = row['ContactID']
@@ -198,5 +198,11 @@ class TntImport::GiftsImport
       currency_row['id'] == tnt_currency_id
     end
     found_currency_row&.[]('Code').presence || account_list.default_currency
+  end
+
+  def organizations
+    return [] unless account_list
+    Organization.includes(:organization_accounts)
+                .where(person_organization_accounts: { person_id: account_list.users })
   end
 end

@@ -17,9 +17,9 @@ describe TntImport::GiftsImport do
       @user.organization_accounts << create(:organization_account, organization: @offline_org)
       @account_list.users << @user
 
-      @import = create(:tnt_import_gifts, account_list: @account_list)
+      @import = create(:tnt_import_gifts, account_list: @account_list, user: @user)
       @tnt_import = TntImport.new(@import)
-      @import_with_personal_gift = create(:tnt_import_with_personal_gift, account_list: @account_list)
+      @import_with_personal_gift = create(:tnt_import_with_personal_gift, account_list: @account_list, user: @user)
       @tnt_import_with_personal_gift = TntImport.new(@import_with_personal_gift)
       @appeal = create(:appeal, account_list: @account_list, tnt_id: '1')
       @second_appeal = create(:appeal, account_list: @account_list, tnt_id: '2')
@@ -32,7 +32,7 @@ describe TntImport::GiftsImport do
     end
 
     it 'handles an xml that has no gifts' do
-      @import = create(:tnt_import_no_gifts, account_list: @account_list)
+      @import = create(:tnt_import_no_gifts, account_list: @account_list, user: @user)
       @tnt_import = TntImport.new(@import)
       expect { @tnt_import.import }.to_not change(Donation, :count).from(0)
     end
@@ -70,7 +70,16 @@ describe TntImport::GiftsImport do
       @user.organization_accounts.destroy_all
       @user.organization_accounts << create(:organization_account, organization: @offline_org)
       @user.organization_accounts << create(:organization_account, organization: create(:offline_org))
-      expect { @tnt_import.import  }.to_not change(Donation, :count).from(0)
+      expect { @tnt_import.import }.to_not change(Donation, :count).from(0)
+    end
+
+    it 'imports gifts when account list has other users with org accounts on the same org' do
+      expect(@user.organization_accounts.count).to eq 1
+      user2 = create(:user)
+      @account_list.users << user2
+      user2.organization_accounts << create(:organization_account, organization: @offline_org)
+
+      expect { @tnt_import_with_personal_gift.import }.to change(Donation, :count).from(0).to(2)
     end
 
     it 'imports gifts for a single org' do
@@ -130,7 +139,7 @@ describe TntImport::GiftsImport do
     end
 
     it 'assigns the gift currency code' do
-      @import = create(:tnt_import_broad, account_list: @account_list)
+      @import = create(:tnt_import_broad, account_list: @account_list, user: @user)
       @tnt_import = TntImport.new(@import)
 
       @user.organization_accounts.destroy_all
@@ -255,7 +264,7 @@ describe TntImport::GiftsImport do
       end
 
       it 'does not create a pledge if the donation does not belong to an appeal' do
-        @import = create(:tnt_import_gifts_without_appeal, account_list: @account_list)
+        @import = create(:tnt_import_gifts_without_appeal, account_list: @account_list, user: @user)
         @tnt_import = TntImport.new(@import)
         setup_online_org
         expect { @tnt_import.import }.to change { Donation.count }.from(0).to(2)
