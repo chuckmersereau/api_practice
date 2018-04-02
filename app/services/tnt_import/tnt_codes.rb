@@ -83,7 +83,9 @@ class TntImport::TntCodes
     end
 
     def import_task_type?(task_type_id)
-      task_type_id.to_i != 190 # The TaskTypeID 190 indicates a "Data Change", we don't import data change types because it creates too many unhelpful tasks in Mpdx.
+      # The TaskTypeID 190 indicates a "Data Change", we don't import data
+      # change types because it creates too many unhelpful tasks in Mpdx.
+      task_type_id.to_i != 190
     end
 
     def task_status_completed?(task_status_id)

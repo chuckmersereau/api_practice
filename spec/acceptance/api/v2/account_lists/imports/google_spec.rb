@@ -94,22 +94,23 @@ resource 'Account Lists > Imports > from Google' do
       end
 
       with_options scope: [:data, :attributes] do
-        response_field 'account_list_id',         'Account List ID',                                                           type: 'Number'
-        response_field 'created_at',              'Created At',                                                                type: 'String'
-        response_field 'file_url',                'Not applicable to Google imports.',                                         type: 'String'
-        response_field 'file_headers_mappings',   'Not applicable to Google imports.',                                         type: 'Object'
-        response_field 'file_headers',            'Not applicable to Google imports.',                                         type: 'Object'
-        response_field 'file_constants',          'Not applicable to Google imports.',                                         type: 'Object'
-        response_field 'file_constants_mappings', 'Not applicable to Google imports.',                                         type: 'Object'
-        response_field 'group_tags',              'Group Tags',                                                                type: 'Object'
-        response_field 'groups',                  'Groups',                                                                    type: 'Array[String]'
-        response_field 'import_by_group',         'Import by Group',                                                           type: 'String'
-        response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to false", type: 'Boolean'
-        response_field 'override',                'Override',                                                                  type: 'Boolean'
-        response_field 'source',                  'Source; Defaults to "google"',                                              type: 'String'
-        response_field 'tag_list',                'Comma delimited list of Tags',                                              type: 'String'
-        response_field 'updated_at',              'Updated At',                                                                type: 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',                                                          type: 'String'
+        response_field 'account_list_id',         'Account List ID',                         type: 'Number'
+        response_field 'created_at',              'Created At',                              type: 'String'
+        response_field 'file_url',                'Not applicable to Google imports.',       type: 'String'
+        response_field 'file_headers_mappings',   'Not applicable to Google imports.',       type: 'Object'
+        response_field 'file_headers',            'Not applicable to Google imports.',       type: 'Object'
+        response_field 'file_constants',          'Not applicable to Google imports.',       type: 'Object'
+        response_field 'file_constants_mappings', 'Not applicable to Google imports.',       type: 'Object'
+        response_field 'group_tags',              'Group Tags',                              type: 'Object'
+        response_field 'groups',                  'Groups',                                  type: 'Array[String]'
+        response_field 'import_by_group',         'Import by Group',                         type: 'String'
+        response_field 'in_preview',              'The Import will not be performed while '\
+                                                  "it's in preview; Defaults to false",      type: 'Boolean'
+        response_field 'override',                'Override',                                type: 'Boolean'
+        response_field 'source',                  'Source; Defaults to "google"',            type: 'String'
+        response_field 'tag_list',                'Comma delimited list of Tags',            type: 'String'
+        response_field 'updated_at',              'Updated At',                              type: 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',                        type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
@@ -117,8 +118,10 @@ resource 'Account Lists > Imports > from Google' do
       end
 
       example 'Google Import [CREATE]', document: documentation_scope do
-        explanation 'Creates a new Google Import associated with the Account List. Unless otherwise specified, the Import will be created with ' \
-                    '"in_preview" set to false, which will cause the import to begin after being created (the import runs asynchronously as a background job).'
+        explanation 'Creates a new Google Import associated with the Account List. Unless otherwise '\
+                    'specified, the Import will be created with "in_preview" set to false, which '\
+                    'will cause the import to begin after being created '\
+                    '(the import runs asynchronously as a background job).'
         do_request data: form_data
         expect(response_status).to eq(201), invalid_status_detail
         check_resource(['relationships'])
@@ -128,10 +131,10 @@ resource 'Account Lists > Imports > from Google' do
         expect(resource_data['attributes']['in_preview']).to eq false
         expect(resource_data['attributes']['tag_list']).to eq 'test,poster'
         expect(resource_data['attributes']['import_by_group']).to eq true
-        expect(resource_data['attributes']['groups']).to eq [
-          'http://www.google.com/m8/feeds/groups/test%40gmail.com/base/d',
-          'http://www.google.com/m8/feeds/groups/test%40gmail.com/base/f'
-        ]
+        expect(resource_data['attributes']['groups']).to eq %w(
+          http://www.google.com/m8/feeds/groups/test%40gmail.com/base/d
+          http://www.google.com/m8/feeds/groups/test%40gmail.com/base/f
+        )
         expect(resource_data['attributes']['group_tags']).to eq(
           'http://www.google.com/m8/feeds/groups/test%40gmail.com/base/6' => 'my-contacts',
           'http://www.google.com/m8/feeds/groups/test%40gmail.com/base/d' => 'friends'

@@ -385,8 +385,10 @@ describe GoogleContactsIntegrator do
           <gd:orgName>Company, Inc</gd:orgName>
           <gd:orgTitle>Worker</gd:orgTitle>
         </gd:organization>
-        <gContact:groupMembershipInfo deleted="false" href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid"/>
-        <gContact:groupMembershipInfo deleted="false" href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6"/>
+        <gContact:groupMembershipInfo deleted="false"
+                                      href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid"/>
+        <gContact:groupMembershipInfo deleted="false"
+                                      href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6"/>
       EOS
 
       create_contact_request_xml = <<-EOS
@@ -639,7 +641,10 @@ describe GoogleContactsIntegrator do
 
     it 'retries the sync and reloads a contact on a 412 error' do
       g_contact_reloaded = GoogleContactsApi::Contact.new('gd$etag' => 'a', 'id' => { '$t' => '2' },
-                                                          'gd$name' => { 'gd$givenName' => { '$t' => 'MODIFIED-Jane' }, 'gd$familyName' => { '$t' => 'Doe' } })
+                                                          'gd$name' => {
+                                                            'gd$givenName' => { '$t' => 'MODIFIED-Jane' },
+                                                            'gd$familyName' => { '$t' => 'Doe' }
+                                                          })
       expect(@account.contacts_api_user).to receive(:get_contact).with('1').exactly(:twice)
         .and_return(@g_contact, g_contact_reloaded)
 
@@ -710,7 +715,8 @@ describe GoogleContactsIntegrator do
           xmlns:gContact='http://schemas.google.com/contact/2008'
           xmlns:gd='http://schemas.google.com/g/2005'
           xmlns:batch='http://schemas.google.com/gdata/batch'>
-        <entry xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005" gd:etag="">
+        <entry xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom"
+               xmlns:gd="http://schemas.google.com/g/2005" gd:etag="">
           <id>http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/test</id>
           <updated>#{GoogleContactsApi::Api.format_time_for_xml(now)}</updated>
           <category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/contact/2008#contact"/>
@@ -965,10 +971,14 @@ describe GoogleContactsIntegrator do
         '<gContact:website\s+href="blog.example.com"\s+rel="blog"\s+/>\s+'\
         '<gContact:website\s+href="www.example.com"\s+rel="profile"\s+primary="true"\s+/>\s+'\
         '<gContact:website\s+href="mpdx.example.com"\s+rel="other"\s+/>\s+'\
-        '<gContact:groupMembershipInfo\s+deleted="false"\s+href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/1b9d086d0a95e81a"/>\s+'\
-        '<gContact:groupMembershipInfo\s+deleted="false"\s+href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6"/>\s+'\
-        '<gContact:groupMembershipInfo\s+deleted="false"\s+href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/33bfe364885eed6f"/>\s+'\
-        '<gContact:groupMembershipInfo\s+deleted="false"\s+href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid"/>\s+'
+        '<gContact:groupMembershipInfo\s+deleted="false"\s+'\
+          'href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/1b9d086d0a95e81a"/>\s+'\
+        '<gContact:groupMembershipInfo\s+deleted="false"\s+'\
+          'href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6"/>\s+'\
+        '<gContact:groupMembershipInfo\s+deleted="false"\s+'\
+          'href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/33bfe364885eed6f"/>\s+'\
+        '<gContact:groupMembershipInfo\s+deleted="false"\s+'\
+          'href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid"/>\s+'
       stub_request(:post, 'https://www.google.com/m8/feeds/contacts/default/full/batch?alt=&v=3')
         .with(body: /#{xml_regex_str}/m, headers: { 'Authorization' => "Bearer #{@account.token}" })
         .to_return(body: File.new(Rails.root.join('spec/fixtures/google_contacts.xml')).read)
@@ -1168,10 +1178,14 @@ describe GoogleContactsIntegrator do
         '<gContact:website\s+href="MODIFIED_blog.example.com"\s+rel="blog"\s+/>\s+'\
         '<gContact:website\s+href="www.example.com"\s+rel="profile"\s+primary="true"\s+/>\s+'\
         '<gContact:website\s+href="MODIFIED_mpdx.example.com"\s+rel="other"\s+/>\s+'\
-        '<gContact:groupMembershipInfo\s+deleted="false"\s+href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/1b9d086d0a95e81a"/>\s+'\
-        '<gContact:groupMembershipInfo\s+deleted="false"\s+href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6"/>\s+'\
-        '<gContact:groupMembershipInfo\s+deleted="false"\s+href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/33bfe364885eed6f"/>\s+'\
-        '<gContact:groupMembershipInfo\s+deleted="false"\s+href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid"/>\s+'\
+        '<gContact:groupMembershipInfo\s+deleted="false"\s+'\
+          'href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/1b9d086d0a95e81a"/>\s+'\
+        '<gContact:groupMembershipInfo\s+deleted="false"\s+'\
+          'href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6"/>\s+'\
+        '<gContact:groupMembershipInfo\s+deleted="false"\s+'\
+          'href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/33bfe364885eed6f"/>\s+'\
+        '<gContact:groupMembershipInfo\s+deleted="false"\s+'\
+          'href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid"/>\s+'\
       '</entry>'
       stub_request(:post, 'https://www.google.com/m8/feeds/contacts/default/full/batch?alt=&v=3')
         .with(body: /#{xml_regex_str}/m, headers: { 'Authorization' => "Bearer #{@account.token}" })

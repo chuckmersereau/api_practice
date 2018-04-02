@@ -88,8 +88,12 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
       expect(response.status).to eq(200)
       expect(response.body).to include(expected_headers1)
       expect(response.body).to include(expected_headers2)
-      expect(response.body).to include("#{primary_email_address.email},#{spouse_email_address.email},,#{spouse_other_email_address.email}")
-      expect(response.body).to include("#{primary_phone_number.number},#{spouse_phone_number.number},,#{spouse_other_phone_number.number}")
+      email_addresses = "#{primary_email_address.email},#{spouse_email_address.email}"\
+                        ",,#{spouse_other_email_address.email}"
+      expect(response.body).to include(email_addresses)
+      phone_numbers = "#{primary_phone_number.number},#{spouse_phone_number.number}"\
+                      ",,#{spouse_other_phone_number.number}"
+      expect(response.body).to include(phone_numbers)
     end
   end
 
@@ -128,8 +132,12 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
       expect(response.status).to eq(200)
       expect(spreadsheet.to_csv).to include(expected_headers1)
       expect(spreadsheet.to_csv).to include(expected_headers2)
-      expect(spreadsheet.to_csv).to include("#{primary_email_address.email}\",\"#{spouse_email_address.email}\",,\"#{spouse_other_email_address.email}")
-      expect(spreadsheet.to_csv).to include("#{primary_phone_number.number}\",\"#{spouse_phone_number.number}\",,\"#{spouse_other_phone_number.number}")
+      email_addresses = "#{primary_email_address.email}\",\"#{spouse_email_address.email}\""\
+                        ",,\"#{spouse_other_email_address.email}"
+      expect(spreadsheet.to_csv).to include(email_addresses)
+      phone_numbers = "#{primary_phone_number.number}\",\"#{spouse_phone_number.number}\""\
+                      ",,\"#{spouse_other_phone_number.number}"
+      expect(spreadsheet.to_csv).to include(phone_numbers)
     end
   end
 

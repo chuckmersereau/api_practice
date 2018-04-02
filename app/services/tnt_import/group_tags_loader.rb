@@ -43,7 +43,14 @@ class TntImport::GroupTagsLoader
     # TNT Version 3.2:
     # The Category and Description are replaced by PathName.
     # PathName looks like "a\hierarchy\of\tags\separated\by\slashes".
-    # We want tag list like: "a a\hierarchy a\hierarchy\of a\hierarchy\of\tags a\hierarchy\of\tags\separated a\hierarchy\of\tags\separated\by a\hierarchy\of\tags\separated\by\slashes"
+    # We want tag list like:
+    # a
+    # a\hierarchy
+    # a\hierarchy\of
+    # a\hierarchy\of\tags
+    # a\hierarchy\of\tags\separated
+    # a\hierarchy\of\tags\separated\by
+    # a\hierarchy\of\tags\separated\by\slashes
     def extract_tags_from_group_row_version_3_2(row)
       groups = row['PathName'].split('\\')
       (1..groups.size).map do |i|
@@ -56,7 +63,8 @@ class TntImport::GroupTagsLoader
     # If not, then the Description will just look like "description".
     # We want a tag list like: "category description"
     def extract_tags_from_group_row_version_3_1(row)
-      description_tag = row['Category'].present? ? row['Description'].sub("#{row['Category']}\\", '') : row['Description']
+      description_tag = row['Description']
+      description_tag = description_tag.sub("#{row['Category']}\\", '') if row['Category'].present?
       [description_tag, row['Category']].select(&:present?).map do |group|
         group_to_tag(group)
       end

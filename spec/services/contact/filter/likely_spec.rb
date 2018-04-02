@@ -11,13 +11,14 @@ RSpec.describe Contact::Filter::Likely do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' },
+                 { name: '-- None --', id: 'none' },
+                 { name: 'Least Likely', id: 'Least Likely' },
+                 { name: 'Likely', id: 'Likely' },
+                 { name: 'Most Likely', id: 'Most Likely' }]
       expect(described_class.config([account_list])).to include(multiple: true,
                                                                 name: :likely,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                          { name: '-- None --', id: 'none' },
-                                                                          { name: 'Least Likely', id: 'Least Likely' },
-                                                                          { name: 'Likely', id: 'Likely' },
-                                                                          { name: 'Most Likely', id: 'Most Likely' }],
+                                                                options: options,
                                                                 parent: 'Contact Details',
                                                                 title: 'Likely To Give',
                                                                 type: 'multiselect',
@@ -44,7 +45,8 @@ RSpec.describe Contact::Filter::Likely do
 
     context 'filter by likely to give' do
       it 'filters multiple likely to give' do
-        expect(described_class.query(contacts, { likely: 'Least Likely, Likely' }, nil).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { likely: 'Least Likely, Likely' }, nil).to_a
+        expect(result).to match_array [contact_one, contact_two]
       end
       it 'filters a single likely to give' do
         expect(described_class.query(contacts, { likely: 'Most Likely' }, nil).to_a).to eq [contact_three]
@@ -53,7 +55,8 @@ RSpec.describe Contact::Filter::Likely do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { likely: 'none, Most Likely, Likely' }, nil).to_a).to match_array [contact_two, contact_three, contact_four]
+        result = described_class.query(contacts, { likely: 'none, Most Likely, Likely' }, nil).to_a
+        expect(result).to match_array [contact_two, contact_three, contact_four]
       end
     end
   end

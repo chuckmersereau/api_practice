@@ -13,20 +13,27 @@ describe Person do
   describe 'saving family relationships' do
     it 'should create a family relationship' do
       family_relationship = build(:family_relationship, person: nil, related_person: create(:person))
+      family_relationship_attributes = family_relationship.attributes
+                                                          .with_indifferent_access
+                                                          .except(:id, :person_id, :created_at, :updated_at)
       expect do
-        person.family_relationships_attributes = { '0' => family_relationship.attributes.with_indifferent_access.except(:id, :person_id, :created_at, :updated_at) }
+        person.family_relationships_attributes = { '0' => family_relationship_attributes }
       end.to change(FamilyRelationship, :count).by(1)
     end
     it 'should destroy a family relationship' do
       family_relationship = create(:family_relationship, person: person, related_person: create(:person))
       expect do
-        person.family_relationships_attributes = { '0' => family_relationship.attributes.merge(_destroy: '1').with_indifferent_access }
+        family_relationship_attributes = family_relationship.attributes.merge(_destroy: '1').with_indifferent_access
+        person.family_relationships_attributes = { '0' => family_relationship_attributes }
       end.to change(FamilyRelationship, :count).from(1).to(0)
     end
     it 'should update a family relationship' do
       family_relationship = create(:family_relationship, person: person)
-      family_relationship_attributes = family_relationship.attributes.merge!(relationship: family_relationship.relationship + 'boo')
-                                                          .with_indifferent_access.except(:person_id, :updated_at, :created_at)
+      family_relationship_attributes = family_relationship
+                                       .attributes
+                                       .merge!(relationship: family_relationship.relationship + 'boo')
+                                       .with_indifferent_access
+                                       .except(:person_id, :updated_at, :created_at)
       person.family_relationships_attributes = { '0' => family_relationship_attributes }
       expect(person.family_relationships.first.relationship).to eq(family_relationship.relationship + 'boo')
     end
@@ -342,7 +349,10 @@ describe Person do
       winner.contacts << create(:contact)
       loser.contacts << winner.contacts.first
       expect(winner.account_lists).to eq(loser.account_lists)
-      dup_pair_id = DuplicateRecordPair.create!(account_list: winner.account_lists.order(:created_at).first, record_one: winner, record_two: loser, reason: 'Testing').id
+      dup_pair_id = DuplicateRecordPair.create!(account_list: winner.account_lists.order(:created_at).first,
+                                                record_one: winner,
+                                                record_two: loser,
+                                                reason: 'Testing').id
       expect { winner.merge(loser) }.to change { DuplicateRecordPair.exists?(dup_pair_id) }.from(true).to(false)
     end
 

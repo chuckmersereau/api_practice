@@ -48,7 +48,9 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   private
 
   def validate_account_list_invite_code
-    raise Exceptions::BadRequestError, "'data/attributes/code' cannot be blank" if params.dig(:account_list_invite, :code).blank?
+    if params.dig(:account_list_invite, :code).blank?
+      raise Exceptions::BadRequestError, "'data/attributes/code' cannot be blank"
+    end
     raise Exceptions::BadRequestError, "'data/attributes/code' is invalid" unless valid_invite_code?
   end
 
@@ -85,12 +87,15 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def authorize_and_save_invite
+    invite_user_as = invite_params['invite_user_as'] || 'user'
+    email = invite_params['recipient_email']
     authorize AccountListInvite.new(invited_by_user: current_user,
-                                    recipient_email: invite_params['recipient_email'],
-                                    invite_user_as: invite_params['invite_user_as'] || 'user',
+                                    recipient_email: email,
+                                    invite_user_as: invite_user_as,
                                     account_list: load_account_list), :update?
-    return false unless EmailValidator.valid?(invite_params['recipient_email'])
-    @invite = AccountListInvite.send_invite(current_user, load_account_list, invite_params['recipient_email'], invite_params['invite_user_as'] || 'user')
+
+    return false unless EmailValidator.valid?(email)
+    @invite = AccountListInvite.send_invite(current_user, load_account_list, email, invite_user_as)
   end
 
   def authorize_invite

@@ -62,26 +62,36 @@ resource 'Tasks' do
     before { api_login(user) }
 
     get '/api/v2/tasks' do
-      parameter 'filter', 'Filter the list of returned tasks. Any filter can be reversed by adding reverse_FILTER_NAME_HERE = true'
+      parameter 'filter', 'Filter the list of returned tasks. Any filter '\
+                          'can be reversed by adding reverse_FILTER_NAME_HERE = true'
 
       parameter 'filter[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
-      parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '
+      parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, '\
+                                            'with values "Call", "Appointment", "Email", '
       parameter 'filter[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
-      parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '\
-                                            '"Text Message", "Facebook Message", "Letter", "Newsletter", "Pre Call Letter", "Reminder Letter", '\
-                                            '"Support Letter", "Thank", "To Do", "Talk to In Person", or "Prayer Request"',                     required: false
-      parameter 'filter[completed]',       'Filter by Completed; Accepts values "true", or "false"',                                           required: false
-      parameter 'filter[contact_ids][]',   'Filter by Contact IDs; Accepts multiple parameters, with Contact IDs',                             required: false
-      parameter 'filter[date_range]',      'Filter by Date Range; Accepts values "last_month", "last_year", "last_two_years", "last_week", '\
-                                            '"overdue", "today", "tomorrow", "future", and "upcoming"',                                         required: false
-      parameter 'filter[no_date]',         'Filter by No Date; Accepts values "true", or "false"',                                             required: false
-      parameter 'filter[overdue]',         'Filter by Overdue; Accepts values "true", or "false"',                                             required: false
-      parameter 'filter[starred]',         'Filter by Starred; Accepts values "true", or "false"',                                             required: false
-      parameter 'filter[tags][]',          'Filter by Tags; Accepts multiple parameters, with text values',                                    required: false
-      parameter 'filter[wildcard_search]', 'Filter by keyword, searches through subject and tags',                                             required: false
+      parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values '\
+                                            '"Call", "Appointment", "Email", "Text Message", '\
+                                            '"Facebook Message", "Letter", "Newsletter", '\
+                                            '"Pre Call Letter", "Reminder Letter", "Support Letter", '\
+                                            '"Thank", "To Do", "Talk to In Person", or '\
+                                            '"Prayer Request"',                                         required: false
+      parameter 'filter[completed]',       'Filter by Completed; Accepts values "true", or "false"',    required: false
+      parameter 'filter[contact_ids][]',   'Filter by Contact IDs; Accepts multiple '\
+                                            'parameters, with Contact IDs',                             required: false
+      parameter 'filter[date_range]',      'Filter by Date Range; Accepts values "last_month", '\
+                                            '"last_year", "last_two_years", "last_week", '\
+                                            '"overdue", "today", "tomorrow", "future", and "upcoming"', required: false
+      parameter 'filter[no_date]',         'Filter by No Date; Accepts values "true", or "false"',      required: false
+      parameter 'filter[overdue]',         'Filter by Overdue; Accepts values "true", or "false"',      required: false
+      parameter 'filter[starred]',         'Filter by Starred; Accepts values "true", or "false"',      required: false
+      parameter 'filter[tags][]',          'Filter by Tags; Accepts multiple '\
+                                            'parameters, with text values',                             required: false
+      parameter 'filter[wildcard_search]', 'Filter by keyword, searches through subject and tags',      required: false
 
-      parameter 'filter[any_filters]',         'If set to true any result where at least one of the filters apply will be returned',           required: false
-      parameter 'filter[reverse_FILTER_NAME]', "If set to true, the filter defined as FILTER_NAME will return results that don't apply",       required: false
+      parameter 'filter[any_filters]',         'If set to true any result where at least '\
+                                                'one of the filters apply will be returned',         required: false
+      parameter 'filter[reverse_FILTER_NAME]', 'If set to true, the filter defined as FILTER_NAME '\
+                                                "will return results that don't apply",              required: false
 
       with_options scope: :sort do
         parameter :completed_at, 'Sort by CompletedAt'

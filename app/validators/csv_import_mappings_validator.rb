@@ -31,33 +31,43 @@ class CsvImportMappingsValidator < ActiveModel::Validator
 
     return unless (CsvImport.required_headers.keys.map(&:to_s) & import.file_headers_mappings.keys).empty?
 
-    import.errors[:file_headers_mappings] << "should specify a header mapping for at least one of the required headers. The required headers are: #{CsvImport.required_headers.keys}"
+    import.errors[:file_headers_mappings] << 'should specify a header mapping for at least one of '\
+                                             'the required headers. The required headers are: '\
+                                             "#{CsvImport.required_headers.keys}"
   end
 
   def file_headers_mappings_contains_only_supported_headers
-    return if (import.file_headers_mappings.keys & CsvImport.supported_headers.keys.map(&:to_s)) == import.file_headers_mappings.keys
+    supported_keys = import.file_headers_mappings.keys & CsvImport.supported_headers.keys.map(&:to_s)
+    return if supported_keys == import.file_headers_mappings.keys
 
     unsupported_keys = import.file_headers_mappings.keys - CsvImport.supported_headers.keys.map(&:to_s)
-    import.errors[:file_headers_mappings] << 'has unsupported headers. One or more of the headers specified in file_headers_mappings is not supported, ' \
-                                             'please refer to the constants endpoints for a list of supported headers. ' \
-                                             "The unsupported headers you specifed are #{unsupported_keys}"
+    import.errors[:file_headers_mappings] << 'has unsupported headers. One or more of the headers '\
+                                             'specified in file_headers_mappings is not supported, '\
+                                             'please refer to the constants endpoints for a list of '\
+                                             'supported headers. The unsupported headers you specifed '\
+                                             "are #{unsupported_keys}"
   end
 
   def file_headers_mappings_only_maps_to_headers_in_the_file
-    return if (import.file_headers_mappings.values & import.file_headers.keys) == import.file_headers_mappings.values.uniq
+    matches = import.file_headers_mappings.values & import.file_headers.keys
+    return if matches == import.file_headers_mappings.values.uniq
 
     invalid_headers = import.file_headers_mappings.values - import.file_headers.keys
-    import.errors[:file_headers_mappings] << 'has unsupported mappings. One or more of the header mappings was not found in the headers of the given CSV file, ' \
-                                             'refer to attribute "file_headers" for a list of headers extracted from the given file. ' \
+    import.errors[:file_headers_mappings] << 'has unsupported mappings. One or more of the header '\
+                                             'mappings was not found in the headers of the given CSV '\
+                                             'file, refer to attribute "file_headers" for a list of '\
+                                             'headers extracted from the given file. '\
                                              "The invalid headers are: #{invalid_headers}"
   end
 
   def file_constants_mappings_contains_the_constants_needed_for_import
     constants_needing_to_be_imported = (CsvImport.constants.keys.map(&:to_s) & import.file_headers_mappings.keys)
-    return if (constants_needing_to_be_imported & file_constants_mappings.constant_names) == constants_needing_to_be_imported
+    matches = constants_needing_to_be_imported & file_constants_mappings.constant_names
+    return if matches == constants_needing_to_be_imported
 
     missing_constant_mappings = constants_needing_to_be_imported - file_constants_mappings.constant_names
-    import.errors[:file_constants_mappings] << 'is missing mappings. One or more of the header constants specified in file_headers_mappings ' \
+    import.errors[:file_constants_mappings] << 'is missing mappings. One or more of the header '\
+                                               'constants specified in file_headers_mappings ' \
                                                'does not have a mapping specified in file_constants_mappings. ' \
                                                "The missing constant mappings are: #{missing_constant_mappings}"
   end
@@ -65,21 +75,28 @@ class CsvImportMappingsValidator < ActiveModel::Validator
   def file_constants_mappings_only_maps_constants_that_are_supported
     file_constants_mappings.constant_names.each do |header_id|
       unless CsvImport.supported_headers.keys.map(&:to_s).include?(header_id)
-        import.errors[:file_constants_mappings] << %(has an invalid mapping. You cannot map to the constant "#{header_id}" because it's not a supported MPDX constant.)
+        import.errors[:file_constants_mappings] << 'has an invalid mapping. You cannot map to the '\
+                                                   "constant \"#{header_id}\" because it's not a "\
+                                                   'supported MPDX constant.'
         next
       end
 
       unsupported_constants = file_constants_mappings.find_unsupported_constants(header_id)
       next if unsupported_constants.blank?
-      import.errors[:file_constants_mappings] << %(has an invalid mapping. For the header "#{header_id}", you cannot map to the constants: #{unsupported_constants})
+      import.errors[:file_constants_mappings] << 'has an invalid mapping. For the header '\
+                                                 "\"#{header_id}\", you cannot map to the "\
+                                                 "constants: #{unsupported_constants}"
     end
   end
 
   def file_constants_mappings_only_maps_constants_that_are_also_in_file_headers_mappings
-    return if (file_constants_mappings.constant_names & import.file_headers_mappings.keys) == file_constants_mappings.constant_names
+    matches = file_constants_mappings.constant_names & import.file_headers_mappings.keys
+    return if matches == file_constants_mappings.constant_names
 
     invalid_mapping_keys = file_constants_mappings.constant_names - import.file_headers_mappings.keys
-    import.errors[:file_constants_mappings] << "has an invalid mapping. You cannot map to the constants #{invalid_mapping_keys} because they are not found in file_headers_mappings"
+    import.errors[:file_constants_mappings] << 'has an invalid mapping. You cannot map to the '\
+                                               "constants #{invalid_mapping_keys} because they are "\
+                                               'not found in file_headers_mappings'
   end
 
   def file_constants_mappings_only_maps_constants_to_values_found_in_the_csv
@@ -89,7 +106,9 @@ class CsvImportMappingsValidator < ActiveModel::Validator
       next if (mapping_values & file_constants) == mapping_values.uniq
 
       invalid_mapping_values = mapping_values - file_constants
-      import.errors[:file_constants_mappings] << %(has an invalid mapping. For the header "#{header_id}", we couldn't find the following values in the CSV: #{invalid_mapping_values})
+      import.errors[:file_constants_mappings] << 'has an invalid mapping. For the header '\
+                                                 "\"#{header_id}\", we couldn't find the following "\
+                                                 "values in the CSV: #{invalid_mapping_values}"
     end
   end
 
@@ -102,7 +121,9 @@ class CsvImportMappingsValidator < ActiveModel::Validator
       next if (file_constants & mapped_constants) == file_constants
 
       missing_mappings = file_constants - mapped_constants
-      import.errors[:file_constants_mappings] << %(is missing mappings. For the header "#{constant_header}", we couldn't find the following mappings to the CSV values: #{missing_mappings})
+      import.errors[:file_constants_mappings] << 'is missing mappings. For the header '\
+                                                 "\"#{constant_header}\", we couldn't find the "\
+                                                 "following mappings to the CSV values: #{missing_mappings}"
     end
   end
 end

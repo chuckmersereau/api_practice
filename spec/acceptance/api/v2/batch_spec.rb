@@ -23,14 +23,20 @@ resource 'Batch' do
         parameter :body, 'The JSON body of the request'
       end
       example 'Batch', document: documentation_scope do
-        explanation 'A batch endpoint that allows you to send an array of requests. It expects a JSON payload with a requests key that has an array of request objects. ' \
-                    'A request object needs to have a method key and a path key. It may also have a body key. The response will be a JSON array of response objects. ' \
-                    'A response object has a status key, a headers key, and a body key. The body is a string of the server response. ' \
-                    'In addition to the requests key in the payload, you may also specify a on_error key which may be set to CONTINUE, or ABORT. CONTINUE is the default, ' \
-                    'and it will return a 200 no matter what, and give a response for every request, no matter if they errored or not. ABORT will end the batch request early ' \
-                    'if one of the requests fails. The batch response will have the status code of the failing request, and the response will include responses up to and including ' \
-                    'the errored request, but no more. Some endpoints are unable to be used within a batch request. At this time, only bulk endpoints are disallowed from being used in ' \
-                    'a batch request.'
+        explanation <<~HEREDOC
+          A batch endpoint that allows you to send an array of requests. It expects a JSON payload
+          with a requests key that has an array of request objects. A request object needs to have a
+          method key and a path key. It may also have a body key. The response will be a JSON array
+          of response objects. A response object has a status key, a headers key, and a body key.
+          The body is a string of the server response. In addition to the requests key in the
+          payload, you may also specify a on_error key which may be set to CONTINUE, or ABORT.
+          CONTINUE is the default, and it will return a 200 no matter what, and give a response for
+          every request, no matter if they errored or not. ABORT will end the batch request early
+          if one of the requests fails. The batch response will have the status code of the failing
+          request, and the response will include responses up to and including the errored request,
+          but no more. Some endpoints are unable to be used within a batch request. At this time,
+          only bulk endpoints are disallowed from being used in a batch request.
+        HEREDOC
 
         do_request requests: [
           { method: 'GET', path: "/api/v2/account_lists/#{account_list.id}/donations" },

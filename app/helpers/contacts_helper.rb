@@ -2,10 +2,12 @@ module ContactsHelper
   PLEDGE_AMOUNT_INDEX = 12
 
   def spreadsheet_header_titles
-    [_('Contact Name'), _('First Name'), _('Last Name'), _('Spouse First Name'), _('Greeting'), _('Envelope Greeting'),
-     _('Mailing Street Address'), _('Mailing City'), _('Mailing State'), _('Mailing Postal Code'), _('Mailing Country'), _('Status'),
-     _('Commitment Amount'), _('Commitment Currency'), _('Commitment Frequency'), _('Newsletter'), _('Commitment Received'), _('Tags'),
-     _('Primary Email'), _('Spouse Email'), _('Other Email'), _('Spouse Other Email'), _('Primary Phone'), _('Spouse Phone'), _('Other Phone'), _('Spouse Other Phone')]
+    [_('Contact Name'), _('First Name'), _('Last Name'), _('Spouse First Name'), _('Greeting'),
+     _('Envelope Greeting'), _('Mailing Street Address'), _('Mailing City'), _('Mailing State'),
+     _('Mailing Postal Code'), _('Mailing Country'), _('Status'), _('Commitment Amount'),
+     _('Commitment Currency'), _('Commitment Frequency'), _('Newsletter'), _('Commitment Received'),
+     _('Tags'), _('Primary Email'), _('Spouse Email'), _('Other Email'), _('Spouse Other Email'),
+     _('Primary Phone'), _('Spouse Phone'), _('Other Phone'), _('Spouse Other Phone')]
   end
 
   def spreadsheet_header_titles_joined

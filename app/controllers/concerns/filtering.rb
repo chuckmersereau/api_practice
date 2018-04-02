@@ -68,7 +68,8 @@ module Filtering
   end
 
   def invalid_date_range_format_message(key)
-    "Wrong format of date range for filter '#{key}', should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates and 'YYYY-MM-DDThh:mm:ssZ...YYYY-MM-DDThh:mm:ssZ' for datetimes"
+    "Wrong format of date range for filter '#{key}', should follow 'YYYY-MM-DD...YYYY-MM-DD' for "\
+    "dates and 'YYYY-MM-DDThh:mm:ssZ...YYYY-MM-DDThh:mm:ssZ' for datetimes"
   end
 
   def permitted_filters

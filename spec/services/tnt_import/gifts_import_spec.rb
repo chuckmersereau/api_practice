@@ -123,9 +123,16 @@ describe TntImport::GiftsImport do
       expect { tnt_import2.import  }.to change(Donation, :count).from(2).to(3)
 
       donations = Donation.all.map { |d| d.attributes.symbolize_keys.slice(:donation_date, :amount, :memo, :tnt_id) }
-      expect(donations).to include(donation_date: Date.new(2013, 11, 20), amount: 50, memo: 'This donation was imported from Tnt.', tnt_id: '1-M84S3J')
-      expect(donations).to include(donation_date: Date.new(2013, 11, 21), amount: 25, memo: 'This donation was imported from Tnt.', tnt_id: '1-O73R2P')
-      expect(donations).to include(donation_date: Date.new(2013, 11, 22), amount: 100, memo: 'This donation was imported from Tnt.', tnt_id: nil)
+      expect(donations).to include(donation_date: Date.new(2013, 11, 20),
+                                   amount: 50, memo: 'This donation was imported from Tnt.',
+                                   tnt_id: '1-M84S3J')
+      expect(donations).to include(donation_date: Date.new(2013, 11, 21),
+                                   amount: 25, memo: 'This donation was imported from Tnt.',
+                                   tnt_id: '1-O73R2P')
+      expect(donations).to include(donation_date: Date.new(2013, 11, 22),
+                                   amount: 100,
+                                   memo: 'This donation was imported from Tnt.',
+                                   tnt_id: nil)
 
       contact = Contact.first
       expect(contact.last_donation_date).to eq(Date.new(2013, 11, 22))
@@ -225,11 +232,14 @@ describe TntImport::GiftsImport do
       expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
       # Set the tnt_id and remote_id to nil, to force the import to find by donor, amount, and date.
       # Set the amount to 1, to test that the import doesn't find the donation and creates a new one.
-      Donation.where(tnt_id: '1-M84S3J').first.update!(tnt_id: nil, remote_id: nil, amount: 1)
+      Donation.find_by(tnt_id: '1-M84S3J').update!(tnt_id: nil, remote_id: nil, amount: 1)
       expect { @tnt_import.import }.to change(Donation, :count).from(2).to(3)
-      Donation.where(tnt_id: '1-M84S3J').first.update!(tnt_id: nil, remote_id: nil, donor_account_id: create(:donor_account).id)
+
+      donation = Donation.find_by(tnt_id: '1-M84S3J')
+      donation.update!(tnt_id: nil, remote_id: nil, donor_account_id: create(:donor_account).id)
       expect { @tnt_import.import }.to change(Donation, :count).from(3).to(4)
-      Donation.where(tnt_id: '1-M84S3J').first.update!(tnt_id: nil, remote_id: nil, donation_date: Time.current)
+
+      Donation.find_by(tnt_id: '1-M84S3J').update!(tnt_id: nil, remote_id: nil, donation_date: Time.current)
       expect { @tnt_import.import }.to change(Donation, :count).from(4).to(5)
     end
 

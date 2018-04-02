@@ -20,7 +20,9 @@ class FacebookImport
         # Add to friend set
         begin
           friend = Retryable.retryable on: FbGraph::Unauthorized, times: 5, sleep: 60 do
-            Retryable.retryable on: [FbGraph::InvalidRequest, OpenSSL::SSL::SSLError, HTTPClient::ConnectTimeoutError, HTTPClient::ReceiveTimeoutError], times: 5, sleep: 5 do
+            retriable_errors = [FbGraph::InvalidRequest, OpenSSL::SSL::SSLError,
+                                HTTPClient::ConnectTimeoutError, HTTPClient::ReceiveTimeoutError]
+            Retryable.retryable on: retriable_errors, times: 5, sleep: 5 do
               sleep 3 # facebook apparently limits api calls to 600 calls every 600s
               f.fetch
             end
@@ -99,12 +101,16 @@ class FacebookImport
     }.select { |_, v| v.present? }
 
     # First from my contacts
-    fb_person = account_list.people.includes(:facebook_account).find_by('person_facebook_accounts.remote_id' => friend.identifier)
+    fb_person = account_list.people
+                            .includes(:facebook_account)
+                            .find_by('person_facebook_accounts.remote_id' => friend.identifier)
 
     # If we can't find a contact with this fb account, see if we have a contact with the same name and no fb account
-    fb_person ||= account_list.people.includes(:facebook_account).find_by('person_facebook_accounts.remote_id' => nil,
-                                                                          'people.first_name' => friend.first_name,
-                                                                          'people.last_name' => friend.last_name)
+    fb_person ||= account_list.people
+                              .includes(:facebook_account)
+                              .find_by('person_facebook_accounts.remote_id' => nil,
+                                       'people.first_name' => friend.first_name,
+                                       'people.last_name' => friend.last_name)
 
     if fb_person
       fb_person.update_attributes(person_attributes)

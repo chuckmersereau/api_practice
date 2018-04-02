@@ -2,7 +2,10 @@ class MasterAddress < ApplicationRecord
   has_many :addresses
   serialize :smarty_response, JSON
 
-  scope :requires_geocode, -> { where("latitude IS NULL OR latitude = ''").where('updated_at::timestamp(0) > last_geocoded_at::timestamp(0) OR last_geocoded_at IS NULL') }
+  scope :requires_geocode, lambda {
+    where(latitude: [nil, ''])
+      .where('updated_at::timestamp(0) > last_geocoded_at::timestamp(0) OR last_geocoded_at IS NULL')
+  }
 
   def geo
     return unless latitude.present? && longitude.present?

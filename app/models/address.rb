@@ -17,7 +17,8 @@ class Address < ApplicationRecord
   after_save :update_contact_timezone
   before_create :set_valid_values
 
-  validates :street, :city, :state, :country, :postal_code, :start_date, :end_date, :remote_id, :region, :metro_area, updatable_only_when_source_is_mpdx: true
+  validates :street, :city, :state, :country, :postal_code, :start_date, :end_date, :remote_id, :region, :metro_area,
+            updatable_only_when_source_is_mpdx: true
 
   alias destroy! destroy
 
@@ -70,7 +71,9 @@ class Address < ApplicationRecord
   end
 
   def not_blank?
-    attributes.with_indifferent_access.slice(:street, :city, :state, :country, :postal_code).any? { |_, v| v.present? && v.strip != '(UNDELIVERABLE)' }
+    attributes.with_indifferent_access
+              .slice(:street, :city, :state, :country, :postal_code)
+              .any? { |_, v| v.present? && v.strip != '(UNDELIVERABLE)' }
   end
 
   def merge(other_address)
@@ -262,12 +265,13 @@ class Address < ApplicationRecord
                               .find_by('master_address_id is not null')
                               .try(:master_address)
 
+    is_us_country = attributes_for_master_address[:country].to_s.casecmp('united states').zero?
+    is_us_state = US_STATES.flatten.map(&:upcase).include?(attributes_for_master_address[:state].to_s.upcase)
     if !master_address &&
        (attributes_for_master_address[:state].to_s.length == 2 ||
         attributes_for_master_address[:postal_code].to_s.length == 5 ||
         attributes_for_master_address[:postal_code].to_s.length == 10) &&
-       (attributes_for_master_address[:country].to_s.casecmp('united states').zero? ||
-        (attributes_for_master_address[:country].blank? && US_STATES.flatten.map(&:upcase).include?(attributes_for_master_address[:state].to_s.upcase)))
+       (is_us_country || (attributes_for_master_address[:country].blank? && is_us_state))
 
       begin
         results = SmartyStreets.get(attributes_for_master_address)

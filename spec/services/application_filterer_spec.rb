@@ -53,7 +53,8 @@ describe ApplicationFilterer do
     let(:filters) { { simple_name_search: 'name', simple_date_search: contact_one.created_at, any_filter: true } }
 
     it 'returns results that apply to any filter' do
-      expect(Contact::ContactFilterer.new(filters).filter(scope: account_list.contacts, account_lists: [account_list])).to eq [contact_one, contact_two]
+      result = Contact::ContactFilterer.new(filters).filter(scope: account_list.contacts, account_lists: [account_list])
+      expect(result).to eq [contact_one, contact_two]
     end
 
     class Contact::ContactFilterer < ApplicationFilterer

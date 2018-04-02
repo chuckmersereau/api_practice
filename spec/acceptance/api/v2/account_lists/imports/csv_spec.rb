@@ -239,7 +239,8 @@ resource 'Account Lists > Imports > from CSV' do
       end
 
       example 'CSV Import [UPDATE]', document: documentation_scope do
-        explanation 'Update a CSV Import associated with the Account List. For more details regarding the CSV Import see the description on the create request.'
+        explanation 'Update a CSV Import associated with the Account List. For more details '\
+                    'regarding the CSV Import see the description on the create request.'
         do_request data: form_data
         check_resource(['relationships'])
         expect(response_status).to eq(200), invalid_status_detail
@@ -307,21 +308,35 @@ resource 'Account Lists > Imports > from CSV' do
       end
 
       example 'CSV Import [CREATE]', document: documentation_scope do
-        explanation '<p>Creates a new CSV Import associated with the Account List. This endpoint expects a CSV file to be uploaded using Content-Type ' \
-                    '"multipart/form-data", this makes the endpoint unique in that it does not expect only JSON content. ' \
-                    'Unless otherwise specified, the Import will be created with "in_preview" set to true. </p>' \
-                    '<p>A CSV Import is expected to take multiple steps to setup: </p>' \
-                    '<p>1. The first step is to create a new Import via a POST request, ' \
-                    'the client can upload the CSV file in the POST request using "multipart/form-data". ' \
-                    'If the file upload is successful then the file_headers and file_constants will be returned to the client in the response. </p>' \
-                    '<p>2. In the second step the client is expected to update (via PUT) the file_headers_mappings ' \
-                    "according to the user's desire (based on the file_headers). This step could take several attempts. </p>" \
-                    '<p>3. In the third step the client is expected to update (via PUT) the file_constants_mappings ' \
-                    "according to the user's desire (based on the file_constants). This step could take several attempts. </p>" \
-                    '<p>4. The fourth step is to show a sample of the import to the user. The sample_contacts relationship should be used. ' \
-                    '<p>5. The fifth step is to start the import. The client is expected to update (via PUT) the "in_preview" attribute to "false", ' \
-                    'which will trigger the import to begin (as a background job). If the mappings are incorrect or incomplete, ' \
-                    'or the record is otherwise invalid, then the import will not begin and an error object will be returned instead. </p>'
+        explanation <<~HEREDOC
+          <p>
+            Creates a new CSV Import associated with the Account List. This endpoint expects a CSV
+            file to be uploaded using Content-Type "multipart/form-data", this makes the endpoint
+            unique in that it does not expect only JSON content. Unless otherwise specified, the
+            Import will be created with "in_preview" set to true.
+          </p><p>
+            A CSV Import is expected to take multiple steps to setup:
+          </p><p>
+            1. The first step is to create a new Import via a POST request, the client can upload
+            the CSV file in the POST request using "multipart/form-data". If the file upload is successful
+            then the file_headers and file_constants will be returned to the client in the response.
+          </p><p>
+            2. In the second step the client is expected to update (via PUT) the file_headers_mappings
+            according to the user's desire (based on the file_headers). This step could take several attempts.
+          </p><p>
+            3. In the third step the client is expected to update (via PUT) the file_constants_mappings
+            according to the user's desire (based on the file_constants). This step could take several attempts.
+          </p><p>
+            4. The fourth step is to show a sample of the import to the user.
+            The sample_contacts relationship should be used.
+          </p><p>
+            5. The fifth step is to start the import. The client is expected to update (via PUT) the
+            "in_preview" attribute to "false", which will trigger the import to begin (as a
+            background job). If the mappings are incorrect or incomplete, or the record is otherwise
+            invalid, then the import will not begin and an error object will be returned instead.
+          </p>
+        HEREDOC
+
         do_request data: form_data
         check_resource(['relationships'])
         expect(response_status).to eq(201), invalid_status_detail

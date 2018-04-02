@@ -82,7 +82,8 @@ describe User do
 
     it 'finds a person with a key account' do
       user = create(:user)
-      user.key_accounts << create(:key_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F') # Key and relay account models both use the same db table
+      # Key and relay account models both use the same db table
+      user.key_accounts << create(:key_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
       found_user = User.find_by_guid('B163530-7372-551R-KO83-1FR05534129F')
       expect(found_user.id).to eq user.id
       expect(found_user).to be_a User

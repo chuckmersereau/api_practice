@@ -9,14 +9,17 @@ describe Api::V2::AccountLists::Imports::TntDataSyncController, type: :controlle
   let!(:account_list) { user.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
   let(:organization_account) { create(:organization_account, person: user) }
-  let(:import) { create(:tnt_import, account_list: account_list, user: user, source_account_id: organization_account.id) }
+  let(:import) do
+    create(:tnt_import, account_list: account_list, user: user, source_account_id: organization_account.id)
+  end
   let(:id) { import.id }
 
   let(:resource) { import }
   let(:parent_param) { { account_list_id: account_list_id } }
 
   let(:correct_attributes) do
-    attributes_for(:import, file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_data_sync_no_org_lowercase_fields.tntmpd')))
+    file_path = Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_data_sync_no_org_lowercase_fields.tntmpd')
+    attributes_for(:import, file: Rack::Test::UploadedFile.new(file_path))
   end
 
   let(:correct_relationships) do
@@ -61,7 +64,8 @@ describe Api::V2::AccountLists::Imports::TntDataSyncController, type: :controlle
       expect(response.status).to eq(201)
       import = Import.find_by_id(JSON.parse(response.body)['data']['id'])
       expect(import.file).to be_present
-      expect(import.file.path).to end_with("uploads/import/file/#{import.id}/tnt_data_sync_no_org_lowercase_fields.tntmpd")
+      expected_file_path = "uploads/import/file/#{import.id}/tnt_data_sync_no_org_lowercase_fields.tntmpd"
+      expect(import.file.path).to end_with(expected_file_path)
     end
 
     it 'defaults source to tnt_data_sync' do

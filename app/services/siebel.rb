@@ -35,9 +35,11 @@ class Siebel < DataServer
 
       # Add included designation accounts
       profile.designations.each do |designation|
-        find_or_create_designation_account(designation.number, designation_profile,  name: designation.description,
-                                                                                     staff_account_id: designation.staff_account_id,
-                                                                                     chartfield: designation.chartfield)
+        find_or_create_designation_account(designation.number,
+                                           designation_profile,
+                                           name: designation.description,
+                                           staff_account_id: designation.staff_account_id,
+                                           chartfield: designation.chartfield)
       end
 
       next if designation_profile.account_list
@@ -118,7 +120,8 @@ class Siebel < DataServer
   def remove_deleted_siebel_donations(da, rails_start_date, rails_end_date,
                                       start_date, end_date)
     # Check for removed donations
-    all_current_donations_relation = da.donations.where('donation_date >= ? AND donation_date <= ?', rails_start_date, rails_end_date)
+    all_current_donations_relation = da.donations.where('donation_date >= ? AND donation_date <= ?',
+                                                        rails_start_date, rails_end_date)
                                        .where.not(remote_id: nil)
     all_current_donations_array = all_current_donations_relation.to_a
     SiebelDonations::Donation.find(designations: da.designation_number, donation_date_start: start_date,
@@ -132,8 +135,10 @@ class Siebel < DataServer
     all_current_donations_array.each do |donation|
       next if donation.appeal.present?
       donation_date = donation.donation_date.strftime('%Y-%m-%d')
-      siebel_donations = SiebelDonations::Donation.find(designations: da.designation_number, donors: donation.donor_account.account_number,
-                                                        start_date: donation_date, end_date: donation_date)
+      siebel_donations = SiebelDonations::Donation.find(designations: da.designation_number,
+                                                        donors: donation.donor_account.account_number,
+                                                        start_date: donation_date,
+                                                        end_date: donation_date)
       # The previous query might return a donation for the same date, so check that the remote_id is equal
       next unless siebel_donations.blank? ||
                   (siebel_donations.size == 1 && siebel_donations.first.id != donation.remote_id)
@@ -220,7 +225,8 @@ class Siebel < DataServer
         tendered_currency: default_currency
       }
 
-      donation = DonationImports::Base::FindDonation.new(designation_profile: profile, attributes: attributes).find_and_merge
+      finder = DonationImports::Base::FindDonation.new(designation_profile: profile, attributes: attributes)
+      donation = finder.find_and_merge
       donation ||= Donation.new
       donation.update!(attributes)
       donation
@@ -247,7 +253,9 @@ class Siebel < DataServer
     }
     company.save!
 
-    donor_account.update_attribute(:master_company_id, company.master_company_id) unless donor_account.master_company_id == company.master_company.id
+    unless donor_account.master_company_id == company.master_company.id
+      donor_account.update_attribute(:master_company_id, company.master_company_id)
+    end
     company
   end
 
@@ -289,7 +297,9 @@ class Siebel < DataServer
     unless master_person_from_source
       remote_id = siebel_person.primary ? "#{donor_account.account_number}-1" : "#{donor_account.account_number}-2"
       master_person_from_source = @org.master_people.find_by('master_person_sources.remote_id' => remote_id)
-      MasterPersonSource.where(organization_id: @org.id, remote_id: remote_id).update_all(remote_id: siebel_person.id) if master_person_from_source
+      if master_person_from_source
+        MasterPersonSource.where(organization_id: @org.id, remote_id: remote_id).update_all(remote_id: siebel_person.id)
+      end
     end
 
     person = contact.people.find_by(first_name: siebel_person.first_name, last_name: siebel_person.last_name)
@@ -316,7 +326,9 @@ class Siebel < DataServer
 
     Retryable.retryable do
       donor_account.people << person unless donor_account.people.include?(person)
-      donor_account.master_people << person.master_person unless donor_account.master_people.include?(person.master_person)
+      unless donor_account.master_people.include?(person.master_person)
+        donor_account.master_people << person.master_person
+      end
     end
 
     contact_person = contact.add_person(person, donor_account)
@@ -324,7 +336,8 @@ class Siebel < DataServer
     # create the master_person_source if needed
     unless master_person_from_source
       Retryable.retryable do
-        @org.master_person_sources.where(remote_id: siebel_person.id).first_or_create(master_person_id: person.master_person.id)
+        @org.master_person_sources.where(remote_id: siebel_person.id)
+            .first_or_create(master_person_id: person.master_person.id)
       end
     end
 
@@ -340,7 +353,9 @@ class Siebel < DataServer
 
     # Email Addresses
     siebel_person.email_addresses&.each do |email|
-      next if date_from.present? && DateTime.parse(email.updated_at) < date_from && contact_person.email_addresses.present?
+      next if date_from.present? &&
+              contact_person.email_addresses.present? &&
+              DateTime.parse(email.updated_at) < date_from
 
       add_or_update_email_address(email, person)
 
@@ -369,7 +384,9 @@ class Siebel < DataServer
       new_or_updated_address = object.addresses.create!(new_address.attributes)
     end
 
-    object.addresses.where.not(id: new_or_updated_address.id).update_all(primary_mailing_address: false) if new_or_updated_address.primary_mailing_address?
+    if new_or_updated_address.primary_mailing_address?
+      object.addresses.where.not(id: new_or_updated_address.id).update_all(primary_mailing_address: false)
+    end
   rescue ActiveRecord::RecordInvalid => e
     raise e.message + " - #{address.inspect}"
   end
@@ -379,7 +396,8 @@ class Siebel < DataServer
     make_primary = current_primary.blank? || (address.primary && current_primary.source == 'Siebel' &&
       source_donor_account.present? && current_primary.source_donor_account == source_donor_account)
 
-    new_address = Address.new(street: [address.address1, address.address2, address.address3, address.address4].compact.join("\n"),
+    street_value = [address.address1, address.address2, address.address3, address.address4].compact.join("\n")
+    new_address = Address.new(street: street_value,
                               city: address.city,
                               state: address.state,
                               postal_code: address.zip,

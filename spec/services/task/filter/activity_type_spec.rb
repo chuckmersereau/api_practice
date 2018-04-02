@@ -12,27 +12,28 @@ RSpec.describe Task::Filter::ActivityType do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [
+        { name: '-- Any --', id: '', placeholder: 'None' },
+        { name: '-- None --', id: 'none' },
+        { name: 'Call', id: 'Call' },
+        { name: 'Appointment', id: 'Appointment' },
+        { name: 'Email', id: 'Email' },
+        { name: 'Text Message', id: 'Text Message' },
+        { name: 'Facebook Message', id: 'Facebook Message' },
+        { name: 'Letter', id: 'Letter' },
+        { name: 'Newsletter - Physical', id: 'Newsletter - Physical' },
+        { name: 'Newsletter - Email', id: 'Newsletter - Email' },
+        { name: 'Pre Call Letter', id: 'Pre Call Letter' },
+        { name: 'Reminder Letter', id: 'Reminder Letter' },
+        { name: 'Support Letter', id: 'Support Letter' },
+        { name: 'Thank', id: 'Thank' },
+        { name: 'To Do', id: 'To Do' },
+        { name: 'Talk to In Person', id: 'Talk to In Person' },
+        { name: 'Prayer Request', id: 'Prayer Request' }
+      ]
       expect(described_class.config([account_list])).to include(multiple: true,
                                                                 name: :activity_type,
-                                                                options: [
-                                                                  { name: '-- Any --', id: '', placeholder: 'None' },
-                                                                  { name: '-- None --', id: 'none' },
-                                                                  { name: 'Call', id: 'Call' },
-                                                                  { name: 'Appointment', id: 'Appointment' },
-                                                                  { name: 'Email', id: 'Email' },
-                                                                  { name: 'Text Message', id: 'Text Message' },
-                                                                  { name: 'Facebook Message', id: 'Facebook Message' },
-                                                                  { name: 'Letter', id: 'Letter' },
-                                                                  { name: 'Newsletter - Physical', id: 'Newsletter - Physical' },
-                                                                  { name: 'Newsletter - Email', id: 'Newsletter - Email' },
-                                                                  { name: 'Pre Call Letter', id: 'Pre Call Letter' },
-                                                                  { name: 'Reminder Letter', id: 'Reminder Letter' },
-                                                                  { name: 'Support Letter', id: 'Support Letter' },
-                                                                  { name: 'Thank', id: 'Thank' },
-                                                                  { name: 'To Do', id: 'To Do' },
-                                                                  { name: 'Talk to In Person', id: 'Talk to In Person' },
-                                                                  { name: 'Prayer Request', id: 'Prayer Request' }
-                                                                ],
+                                                                options: options,
                                                                 parent: nil,
                                                                 priority: 0,
                                                                 title: 'Action',
@@ -55,8 +56,11 @@ RSpec.describe Task::Filter::ActivityType do
 
     context 'filter by activity_type' do
       it 'filters multiple activity_types' do
-        expect(described_class.query(tasks, { activity_type: 'Call, Appointment,none' }, nil).to_a).to match_array([task_one, task_two, task_four, task_five])
-        expect(described_class.query(tasks, { activity_type: 'call,none, Email,' }, nil).to_a).to match_array([task_three, task_four, task_five])
+        result = described_class.query(tasks, { activity_type: 'Call, Appointment,none' }, nil).to_a
+        expect(result).to match_array([task_one, task_two, task_four, task_five])
+
+        result = described_class.query(tasks, { activity_type: 'call,none, Email,' }, nil).to_a
+        expect(result).to match_array([task_three, task_four, task_five])
       end
       it 'filters a single activity_type' do
         expect(described_class.query(tasks, { activity_type: 'Email' }, nil).to_a).to match_array([task_three])

@@ -24,7 +24,8 @@ describe TntImport do
       import = TntImport.new(create(:tnt_import))
       expect(import.xml).to be_a TntImport::Xml
       expect(import.xml.tables.keys).to eq %w(Appeal Contact Designation Group GroupContact History HistoryContact
-                                              HistoryResult LikelyToGive Login LoginProfile LoginProfileDesignation PendingAction Picture Property Region
+                                              HistoryResult LikelyToGive Login LoginProfile
+                                              LoginProfileDesignation PendingAction Picture Property Region
                                               RegionLocation Task TaskContact TaskReason TaskType Currency)
       expect(import.xml.version).to eq 3.0
     end
@@ -86,21 +87,23 @@ describe TntImport do
 
     it 'associates referrals and imports no_appeals field' do
       expect do
-        import.send(:import)
+        import.import
       end.to change(ContactReferral, :count).by(1)
       expect(Contact.order(:created_at).first.no_appeals).to be true
     end
 
     context 'referred by contact cannot be found' do
       it 'adds the referred by name into the contact notes' do
+        expected_note = "call for amount \n \nReferred by: Steve and Lisa Moss"
+
         expect do
-          import.send(:import)
-        end.to change { Contact.order(:created_at).last&.notes }.from(nil).to("call for amount \n \nReferred by: Steve and Lisa Moss")
+          import.import
+        end.to change { Contact.order(:created_at).last&.notes }.from(nil).to(expected_note)
       end
 
       it 'adds a tag so that the contact can be found' do
         expect do
-          import.send(:import)
+          import.import
         end.to change { Contact.order(:created_at).last&.tag_list }.from(nil).to(['missing tnt referred by'])
       end
     end
@@ -383,7 +386,7 @@ describe TntImport do
       tnt_import = TntImport.new(import)
 
       expect do
-        tnt_import.send(:import)
+        tnt_import.import
       end.to change(Appeal, :count).from(0).to(1)
       appeal = Appeal.first
       expect(appeal.name).to eq('CSU')
@@ -399,7 +402,7 @@ describe TntImport do
       # Also check that it updates created_at to match tnt
       appeal.update(name: 'Test new name', created_at: Time.now)
       expect do
-        tnt_import.send(:import)
+        tnt_import.import
       end.to_not change(Appeal, :count).from(1)
       expect(donation.appeal_amount).to eq(25)
       appeal.reload
@@ -442,7 +445,10 @@ describe TntImport do
     end
 
     it 'marks an existing task as completed' do
-      task = create(:task, source: 'tnt', remote_id: history_rows.first['id'], account_list: tnt_import.account_list, completed: false)
+      task = create(:task, source: 'tnt',
+                           remote_id: history_rows.first['id'],
+                           account_list: tnt_import.account_list,
+                           completed: false)
 
       expect { import.send(:import_history) }.not_to change(Task, :count)
 

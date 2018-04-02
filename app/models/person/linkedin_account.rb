@@ -1,7 +1,9 @@
 class Person::LinkedinAccount < ApplicationRecord
   include Person::Account
 
-  scope :valid_token, -> { where('(token_expires_at is null OR token_expires_at > ?) AND valid_token = ?', Time.now, true) }
+  scope :valid_token, lambda {
+    where('(token_expires_at is null OR token_expires_at > ?) AND valid_token = ?', Time.now, true)
+  }
 
   # attr_accessible :first_name, :last_name, :url
   PERMITTED_ATTRIBUTES = [:authenticated,
@@ -21,7 +23,7 @@ class Person::LinkedinAccount < ApplicationRecord
     relation_scope = person.linkedin_accounts
     remote_id      = auth_hash['uid']
     params         = auth_hash.extra.access_token.params
-    expires_in     = params[:oauth_expires_in].to_i > params[:oauth_authorization_expires_in].to_i ? params[:oauth_authorization_expires_in].to_i : params[:oauth_expires_in].to_i
+    expires_in     = [params[:oauth_expires_in].to_i, params[:oauth_authorization_expires_in].to_i].min
 
     attributes = {
       remote_id: remote_id,
@@ -54,7 +56,10 @@ class Person::LinkedinAccount < ApplicationRecord
 
     # grab some valid linkedin credentials
     l = Person::LinkedinAccount.valid_token.first
-    raise LinkedIn::Errors::UnauthorizedError, _('The connection to your LinkedIn account needs to be renewed.') unless l
+    unless l
+      raise LinkedIn::Errors::UnauthorizedError,
+            _('The connection to your LinkedIn account needs to be renewed.')
+    end
 
     begin
       LINKEDIN.authorize_from_access(l.token, l.secret)

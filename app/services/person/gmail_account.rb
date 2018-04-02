@@ -83,7 +83,9 @@ class Person::GmailAccount
     google_email.save!
 
     task
-  rescue StandardError => error # Rescue all errors so that the sync can continue (otherwise it would repeat and get stuck at the same spot logging the same email).
+  # Rescue all errors so that the sync can continue (otherwise it would
+  # repeat and get stuck at the same spot logging the same email).
+  rescue StandardError => error
     Rollbar.error(error) # Report the error so that we still know about it.
   end
 
@@ -103,7 +105,7 @@ class Person::GmailAccount
     # we're selecting the first item in the array to maintain feature parity with legacy only fetching
     # and logging emails for an email address once.
     #
-    # For context: https://github.com/CruGlobal/mpdx_api/blob/6412f535455c4959e3801c43143758f1438272ce/app/services/person/gmail_account.rb#L35-L46
+    # For context: https://github.com/CruGlobal/mpdx_api/blob/6412f53/app/services/person/gmail_account.rb#L35-L46
     email_collection.select_by_email(email_address)&.first
   end
 

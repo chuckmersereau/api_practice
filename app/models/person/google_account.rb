@@ -42,7 +42,8 @@ class Person::GoogleAccount < ApplicationRecord
   end
 
   def self.create_user_from_auth(_auth_hash)
-    raise Person::Account::NoSessionError, 'Somehow a user without an account/session is trying to sign in using google'
+    raise Person::Account::NoSessionError,
+          'Somehow a user without an account/session is trying to sign in using google'
   end
 
   def google_integration(account_list_id)
@@ -113,7 +114,10 @@ class Person::GoogleAccount < ApplicationRecord
       refresh_token: refresh_token,
       grant_type: 'refresh_token'
     }
-    RestClient.post('https://accounts.google.com/o/oauth2/token', params, content_type: 'application/x-www-form-urlencoded') do |response, _request, _result, &_block|
+    request_options = ['https://accounts.google.com/o/oauth2/token',
+                       params,
+                       content_type: 'application/x-www-form-urlencoded']
+    RestClient.post(*request_options) do |response, _request, _result, &_block|
       json = JSON.parse(response)
       if response.code == 200
         self.token = json['access_token']

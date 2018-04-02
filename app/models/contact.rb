@@ -47,10 +47,16 @@ class Contact < ApplicationRecord
   serialize :prayer_letters_params, Hash
   serialize :suggested_changes, Hash
 
-  scope :people, -> { where('donor_accounts.master_company_id is null').includes(:donor_accounts).references('donor_accounts') }
-  scope :companies, -> { where('donor_accounts.master_company_id is not null').includes(:donor_accounts).references('donor_accounts') }
+  scope :people, lambda {
+    where('donor_accounts.master_company_id is null').includes(:donor_accounts).references('donor_accounts')
+  }
+  scope :companies, lambda {
+    where('donor_accounts.master_company_id is not null').includes(:donor_accounts).references('donor_accounts')
+  }
   scope :with_person, -> (person) { includes(:people).where('people.id' => person.id) }
-  scope :for_donor_account, -> (donor_account) { where('donor_accounts.id' => donor_account.id).includes(:donor_accounts).references('donor_accounts') }
+  scope :for_donor_account, lambda { |donor_account|
+    where('donor_accounts.id' => donor_account.id).includes(:donor_accounts).references('donor_accounts')
+  }
   scope :for_account_list, -> (account_list) { where(account_list_id: account_list.id) }
   scope :financial_partners, -> { where(status: 'Partner - Financial') }
   scope :non_financial_partners, -> { where("status <> 'Partner - Financial' OR status is NULL") }
@@ -62,7 +68,9 @@ class Contact < ApplicationRecord
   scope :late_by, lambda { |min_days, max_days = 100.years|
     financial_partners.where(late_at: (max_days || 100.years).ago..min_days.ago)
   }
-  scope :created_between, -> (start_date, end_date) { where('contacts.created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
+  scope :created_between, lambda { |start_date, end_date|
+    where('contacts.created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone)
+  }
 
   PERMITTED_ATTRIBUTES = [
     :account_list_id,

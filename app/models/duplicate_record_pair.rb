@@ -20,7 +20,8 @@ class DuplicateRecordPair < ApplicationRecord
 
   before_save :sort_record_ids
 
-  validates :account_list_id, :record_one_id, :record_one_type, :record_two_id, :record_two_type, :reason, presence: true
+  validates :account_list_id, :record_one_id, :record_one_type, :record_two_id, :record_two_type, :reason,
+            presence: true
   validates :record_one_type, :record_two_type, inclusion: { in: TYPES }
   validate :records_have_the_same_type_validation
   validate :records_belong_to_the_same_account_list_validation
@@ -71,15 +72,22 @@ class DuplicateRecordPair < ApplicationRecord
     errors.add(:base, 'Records must belong to the same AccountList!')
   end
 
-  # We don't let a record into multiple pairs because if one of those pairs is merged then the original record may be deleted,
-  # and in that case dealing with the next pair is challenging because the record no longer exists.
+  # We don't let a record into multiple pairs because if one of those pairs is
+  # merged then the original record may be deleted, and in that case dealing
+  # with the next pair is challenging because the record no longer exists.
   def a_record_cannot_be_in_multiple_pairs_validation
-    return unless DuplicateRecordPair.type(type).where.not(id: id).where(ignore: false).where('record_one_id IN (:ids) OR record_two_id IN (:ids)', ids: ids).exists?
+    records_with_multiple_pairs = DuplicateRecordPair.type(type)
+                                                     .where.not(id: id)
+                                                     .where(ignore: false)
+                                                     .where('record_one_id IN (:ids) OR record_two_id IN (:ids)',
+                                                            ids: ids)
+    return unless records_with_multiple_pairs.exists?
     errors.add(:base, 'A record cannot be in multiple pairs (unless the pair is ignored first)!')
   end
 
   def pair_is_unique_validation
-    return unless DuplicateRecordPair.type(type).where.not(id: id).where(record_one_id: ids, record_two_id: ids).exists?
+    existing_pair = DuplicateRecordPair.type(type).where.not(id: id).where(record_one_id: ids, record_two_id: ids)
+    return unless existing_pair.exists?
     errors.add(:base, 'Each duplicate pair should be unique!')
   end
 end

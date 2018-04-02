@@ -28,8 +28,10 @@ describe Contact do
   describe 'saving addresses' do
     it 'should create an address' do
       address = build(:address, addressable: nil)
+      address_attributes = address.attributes.with_indifferent_access
+                                  .except(:id, :addressable_id, :addressable_type, :updated_at, :created_at)
       expect do
-        contact.addresses_attributes = [address.attributes.with_indifferent_access.except(:id, :addressable_id, :addressable_type, :updated_at, :created_at)]
+        contact.addresses_attributes = [address_attributes]
         contact.save!
       end.to change(Address, :count).by(1)
     end
@@ -45,11 +47,18 @@ describe Contact do
 
     it 'should update an address' do
       stub_request(:get, %r{https:\/\/api\.smartystreets\.com\/street-address})
-        .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
+        .with(headers: {
+                'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate',
+                'Content-Type' => 'application/json', 'User-Agent' => 'Ruby'
+              })
         .to_return(status: 200, body: '[]', headers: {})
 
       address = create(:address, addressable: contact)
-      contact.addresses_attributes = [address.attributes.merge!(street: address.street + 'boo').with_indifferent_access.except(:addressable_id, :addressable_type, :updated_at, :created_at)]
+      address_attributes = address.attributes
+                                  .merge!(street: address.street + 'boo')
+                                  .with_indifferent_access
+                                  .except(:addressable_id, :addressable_type, :updated_at, :created_at)
+      contact.addresses_attributes = [address_attributes]
       contact.save!
       expect(contact.addresses.first.street).to eq(address.street + 'boo')
     end
@@ -101,7 +110,11 @@ describe Contact do
     it 'links to an existing donor account if one matches' do
       donor_account = create(:donor_account)
       account_list.designation_accounts << create(:designation_account, organization: donor_account.organization)
-      contact.donor_accounts_attributes = { '0' => { account_number: donor_account.account_number, organization_id: donor_account.organization_id } }
+      donor_account_attributes = {
+        account_number: donor_account.account_number,
+        organization_id: donor_account.organization_id
+      }
+      contact.donor_accounts_attributes = { '0' => donor_account_attributes }
       contact.save!
       expect(contact.donor_accounts).to include(donor_account)
     end
@@ -782,7 +795,10 @@ describe Contact do
       create(:donation, donor_account: donor_account, designation_account: da,
                         donation_date: Date.today << 3)
     end
-    let(:gift_aid_donation) { create(:donation, donor_account: donor_account, designation_account: da, payment_method: 'Gift Aid', amount: 2.50) }
+    let(:gift_aid_donation) do
+      create(:donation, donor_account: donor_account, designation_account: da,
+                        payment_method: 'Gift Aid', amount: 2.50)
+    end
 
     before do
       account_list.account_list_entries.create!(designation_account: da)
@@ -1023,7 +1039,9 @@ describe Contact do
       stub_request(:get, 'https://us4.api.mailchimp.com/3.0/')
         .to_return(status: 200, body: '', headers: {})
 
-      stub_request(:get, "https://us4.api.mailchimp.com/3.0/lists/MyString/members/#{Digest::MD5.hexdigest(email.email.downcase)}")
+      email_hash = Digest::MD5.hexdigest(email.email.downcase)
+      member_url = "https://us4.api.mailchimp.com/3.0/lists/MyString/members/#{email_hash}"
+      stub_request(:get, member_url)
         .to_return(status: 200, body: { 'stats' => { 'avg_open_rate' => 89 } }.to_json, headers: {})
     end
 

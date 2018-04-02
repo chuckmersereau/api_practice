@@ -44,28 +44,33 @@ RSpec.describe Task::Filter::ContactCity do
 
     context 'filter by no city' do
       it 'returns only tasks with contacts that have no city' do
-        expect(described_class.query(tasks, { contact_city: 'none' }, account_list).to_a).to include(task_three, task_four)
+        result = described_class.query(tasks, { contact_city: 'none' }, account_list).to_a
+        expect(result).to include(task_three, task_four)
       end
     end
 
     context 'filter by city' do
       it 'filters multiple cities' do
-        expect(described_class.query(tasks, { contact_city: 'Fremont, Fremont' }, account_list).to_a).to include(task_one, task_two)
+        result = described_class.query(tasks, { contact_city: 'Fremont, Fremont' }, account_list).to_a
+        expect(result).to include(task_one, task_two)
       end
       it 'filters a single cities' do
-        expect(described_class.query(tasks, { contact_city: 'Fremont' }, account_list).to_a).to include(task_one, task_two)
+        result = described_class.query(tasks, { contact_city: 'Fremont' }, account_list).to_a
+        expect(result).to include(task_one, task_two)
       end
     end
 
     context 'multiple filters' do
       it 'returns tasks with contacts matching multiple filters' do
-        expect(described_class.query(tasks, { contact_city: 'Fremont, none' }, account_list).to_a).to include(task_one, task_two, task_three, task_four)
+        result = described_class.query(tasks, { contact_city: 'Fremont, none' }, account_list).to_a
+        expect(result).to include(task_one, task_two, task_three, task_four)
       end
     end
 
     context 'address historic' do
       it 'returns tasks with contacts matching the city with historic addresses' do
-        expect(described_class.query(tasks, { contact_city: 'Fremont', address_historic: 'true' }, account_list).to_a).to include(task_five)
+        result = described_class.query(tasks, { contact_city: 'Fremont', address_historic: 'true' }, account_list).to_a
+        expect(result).to include(task_five)
       end
     end
   end

@@ -138,18 +138,25 @@ resource 'People' do
 
     get '/api/v2/contacts/people' do
       parameter 'filter[deceased]',            'Filter by deceased; Accepts values "true" and "false"', required: false
-      parameter 'filter[email_address_valid]', %(Filter by Email Address Invalid; A Person's Email Address is invalid if \
-                                                  the Email Address's valid_values attribute is set to false, or if the Person has \
-                                                  multiple Email Addresses marked as primary; Accepts value "false"), required: false
-      parameter 'filter[phone_number_valid]',  %(Filter by Phone Number Invalid; A Person's Phone Number is invalid if \
-                                                  the Phone Number's valid_values attribute is set to false, or if the Person has \
-                                                  multiple Phone Numbers marked as primary; Accepts value "false"),                      required: false
-      parameter 'filter[updated_at]',          %(Filter by Updated At Date range; Accepts date range with text value like\
-                                                  "MM/DD/YYYY - MM/DD/YYYY"),                                                            required: false
-      parameter 'filter[wildcard_search]',     %(Filter by keyword, searches through name, email_addresses and phone_numbers),           required: false
+      parameter 'filter[email_address_valid]', %(Filter by Email Address Invalid; A Person's Email \
+                                                Address is invalid if the Email Address's valid_values \
+                                                attribute is set to false, or if the Person has \
+                                                multiple Email Addresses marked as primary; \
+                                                Accepts value "false"), required: false
+      parameter 'filter[phone_number_valid]',  %(Filter by Phone Number Invalid; A Person's Phone \
+                                                Number is invalid if the Phone Number's valid_values \
+                                                attribute is set to false, or if the Person has \
+                                                multiple Phone Numbers marked as primary; \
+                                                Accepts value "false"),                                 required: false
+      parameter 'filter[updated_at]',          %(Filter by Updated At Date range; Accepts date range \
+                                                with text value like"MM/DD/YYYY - MM/DD/YYYY"),         required: false
+      parameter 'filter[wildcard_search]',     %(Filter by keyword, searches through \
+                                                name, email_addresses and phone_numbers),               required: false
 
-      parameter 'filter[any_filters]',         'If set to true any result where at least one of the filters apply will be returned',     required: false
-      parameter 'filter[reverse_FILTER_NAME]', "If set to true, the filter defined as FILTER_NAME will return results that don't apply", required: false
+      parameter 'filter[any_filters]',         'If set to true any result where at least one '\
+                                                'of the filters apply will be returned',             required: false
+      parameter 'filter[reverse_FILTER_NAME]', 'If set to true, the filter defined as FILTER_NAME '\
+                                                "will return results that don't apply",              required: false
 
       example 'List people', document: documentation_scope do
         explanation 'List of People'
@@ -283,6 +290,7 @@ resource 'People' do
         with_options required: true do
           parameter 'first_name', 'First Name', type: 'String'
         end
+        # rubocop:disable Metrics/LineLength
         parameter 'anniversary_day',                                          'Anniversary Day',                                                                  type: 'Number'
         parameter 'anniversary_month',                                        'Anniversary Month',                                                                type: 'Number'
         parameter 'anniversary_year',                                         'Anniversary Year',                                                                 type: 'Number'
@@ -401,6 +409,7 @@ resource 'People' do
         parameter 'websites_attributes[:key][id]',                            'Website ID, omit to create a new record, where :key is an integer',                type: 'String'
         parameter 'websites_attributes[:key][primary]',                       'Website Primary, where :key is an integer',                                        type: 'Boolean'
         parameter 'websites_attributes[:key][url]',                           'Website URL, where :key is an integer',                                            type: 'String'
+        # rubocop:enabled Metrics/LineLength
       end
 
       example 'Update a person', document: documentation_scope do

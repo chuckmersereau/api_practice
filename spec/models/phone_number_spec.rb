@@ -9,7 +9,9 @@ describe PhoneNumber do
   let(:contact) { create(:contact, account_list: user.account_lists.order(:created_at).first) }
   let(:person) { contact.people.create(first_name: 'test').reload }
 
-  include_examples 'updatable_only_when_source_is_mpdx_validation_examples', attributes: [:number, :country_code, :location, :remote_id], factory_type: :phone_number
+  include_examples 'updatable_only_when_source_is_mpdx_validation_examples',
+                   attributes: [:number, :country_code, :location, :remote_id],
+                   factory_type: :phone_number
 
   include_examples 'after_validate_set_source_to_mpdx_examples', factory_type: :phone_number
 

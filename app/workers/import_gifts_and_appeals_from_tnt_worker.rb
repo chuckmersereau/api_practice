@@ -1,7 +1,9 @@
-# Historically the Tnt import did not import gifts (donations) from the Tnt xml for online orgs (because they are imported from the org api, like Siebel).
+# Historically the Tnt import did not import gifts (donations) from the Tnt xml for online orgs
+# (because they are imported from the org api, like Siebel).
 # Because the gifts were not imported from the xml they were not associated to appeals.
 # Recently the Tnt import was updated to import gifts from the Tnt xml, so that we can associate them to appeals.
-# This job will re-run the appeal, pledge, and gift part of the Tnt import. We will run it on accounts that did not have their gifts associated to appeals.
+# This job will re-run the appeal, pledge, and gift part of the Tnt import.
+# We will run it on accounts that did not have their gifts associated to appeals.
 
 class ImportGiftsAndAppealsFromTntWorker
   include Sidekiq::Worker
@@ -32,7 +34,8 @@ class ImportGiftsAndAppealsFromTntWorker
   end
 
   def contact_ids_by_tnt_contact_id
-    @contact_ids_by_tnt_contact_id ||= import.account_list.contacts.where.not(tnt_id: nil).pluck(:id, :tnt_id).each_with_object({}) do |(mpdx_id, tnt_id), hash|
+    tnt_ids = import.account_list.contacts.where.not(tnt_id: nil).pluck(:id, :tnt_id)
+    @contact_ids_by_tnt_contact_id ||= tnt_ids.each_with_object({}) do |(mpdx_id, tnt_id), hash|
       hash[tnt_id.to_s] = mpdx_id
     end
   end

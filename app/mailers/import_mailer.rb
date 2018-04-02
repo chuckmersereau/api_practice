@@ -8,7 +8,8 @@ class ImportMailer < ApplicationMailer
     @successes = successes
     I18n.locale = user.locale || 'en'
 
-    mail(to: user.email, subject: _('[MPDX] Importing your %{source} contacts completed').localize % { source: import.user_friendly_source })
+    subject = _('[MPDX] Importing your %{source} contacts completed')
+    mail(to: user.email, subject: subject.localize % { source: import.user_friendly_source })
   end
 
   def failed(import, successes = nil, failures = nil)
@@ -21,7 +22,8 @@ class ImportMailer < ApplicationMailer
     @explanation = failure_explanation
     attachments[failure_attachment_filename] = failure_attachment if failure_attachment.present?
 
-    mail(to: user.email, subject: _('[MPDX] Importing your %{source} contacts failed').localize % { source: import.user_friendly_source })
+    subject = _('[MPDX] Importing your %{source} contacts failed')
+    mail(to: user.email, subject: subject.localize % { source: import.user_friendly_source })
   end
 
   def credentials_error(account)
@@ -29,7 +31,8 @@ class ImportMailer < ApplicationMailer
     return unless user&.email
     @account = account
 
-    mail(to: user.email, subject: _('[MPDX] Your credentials for %{source} are invalid').localize % { source: account.organization.name })
+    subject = _('[MPDX] Your credentials for %{source} are invalid')
+    mail(to: user.email, subject: subject.localize % { source: account.organization.name })
   end
 
   private
@@ -37,20 +40,25 @@ class ImportMailer < ApplicationMailer
   def failure_explanation
     case @import.source
     when 'tnt', 'tnt_data_sync'
-      _('There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. ' \
-      "If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly " \
+      _('There are a number of reasons an import can fail. The most common reason is a temporary '\
+      'server issue. Please try your import again. If it fails again, send an email to support@mpdx.org '\
+      "with your Tnt export attached. Having the file you're trying to import will greatly "\
       'help us in trying to determine why the import failed.')
     when 'csv'
-      _('There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. ' \
-      'First Name is a required field on CSV import. ' \
-      'We have attached a CSV file to this email containing the rows that failed to import. The first column in this CSV contains an error message about that row. ' \
-      'Please download this CSV, fix the issues inside it, and then try to import it again. You do not need to reimport the contacts that were successfully imported previously. ' \
-      'If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong.')
+      _('There are a number of reasons an import can fail. The most likely reason for a CSV import '\
+      'to fail is due to First Name. First Name is a required field on CSV import. We have attached '\
+      'a CSV file to this email containing the rows that failed to import. The first column in this '\
+      'CSV contains an error message about that row. Please download this CSV, fix the issues '\
+      'inside it, and then try to import it again. You do not need to reimport the contacts that '\
+      'were successfully imported previously. If it fails again, send us an email at support@mpdx.org '\
+      'and we will investigate what went wrong.')
     when 'facebook'
-      _('There are a number of reasons an import can fail. Often the failure is a temporary issue with Facebook that is outside of our control. Please try your import again. ' \
+      _('There are a number of reasons an import can fail. Often the failure is a temporary issue '\
+      'with Facebook that is outside of our control. Please try your import again. '\
       'If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong.')
     else
-      _('There are a number of reasons an import can fail. Often the failure can be a temporary network issue. Please try your import again. ' \
+      _('There are a number of reasons an import can fail. Often the failure '\
+      'can be a temporary network issue. Please try your import again. '\
       'If it fails again, send us an email at support@mpdx.org and we will investigate what went wrong.')
     end
   end

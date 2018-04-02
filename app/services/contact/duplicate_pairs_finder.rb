@@ -24,12 +24,13 @@ class Contact::DuplicatePairsFinder < ApplicationDuplicatePairsFinder
       parsed_name = HumanNameParser.new(original_name).parse
       primary_name = Contact::NameBuilder.new(parsed_name.slice(:first_name, :last_name)).name
 
+      spouse_name = Contact::NameBuilder.new(parsed_name.slice(:spouse_first_name, :spouse_last_name)).name.presence
       {
         id: contact_id,
         original_name: original_name.squish,
         rebuilt_name: Contact::NameBuilder.new(original_name).name,
         primary_name: primary_name,
-        spouse_or_primary_name: Contact::NameBuilder.new(parsed_name.slice(:spouse_first_name, :spouse_last_name)).name.presence || primary_name
+        spouse_or_primary_name: spouse_name || primary_name
       }
     end
   end
@@ -76,7 +77,10 @@ class Contact::DuplicatePairsFinder < ApplicationDuplicatePairsFinder
   end
 
   def build_hashes_for_comparing_donor_numbers
-    ContactDonorAccount.joins(:donor_account).where(contact: contacts_scope).pluck(:contact_id, 'donor_accounts.account_number').collect do |contact_id_and_donor_number|
+    contact_account_numbers = ContactDonorAccount.joins(:donor_account)
+                                                 .where(contact: contacts_scope)
+                                                 .pluck(:contact_id, 'donor_accounts.account_number')
+    contact_account_numbers.collect do |contact_id_and_donor_number|
       { id: contact_id_and_donor_number[0], donor_number: contact_id_and_donor_number[1] }
     end
   end

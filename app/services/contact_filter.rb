@@ -12,7 +12,9 @@ class ContactFilter
     @contacts = filtered_contacts = contacts
 
     if filters.present?
-      filtered_contacts = filtered_contacts.where('contacts.id' => @filters[:ids].split(',')) if @filters[:ids].present?
+      if @filters[:ids].present?
+        filtered_contacts = filtered_contacts.where('contacts.id' => @filters[:ids].split(','))
+      end
 
       filtered_contacts = filtered_contacts.where('contacts.id not in (?)', @filters[:not_ids]) if @filters[:not_ids]
 
@@ -315,8 +317,12 @@ class ContactFilter
       # & is intersection
       return filtered_contacts.where(id: contacts_with_mobile_phone_ids & contacts_with_home_phone_ids)
     end
-    return filtered_contacts.where(id: contacts_with_home_phone_ids - contacts_with_mobile_phone_ids) if filter_home_phone == 'Yes' && filter_mobile_phone == 'No'
-    return filtered_contacts.where(id: contacts_with_mobile_phone_ids - contacts_with_home_phone_ids) if filter_home_phone == 'No' && filter_mobile_phone == 'Yes'
+    if filter_home_phone == 'Yes' && filter_mobile_phone == 'No'
+      return filtered_contacts.where(id: contacts_with_home_phone_ids - contacts_with_mobile_phone_ids)
+    end
+    if filter_home_phone == 'No' && filter_mobile_phone == 'Yes'
+      return filtered_contacts.where(id: contacts_with_mobile_phone_ids - contacts_with_home_phone_ids)
+    end
     if filter_home_phone == 'No' && filter_mobile_phone == 'No'
       # | is union
       return filtered_contacts.where.not(id: contacts_with_mobile_phone_ids | contacts_with_home_phone_ids)

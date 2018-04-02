@@ -14,7 +14,8 @@ class Reports::YearDonations < ActiveModelSerializers::Model
   private
 
   def received_donations
+    scoper = ->(donations) { donations.where('donation_date >= ?', 12.months.ago.beginning_of_month) }
     @received_donations ||= DonationReports::ReceivedDonations.new(account_list: account_list,
-                                                                   donations_scoper: ->(donations) { donations.where('donation_date >= ?', 12.months.ago.beginning_of_month) })
+                                                                   donations_scoper: scoper)
   end
 end

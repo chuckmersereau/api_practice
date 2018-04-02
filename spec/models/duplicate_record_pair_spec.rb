@@ -7,40 +7,47 @@ describe DuplicateRecordPair, type: :model do
   let!(:record_three) { create(:contact).tap { |c| account_list.contacts << c } }
 
   it 'sorts the record ids' do
-    duplicate_record_pair = DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing')
-    expect(duplicate_record_pair.record_one_id).to eq(record_one.id)
-    expect(duplicate_record_pair.record_two_id).to eq(record_two.id)
-    expect(duplicate_record_pair.record_two.created_at > duplicate_record_pair.record_one.created_at).to eq(true)
+    drp = DuplicateRecordPair.create!(account_list: account_list, record_one: record_one,
+                                      record_two: record_two, reason: 'Testing')
+    expect(drp.record_one_id).to eq(record_one.id)
+    expect(drp.record_two_id).to eq(record_two.id)
+    expect(drp.record_two.created_at > drp.record_one.created_at).to eq(true)
 
-    duplicate_record_pair.update!(record_one_id: record_two.id, record_two_id: record_one.id)
-    expect(duplicate_record_pair.record_one_id).to eq(record_one.id)
-    expect(duplicate_record_pair.record_two_id).to eq(record_two.id)
+    drp.update!(record_one_id: record_two.id, record_two_id: record_one.id)
+    expect(drp.record_one_id).to eq(record_one.id)
+    expect(drp.record_two_id).to eq(record_two.id)
 
     DuplicateRecordPair.delete_all
 
-    duplicate_record_pair = DuplicateRecordPair.create!(account_list: account_list, record_one: record_two, record_two: record_one, reason: 'Testing')
-    expect(duplicate_record_pair.record_one_id).to eq(record_one.id)
-    expect(duplicate_record_pair.record_two_id).to eq(record_two.id)
+    drp = DuplicateRecordPair.create!(account_list: account_list, record_one: record_two,
+                                      record_two: record_one, reason: 'Testing')
+    expect(drp.record_one_id).to eq(record_one.id)
+    expect(drp.record_two_id).to eq(record_two.id)
   end
 
   it 'validates presence of both ids' do
-    duplicate_record_pair = DuplicateRecordPair.new(account_list: account_list, record_one: record_one, record_two: nil, reason: 'Testing')
-    expect(duplicate_record_pair.valid?).to eq(false)
-    duplicate_record_pair = DuplicateRecordPair.new(account_list: account_list, record_one: nil, record_two: record_two, reason: 'Testing')
-    expect(duplicate_record_pair.valid?).to eq(false)
-    duplicate_record_pair = DuplicateRecordPair.new(account_list: account_list, record_one: nil, record_two: nil, reason: 'Testing')
-    expect(duplicate_record_pair.valid?).to eq(false)
-    duplicate_record_pair = DuplicateRecordPair.new(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing')
-    expect(duplicate_record_pair.valid?).to eq(true)
+    drp = DuplicateRecordPair.new(account_list: account_list, record_one: record_one,
+                                  record_two: nil, reason: 'Testing')
+    expect(drp.valid?).to eq(false)
+    drp = DuplicateRecordPair.new(account_list: account_list, record_one: nil,
+                                  record_two: record_two, reason: 'Testing')
+    expect(drp.valid?).to eq(false)
+    drp = DuplicateRecordPair.new(account_list: account_list, record_one: nil,
+                                  record_two: nil, reason: 'Testing')
+    expect(drp.valid?).to eq(false)
+    drp = DuplicateRecordPair.new(account_list: account_list, record_one: record_one,
+                                  record_two: record_two, reason: 'Testing')
+    expect(drp.valid?).to eq(true)
   end
 
   it 'validates that both records have the same type' do
-    duplicate_record_pair = DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing')
-    expect(duplicate_record_pair.valid?).to eq(true)
-    duplicate_record_pair.record_one_type = 'Person'
-    expect(duplicate_record_pair.valid?).to eq(false)
-    duplicate_record_pair.record_one_type = 'Contact'
-    expect(duplicate_record_pair.valid?).to eq(true)
+    drp = DuplicateRecordPair.create!(account_list: account_list, record_one: record_one,
+                                      record_two: record_two, reason: 'Testing')
+    expect(drp.valid?).to eq(true)
+    drp.record_one_type = 'Person'
+    expect(drp.valid?).to eq(false)
+    drp.record_one_type = 'Contact'
+    expect(drp.valid?).to eq(true)
   end
 
   it 'validates that both records belong to the same AccountList' do
@@ -233,20 +240,26 @@ describe DuplicateRecordPair, type: :model do
   end
 
   describe 'scope type' do
-    let!(:duplicate_record_pair_one) { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing') }
-    let!(:duplicate_record_pair_two) do
+    let!(:drp1) do
+      DuplicateRecordPair.create!(account_list: account_list, record_one: record_one,
+                                  record_two: record_two, reason: 'Testing')
+    end
+    let!(:drp2) do
       DuplicateRecordPair.create!(account_list: account_list, record_one: create(:contact, account_list: account_list),
                                   record_two: create(:contact, account_list: account_list), reason: 'Testing')
     end
 
     it "returns DuplicateRecordPair's with the expected type" do
-      expect(DuplicateRecordPair.type('Contact').to_a).to contain_exactly(duplicate_record_pair_one, duplicate_record_pair_two)
+      expect(DuplicateRecordPair.type('Contact').to_a).to contain_exactly(drp1, drp2)
       expect(DuplicateRecordPair.type('Person').to_a).to eq([])
     end
   end
 
   describe '#type' do
-    let(:duplicate_record_pair) { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing') }
+    let(:duplicate_record_pair) do
+      DuplicateRecordPair.create!(account_list: account_list, record_one: record_one,
+                                  record_two: record_two, reason: 'Testing')
+    end
 
     it 'returns the type if they are the same' do
       expect(duplicate_record_pair.type).to eq('Contact')
@@ -258,7 +271,10 @@ describe DuplicateRecordPair, type: :model do
   end
 
   describe '#records' do
-    let(:duplicate_record_pair) { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing') }
+    let(:duplicate_record_pair) do
+      DuplicateRecordPair.create!(account_list: account_list, record_one: record_one,
+                                  record_two: record_two, reason: 'Testing')
+    end
 
     it 'returns the record pair as an array' do
       expect(duplicate_record_pair.records).to eq([record_one, record_two])
@@ -266,7 +282,10 @@ describe DuplicateRecordPair, type: :model do
   end
 
   describe '#ids' do
-    let(:duplicate_record_pair) { DuplicateRecordPair.create!(account_list: account_list, record_one: record_one, record_two: record_two, reason: 'Testing') }
+    let(:duplicate_record_pair) do
+      DuplicateRecordPair.create!(account_list: account_list, record_one: record_one,
+                                  record_two: record_two, reason: 'Testing')
+    end
 
     it 'returns the record ids as an array' do
       expect(duplicate_record_pair.ids).to eq([record_one.id, record_two.id])

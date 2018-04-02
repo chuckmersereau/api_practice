@@ -17,13 +17,24 @@ class Activity < ApplicationRecord
   has_many :phone_numbers, through: :people
 
   scope :completed,         -> { where(completed: true).order('completed_at desc, start_at desc') }
-  scope :future,            -> { where('start_at > ?', Time.current).order('start_at') }
-  scope :overdue,           -> { where(completed: false).where('start_at < ?', Time.current.beginning_of_day).order('start_at DESC') }
-  scope :overdue_and_today, -> { where(completed: false).where('start_at < ?', Time.current.end_of_day) }
-  scope :starred,           -> { where(starred: true).order('start_at') }
-  scope :today,             -> { where('start_at BETWEEN ? AND ?', Time.current.beginning_of_day, Time.current.end_of_day).order('start_at') }
-  scope :tomorrow,          -> { where('start_at BETWEEN ? AND ?', (Date.current + 1.day).beginning_of_day, (Date.current + 1.day).end_of_day).order('start_at') }
   scope :uncompleted,       -> { where(completed: false).order('start_at') }
+  scope :starred,           -> { where(starred: true).order('start_at') }
+  scope :overdue,           lambda {
+                              where(completed: false)
+                                .where('start_at < ?', Time.current.beginning_of_day)
+                                .order('start_at DESC')
+                            }
+  scope :overdue_and_today, -> { where(completed: false).where('start_at < ?', Time.current.end_of_day) }
+  scope :today,             lambda {
+                              where('start_at BETWEEN ? AND ?', Time.current.beginning_of_day, Time.current.end_of_day)
+                                .order('start_at')
+                            }
+  scope :tomorrow,          lambda {
+                              tomorrow = Date.current + 1.day
+                              where('start_at BETWEEN ? AND ?', tomorrow.beginning_of_day, tomorrow.end_of_day)
+                                .order('start_at')
+                            }
+  scope :future,            -> { where('start_at > ?', Time.current).order('start_at') }
   scope :upcoming,          -> { where('start_at > ?', Time.current.end_of_day).order('start_at') }
   scope :no_date,           -> { where('start_at IS NULL') }
 

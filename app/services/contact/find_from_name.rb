@@ -24,11 +24,14 @@ class Contact::FindFromName
   end
 
   def find_contact_by_primary_person
-    contact_scope.people.joins(:people).where(people: { first_name: parsed_name_parts[:first_name], last_name: parsed_name_parts[:last_name] })
+    people_params = { first_name: parsed_name_parts[:first_name], last_name: parsed_name_parts[:last_name] }
+    contact_scope.people.joins(:people).where(people: people_params)
   end
 
   def find_contact_by_spouse
-    contact_scope.people.joins(:people).where(people: { first_name: parsed_name_parts[:spouse_first_name], last_name: parsed_name_parts[:spouse_last_name] })
+    people_params = { first_name: parsed_name_parts[:spouse_first_name],
+                      last_name: parsed_name_parts[:spouse_last_name] }
+    contact_scope.people.joins(:people).where(people: people_params)
   end
 
   def parsed_name_parts
@@ -40,6 +43,7 @@ class Contact::FindFromName
   end
 
   def parse_and_rebuild_first_name
-    @parse_and_rebuild_first_name ||= Contact::NameBuilder.new(parsed_name_parts.slice(:first_name, :spouse_first_name)).name
+    @parse_and_rebuild_first_name ||=
+      Contact::NameBuilder.new(parsed_name_parts.slice(:first_name, :spouse_first_name)).name
   end
 end

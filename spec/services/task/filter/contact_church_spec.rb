@@ -27,13 +27,15 @@ RSpec.describe Task::Filter::ContactChurch do
 
     context 'filter by no church' do
       it 'returns only tasks with  contacts that have no church' do
-        expect(described_class.query(tasks, { contact_church: 'none' }, account_list).to_a).to match_array [task_three, task_four]
+        result = described_class.query(tasks, { contact_church: 'none' }, account_list).to_a
+        expect(result).to match_array [task_three, task_four]
       end
     end
 
     context 'filter by church' do
       it 'filters multiple churches' do
-        expect(described_class.query(tasks, { contact_church: 'My Church, First Pedestrian Church' }, account_list).to_a).to match_array [task_one, task_two]
+        result = described_class.query(tasks, { contact_church: 'My Church, First Pedestrian Church' }, account_list).to_a
+        expect(result).to match_array [task_one, task_two]
       end
       it 'filters a single church' do
         expect(described_class.query(tasks, { contact_church: 'My Church' }, account_list).to_a).to eq [task_one]
@@ -42,7 +44,8 @@ RSpec.describe Task::Filter::ContactChurch do
 
     context 'multiple filters' do
       it 'returns tasks with contacts matching multiple filters' do
-        expect(described_class.query(tasks, { contact_church: 'My Church, none' }, account_list).to_a).to match_array [task_one, task_three, task_four]
+        result = described_class.query(tasks, { contact_church: 'My Church, none' }, account_list).to_a
+        expect(result).to match_array [task_one, task_three, task_four]
       end
     end
   end

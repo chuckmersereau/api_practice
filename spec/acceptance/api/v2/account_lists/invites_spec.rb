@@ -11,8 +11,10 @@ resource 'Account Lists > Invites' do
   let!(:account_list)   { user.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
 
-  let!(:invite)         { create(:account_list_invite, account_list: account_list, accepted_by_user: nil, cancelled_by_user: nil) }
-  let!(:invite_coach)   { create(:account_list_invite, account_list: account_list, accepted_by_user: nil, cancelled_by_user: nil, invite_user_as: 'coach') }
+  let(:invite_params) { { account_list: account_list, accepted_by_user: nil, cancelled_by_user: nil } }
+
+  let!(:invite)         { create(:account_list_invite, invite_params) }
+  let!(:invite_coach)   { create(:account_list_invite, invite_params.merge(invite_user_as: 'coach')) }
   let(:id)              { invite.id }
 
   let(:expected_attribute_keys) do

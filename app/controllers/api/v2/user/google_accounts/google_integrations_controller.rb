@@ -92,9 +92,15 @@ class Api::V2::User::GoogleAccounts::GoogleIntegrationsController < Api::V2Contr
     params
       .require(:google_integration)
       .permit(GoogleIntegration::PERMITTED_ATTRIBUTES)
-      .tap do |permit_params| # Permit the Array attributes to be set to anything, including nil (so that the client can empty the Array).
-        permit_params[:email_blacklist] = params[:google_integration][:email_blacklist] if params[:google_integration].keys.include?('email_blacklist')
-        permit_params[:calendar_integrations] = params[:google_integration][:calendar_integrations] if params[:google_integration].keys.include?('calendar_integrations')
+      .tap do |permit_params|
+        # Permit the Array attributes to be set to anything,
+        # including nil (so that the client can empty the Array).
+        if params[:google_integration].keys.include?('email_blacklist')
+          permit_params[:email_blacklist] = params[:google_integration][:email_blacklist]
+        end
+        if params[:google_integration].keys.include?('calendar_integrations')
+          permit_params[:calendar_integrations] = params[:google_integration][:calendar_integrations]
+        end
       end
   end
 

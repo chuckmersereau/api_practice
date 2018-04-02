@@ -3,13 +3,18 @@ require 'rails_helper'
 describe GoogleCalendarIntegrator do
   let(:user) { create(:user) }
   let(:google_account) { create :google_account, person: user }
-  let(:google_integration) { build(:google_integration, google_account: google_account, calendar_integrations: ['Appointment'], calendar_name: 'My Calendar') }
+  let(:google_integration) do
+    build(:google_integration, google_account: google_account,
+                               calendar_integrations: ['Appointment'],
+                               calendar_name: 'My Calendar')
+  end
   let(:integrator) { google_integration.calendar_integrator }
   let(:task) { create(:task, account_list: google_integration.account_list, activity_type: 'Appointment') }
   let(:google_event) { create(:google_event, activity: task, google_integration: google_integration) }
 
   let(:missing_event_response) do
-    double(data: { 'error' => { 'errors' => [{ 'domain' => 'global', 'reason' => 'notFound', 'message' => 'Not Found' }],
+    errors = [{ 'domain' => 'global', 'reason' => 'notFound', 'message' => 'Not Found' }]
+    double(data: { 'error' => { 'errors' => errors,
                                 'code' => 404, 'message' => 'Not Found' } },
            status: 404)
   end
@@ -63,7 +68,8 @@ describe GoogleCalendarIntegrator do
 
   context '#add_task' do
     it 'creates a google_event' do
-      allow(google_integration).to receive_message_chain(:calendar_service, :insert_event).and_return(double(id: '1234'))
+      allow(google_integration).to receive_message_chain(:calendar_service, :insert_event)
+        .and_return(double(id: '1234'))
 
       expect do
         integrator.send(:add_task, task)
@@ -74,7 +80,8 @@ describe GoogleCalendarIntegrator do
     end
 
     it 'removes the calendar integration if the calendar no longer exists on google' do
-      allow(google_integration).to receive_message_chain(:calendar_service, :insert_event).and_raise(Google::Apis::ClientError.new('error', status_code: 404))
+      allow(google_integration).to receive_message_chain(:calendar_service, :insert_event)
+        .and_raise(Google::Apis::ClientError.new('error', status_code: 404))
 
       expect(google_integration.calendar_integration?).to be true
       expect(google_integration.calendar_id).to be_present
@@ -102,13 +109,16 @@ describe GoogleCalendarIntegrator do
     end
 
     it 'adds the google event if it is missing from google' do
-      allow(google_integration).to receive_message_chain(:calendar_service, :patch_event).and_raise(Google::Apis::ClientError.new('error', status_code: 404))
-      allow(google_integration).to receive_message_chain(:calendar_service, :insert_event).and_return(double(id: '1234'))
+      allow(google_integration).to receive_message_chain(:calendar_service, :patch_event)
+        .and_raise(Google::Apis::ClientError.new('error', status_code: 404))
+      allow(google_integration).to receive_message_chain(:calendar_service, :insert_event)
+        .and_return(double(id: '1234'))
 
       integrator.send(:update_task, task, google_event)
 
       expect(GoogleEvent.exists?(id: google_event.id)).to eq(false)
-      expect(GoogleEvent.exists?(google_integration_id: google_integration.id, activity_id: task.id, google_event_id: '1234')).to eq(true)
+      event_attrs = { google_integration_id: google_integration.id, activity_id: task.id, google_event_id: '1234' }
+      expect(GoogleEvent.exists?(event_attrs)).to eq(true)
     end
   end
 

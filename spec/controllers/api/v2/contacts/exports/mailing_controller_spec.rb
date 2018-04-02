@@ -11,7 +11,11 @@ describe Api::V2::Contacts::Exports::MailingController, type: :controller do
   let(:second_account_list) { create(:account_list, users: [user]) }
 
   let!(:contact) { create(:contact, account_list: account_list, name: 'Last Contact', addresses: [build(:address)]) }
-  let!(:second_contact) { create(:contact, account_list: account_list, name: 'First Contact', addresses: [build(:address, street: '123 another street')]) }
+  let!(:second_contact) do
+    create(:contact, account_list: account_list,
+                     name: 'First Contact',
+                     addresses: [build(:address, street: '123 another street')])
+  end
   let!(:third_contact) { create(:contact, account_list: second_account_list, name: 'Missing Contact') }
 
   let(:id) { contact.id }

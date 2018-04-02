@@ -2,6 +2,8 @@ class TntImport::ContactImport
   include Concerns::TntImport::DateHelpers
   include LocalizationHelper
 
+  BEGINNING_OF_TIME = '1899-12-30'.freeze
+
   def initialize(import, tags, donor_accounts, xml)
     @import = import
     @account_list = import.account_list
@@ -72,7 +74,9 @@ class TntImport::ContactImport
     contact.name = row['FileAs'] if @override || contact.name.blank?
     contact.full_name = row['FullName'] if @override || contact.full_name.blank?
     contact.greeting = row['Greeting'] if @override || contact.greeting.blank?
-    contact.envelope_greeting = extract_envelope_greeting_from_row(row) if @override || contact.attributes['envelope_greeting'].blank?
+    if @override || contact.attributes['envelope_greeting'].blank?
+      contact.envelope_greeting = extract_envelope_greeting_from_row(row)
+    end
     contact.website = row['WebPage'] if @override || contact.website.blank?
     contact.church_name = row['ChurchName'] if @override || contact.church_name.blank?
     contact.updated_at = parse_date(row['LastEdit'], @import.user) if @override
@@ -86,28 +90,59 @@ class TntImport::ContactImport
 
   def update_contact_pledge_fields(contact, row)
     contact.pledge_amount = row['PledgeAmount'] if @override || contact.pledge_amount.blank?
-    # PledgeFrequencyID: Since TNT 3.2, a negative number indicates a fequency in days. For example: -11 would be a frequency of 11 days. For now we are ignoring negatives.
-    contact.pledge_frequency = row['PledgeFrequencyID'] if (@override || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i.positive?
+    # PledgeFrequencyID: Since TNT 3.2, a negative number indicates a fequency in days.
+    # For example: -11 would be a frequency of 11 days. For now we are ignoring negatives.
+    if (@override || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i.positive?
+      contact.pledge_frequency = row['PledgeFrequencyID']
+    end
     contact.pledge_received = true?(row['PledgeReceived']) if @override || contact.pledge_received.blank?
-    contact.status = TntImport::TntCodes.mpd_phase(row['MPDPhaseID']) if (@override || contact.status.blank?) && TntImport::TntCodes.mpd_phase(row['MPDPhaseID']).present?
-    contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1] if (@override || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i.nonzero?
+    if (@override || contact.status.blank?) && TntImport::TntCodes.mpd_phase(row['MPDPhaseID']).present?
+      contact.status = TntImport::TntCodes.mpd_phase(row['MPDPhaseID'])
+    end
+    if (@override || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i.nonzero?
+      contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1]
+    end
     contact.no_appeals = true?(row['NeverAsk']) if @override || contact.no_appeals.nil?
-    contact.estimated_annual_pledge_amount = row['EstimatedAnnualCapacity'] if @override || contact.estimated_annual_pledge_amount.nil?
+    if @override || contact.estimated_annual_pledge_amount.nil?
+      contact.estimated_annual_pledge_amount = row['EstimatedAnnualCapacity']
+    end
     contact.next_ask_amount = row['NextAskAmount'] if @override || contact.next_ask_amount.nil?
     contact.pledge_currency = pledge_currency(row) if @override || contact.pledge_currency.nil?
   end
 
   def update_contact_date_fields(contact, row)
-    contact.pledge_start_date = parse_date(row['PledgeStartDate'], @import.user) if (@override || contact.pledge_start_date.blank?) && row['PledgeStartDate'].present? &&
-                                                                                    row['PledgeStartDate'] != '1899-12-30'
-    contact.next_ask = parse_date(row['NextAsk'], @import.user) if (@override || contact.next_ask.blank?) && row['NextAsk'].present? && row['NextAsk'] != '1899-12-30'
-    contact.last_activity = parse_date(row['LastActivity'], @import.user) if (@override || contact.last_activity.blank?) && row['LastActivity'].present? && row['LastActivity'] != '1899-12-30'
-    contact.last_appointment = parse_date(row['LastAppointment'], @import.user) if (@override || contact.last_appointment.blank?) && row['LastAppointment'].present? &&
-                                                                                   row['LastAppointment'] != '1899-12-30'
-    contact.last_letter = parse_date(row['LastLetter'], @import.user) if (@override || contact.last_letter.blank?) && row['LastLetter'].present? && row['LastLetter'] != '1899-12-30'
-    contact.last_phone_call = parse_date(row['LastCall'], @import.user) if (@override || contact.last_phone_call.blank?) && row['LastCall'].present? && row['LastCall'] != '1899-12-30'
-    contact.last_pre_call = parse_date(row['LastPreCall'], @import.user) if (@override || contact.last_pre_call.blank?) && row['LastPreCall'].present? && row['LastPreCall'] != '1899-12-30'
-    contact.last_thank = parse_date(row['LastThank'], @import.user) if (@override || contact.last_thank.blank?) && row['LastThank'].present? && row['LastThank'] != '1899-12-30'
+    if (@override || contact.pledge_start_date.blank?) &&
+       row['PledgeStartDate'].present? &&
+       row['PledgeStartDate'] != BEGINNING_OF_TIME
+      contact.pledge_start_date = parse_date(row['PledgeStartDate'], @import.user)
+    end
+    if (@override || contact.next_ask.blank?) && row['NextAsk'].present? && row['NextAsk'] != BEGINNING_OF_TIME
+      contact.next_ask = parse_date(row['NextAsk'], @import.user)
+    end
+    if (@override || contact.last_activity.blank?) &&
+       row['LastActivity'].present? &&
+       row['LastActivity'] != BEGINNING_OF_TIME
+      contact.last_activity = parse_date(row['LastActivity'], @import.user)
+    end
+    if (@override || contact.last_appointment.blank?) &&
+       row['LastAppointment'].present? &&
+       row['LastAppointment'] != BEGINNING_OF_TIME
+      contact.last_appointment = parse_date(row['LastAppointment'], @import.user)
+    end
+    if (@override || contact.last_letter.blank?) && row['LastLetter'].present? && row['LastLetter'] != BEGINNING_OF_TIME
+      contact.last_letter = parse_date(row['LastLetter'], @import.user)
+    end
+    if (@override || contact.last_phone_call.blank?) && row['LastCall'].present? && row['LastCall'] != BEGINNING_OF_TIME
+      contact.last_phone_call = parse_date(row['LastCall'], @import.user)
+    end
+    if (@override || contact.last_pre_call.blank?) &&
+       row['LastPreCall'].present? &&
+       row['LastPreCall'] != BEGINNING_OF_TIME
+      contact.last_pre_call = parse_date(row['LastPreCall'], @import.user)
+    end
+    if (@override || contact.last_thank.blank?) && row['LastThank'].present? && row['LastThank'] != BEGINNING_OF_TIME
+      contact.last_thank = parse_date(row['LastThank'], @import.user)
+    end
   end
 
   def update_contact_send_newsletter_field(contact, row)
@@ -172,7 +207,9 @@ class TntImport::ContactImport
                               postal_code: row['MailingPostalCode'],
                               country: row['MailingCountry'])
     company.save!
-    donor_account.update_attribute(:master_company_id, company.master_company_id) unless donor_account.master_company_id == company.master_company.id
+    unless donor_account.master_company_id == company.master_company.id
+      donor_account.update_attribute(:master_company_id, company.master_company_id)
+    end
     company
   end
 

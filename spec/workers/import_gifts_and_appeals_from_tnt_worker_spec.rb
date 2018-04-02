@@ -51,8 +51,10 @@ describe ImportGiftsAndAppealsFromTntWorker do
     tnt_import = TntImport.new(import)
     expect(worker).to receive(:tnt_import).and_return(tnt_import)
     expect(TntImport::AppealsImport).to receive(:new).with(account_list,
-                                                           { '183362175' => [contact.id], '291896527' => [], '681505203' => [],
-                                                             '830704017' => [], '936046261' => [], '936046262' => [], '1494330654' => [], '1541020410' => [] },
+                                                           { '183362175' => [contact.id], '291896527' => [],
+                                                             '681505203' => [], '830704017' => [],
+                                                             '936046261' => [], '936046262' => [],
+                                                             '1494330654' => [], '1541020410' => [] },
                                                            tnt_import.xml).and_return(double(import: true))
     worker.perform(import.id)
   end
@@ -60,16 +62,21 @@ describe ImportGiftsAndAppealsFromTntWorker do
   it 'imports pledges with expected parameters' do
     tnt_import = TntImport.new(import)
     expect(worker).to receive(:tnt_import).and_return(tnt_import)
-    expect(TntImport::PledgesImport).to receive(:new).with(account_list, import, tnt_import.xml).and_return(double(import: true))
+    expect(TntImport::PledgesImport).to receive(:new)
+      .with(account_list, import, tnt_import.xml)
+      .and_return(double(import: true))
     worker.perform(import.id)
   end
 
   it 'imports gifts with expected parameters' do
     tnt_import = TntImport.new(import)
     contact = create(:contact, tnt_id: 1)
-    account_list.contacts << contact # Add a contact to the account_list to test that it shows up in the arguments below.
+    # Add a contact to the account_list to test that it shows up in the arguments below.
+    account_list.contacts << contact
     expect(worker).to receive(:tnt_import).and_return(tnt_import)
-    expect(TntImport::GiftsImport).to receive(:new).with(account_list, { '1' => contact.id }, tnt_import.xml, import).and_return(double(import: true))
+    expect(TntImport::GiftsImport).to receive(:new)
+      .with(account_list, { '1' => contact.id }, tnt_import.xml, import)
+      .and_return(double(import: true))
     worker.perform(import.id)
   end
 end

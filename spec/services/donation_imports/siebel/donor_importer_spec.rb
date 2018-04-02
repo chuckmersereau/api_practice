@@ -7,7 +7,10 @@ RSpec.describe DonationImports::Siebel::DonorImporter do
   let(:organization) { organization_account.organization }
 
   let(:designation_profile) { organization_account.designation_profiles.first }
-  let!(:designation_account) { create(:designation_account, designation_profiles: [designation_profile], designation_number: 'the_designation_number') }
+  let!(:designation_account) do
+    create(:designation_account, designation_profiles: [designation_profile],
+                                 designation_number: 'the_designation_number')
+  end
 
   let(:mock_siebel_import) { double(:mock_siebel_import) }
   let(:mock_profile) { double(:mock_profile) }
@@ -24,7 +27,8 @@ RSpec.describe DonationImports::Siebel::DonorImporter do
   subject { described_class.new(mock_siebel_import) }
 
   DonorStruct = Struct.new(:id, :account_name, :type, :addresses, :contacts)
-  AddressStruct = Struct.new(:id, :address1, :primary, :address2, :address3, :address4, :city, :state, :zip, :seasonal, :type, :updated_at)
+  AddressStruct = Struct.new(:id, :address1, :primary, :address2, :address3, :address4,
+                             :city, :state, :zip, :seasonal, :type, :updated_at)
   PersonStruct = Struct.new(:id, :name)
 
   let(:siebel_person) { PersonStruct.new('person_id_one', 'Oliver') }

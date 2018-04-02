@@ -95,10 +95,9 @@ RSpec.describe 'Post Requests', type: :request do
       end
 
       let(:error_message) do
-        [
-          'A primary key, if sent in a request, CANNOT be referenced in the #attributes of a JSONAPI resource object.',
-          "It must instead be sent as a top level member of the resource's `data` object. Reference: `/data/attributes/id`. Expected `/data/id`"
-        ].join(' ')
+        'A primary key, if sent in a request, CANNOT be referenced in the #attributes of a JSONAPI '\
+        "resource object. It must instead be sent as a top level member of the resource's `data` "\
+        'object. Reference: `/data/attributes/id`. Expected `/data/id`'
       end
 
       it 'returns an error' do
@@ -219,7 +218,8 @@ RSpec.describe 'Post Requests', type: :request do
       end
 
       let(:error_message) do
-        'JSONAPI resource objects MUST contain a `type` top-level member of its hash for POST and PATCH requests. Expected to find a `type` member at /data/type'
+        'JSONAPI resource objects MUST contain a `type` top-level member of its hash for POST '\
+        'and PATCH requests. Expected to find a `type` member at /data/type'
       end
 
       it 'returns a 409' do

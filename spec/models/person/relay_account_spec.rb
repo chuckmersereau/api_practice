@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 describe Person::RelayAccount do
+  let(:guid) { 'F167605D-94A4-7121-2A58-8D0F2CA6E024' }
+
   before(:each) do
     @org = Organization.find_by(code: 'CCC-USA') || create(:ccc) # Spec requires CCC-USA org to exist.
     user_attributes = [{ firstName: 'John', lastName: 'Doe', username: 'JOHN.DOE@EXAMPLE.COM',
                          email: 'johnnydoe@example.com', designation: '0000000', emplid: '000000000',
-                         ssoGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024',
-                         relayGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024',
-                         keyGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024' }]
+                         ssoGuid: guid, relayGuid: guid, keyGuid: guid }]
     @auth_hash = Hashie::Mash.new(uid: 'JOHN.DOE@EXAMPLE.COM', extra: { attributes: user_attributes })
     @wsapi_headers = { 'Authorization' => "Bearer #{ENV.fetch('WSAPI_KEY')}" }
-    stub_request(:get, 'https://wsapi.ccci.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=F167605D-94A4-7121-2A58-8D0F2CA6E024')
+    stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=#{guid}")
       .with(headers: @wsapi_headers)
       .to_return(status: 200, body: '[]', headers: {})
   end
@@ -37,10 +37,12 @@ describe Person::RelayAccount do
     end
 
     it 'creates an organization account if this user has a profile at cru' do
-      stub_request(:get, 'https://wsapi.ccci.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=F167605D-94A4-7121-2A58-8D0F2CA6E024')
+      stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=#{guid}")
         .with(headers: @wsapi_headers)
         .to_return(status: 200, headers: {},
-                   body: '[{"name":"Staff Account(000555555)","designations":[{"number":"0555555","description":"Jon and Jane Doe(000555555)","staffAccountId":"000555555"}]}]')
+                   body: '[{"name":"Staff Account(000555555)",'\
+                           '"designations":[{"number":"0555555","description":"Jon and Jane Doe(000555555)",'\
+                                            '"staffAccountId":"000555555"}]}]')
       person = create(:user)
       allow(@org).to receive(:api).and_return(FakeApi.new)
       expect do

@@ -14,7 +14,8 @@ class TntImport::AddressesBuilder
         primary_address = row['MailingAddressType'].to_i == (i + 1) if override
         if primary_address && contact
           contact.addresses.each do |address|
-            next if address.street == street && address.city == city && address.state == state && address.postal_code == postal_code && address.country == country
+            next if address.street == street && address.city == city && address.state == state &&
+                    address.postal_code == postal_code && address.country == country
             address.primary_mailing_address = false
             address.save
           end

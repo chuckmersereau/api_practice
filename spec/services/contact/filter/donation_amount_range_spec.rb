@@ -17,18 +17,27 @@ RSpec.describe Contact::Filter::DonationAmountRange do
   let!(:designation_account_one) { create(:designation_account, account_lists: [account_list]) }
   let!(:designation_account_two) { create(:designation_account, account_lists: [account_list]) }
 
-  let!(:donation_one) { create(:donation, donor_account: donor_account_one, designation_account: designation_account_one, amount: 12.34) }
-  let!(:donation_two) { create(:donation, donor_account: donor_account_two, designation_account: designation_account_one, amount: 4444.33) }
-  let!(:donation_three) { create(:donation, donor_account: donor_account_three, designation_account: designation_account_two, amount: 8.31) }
-  let!(:donation_four) { create(:donation, donor_account: donor_account_four, designation_account_id: nil, amount: 12.00) }
+  let!(:donation_one) do
+    create(:donation, donor_account: donor_account_one, designation_account: designation_account_one, amount: 12.34)
+  end
+  let!(:donation_two) do
+    create(:donation, donor_account: donor_account_two, designation_account: designation_account_one, amount: 4444.33)
+  end
+  let!(:donation_three) do
+    create(:donation, donor_account: donor_account_three, designation_account: designation_account_two, amount: 8.31)
+  end
+  let!(:donation_four) do
+    create(:donation, donor_account: donor_account_four, designation_account_id: nil, amount: 12.00)
+  end
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: 'Gift Amount Higher Than or Equal To', id: 'min', placeholder: 0 },
+                 { name: 'Gift Amount Less Than or Equal To', id: 'max', placeholder: 4444.33 }]
       expect(described_class.config([account_list])).to include(default_selection: '',
                                                                 multiple: false,
                                                                 name: :donation_amount_range,
-                                                                options: [{ name: 'Gift Amount Higher Than or Equal To', id: 'min', placeholder: 0 },
-                                                                          { name: 'Gift Amount Less Than or Equal To', id: 'max', placeholder: 4444.33 }],
+                                                                options: options,
                                                                 parent: 'Gift Details',
                                                                 title: 'Gift Amount Range',
                                                                 type: 'text')
@@ -50,19 +59,22 @@ RSpec.describe Contact::Filter::DonationAmountRange do
 
     context 'filter by amount min' do
       it 'returns only contacts that have given the at least the min amount' do
-        expect(described_class.query(contacts, { donation_amount_range: { min: '10' } }, [account_list]).to_a).to match_array [contact_one, contact_two]
+        result = described_class.query(contacts, { donation_amount_range: { min: '10' } }, [account_list]).to_a
+        expect(result).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by amount max' do
       it 'returns only contacts that have given no more than the max amount' do
-        expect(described_class.query(contacts, { donation_amount_range: { max: '13' } }, [account_list]).to_a).to match_array [contact_one, contact_three]
+        result = described_class.query(contacts, { donation_amount_range: { max: '13' } }, [account_list]).to_a
+        expect(result).to match_array [contact_one, contact_three]
       end
     end
 
     context 'filter by amount min and max' do
       it 'returns only contacts that have given gifts within the min and max amounts' do
-        expect(described_class.query(contacts, { donation_amount_range: { min: '10', max: '13' } }, [account_list]).to_a).to match_array [contact_one]
+        result = described_class.query(contacts, { donation_amount_range: { min: '10', max: '13' } }, [account_list]).to_a
+        expect(result).to match_array [contact_one]
       end
     end
   end
