@@ -329,7 +329,7 @@ class DataServer
 
     Rails.logger.debug(request_params)
     RestClient::Request.execute(request_params) do |response, _request, _result, &_block|
-      raise_if_error_code(response.code)
+      raise_if_error_code(response)
       handle_ok_response(response)
     end
   rescue OpenSSL::SSL::SSLError => e
@@ -338,7 +338,8 @@ class DataServer
                  URI(url).host, e)
   end
 
-  def raise_if_error_code(code)
+  def raise_if_error_code(response)
+    code = response.code
     case code
     when 403 then
       raise_invalid_credentials

@@ -13,6 +13,6 @@ class RunOnce::AccountPasswordRemovalWorker
   private
 
   def accounts_with_tokens
-    Person::OrganizationAccount.where.not(token: nil)
+    Person::OrganizationAccount.where.not(password: nil, token: nil)
   end
 end
