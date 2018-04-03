@@ -19,6 +19,7 @@ class Person::FacebookAccount < ApplicationRecord
                           :id].freeze
 
   validates :username, presence: true, uniqueness: { scope: :person_id }
+  validates :remote_id, uniqueness: { scope: :person_id, allow_nil: true }
 
   def self.find_or_create_from_auth(auth_hash, person)
     relation_scope = person.facebook_accounts

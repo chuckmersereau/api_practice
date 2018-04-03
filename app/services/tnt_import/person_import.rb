@@ -113,21 +113,19 @@ class TntImport::PersonImport
   end
 
   def update_person_social_media_accounts(person, row, prefix)
-    facebook = row["#{prefix}SocialWeb1"]
-    facebook = Person::FacebookAccount.username_from_url(facebook) || facebook
-    person.facebook_accounts.find_or_initialize_by(username: facebook) if facebook
+    import_social_column(person.facebook_accounts, row, prefix, 'SocialWeb1', :username)
+    import_social_column(person.linkedin_accounts, row, prefix, 'SocialWeb2', :public_url)
+    import_social_column(person.twitter_accounts, row, prefix, 'SocialWeb3', :screen_name)
+    import_social_column(person.websites, row, prefix, 'WebPage1', :url)
+    import_social_column(person.websites, row, prefix, 'WebPage2', :url)
+  end
 
-    linkedin = row["#{prefix}SocialWeb2"]
-    person.linkedin_accounts.find_or_initialize_by(public_url: linkedin) if linkedin
+  def import_social_column(relationship, row, prefix, col_name, remote_field)
+    remote_value = row["#{prefix}#{col_name}"]
+    new_account = relationship.find_or_initialize_by(remote_field => remote_value) if remote_value
 
-    twitter = row["#{prefix}SocialWeb3"]
-    person.twitter_accounts.find_or_initialize_by(screen_name: twitter) if twitter
-
-    webpage_1 = row["#{prefix}WebPage1"]
-    person.websites.find_or_initialize_by(url: webpage_1) if webpage_1
-
-    webpage_2 = row["#{prefix}WebPage2"]
-    person.websites.find_or_initialize_by(url: webpage_2) if webpage_2
+    # if the record is invalid, don't try to initialize it
+    relationship.delete(new_account) if new_account&.invalid?
   end
 
   def true?(val)
