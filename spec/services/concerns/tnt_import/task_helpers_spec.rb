@@ -19,29 +19,29 @@ describe Concerns::TntImport::TaskHelpers do
 
   it 'adds a comment for a tnt notes' do
     expect do
-      test_class.new.send(:import_comments_for_task, task: task, notes: 'A non-notable note')
+      test_class.new.send(:import_comments_for_task, task: task, row: { 'Notes' => 'A non-notable note' })
     end.to change { task.reload.comments.where(body: 'A non-notable note').count }.from(0).to(1)
   end
 
   it 'does not add a duplicate comment for a note' do
-    test_class.new.send(:import_comments_for_task, task: task, notes: 'A non-notable note')
+    test_class.new.send(:import_comments_for_task, task: task, row: { 'Notes' => 'A non-notable note' })
     expect do
-      test_class.new.send(:import_comments_for_task, task: task, notes: 'A non-notable note')
+      test_class.new.send(:import_comments_for_task, task: task, row: { 'Notes' => 'A non-notable note' })
     end.to_not change { task.reload.comments.count }.from(1)
   end
 
   it 'adds a comment for an unsupported tnt task type' do
     expect do
-      test_class.new.send(:import_comments_for_task, task: task, tnt_task_type_id: unsupported_tnt_task_id)
+      test_class.new.send(:import_comments_for_task, task: task, row: { 'TaskTypeID' => unsupported_tnt_task_id })
     end.to change { task.reload.comments.count }.from(0).to(1)
     expect(task.comments.where(body: 'This task was given the type "Present" in TntConnect.').count).to eq(1)
   end
 
   it 'returns the added comments' do
+    unsupported_row_with_note = { 'Notes' => 'A non-notable note', 'TaskTypeID' => unsupported_tnt_task_id }
     result = test_class.new.send(:import_comments_for_task,
                                  task: task,
-                                 notes: 'Hello',
-                                 tnt_task_type_id: unsupported_tnt_task_id)
+                                 row: unsupported_row_with_note)
     expect(result.size).to eq(2)
     expect(result.all? { |item| item.is_a?(ActivityComment) }).to eq(true)
   end

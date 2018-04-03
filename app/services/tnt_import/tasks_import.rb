@@ -11,8 +11,11 @@ class TntImport::TasksImport
     @xml_tables = xml.tables
   end
 
+  XML_TABLE_NAME = 'Task'.freeze
+  XML_FOREIGN_KEY = 'TaskID'.freeze
+
   def import
-    return unless xml_tables['Task'].present? && xml_tables['TaskContact'].present?
+    return unless xml_tables[XML_TABLE_NAME].present? && xml_tables['TaskContact'].present?
 
     new_tasks = []
     all_tasks = build_tasks
@@ -36,8 +39,12 @@ class TntImport::TasksImport
 
   attr_reader :xml_tables, :contact_ids_by_tnt_contact_id
 
+  def subject(row)
+    row['Description'] || TntImport::TntCodes.task_type(row['TaskTypeID'])
+  end
+
   def build_tasks
-    task_rows = xml_tables['Task'].select { |row| TntImport::TntCodes.import_task_type?(row['TaskTypeID']) }
+    task_rows = xml_tables[XML_TABLE_NAME].select { |row| TntImport::TntCodes.import_task_type?(row['TaskTypeID']) }
     task_rows.map { |r| build_task_from_row(r) }
   end
 
@@ -46,7 +53,7 @@ class TntImport::TasksImport
 
     task.attributes = {
       activity_type: TntImport::TntCodes.task_type(row['TaskTypeID']),
-      subject: row['Description'],
+      subject: subject(row),
       start_at: parse_date("#{row['TaskDate']} #{row['TaskTime'].split(' ').second}", @user)
     }
 
@@ -66,7 +73,7 @@ class TntImport::TasksImport
   end
 
   def create_task_for_contact!(contact_row, tasks)
-    task_prototype = tasks.find { |t| t.remote_id == contact_row['TaskID'] }
+    task_prototype = find_task_prototype(contact_row, tasks)
     contact_id = contact_ids_by_tnt_contact_id[contact_row['ContactID']]
     return unless task_prototype && contact_id
 
@@ -80,13 +87,16 @@ class TntImport::TasksImport
     [task, contact_id]
   end
 
+  def find_task_prototype(contact_row, tasks)
+    tasks.find { |t| t.remote_id == contact_row[XML_FOREIGN_KEY] }
+  end
+
   def create_task_from_prototype!(prototype, contact_id)
     dup_task(prototype, contact_id).tap do |task|
       task.save!
 
-      row = xml_tables['Task'].find { |r| r['id'] == task.remote_id }
-      import_comments_for_task(task: task, notes: row['Notes'],
-                               tnt_task_type_id: row['TaskTypeID'])
+      row = @xml.find(XML_TABLE_NAME, task.remote_id)
+      import_comments_for_task(task: task, row: row)
     end
   end
 

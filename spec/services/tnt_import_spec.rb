@@ -440,7 +440,7 @@ describe TntImport do
   context '#import_history' do
     it 'creates a new completed task' do
       expect do
-        import.send(:import_history)
+        import.send(:import_history, import.send(:import_contacts))
       end.to change(Task, :count).by(1)
     end
 
@@ -450,7 +450,7 @@ describe TntImport do
                            account_list: tnt_import.account_list,
                            completed: false)
 
-      expect { import.send(:import_history) }.not_to change(Task, :count)
+      expect { import.send(:import_history, import.send(:import_contacts)) }.not_to change(Task, :count)
 
       task.reload
       expect(task.completed).to eq(true)

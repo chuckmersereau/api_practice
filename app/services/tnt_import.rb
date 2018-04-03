@@ -52,7 +52,7 @@ class TntImport
   end
 
   def import_history(tnt_contacts = {})
-    TntImport::HistoryImport.new(@import, tnt_contacts, xml).import_history
+    TntImport::HistoryImport.new(@import, tnt_contacts, xml).import
   end
 
   def import_offline_org_gifts(contact_ids_by_tnt_contact_id)

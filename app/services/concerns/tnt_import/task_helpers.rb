@@ -3,7 +3,10 @@ module Concerns
     module TaskHelpers
       private
 
-      def import_comments_for_task(task:, notes: nil, tnt_task_type_id: nil)
+      def import_comments_for_task(task:, row: nil)
+        notes = row.try(:[], 'Notes')
+        tnt_task_type_id = row.try(:[], 'TaskTypeID')
+
         task.comments.where(body: notes.strip).first_or_create if notes.present?
 
         unsupported_type_name = ::TntImport::TntCodes.unsupported_task_type(tnt_task_type_id)
