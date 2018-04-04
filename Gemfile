@@ -101,7 +101,7 @@ group :development, :test do
   gem 'gettext', '~> 3.1.6', require: false, group: :development
   gem 'guard-brakeman'
   gem 'guard-bundler'
-  gem 'guard-bundler-audit', git: 'https://github.com/christianhellsten/guard-bundler-audit.git'
+  gem 'guard-bundler-audit'
   gem 'guard-puma'
   gem 'guard-rails', require: false
   gem 'guard-rspec'
