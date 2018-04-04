@@ -78,6 +78,21 @@ describe TntImport::TasksImport do
       end
     end
 
+    context 'with task campaign' do
+      before do
+        tnt_import.file = File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml'))
+        # only one task
+        xml.tables['Task'] = xml.tables['Task'][0..0]
+        xml.tables['Task'].first['CampaignID'] = xml.tables['Campaign'].first['id']
+      end
+
+      it 'includes a tag' do
+        expect { subject.import }.to change { Task.count }
+        task = Task.last
+        expect(task.tag_list).to include xml.tables['Campaign'].first['Description'].downcase
+      end
+    end
+
     context 'with multiple task contacts per task' do
       let(:tnt_import) do
         create(:tnt_import_with_multiple_task_contacts, override: true,

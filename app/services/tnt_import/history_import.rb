@@ -1,6 +1,4 @@
 class TntImport::HistoryImport < TntImport::TasksImport
-  include Concerns::TntImport::AppealHelpers
-
   XML_TABLE_NAME = 'History'.freeze
   XML_FOREIGN_KEY = 'HistoryID'.freeze
 
@@ -67,6 +65,9 @@ class TntImport::HistoryImport < TntImport::TasksImport
       completed: true,
       result: TntImport::TntCodes.history_result(row['HistoryResultID'])
     }
+
+    add_assigned_to_as_tag(task, row)
+    add_campaign_as_tag(task, row)
 
     task.start_at ||= parse_date(row['HistoryDate'], @user)
     task

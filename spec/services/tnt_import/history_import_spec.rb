@@ -37,6 +37,46 @@ describe TntImport::HistoryImport do
     end
 
     context 'with appeal mapping' do
+      let(:appeal) { xml.tables['Appeal'].first }
+
+      before do
+        xml.tables['History'].first['AppealID'] = appeal['id']
+      end
+
+      it 'returns mapping of contacts to appeal ids' do
+        expect(subject.import).to eq(appeal['id'] => contact_ids.values)
+      end
+
+      it 'adds a tag' do
+        expect { subject.import }.to change { Task.count }
+        task = Task.last
+        expect(task.tag_list).to include appeal['Description'].downcase
+      end
+    end
+
+    context 'with multiple task contacts per task' do
+      let(:tnt_import) do
+        create(:tnt_import_with_multiple_task_contacts, override: true, user: user)
+      end
+
+      it 'creates one for each contact' do
+        expect { subject.import }.to change { Task.count }.by(contacts.size)
+      end
+
+      it 'creates tasks with only a single associated contact' do
+        subject.import
+        Task.all.each { |task| expect(task.contacts.size).to eq 1 }
+      end
+    end
+
+    it 'does not increment the tasks counts' do
+      expect(contacts.count).to be 1
+      contact = contacts.first
+
+      expect { subject.import }.to change { contact.tasks.count }.by(1).and change { contact.uncompleted_tasks_count }.by(0)
+    end
+
+    context 'with appeal mapping' do
       it 'returns mapping of contacts to appeal ids' do
         appeal_id = xml.tables['Appeal'].first['id']
         xml.tables['History'].first['AppealID'] = appeal_id

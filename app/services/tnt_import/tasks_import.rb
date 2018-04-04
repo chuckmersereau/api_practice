@@ -1,6 +1,7 @@
 class TntImport::TasksImport
   include Concerns::TntImport::DateHelpers
   include Concerns::TntImport::TaskHelpers
+  include Concerns::TntImport::AppealHelpers
 
   def initialize(import, contact_ids_by_tnt_contact_id, xml)
     @import = import
@@ -58,6 +59,7 @@ class TntImport::TasksImport
     }
 
     add_assigned_to_as_tag(task, row)
+    add_campaign_as_tag(task, row)
 
     task.completed = TntImport::TntCodes.task_status_completed?(row['Status'])
     task.completed_at = parse_date(row['LastEdit'], @user) if task.completed
@@ -70,6 +72,14 @@ class TntImport::TasksImport
 
     username = @xml.find('User', assigned_to_id).try(:[], 'UserName')
     task.tag_list.add username
+  end
+
+  def add_campaign_as_tag(task, row)
+    campaign_id = row[appeal_id_name]
+    return unless campaign_id
+
+    campaign_name = @xml.find(appeal_table_name, campaign_id).try(:[], 'Description')
+    task.tag_list.add campaign_name
   end
 
   def create_task_for_contact!(contact_row, tasks)
