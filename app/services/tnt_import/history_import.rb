@@ -1,9 +1,6 @@
 class TntImport::HistoryImport < TntImport::TasksImport
-  XML_TABLE_NAME = 'History'.freeze
-  XML_FOREIGN_KEY = 'HistoryID'.freeze
-
   def import
-    return {} unless xml_tables[XML_TABLE_NAME].present? && xml_tables['HistoryContact'].present?
+    return {} unless xml_tables[xml_table_name].present? && xml_tables['HistoryContact'].present?
 
     @tnt_appeal_id_by_tnt_history_id = {}
 
@@ -19,7 +16,7 @@ class TntImport::HistoryImport < TntImport::TasksImport
   private
 
   def build_tasks
-    task_rows = xml_tables[XML_TABLE_NAME].select { |row| TntImport::TntCodes.import_task_type?(row['TaskTypeID']) }
+    task_rows = xml_tables[xml_table_name].select { |row| TntImport::TntCodes.import_task_type?(row['TaskTypeID']) }
 
     task_rows.map do |row|
       tnt_history_id = row['id']
@@ -46,7 +43,7 @@ class TntImport::HistoryImport < TntImport::TasksImport
 
       next unless contact_id
 
-      tnt_appeal_id = @tnt_appeal_id_by_tnt_history_id[row[XML_FOREIGN_KEY]]
+      tnt_appeal_id = @tnt_appeal_id_by_tnt_history_id[row[xml_foreign_key]]
       contact_ids_by_tnt_appeal_id[tnt_appeal_id] << contact_id if tnt_appeal_id
     end
 
@@ -74,11 +71,11 @@ class TntImport::HistoryImport < TntImport::TasksImport
     task
   end
 
-  def find_task_prototype(contact_row, tasks)
-    tasks.find { |t| t.remote_id == contact_row[XML_FOREIGN_KEY] }
+  def xml_table_name
+    'History'
   end
 
-  def row_appeal_id(row)
-    row[appeal_id_name]
+  def xml_foreign_key
+    'HistoryID'
   end
 end

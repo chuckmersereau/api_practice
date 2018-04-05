@@ -75,17 +75,40 @@ describe TntImport::TasksImport do
     end
 
     context 'with task assigned to' do
+      let(:user_row) { xml.tables['User'].first }
+
       before do
         tnt_import.file = tnt3_2_xml
         # only one task
         xml.tables['Task'] = xml.tables['Task'][0..0]
-        xml.tables['Task'].first['AssignedToUserID'] = xml.tables['User'].first['id']
+        xml.tables['Task'].first['AssignedToUserID'] = user_row['id']
       end
 
       it 'includes a tag' do
         expect { subject.import }.to change { Task.count }
         task = Task.last
-        expect(task.tag_list).to include xml.tables['User'].first['UserName'].downcase
+        expect(task.tag_list).to include user_row['UserName'].downcase
+      end
+    end
+
+    context 'with LoggedByUserID' do
+      let(:user_row) { xml.tables['User'].first }
+
+      before do
+        tnt_import.file = tnt3_2_xml
+        # only one task
+        xml.tables['Task'] = xml.tables['Task'][0..0]
+        xml.tables['Task'].first['LoggedByUserID'] = user_row['id']
+        # mark task completed
+        xml.tables['Task'].first['Status'] = '2'
+      end
+
+      it 'adds user to comment' do
+        expect { subject.import }.to change(ActivityComment, :count)
+
+        task = Task.last
+        comments = task.comments.pluck(:body)
+        expect(comments).to include "Completed By: #{user_row['UserName']}"
       end
     end
 
@@ -147,6 +170,40 @@ describe TntImport::TasksImport do
           tasks = Contact.all.flat_map(&:tasks)
           expect(tasks.size).to eq tasks.uniq.size
         end
+      end
+    end
+
+    context 'with comments' do
+      let(:unsupported_tnt_task_id) { TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES.keys.first }
+      let(:task_row) { xml.tables['Task'].first }
+      let(:note) { 'A non-notable note' }
+
+      before do
+        task_row['Notes'] = note
+      end
+
+      it 'adds a comment for a tnt notes' do
+        expect do
+          subject.import
+        end.to change(ActivityComment, :count).from(0).to(1)
+      end
+
+      it 'does not add a duplicate comment for a note' do
+        subject.import
+        task = Task.first
+
+        expect do
+          subject.import
+        end.to_not change { task.reload.comments.count }
+      end
+
+      it 'adds a comment for an unsupported tnt task type' do
+        task_row['TaskTypeID'] = unsupported_tnt_task_id
+
+        expect do
+          subject.import
+        end.to change(ActivityComment, :count).from(0).to(2)
+        expect(Task.first.comments.where(body: 'This task was given the type "Present" in TntConnect.').count).to eq(1)
       end
     end
   end
