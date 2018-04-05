@@ -48,9 +48,11 @@ class AccountList::NotificationsSender
 
   def create_emails
     @notifications_to_email.each do |_key, notifications_by_user|
+      account_list_id = notifications_by_user[:user].account_lists.many? ? @account_list.id : nil
       NotificationMailer.delay.notify(
         notifications_by_user[:user],
-        notifications_by_user[:notifications_by_type]
+        notifications_by_user[:notifications_by_type],
+        account_list_id
       )
     end
   end

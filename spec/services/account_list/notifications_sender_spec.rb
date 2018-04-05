@@ -38,8 +38,21 @@ RSpec.describe AccountList::NotificationsSender do
       it 'should create_emails' do
         account_list.notification_preferences.create(notification_type: notification_type, user: user, email: true)
         allow(notification_type).to receive(:create_task).with(account_list, notification).and_return(nil)
+
         subject.send_notifications
-        expect(NotificationMailer.instance_method(:notify)).to be_delayed(user, notification_type => [notification])
+
+        expect(NotificationMailer.instance_method(:notify)).to be_delayed(user, { notification_type => [notification] }, nil)
+      end
+
+      it 'sends account_list_id if multiple account_lists' do
+        user.account_lists << create(:account_list)
+        account_list.notification_preferences.create(notification_type: notification_type, user: user, email: true)
+        allow(notification_type).to receive(:create_task).with(account_list, notification).and_return(nil)
+
+        subject.send_notifications
+
+        worker_args = [user, { notification_type => [notification] }, account_list.id]
+        expect(NotificationMailer.instance_method(:notify)).to be_delayed(*worker_args)
       end
     end
   end

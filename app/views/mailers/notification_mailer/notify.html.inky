@@ -8,6 +8,9 @@
 <h3>
   <%= _('Hey %{user},').localize % { user: @user.first_name } %>
 </h3>
+<% if @account_list %>
+  <h5><%= _("Here are today's notifications for %{list}:").localize % { list: @account_list.name } %></h5>
+<% end %>
 <% @notifications_by_type.each do |type, notifications| %>
   <p><%= type.description_for_email %></p>
   <ul>
