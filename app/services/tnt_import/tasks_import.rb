@@ -3,6 +3,9 @@ class TntImport::TasksImport
   include Concerns::TntImport::TaskHelpers
   include Concerns::TntImport::AppealHelpers
 
+  XML_TABLE_NAME = 'Task'.freeze
+  XML_FOREIGN_KEY = 'TaskID'.freeze
+
   def initialize(import, contact_ids_by_tnt_contact_id, xml)
     @import = import
     @user = import.user
@@ -11,9 +14,6 @@ class TntImport::TasksImport
     @xml = xml
     @xml_tables = xml.tables
   end
-
-  XML_TABLE_NAME = 'Task'.freeze
-  XML_FOREIGN_KEY = 'TaskID'.freeze
 
   def import
     return unless xml_tables[XML_TABLE_NAME].present? && xml_tables['TaskContact'].present?
@@ -60,10 +60,15 @@ class TntImport::TasksImport
 
     add_assigned_to_as_tag(task, row)
     add_campaign_as_tag(task, row)
+    add_categories_as_tags(task, row)
 
     task.completed = TntImport::TntCodes.task_status_completed?(row['Status'])
     task.completed_at = parse_date(row['LastEdit'], @user) if task.completed
     task
+  end
+
+  def add_categories_as_tags(task, row)
+    task.tag_list.add(row['Categories'], parse: true) if row['Categories'].present?
   end
 
   def add_assigned_to_as_tag(task, row)

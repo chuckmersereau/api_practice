@@ -63,6 +63,17 @@ describe TntImport::TasksImport do
       end
     end
 
+    context 'with Categories' do
+      it 'includes tags for multiple categories' do
+        xml.tables['Task'].first['Categories'] = 'test, Another Category'
+
+        expect { subject.import }.to change { Task.count }.from(0).to(1)
+
+        task = Task.last
+        expect(task.tag_list).to include 'test', 'another category'
+      end
+    end
+
     context 'with task assigned to' do
       before do
         tnt_import.file = tnt3_2_xml

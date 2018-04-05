@@ -68,6 +68,7 @@ class TntImport::HistoryImport < TntImport::TasksImport
 
     add_assigned_to_as_tag(task, row)
     add_campaign_as_tag(task, row)
+    add_categories_as_tags(task, row)
 
     task.start_at ||= parse_date(row['HistoryDate'], @user)
     task
