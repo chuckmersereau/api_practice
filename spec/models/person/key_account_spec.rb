@@ -35,7 +35,7 @@ describe Person::KeyAccount do
       expect do
         expect(user.first_name).to eq auth_hash.extra.attributes.first.firstName
         expect(user.last_name).to eq auth_hash.extra.attributes.first.lastName
-      end.to change(User, :count).by(1).and change(NewUserTransferWorker.jobs, :size).by(1)
+      end.to change(User, :count).by(1)
     end
   end
 
