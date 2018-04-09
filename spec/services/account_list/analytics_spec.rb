@@ -34,8 +34,10 @@ RSpec.describe AccountList::Analytics, type: :model do
 
     # Correspondence
     create_task(activity_type: 'Pre Call Letter', result: 'Done')
+    create_task(activity_type: 'Pre Call Letter', result: 'Completed')
     create_task(activity_type: 'Reminder Letter', result: 'Done')
     create_task(activity_type: 'Support Letter', result: 'Done')
+    create_task(activity_type: 'Support Letter', result: 'Completed')
     create_task(activity_type: 'Thank', result: 'Done')
 
     # Electronic
@@ -105,7 +107,7 @@ RSpec.describe AccountList::Analytics, type: :model do
   describe '#correspondence' do
     subject { analytics.correspondence }
     it 'returns counts of completed correspondence tasks' do
-      expect(subject).to eq(precall: 1, reminders: 1, support_letters: 1, thank_yous: 1)
+      expect(subject).to eq(precall: 2, reminders: 1, support_letters: 2, thank_yous: 1)
     end
   end
 

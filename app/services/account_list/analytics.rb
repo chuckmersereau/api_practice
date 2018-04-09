@@ -54,10 +54,10 @@ class AccountList::Analytics < ActiveModelSerializers::Model
 
   def correspondence
     @correspondence ||= {
-      precall:         task_count(activity_type: 'Pre Call Letter', with_result: 'Done'),
-      reminders:       task_count(activity_type: 'Reminder Letter', with_result: 'Done'),
-      support_letters: task_count(activity_type: 'Support Letter',  with_result: 'Done'),
-      thank_yous:      task_count(activity_type: 'Thank',           with_result: 'Done')
+      precall:         task_count(activity_type: 'Pre Call Letter', with_result: %w(Completed Done)),
+      reminders:       task_count(activity_type: 'Reminder Letter', with_result: %w(Completed Done)),
+      support_letters: task_count(activity_type: 'Support Letter',  with_result: %w(Completed Done)),
+      thank_yous:      task_count(activity_type: 'Thank',           with_result: %w(Completed Done))
     }
   end
 
