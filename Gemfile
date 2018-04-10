@@ -94,7 +94,6 @@ end
 
 group :development, :test do
   gem 'awesome_print', '~> 1.7.0'
-  gem 'database_cleaner', '~> 1.5.3'
   gem 'equivalent-xml', '~> 0.6.0'
   gem 'dotenv-rails', '~> 2.2.1', require: 'dotenv/rails-now'
   gem 'factory_girl_rails', '~> 4.5.0'
@@ -128,6 +127,11 @@ end
 group :test do
   gem 'ammeter', '~> 1.1.4' # for testing generators
   gem 'coveralls', '~> 0.8.21', require: false
+
+  # this can be changed back to rubygems source after the safeguard stuff is published
+  # https://github.com/DatabaseCleaner/database_cleaner/pull/521
+  gem 'database_cleaner', git: 'https://github.com/DatabaseCleaner/database_cleaner'
+
   gem 'faker', '~> 1.6.6'
   gem 'growl', '~> 1.0.3'
   gem 'mock_redis', '~> 0.17.0'

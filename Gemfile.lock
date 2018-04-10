@@ -32,6 +32,12 @@ GIT
       rspec (~> 3.0)
 
 GIT
+  remote: https://github.com/DatabaseCleaner/database_cleaner
+  revision: 6957554ad53df15609db66a9e1aaf8dd86ff8059
+  specs:
+    database_cleaner (1.6.3)
+
+GIT
   remote: https://github.com/gmailgem/gmail.git
   revision: 4f78039e9821340a24ad3d840180d2ec6c6e0115
   ref: 4f78039e9821340a24ad3d840180d2ec6c6e0115
@@ -183,7 +189,6 @@ GEM
     css_parser (1.6.0)
       addressable
     currencies (0.4.2)
-    database_cleaner (1.5.3)
     ddtrace (0.7.2)
       msgpack
     deadlock_retry (1.2.0)
@@ -840,7 +845,7 @@ DEPENDENCIES
   cloudinary (~> 1.8.1)
   country_select!
   coveralls (~> 0.8.21)
-  database_cleaner (~> 1.5.3)
+  database_cleaner!
   ddtrace (~> 0.7.2)
   deadlock_retry (~> 1.2.0)
   devise (~> 4.2.1)
