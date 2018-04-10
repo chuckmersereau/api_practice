@@ -57,8 +57,7 @@ class TntImport::ContactImport
     update_contact_date_fields(contact, row)
     update_contact_send_newsletter_field(contact, row)
     update_locale(contact, row)
-
-    @tags.each { |tag| contact.tag_list.add(tag) }
+    update_contact_tags(contact)
 
     Retryable.retryable do
       contact.save
@@ -169,6 +168,14 @@ class TntImport::ContactImport
       contact.locale = locale
     elsif newsletter_lang.present? && newsletter_lang != 'Unknown'
       contact.tag_list.add(newsletter_lang)
+    end
+  end
+
+  def update_contact_tags(contact)
+    @tags.each do |tag|
+      # we replace , with ; to allow for safe tags to be created
+      safe_tag = tag.gsub(ActsAsTaggableOn.delimiter, ';')
+      contact.tag_list.add(safe_tag)
     end
   end
 

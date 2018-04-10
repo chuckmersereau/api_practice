@@ -184,8 +184,11 @@ describe TntImport::ContactImport do
   end
 
   it 'imports given tags' do
+    expected_tags = tags + ['new tag; other tag']
+    tags << 'new tag, other tag'
+
     row = contact_rows.first
-    expect(import.import_contact(row).tag_list).to eq(tags)
+    expect(import.import_contact(row).tag_list).to eq(expected_tags)
   end
 
   describe 'importing Contact attributes' do
