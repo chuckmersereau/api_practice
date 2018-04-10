@@ -98,15 +98,6 @@ describe MailChimp::Exporter do
         subject.export_contacts!([contact.id], false)
       end
 
-      it 'generates reason when contact status is Not Interested' do
-        contact.update!(status: 'Not Interested')
-
-        unsubscribe_reason = 'email on contact with a hidden status'
-        expect(mock_batcher).to receive(:unsubscribe_members).with(unsubscribed_email => unsubscribe_reason)
-
-        subject.export_contacts!([contact.id], false)
-      end
-
       it 'generates reason when person is opted out' do
         contact.people.first.update(optout_enewsletter: true)
 

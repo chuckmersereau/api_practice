@@ -47,15 +47,13 @@ class MailChimpReport
     active_emails = account_list_emails.where(historic: false)
     primary_emails = active_emails.where(primary: true)
     non_opt_out_people_emails = primary_emails.where(people: { optout_enewsletter: false })
-    active_contact_emails = non_opt_out_people_emails.where(contacts: { status: Contact::ACTIVE_STATUSES + [nil] })
-    newsletter_emails = active_contact_emails.where(contacts: { send_newsletter: %w(Email Both) })
+    newsletter_emails = non_opt_out_people_emails.where(contacts: { send_newsletter: %w(Email Both) })
 
     @report = {}
     members.each do |member|
       email = member['email_address']
       next add_to_list(:newsletter_contacts, member) if newsletter_emails.exists?(email: email)
-      next add_to_list(:active_contacts, member) if active_contact_emails.exists?(email: email)
-      next add_to_list(:inactive_contacts, member) if non_opt_out_people_emails.exists?(email: email)
+      next add_to_list(:active_contacts, member) if non_opt_out_people_emails.exists?(email: email)
       next add_to_list(:opted_out, member) if primary_emails.exists?(email: email)
       next add_to_list(:non_primary, member) if active_emails.exists?(email: email)
       next add_to_list(:inactive_email, member) if account_list_emails.exists?(email: email)
@@ -109,11 +107,6 @@ class MailChimpReport
 
     puts 'Active Contacts (Physical or none newsletter):'
     puts_counts :active_contacts
-
-    puts 'Inactive Contact Statuses:'
-    puts 'These email addresses are primary on a contact that has a hidden or inactive status, but subscribed in Mailchimp.'
-    puts 'We recommend changing them to Partner - Prayer if you want them to continue to receive newsletters.'
-    puts_counts :inactive_contacts
 
     puts 'Opted Out = true:'
     puts 'These emails addresses are primary on a person in MPDX who is labeled with "Opt-out of Email Newsletter", but are subscribed on Mailchimp.'

@@ -54,9 +54,7 @@ class MailChimp::Exporter
 
   def unsubscribe_reason(email)
     # newsletter: none/physical
-    return 'email on contact with newsletter set to None or Physical' if active_contact_emails.exists?(email: email)
-    # status: hidden
-    return 'email on contact with a hidden status' if non_opt_out_people_emails.exists?(email: email)
+    return 'email on contact with newsletter set to None or Physical' if non_opt_out_people_emails.exists?(email: email)
     # opt-out
     return "email on person marked as 'Opt-out of Email Newsletter'" if primary_emails.exists?(email: email)
     # non-primary
@@ -81,10 +79,6 @@ class MailChimp::Exporter
 
   def non_opt_out_people_emails
     primary_emails.where(people: { optout_enewsletter: false })
-  end
-
-  def active_contact_emails
-    non_opt_out_people_emails.where(contacts: { status: Contact::ACTIVE_STATUSES + [nil, ''] })
   end
 
   def group_adder
