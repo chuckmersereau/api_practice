@@ -45,23 +45,13 @@ describe Person::KeyAccount do
     expect(Person::KeyAccount.find_authenticated_user(auth_hash)).to eq(user)
   end
 
-  it 'should not catch exeception raised by siebel for an authenticated user without organization_account' do
-    expect(SiebelDonations::Profile).to receive(:find).with(ssoGuid: auth_hash.extra.attributes.first.ssoGuid) do
-      raise RestClient::Exception
-    end
-    expect do
-      Person::KeyAccount.find_or_create_from_auth(auth_hash, user)
-    end.to raise_error RestClient::Exception
-  end
-
-  it 'should catch exeception raised by siebel for an authenticated user with organization_account' do
+  it 'should raise_or_notify exeception raised by siebel for an authenticated user with organization_account' do
     create(:organization_account, user: user)
     expect(SiebelDonations::Profile).to receive(:find).with(ssoGuid: auth_hash.extra.attributes.first.ssoGuid) do
       raise RestClient::Exception
     end
-    expect do
-      Person::KeyAccount.find_or_create_from_auth(auth_hash, user)
-    end.to_not raise_error
+    expect(Rollbar).to receive(:raise_or_notify)
+    Person::KeyAccount.find_or_create_from_auth(auth_hash, user)
   end
 
   it 'should use guid to find an authenticated user created with Relay' do
