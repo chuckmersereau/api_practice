@@ -54,8 +54,10 @@ class ApplicationSeeder
     organization = create :organization
     user = create :user_with_full_account
     account_list = user.account_lists.reload.order(:created_at).last
-    contact = create :contact_with_person, account_list: account_list
-    person = contact.people.reload.order(:created_at).last
+    contact = create :contact, account_list: account_list
+    master_person = create :master_person
+    person = create :person, master_person: master_person
+    contact.people << person
 
     create :contact_referral, referred_by: contact, referred_to: create(:contact)
     create :contact_notes_log, contact: contact
@@ -136,7 +138,6 @@ class ApplicationSeeder
 
     create :master_address
     create :master_company
-    master_person = create :master_person
     create :master_person_donor_account,
            master_person: master_person,
            donor_account: donor_account
@@ -167,10 +168,11 @@ class ApplicationSeeder
     create :prayer_letters_account, account_list: account_list
     create :donation_amount_recommendation
     create :donation_amount_recommendation_remote
-    create :task, account_list: account_list
+    task = create :task, account_list: account_list
 
-    create :tag
-    create :tagging, tag: ActsAsTaggableOn::Tag.last, taggable: person
+    tag = create :tag
+    create :tagging, tag: tag, taggable: contact
+    create :tagging, tag: tag, taggable: task
 
     create :background_batch
 
