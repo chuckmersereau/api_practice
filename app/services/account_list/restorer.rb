@@ -3,9 +3,77 @@
 class AccountList::Restorer
   attr_reader :account_list, :store
 
+  TABLES_TO_IMPORT = %w(
+    account_lists
+    account_list_coaches
+    account_list_entries
+    account_list_invites
+    account_list_users
+    master_companies
+    companies
+    company_partnerships
+    master_people
+    master_person_sources
+    donor_accounts
+    master_person_donor_accounts
+    people
+    company_positions
+    person_facebook_accounts
+    person_google_accounts
+    person_relay_accounts
+    person_linkedin_accounts
+    person_twitter_accounts
+    person_websites
+    phone_numbers
+    email_addresses
+    pictures
+    donor_account_people
+    family_relationships
+    contacts
+    contact_referrals
+    contact_people
+    contact_donor_accounts
+    contact_notes_logs
+    master_addresses
+    addresses
+    partner_status_logs
+    activities
+    activity_comments
+    activity_contacts
+    designation_profiles
+    designation_accounts
+    balances
+    designation_profile_accounts
+    donations
+    appeals
+    appeal_contacts
+    appeal_excluded_appeal_contacts
+    pledges
+    pledge_donations
+    duplicate_record_pairs
+    imports
+    mail_chimp_accounts
+    mail_chimp_members
+    mail_chimp_appeal_lists
+    pls_accounts
+    prayer_letters_accounts
+    notification_preferences
+    notifications
+    tags
+    taggings
+    google_contacts
+    google_integrations
+    google_emails
+    google_events
+    google_email_activities
+    google_plus_accounts
+  ).freeze
+
   def self.restore(id)
-    AccountList::Restorer.new(id).store.each do |table_name, ids|
-      RowTransferRequest.transfer(table_name, ids)
+    store = AccountList::Restorer.new(id).store
+    TABLES_TO_IMPORT.each do |table_name|
+      next unless store[table_name]&.present?
+      RowTransferRequest.transfer(table_name, store[table_name])
     end
   end
 

@@ -16,11 +16,11 @@ RSpec.describe AccountList::Restorer do
       expect(AccountList::Restorer).to receive(:new).with(account_list_id).and_return(
         OpenStruct.new(
           store: {
-            people: %w(123 456)
+            'people' => %w(123 456)
           }
         )
       )
-      expect(RowTransferRequest).to receive(:transfer).with(:people, %w(123 456))
+      expect(RowTransferRequest).to receive(:transfer).with('people', %w(123 456))
       described_class.restore(account_list_id)
     end
   end

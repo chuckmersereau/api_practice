@@ -7,7 +7,7 @@ class RowTransferRequest
     # if false, the ids that are already in the slave db will be ignored
     def transfer(table_name, ids, clone: true, safe: false)
       RestClient.post ENV.fetch('KIRBY_URL'), payload(table_name, Array.wrap(ids), clone, safe), headers
-      Rails.logger.debug "#{ids.size} records on #{table_name} transferred"
+      Rails.logger.debug "#{ids.size} record(s) on #{table_name} transferred"
     end
 
     private
