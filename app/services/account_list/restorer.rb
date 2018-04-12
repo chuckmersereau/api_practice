@@ -354,11 +354,11 @@ class AccountList::Restorer
   def fetch_mailchimp_account_records
     add_to_store(
       MailChimpAccount,
-      account_list.mail_chimp_account.id
+      account_list.mail_chimp_account&.id
     )
     add_to_store(
       MailChimpMember,
-      account_list.mail_chimp_account.mail_chimp_members.pluck(:id)
+      account_list.mail_chimp_account&.mail_chimp_members.pluck(:id)
     )
     add_to_store(
       MailChimpAppealList,
@@ -369,14 +369,14 @@ class AccountList::Restorer
   def fetch_pls_account_records
     add_to_store(
       PlsAccount,
-      account_list.pls_account.id
+      account_list.pls_account&.id
     )
   end
 
   def fetch_prayer_letters_account_records
     add_to_store(
       PrayerLettersAccount,
-      account_list.prayer_letters_account.id
+      account_list.prayer_letters_account&.id
     )
   end
 
