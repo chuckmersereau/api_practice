@@ -58,6 +58,22 @@ RSpec.describe Tools::Analytics do
       expect_type_and_count(first_counts_array[6], 'duplicate-people', 2)
     end
 
+    it 'does not count hidden people' do
+      contact_one.hide
+      contact_two.hide
+
+      expect_type_and_count(first_counts_array[1], 'fix-phone-numbers', 0)
+      expect_type_and_count(first_counts_array[3], 'fix-addresses', 0)
+    end
+
+    it 'does count contacts with nil status' do
+      contact_one.update!(status: nil)
+      contact_two.update!(status: nil)
+
+      expect_type_and_count(first_counts_array[1], 'fix-phone-numbers', 1)
+      expect_type_and_count(first_counts_array[3], 'fix-addresses', 1)
+    end
+
     def expect_type_and_count(count_object, type, count)
       expect(count_object[:type]).to eq(type)
       expect(count_object[:count]).to eq(count)

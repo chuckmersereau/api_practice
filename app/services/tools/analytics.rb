@@ -39,7 +39,7 @@ class Tools::Analytics < ActiveModelSerializers::Model
   end
 
   def filter_people(account_list, filter_params)
-    person_scope = Person.joins(:contact_people).where(contact_people: { contact: account_list.contacts })
+    person_scope = Person.joins(:contact_people).where(contact_people: { contact: account_list.contacts.active })
     Person::Filterer.new(filter_params).filter(scope: person_scope, account_lists: [account_list])
   end
 
