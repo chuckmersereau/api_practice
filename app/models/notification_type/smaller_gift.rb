@@ -31,6 +31,6 @@ class NotificationType::SmallerGift < NotificationType
   end
 
   def task_description_template
-    '%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift.'
+    _('%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift.')
   end
 end

@@ -11,11 +11,11 @@ class NotificationType::LongTimeFrameGift < NotificationType
                              contact.last_monthly_total == contact.pledge_amount
   end
 
-  def task_description(notification)
-    template = '%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You.'
-    _(template).localize %
-      { contact_name: notification.contact.name, amount: notification.donation.localized_amount,
-        date: notification.donation.localized_date,
-        frequency: _(Contact.pledge_frequencies[notification.contact.pledge_frequency]) }
+  def interpolation_values(notification)
+    super(notification).merge(frequency: _(Contact.pledge_frequencies[notification.contact.pledge_frequency]))
+  end
+
+  def task_description_template
+    _('%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You.')
   end
 end

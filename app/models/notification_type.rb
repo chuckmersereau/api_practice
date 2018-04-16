@@ -48,12 +48,33 @@ class NotificationType < ApplicationRecord
   end
 
   def task_description(notification)
-    _(task_description_template).localize %
-      { contact_name: notification.contact.name, amount: notification.donation.localized_amount,
-        date: notification.donation.localized_date }
+    _(task_description_template).localize % interpolation_values(notification)
+  end
+
+  def email_description(notification, context)
+    values = interpolation_values(notification)
+
+    # insert %{link} in the place of the contact name so that it can be split out later.
+    localized = format(_(task_description_template), values.merge(contact_name: '%{link}'))
+
+    # replace each instance of %{contact_name} with a link
+    # to the contact by splitting and joining in a safe way
+    context.safe_join(localized.split('%{link}'), contact_link(notification, context))
   end
 
   protected
+
+  def interpolation_values(notification)
+    { contact_name: notification.contact.name,
+      amount: notification.donation&.localized_amount,
+      date: notification.donation&.localized_date }
+  end
+
+  def contact_link(notification, context)
+    url = WebRouter.contact_url(notification.contact)
+    name = notification.contact.name
+    context.link_to(name, url)
+  end
 
   def task_description_template
     raise 'This method (or create_task and task_description) must be implemented in a subclass'

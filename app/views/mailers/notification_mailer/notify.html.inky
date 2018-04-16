@@ -15,7 +15,7 @@
   <p><%= type.description_for_email %></p>
   <ul>
   <% notifications.sort_by { |n| n.contact.name  }.each do |notification| %>
-    <li><%= type.task_description(notification) %></li>
+    <li><%= type.email_description(notification, self) %></li>
   <% end %>
   </ul>
   <br/>

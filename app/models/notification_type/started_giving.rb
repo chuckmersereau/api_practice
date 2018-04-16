@@ -38,9 +38,8 @@ class NotificationType::StartedGiving < NotificationType
     task
   end
 
-  def task_description(notification)
-    _('%{contact_name} just gave their first gift. Send them a Thank You.').localize %
-      { contact_name: notification.contact.name }
+  def task_description_template
+    _('%{contact_name} just gave their first gift. Send them a Thank You.')
   end
 
   private

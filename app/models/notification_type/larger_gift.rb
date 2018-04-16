@@ -56,6 +56,6 @@ class NotificationType::LargerGift < NotificationType
   end
 
   def task_description_template
-    '%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You.'
+    _('%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You.')
   end
 end

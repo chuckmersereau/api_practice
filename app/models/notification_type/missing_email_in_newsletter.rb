@@ -13,6 +13,6 @@ class NotificationType::MissingEmailInNewsletter < NotificationType::MissingCont
   end
 
   def task_description_template
-    '%{contact_name} is on the email newsletter but lacks a valid email address.'
+    _('%{contact_name} is on the email newsletter but lacks a valid email address.')
   end
 end

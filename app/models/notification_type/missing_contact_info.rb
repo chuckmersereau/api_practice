@@ -13,11 +13,6 @@ class NotificationType::MissingContactInfo < NotificationType
     end.compact
   end
 
-  def task_description(notification)
-    _(task_description_template).localize %
-      { contact_name: notification.contact.name }
-  end
-
   def task_activity_type
     'To Do'
   end

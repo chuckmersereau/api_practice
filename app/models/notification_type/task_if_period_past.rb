@@ -31,11 +31,6 @@ class NotificationType::TaskIfPeriodPast < NotificationType
     task_activity_type
   end
 
-  def task_description(notification)
-    _(task_description_template).localize %
-      { contact_name: notification.contact.name }
-  end
-
   def task_description_template
     raise 'This method must be implemented in a subclass'
   end

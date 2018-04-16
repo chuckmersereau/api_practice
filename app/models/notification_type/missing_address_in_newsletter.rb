@@ -10,6 +10,6 @@ class NotificationType::MissingAddressInNewsletter < NotificationType::MissingCo
   end
 
   def task_description_template
-    '%{contact_name} is on the physical newsletter but lacks a current mailing address.'
+    _('%{contact_name} is on the physical newsletter but lacks a current mailing address.')
   end
 end

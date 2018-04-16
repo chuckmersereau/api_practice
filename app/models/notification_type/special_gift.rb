@@ -8,6 +8,6 @@ class NotificationType::SpecialGift < NotificationType
   end
 
   def task_description_template
-    '%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You.'
+    _('%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You.')
   end
 end

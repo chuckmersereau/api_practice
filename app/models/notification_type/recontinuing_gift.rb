@@ -25,6 +25,6 @@ class NotificationType::RecontinuingGift < NotificationType
   end
 
   def task_description_template
-    '%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You.'
+    _('%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You.')
   end
 end

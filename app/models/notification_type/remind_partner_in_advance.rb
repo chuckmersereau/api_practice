@@ -35,8 +35,7 @@ class NotificationType::RemindPartnerInAdvance < NotificationType
     task
   end
 
-  def task_description(notification)
-    _('%{contact_name} have an expected gift in one month. Contact to follow up.').localize %
-      { contact_name: notification.contact.name }
+  def task_description_template
+    _('%{contact_name} have an expected gift in one month. Contact to follow up.')
   end
 end
