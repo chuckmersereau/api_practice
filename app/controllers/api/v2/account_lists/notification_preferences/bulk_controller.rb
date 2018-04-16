@@ -19,7 +19,7 @@ class Api::V2::AccountLists::NotificationPreferences::BulkController < Api::V2::
   end
 
   def pundit_user
-    PunditContext.new(current_user)
+    PunditContext.new(current_user, account_list: load_account_list)
   end
 
   def notification_preference_id_params
@@ -47,10 +47,10 @@ class Api::V2::AccountLists::NotificationPreferences::BulkController < Api::V2::
   end
 
   def build_empty_notification_preferences
-    @notification_preferences +=
-      params.require(:data).select { |data| data['notification_preference']['id'].nil? }.map do |data|
-        notification_preference_scope.build(id: data['notification_preference']['id'])
-      end
+    sent_ids = params.require(:data).map { |data| data['notification_preference']['id'] }
+    existing_ids = NotificationPreference.where(id: sent_ids).pluck(:id)
+    new_ids = sent_ids - existing_ids
+    @notification_preferences += new_ids.map { |id| notification_preference_scope.build(id: id) }
   end
 
   def build_notification_preferences

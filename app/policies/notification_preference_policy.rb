@@ -7,6 +7,6 @@ class NotificationPreferencePolicy < ApplicationPolicy
   private
 
   def resource_owner?
-    resource.user == user
+    resource.user == user && user.account_lists.include?(resource.account_list)
   end
 end
