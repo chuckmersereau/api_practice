@@ -358,7 +358,7 @@ class AccountList::Restorer
     )
     add_to_store(
       MailChimpMember,
-      account_list.mail_chimp_account&.mail_chimp_members.pluck(:id)
+      account_list.mail_chimp_account&.mail_chimp_members&.pluck(:id)
     )
     add_to_store(
       MailChimpAppealList,
