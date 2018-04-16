@@ -41,7 +41,7 @@ class PhoneNumber < ApplicationRecord
     if number && (attributes[:source] != TntImport::SOURCE || number.source == attributes[:source])
       number.update_attributes(attributes)
     else
-      attributes['primary'] = (person.phone_numbers.present? ? false : true) if attributes['primary'].nil?
+      attributes['primary'] = person.phone_numbers.empty? if attributes['primary'].nil?
       new_or_create = person.new_record? ? :new : :create
       number = person.phone_numbers.send(new_or_create, attributes)
     end

@@ -7,9 +7,7 @@ FactoryGirl.define do
     factory :person_with_email do
       after(:build) do |person|
         email_address = "#{person.first_name.downcase}@example.com"
-        email = create(:email_address, primary: true, email: email_address)
-
-        person.email_addresses << email
+        create(:email_address, primary: true, email: email_address, person: person)
       end
     end
   end

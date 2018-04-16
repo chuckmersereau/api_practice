@@ -85,19 +85,28 @@ describe PhoneNumber do
 
     it 'sets only the first phone number to primary' do
       PhoneNumber.add_for_person(person, number: '213-345-2313')
-      expect(person.phone_numbers.first.primary?).to eq(true)
+      expect(person.phone_numbers.first).to be_primary
       PhoneNumber.add_for_person(person, number: '313-313-3142')
-      expect(person.phone_numbers.last.primary?).to eq(false)
+      expect(person.phone_numbers.last).to_not be_primary
     end
 
     it 'sets a prior phone number to not-primary if the new one is primary' do
       phone1 = PhoneNumber.add_for_person(person, number: '213-345-2313')
-      expect(phone1.primary?).to eq(true)
+      expect(phone1).to be_primary
 
       phone2 = PhoneNumber.add_for_person(person, number: '313-313-3142', primary: true)
-      expect(phone2.primary?).to eq(true)
+      expect(phone2).to be_primary
       phone2.send(:ensure_only_one_primary)
-      expect(phone1.reload.primary?).to eq(false)
+      expect(phone1.reload).to_not be_primary
+    end
+
+    it 'leaves prior phone as primary if the new one is not primary' do
+      phone1 = PhoneNumber.add_for_person(person, number: '213-345-2313')
+
+      expect do
+        phone2 = PhoneNumber.add_for_person(person, number: '313-313-3142')
+        expect(phone2).to_not be_primary
+      end.to_not change { phone1.reload.primary? }.from(true)
     end
   end
 

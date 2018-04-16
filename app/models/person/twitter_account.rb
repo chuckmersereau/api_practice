@@ -16,7 +16,7 @@ class Person::TwitterAccount < ApplicationRecord
   def self.find_or_create_from_auth(auth_hash, person)
     relation_scope = person.twitter_accounts
     params         = auth_hash.extra.access_token.params
-    primary        = person.twitter_accounts.present? ? false : true
+    primary        = person.twitter_accounts.empty?
 
     attributes = {
       remote_id: params[:screen_name],

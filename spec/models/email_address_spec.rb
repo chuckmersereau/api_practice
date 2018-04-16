@@ -66,19 +66,28 @@ describe EmailAddress do
 
     it 'sets only the first email to primary' do
       EmailAddress.add_for_person(person, email: address)
-      expect(person.email_addresses.first.primary?).to eq(true)
+      expect(person.email_addresses.first).to be_primary
       EmailAddress.add_for_person(person, email: 'foo' + address)
-      expect(person.email_addresses.last.primary?).to eq(false)
+      expect(person.email_addresses.last).to_not be_primary
     end
 
     it 'sets a prior email to not-primary if the new one is primary' do
       email1 = EmailAddress.add_for_person(person, email: address)
-      expect(email1.primary?).to eq(true)
+      expect(email1).to be_primary
 
       email2 = EmailAddress.add_for_person(person, email: 'foo' + address, primary: true)
-      expect(email2.primary?).to eq(true)
+      expect(email2).to be_primary
       email2.send(:ensure_only_one_primary)
-      expect(email1.reload.primary?).to eq(false)
+      expect(email1.reload).to_not be_primary
+    end
+
+    it 'leaves prior email as primary if the new one is not primary' do
+      email1 = EmailAddress.add_for_person(person, email: address)
+
+      expect do
+        email2 = EmailAddress.add_for_person(person, email: 'foo' + address)
+        expect(email2).to_not be_primary
+      end.to_not change { email1.reload.primary? }.from(true)
     end
 
     it 'gracefully handles duplicate emails on an unsaved person' do

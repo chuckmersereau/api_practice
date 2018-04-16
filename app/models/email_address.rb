@@ -105,7 +105,7 @@ class EmailAddress < ApplicationRecord
       if both_from_tnt_sources?(email, attributes)
         email.attributes = attributes
       else
-        attributes['primary'] ||= !person.email_addresses.present?
+        attributes['primary'] ||= person.email_addresses.empty?
         new_or_create = person.new_record? ? :new : :create
         email = person.email_addresses.send(new_or_create, attributes)
       end
