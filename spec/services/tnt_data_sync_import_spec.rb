@@ -21,6 +21,7 @@ describe TntDataSyncImport do
     expect(account_list.donations.count).to eq 1
     donation = account_list.donations.first
     expect(donation.amount).to eq 85
+    expect(donation.tendered_amount).to eq 85
   end
 
   it 'works even if [ORGANIZATIONS] section missing and headers are lowercase' do

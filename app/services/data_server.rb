@@ -547,8 +547,8 @@ class DataServer
         motivation: line['MOTIVATION'],
         payment_method: line['PAYMENT_METHOD'],
         remote_id: line['DONATION_ID'],
-        tendered_amount: line['TENDERED_AMOUNT'] || line['AMOUNT'],
-        tendered_currency: line['TENDERED_CURRENCY'] || default_currency
+        tendered_amount: line['TENDERED_AMOUNT'].presence || line['AMOUNT'],
+        tendered_currency: line['TENDERED_CURRENCY'].presence || default_currency
       }
 
       donation =
