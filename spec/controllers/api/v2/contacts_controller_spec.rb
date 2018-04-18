@@ -97,8 +97,14 @@ describe Api::V2::ContactsController, type: :controller do
     end
 
     context 'wildcard_search filter' do
-      it "doesn't blow up with date-like string" do
+      it 'does not blow up with date-like string' do
         expect { get :index, filter: { wildcard_search: '2011-11-01' } }.to_not raise_exception
+      end
+    end
+
+    context 'with donation details filter' do
+      it 'does not blow up' do
+        expect { get :index, filter: { donation: 'one', donation_amount_range: { max: 1 } } }.to_not raise_exception
       end
     end
   end
