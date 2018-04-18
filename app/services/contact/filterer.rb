@@ -32,6 +32,7 @@ class Contact::Filterer < ApplicationFilterer
     DonationAmountRange
     DonationDate
     DonationAmountRecommendation
+    DesignationAccountId
     TasksAllCompleted
     TaskDueDate
   ).freeze # These filters are displayed in this way on purpose, do not alphabetize them
