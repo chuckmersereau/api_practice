@@ -507,4 +507,18 @@ describe TntImport do
       end
     end
   end
+
+  context 'with OrgContactPerson' do
+    before { tnt_import.file = File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
+    it 'add name to person' do
+      import.import
+
+      contact = Contact.find_by(tnt_id: 748_459_735)
+      expect(contact.people.collect(&:to_s)).to eq ['OrgContactPerson ']
+
+      # expect for phone numbers and email addresses to be associated with that person
+      expect(contact.people.first.email_addresses).to be_present
+      expect(contact.people.first.phone_numbers).to be_present
+    end
+  end
 end

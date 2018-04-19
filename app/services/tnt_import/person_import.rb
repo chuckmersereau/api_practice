@@ -15,6 +15,8 @@ class TntImport::PersonImport
   private
 
   def add_or_update_person(row, contact, prefix = '')
+    add_org_contact_person_name(row)
+
     row[prefix + 'FirstName'] = 'Unknown' if row[prefix + 'FirstName'].blank?
 
     # See if there's already a person by this name on this contact (This is a contact with multiple donation accounts)
@@ -34,6 +36,14 @@ class TntImport::PersonImport
     end
 
     person
+  end
+
+  def add_org_contact_person_name(row)
+    return unless true?(row['IsOrganization']) && row['OrgContactPerson'].present?
+
+    parsed = HumanNameParser.new(row['OrgContactPerson']).parse
+    row['FirstName'] = parsed[:first_name]
+    row['LastName'] = parsed[:last_name]
   end
 
   def update_person_attributes(person, row, prefix = '')
@@ -129,7 +139,7 @@ class TntImport::PersonImport
   end
 
   def true?(val)
-    val.casecmp('TRUE').zero?
+    val && val.casecmp('TRUE').zero?
   end
 
   # TntMPD allows multiple emails to be marked as preferred and expresses that array of booleans as a
