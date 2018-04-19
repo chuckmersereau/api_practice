@@ -3,7 +3,7 @@ class CredentialValidator < ActiveModel::Validator
     # we don't want this error to show up if there is already an error
     return if record.errors[:organization_id].present? || record.errors[:person_id].present?
     return if valid_credentials?(record)
-    record.errors[:base] << _('Your credentials for %{org} are invalid.').localize % { org: record.organization }
+    record.errors[:base] << format(_('Your credentials for %{org} are invalid.'), org: record.organization)
   end
 
   private

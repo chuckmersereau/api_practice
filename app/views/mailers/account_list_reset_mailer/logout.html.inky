@@ -5,7 +5,7 @@
   </p>
 <% end %>
 <h3>
-  <%= _('Hey %{account_name},').localize % { account_name: @user.first_name } %>
+  <%= format(_('Hey %{account_name},'), account_name: @user.first_name) %>
 </h3>
 <h5>
   <%=

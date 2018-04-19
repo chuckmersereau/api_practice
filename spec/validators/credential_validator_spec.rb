@@ -9,7 +9,7 @@ describe CredentialValidator do
     record.organization = nil
     record.valid?
     expect(record.errors.full_messages).not_to include(
-      _('Your credentials for %{org} are invalid.').localize % { org: record.organization }
+      format(_('Your credentials for %{org} are invalid.'), org: record.organization)
     )
   end
 
@@ -17,7 +17,7 @@ describe CredentialValidator do
     record.person = nil
     record.valid?
     expect(record.errors.full_messages).not_to include(
-      _('Your credentials for %{org} are invalid.').localize % { org: record.organization }
+      format(_('Your credentials for %{org} are invalid.'), org: record.organization)
     )
   end
 
@@ -30,7 +30,7 @@ describe CredentialValidator do
       record.username = nil
       record.valid?
       expect(record.errors.full_messages).to include(
-        _('Your credentials for %{org} are invalid.').localize % { org: record.organization }
+        format(_('Your credentials for %{org} are invalid.'), org: record.organization)
       )
     end
 
@@ -38,7 +38,7 @@ describe CredentialValidator do
       record.password = nil
       record.valid?
       expect(record.errors.full_messages).to include(
-        _('Your credentials for %{org} are invalid.').localize % { org: record.organization }
+        format(_('Your credentials for %{org} are invalid.'), org: record.organization)
       )
     end
   end
@@ -52,7 +52,7 @@ describe CredentialValidator do
       record.username = nil
       record.valid?
       expect(record.errors.full_messages).to_not include(
-        _('Your credentials for %{org} are invalid.').localize % { org: record.organization }
+        format(_('Your credentials for %{org} are invalid.'), org: record.organization)
       )
     end
 
@@ -60,7 +60,7 @@ describe CredentialValidator do
       record.password = nil
       record.valid?
       expect(record.errors.full_messages).to_not include(
-        _('Your credentials for %{org} are invalid.').localize % { org: record.organization }
+        format(_('Your credentials for %{org} are invalid.'), org: record.organization)
       )
     end
   end
@@ -70,7 +70,7 @@ describe CredentialValidator do
     allow(api).to receive(:validate_credentials) { false }
     validator.validate(record)
     expect(record.errors.full_messages).to eq(
-      [_('Your credentials for %{org} are invalid.').localize % { org: record.organization }]
+      [format(_('Your credentials for %{org} are invalid.'), org: record.organization)]
     )
   end
 

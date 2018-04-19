@@ -1,10 +1,18 @@
-<p><%= _('MPDX encountered errors while trying to import your %{source} contacts.').localize % { source: @import.user_friendly_source } %></p>
+<p>
+  <%= format(_('MPDX encountered errors while trying to import your %{source} contacts.'),
+             source: @import.user_friendly_source) %>
+</p>
 
 <% if @successes %>
-  <p><%= _('%{number_of_successful_contacts} contacts imported successfully.').localize % { number_of_successful_contacts: @successes } %></p>
+  <p>
+    <%= format(_('%{number_of_successful_contacts} contacts imported successfully.'),
+               number_of_successful_contacts: @successes) %>
+  </p>
 <% end %>
 <% if @failures %>
-  <p><%= _('%{number_of_failed_contacts} contacts failed to import.').localize % { number_of_failed_contacts: @failures } %></p>
+  <p>
+    <%= format(_('%{number_of_failed_contacts} contacts failed to import.'), number_of_failed_contacts: @failures) %>
+  </p>
 <% end %>
 
 <p><%= @explanation %></p>

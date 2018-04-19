@@ -1,15 +1,15 @@
 <% content_for :reason do %>
   <%=
-      (_('You are getting this notification from MPDX because you checked the email setting in ' +
-        'your preferences for this type of notification. You can change it <a href="%{preferences_url}">here</a>.')
-      .localize % { preferences_url: WebRouter.notifications_preferences_url }).html_safe
+      format(_('You are getting this notification from MPDX because you checked the email setting in ' +
+               'your preferences for this type of notification. You can change it <a href="%{preferences_url}">here</a>.'),
+             preferences_url: WebRouter.notifications_preferences_url).html_safe
   %>
 <% end %>
 <h3>
-  <%= _('Hey %{user},').localize % { user: @user.first_name } %>
+  <%= format(_('Hey %{user},'), user: @user.first_name) %>
 </h3>
 <% if @account_list %>
-  <h5><%= _("Here are today's notifications for %{list}:").localize % { list: @account_list.name } %></h5>
+  <h5><%= format(_("Here are today's notifications for %{list}:"), list: @account_list.name) %></h5>
 <% end %>
 <% @notifications_by_type.each do |type, notifications| %>
   <p><%= type.description_for_email %></p>

@@ -233,13 +233,6 @@ Style/EmptyMethod:
     - 'spec/support/fake_api.rb'
     - 'spec/workers/admin/account_list_reset_worker_spec.rb'
 
-# Offense count: 26
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: format, sprintf, percent
-Style/FormatString:
-  Enabled: false
-
 # Offense count: 53
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: annotated, template

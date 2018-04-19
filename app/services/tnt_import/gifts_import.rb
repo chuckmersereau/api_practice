@@ -153,7 +153,7 @@ class TntImport::GiftsImport
       current_currency_symbol = currency_symbol(currency_code_for_id(gift_split['CurrencyID']))
 
       "#{current_currency_symbol}#{gift_split['Amount']}" +
-        _(' is designated to the "%{appeal_name}" appeal.').localize % { appeal_name: current_appeal.name }
+        format(_(' is designated to the "%{appeal_name}" appeal.'), appeal_name: current_appeal.name)
     end
   end
 

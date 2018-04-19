@@ -54,3 +54,6 @@ Style/ClassAndModuleChildren:
 
 Style/Documentation:
   Enabled: false
+
+Style/FormatString:
+  EnforcedStyle: format

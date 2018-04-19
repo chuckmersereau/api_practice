@@ -48,7 +48,7 @@ class NotificationType < ApplicationRecord
   end
 
   def task_description(notification)
-    _(task_description_template).localize % interpolation_values(notification)
+    format(_(task_description_template), interpolation_values(notification))
   end
 
   def email_description(notification, context)

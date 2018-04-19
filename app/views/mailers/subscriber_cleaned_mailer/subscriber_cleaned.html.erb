@@ -1,10 +1,10 @@
 <p>
 <%=
-  (
+  format(
     _('Your MPDX contact "%{contact}" has a person <a href="%{edit_person_url}">%{person_name}</a> '\
-     'synced or exported to MailChimp but now has an undeliverable email: %{email}')
-    .localize % { contact: @contact, email: @email, person_name: @person.to_s,
-                  edit_person_url: WebRouter.person_url(@person) }
+     'synced or exported to MailChimp but now has an undeliverable email: %{email}'),
+    contact: @contact, email: @email, person_name: @person.to_s,
+    edit_person_url: WebRouter.person_url(@person)
   ).html_safe
   %>
 </p>

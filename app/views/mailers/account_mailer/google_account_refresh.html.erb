@@ -1,8 +1,8 @@
 <p>
-  <%= _("The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX
+  <%= format(_("The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX
   automatically sync with your Google account, please go to %{link}
   and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations
-  that you had set already.").localize % { link: link_to(_('Google Integration Settings'), WebRouter.integration_preferences_url('google')) } %>
+  that you had set already."), link: link_to(_('Google Integration Settings'), WebRouter.integration_preferences_url('google'))) %>
 </p>
 
 <p>

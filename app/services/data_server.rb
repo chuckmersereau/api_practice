@@ -208,7 +208,7 @@ class DataServer
     raise_missing_credentials unless org_account.username && org_account.password || org_account.token
     unless org_account.valid_credentials?
       raise Person::OrganizationAccount::InvalidCredentialsError,
-            _('Your credentials for %{org} are invalid.').localize % { org: org }
+            format(_('Your credentials for %{org} are invalid.'), org: org)
     end
   end
 
@@ -384,7 +384,7 @@ class DataServer
     org_account.update_column(:valid_credentials, false) if org_account.valid_credentials? && !org_account.new_record?
 
     raise Person::OrganizationAccount::InvalidCredentialsError,
-          _('Your credentials for %{org} are invalid.').localize % { org: org }
+          format(_('Your credentials for %{org} are invalid.'), org: org)
   end
 
   def raise_missing_credentials

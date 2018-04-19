@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe AccountListInviteMailer do
   context '#email' do
-    let(:user_inviting) { create(:user) }
+    let(:user_inviting) { create(:user, first_name: 'Java', last_name: 'Script') }
 
     let(:invite_link) do
       "https://mpdx.org/account_lists/#{invite.account_list.id}/accept_invite/#{invite.id}?code=#{invite.code}"
@@ -20,6 +20,8 @@ describe AccountListInviteMailer do
         invite_message = 'You are getting this email because an MPDX user has '\
                          'invited you to be a coach for an account they manage.'
         expect(mail.body.raw_source).to include(invite_message)
+        expect(mail.body.raw_source).to include('invited by Java Script')
+        expect(mail.body.raw_source).to include(invite.account_list.name)
       end
     end
 
@@ -34,6 +36,8 @@ describe AccountListInviteMailer do
         invite_message = 'You are getting this email because an MPDX user '\
                          'has invited you to access an account they manage.'
         expect(mail.body.raw_source).to include(invite_message)
+        expect(mail.body.raw_source).to include('invited by Java Script')
+        expect(mail.body.raw_source).to include(invite.account_list.name)
       end
     end
   end

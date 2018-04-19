@@ -9,7 +9,7 @@ class ImportMailer < ApplicationMailer
     I18n.locale = user.locale || 'en'
 
     subject = _('[MPDX] Importing your %{source} contacts completed')
-    mail(to: user.email, subject: subject.localize % { source: import.user_friendly_source })
+    mail(to: user.email, subject: format(subject, source: import.user_friendly_source))
   end
 
   def failed(import, successes = nil, failures = nil)
@@ -23,7 +23,7 @@ class ImportMailer < ApplicationMailer
     attachments[failure_attachment_filename] = failure_attachment if failure_attachment.present?
 
     subject = _('[MPDX] Importing your %{source} contacts failed')
-    mail(to: user.email, subject: subject.localize % { source: import.user_friendly_source })
+    mail(to: user.email, subject: format(subject, source: import.user_friendly_source))
   end
 
   def credentials_error(account)
@@ -32,7 +32,7 @@ class ImportMailer < ApplicationMailer
     @account = account
 
     subject = _('[MPDX] Your credentials for %{source} are invalid')
-    mail(to: user.email, subject: subject.localize % { source: account.organization.name })
+    mail(to: user.email, subject: format(subject, source: account.organization.name))
   end
 
   private

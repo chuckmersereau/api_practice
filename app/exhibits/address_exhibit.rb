@@ -24,17 +24,15 @@ class AddressExhibit < DisplayCase::Exhibit
 
   def address_change_email_body
     donor_info = if source_donor_account.present?
-                   _('"%{name}" (donor #%{account_number})').localize % {
-                     name: source_donor_account.name,
-                     account_number: source_donor_account.account_number
-                   }
+                   details = { name: source_donor_account.name, account_number: source_donor_account.account_number }
+                   format(_('"%{name}" (donor #%{account_number})'), details)
                  else
                    "\"#{addressable.name}\""
                  end
 
     [
       _('Dear Donation Services') + ",\n\n",
-      _('One of my donors, %{donor} has a new current address.').localize % { donor: donor_info } + "\n\n",
+      format(_('One of my donors, %{donor} has a new current address.'), donor: donor_info) + "\n\n",
       _('Please update their address to') + ":\n\n",
       _('REPLACE WITH NEW STREET') + "\n",
       _('REPLACE WITH NEW CITY, STATE, ZIP') + "\n\n",

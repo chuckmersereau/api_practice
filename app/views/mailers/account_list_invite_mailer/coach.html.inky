@@ -5,11 +5,8 @@
   <%= _('Hey there,')%>
 </h3>
 <h5>
-  <%=
-    _('You have been invited by %{inviter} to be a coach for their MPDX account "%{account}".')
-      .localize % { inviter: @invite.invited_by_user.first_name.to_s + ' ' +
-                             @invite.invited_by_user.last_name.to_s,
-                    account: @invite.account_list.name.to_s } %>
+  <%= format(_('You have been invited by %{inviter} to be a coach for their MPDX account "%{account}".'),
+             @message_values) %>
 </h5>
 <p>
   <%= _('To activate your invitation, click the button below and log into MPDX.') %>

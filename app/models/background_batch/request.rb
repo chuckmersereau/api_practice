@@ -17,7 +17,7 @@ class BackgroundBatch::Request < ApplicationRecord
       URI(
         ENV.fetch('API_URL') + (
           if path.include? '%{default_account_list_id}'
-            path % { default_account_list_id: default_account_list_id }
+            format(path, default_account_list_id: default_account_list_id)
           else
             path
           end
