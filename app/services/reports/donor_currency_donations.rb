@@ -3,7 +3,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
 
   MONTHS_BACK = 12
 
-  attr_accessor :account_list
+  attr_accessor :account_list, :filter_params
 
   def donor_infos
     received_donations_object.donors
@@ -37,6 +37,17 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
 
   def donation_amount(donation)
     donation.amount
+  end
+
+  def donations(donations)
+    donations = donations.where('donation_date >= ?', start_date)
+    if filter_params && filter_params[:designation_account_id]
+      donations = donations.where(designation_account_id: filter_params[:designation_account_id])
+    end
+    if filter_params && filter_params[:donor_account_id]
+      donations = donations.where(donor_account_id: filter_params[:donor_account_id])
+    end
+    donations
   end
 
   private
@@ -75,7 +86,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
     @received_donations_object ||=
       DonationReports::ReceivedDonations.new(
         account_list: account_list,
-        donations_scoper: ->(donation) { donation.where('donation_date >= ?', start_date) }
+        donations_scoper: ->(donations) { self.donations(donations) }
       )
   end
 

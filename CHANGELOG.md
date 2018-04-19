@@ -2,6 +2,13 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 6 April 2018
+- add designation_account_id & donor_account_id filter to account_list/donations
+- add designation_account_id & donor_account_id filter to reports/donor_currency_donations
+- add designation_account_id & donor_account_id filter to reports/salary_currency_donations
+- add designation_account_id & donor_account_id filter to reports/monthly_giving_graph
+- add designation_account_id & donor_account_id filter to reports/expected_monthly_totals
+
 ## 17 November 2017
 - CSV Import no longer accepts hash key value format
 

@@ -48,4 +48,34 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
   include_examples 'update_examples'
 
   include_examples 'destroy_examples'
+
+  describe 'Filters' do
+    let!(:donor_account_1) { create(:donor_account) }
+    let!(:designation_account_1) { create(:designation_account) }
+    let!(:contact_1) { create(:contact, account_list: account_list) }
+    let!(:donations_1) do
+      create_list(:donation, 2, donor_account: donor_account_1,
+                                designation_account: designation_account_1,
+                                amount: 10.00,
+                                donation_date: Date.today)
+    end
+
+    before do
+      account_list.designation_accounts << designation_account_1
+      contact_1.donor_accounts << donor_account_1
+      api_login(user)
+    end
+
+    it 'allows a user to filter by designation_account_id' do
+      get :index, account_list_id: account_list_id, filter: { designation_account_id: designation_account_1.id }
+      expect(response_json['data'].map { |donation| donation['id'] }).to match_array(donations_1.map(&:id))
+      expect(response_json['meta']['filter']['designation_account_id']).to eq(designation_account_1.id)
+    end
+
+    it 'allows a user to filter by donor_account_id' do
+      get :index, account_list_id: account_list_id, filter: { donor_account_id: donor_account_1.id }
+      expect(response_json['data'].map { |donation| donation['id'] }).to match_array(donations_1.map(&:id))
+      expect(response_json['meta']['filter']['donor_account_id']).to eq(donor_account_1.id)
+    end
+  end
 end

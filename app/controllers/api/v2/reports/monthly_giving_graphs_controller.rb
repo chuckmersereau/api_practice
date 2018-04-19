@@ -39,6 +39,7 @@ class Api::V2::Reports::MonthlyGivingGraphsController < Api::V2Controller
       :account_list_id,
       :donation_date,
       :donor_account_id,
+      :designation_account_id,
       :display_currency
     ]
   end

@@ -28,7 +28,9 @@ resource 'Reports > Donor Currency Donations Report' do
     # show
     get '/api/v2/reports/donor_currency_donations' do
       parameter 'filter[account_list_id]', 'Account List ID', required: true
-      response_field 'data',               'Data object',     type: 'Object'
+      parameter 'filter[donor_account_id]', 'List of Donor Account Ids', 'Type' => 'Array[String]'
+      parameter 'filter[designation_account_id]', 'List of Designation Account Ids', 'Type' => 'Array[String]'
+      response_field 'data', 'Data object', type: 'Object'
 
       with_options scope: [:data, :attributes] do
         response_field 'created_at',      'Time when report was observed',                                     type: 'String'

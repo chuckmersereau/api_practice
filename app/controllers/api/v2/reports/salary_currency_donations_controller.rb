@@ -12,7 +12,9 @@ class Api::V2::Reports::SalaryCurrencyDonationsController < Api::V2Controller
   end
 
   def report_params
-    load_account_list ? { account_list: load_account_list } : {}
+    report_params = { filter_params: filter_params.except(:account_list_id) }
+    report_params[:account_list] = load_account_list if load_account_list
+    report_params
   end
 
   def load_account_list
@@ -24,7 +26,7 @@ class Api::V2::Reports::SalaryCurrencyDonationsController < Api::V2Controller
   end
 
   def permitted_filters
-    [:account_list_id]
+    [:account_list_id, :designation_account_id, :donor_account_id]
   end
 
   def authorize_report

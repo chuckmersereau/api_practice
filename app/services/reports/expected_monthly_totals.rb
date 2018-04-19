@@ -1,5 +1,5 @@
 class Reports::ExpectedMonthlyTotals < ActiveModelSerializers::Model
-  attr_accessor :account_list
+  attr_accessor :account_list, :filter_params
 
   delegate :total_currency,
            :total_currency_symbol,
@@ -12,11 +12,17 @@ class Reports::ExpectedMonthlyTotals < ActiveModelSerializers::Model
   private
 
   def received
-    ExpectedTotalsReport::ReceivedDonations.new(account_list).donation_rows
+    ExpectedTotalsReport::ReceivedDonations.new(
+      account_list: account_list,
+      filter_params: filter_params
+    ).donation_rows
   end
 
   def possible
-    ExpectedTotalsReport::PossibleDonations.new(account_list).donation_rows
+    ExpectedTotalsReport::PossibleDonations.new(
+      account_list: account_list,
+      filter_params: filter_params
+    ).donation_rows
   end
 
   def format_donation_row(donation_row)
