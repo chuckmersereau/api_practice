@@ -130,7 +130,7 @@ group :test do
 
   # this can be changed back to rubygems source after the safeguard stuff is published
   # https://github.com/DatabaseCleaner/database_cleaner/pull/521
-  gem 'database_cleaner', git: 'https://github.com/DatabaseCleaner/database_cleaner'
+  gem 'database_cleaner', '~> 1.7.0'
 
   gem 'faker', '~> 1.6.6'
   gem 'growl', '~> 1.0.3'
