@@ -25,7 +25,7 @@ gem 'cloudinary', '~> 1.8.1'
 gem 'country_select', git: 'https://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 gem 'ddtrace', '~> 0.7.2'
 gem 'deadlock_retry', '~> 1.2.0'
-gem 'devise', '~> 4.2.1'
+gem 'devise', '~> 4.4.3'
 gem 'display_case', '= 0.0.5'
 gem 'elasticsearch-persistence', '~> 5.0.1'
 gem 'email_reply_parser', '~> 0.5.9'
@@ -139,7 +139,7 @@ group :test do
   gem 'roo', '~> 2.7.1'
   gem 'rspec-sidekiq', '~>3.0.3'
   gem 'rspec-retry', '~> 0.5.5'
-  gem 'rubocop', '~> 0.49.0', require: false
+  gem 'rubocop', '~> 0.52.0', require: false
   gem 'shoulda-matchers', '~> 3.1.1'
   gem 'test_after_commit'
   gem 'webmock', '< 3'

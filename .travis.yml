@@ -9,6 +9,8 @@ services:
 - redis-server
 before_install:
 - bundle config gems.contribsys.com $SIDEKIQ_CREDS
+- gem update --system # https://github.com/travis-ci/travis-ci/issues/8978
+- gem install bundler
 before_script:
 - psql -c 'create database mpdx_test;' -U postgres
 - psql -c 'create database mpdx_test2;' -U postgres
