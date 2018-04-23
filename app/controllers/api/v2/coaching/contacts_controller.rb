@@ -24,7 +24,7 @@ class Api::V2::Coaching::ContactsController < Api::V2Controller
                                    .filter(scope: contacts_scope,
                                            account_lists: account_lists)
                                    .reorder(sorting_param)
-                                   .order(:created_at)
+                                   .order(default_sort_param)
                                    .page(page_number_param)
                                    .per(per_page_param)
   end
@@ -51,6 +51,10 @@ class Api::V2::Coaching::ContactsController < Api::V2Controller
 
   def permitted_sorting_params
     %w(name)
+  end
+
+  def default_sort_param
+    Contact.arel_table[:created_at].asc
   end
 
   def permitted_filters

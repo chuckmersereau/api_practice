@@ -69,7 +69,7 @@ class Api::V2::User::OptionsController < Api::V2Controller
     @options = option_scope
                .where(filter_params)
                .reorder(sorting_param)
-               .order(:created_at)
+               .order(default_sort_param)
                .page(page_number_param)
                .per(per_page_param)
   end
@@ -94,5 +94,9 @@ class Api::V2::User::OptionsController < Api::V2Controller
 
   def save_option
     @option.save(context: persistence_context)
+  end
+
+  def default_sort_param
+    User::Option.arel_table[:created_at].asc
   end
 end

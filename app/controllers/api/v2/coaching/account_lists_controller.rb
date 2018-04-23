@@ -21,7 +21,7 @@ class Api::V2::Coaching::AccountListsController < Api::V2Controller
   def load_account_lists
     @account_lists = account_lists_scope.where(filter_params)
                                         .reorder(sorting_param)
-                                        .order(:created_at)
+                                        .order(default_sort_param)
                                         .page(page_number_param)
                                         .per(per_page_param)
   end
@@ -48,5 +48,9 @@ class Api::V2::Coaching::AccountListsController < Api::V2Controller
 
   def permitted_sorting_params
     %w(name active_mpd_start_at active_mpd_finish_at)
+  end
+
+  def default_sort_param
+    AccountList.arel_table[:created_at].asc
   end
 end

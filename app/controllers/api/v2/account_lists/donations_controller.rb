@@ -41,7 +41,7 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   def load_donations
     @donations = donation_scope.where(filter_params)
                                .reorder(sorting_param)
-                               .order(:created_at)
+                               .order(default_sort_param)
                                .page(page_number_param)
                                .per(per_page_param)
   end
@@ -102,6 +102,10 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
 
   def permitted_sorting_params
     %w(donation_date)
+  end
+
+  def default_sort_param
+    Donation.arel_table[:created_at].asc
   end
 
   def pundit_user

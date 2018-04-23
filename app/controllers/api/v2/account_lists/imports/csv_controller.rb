@@ -41,7 +41,7 @@ class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
 
   def load_imports
     @imports = import_scope.reorder(sorting_param)
-                           .order(:created_at)
+                           .order(default_sort_param)
                            .page(page_number_param)
                            .per(per_page_param)
   end
@@ -109,5 +109,9 @@ class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
 
   def pundit_user
     PunditContext.new(current_user, account_list: load_account_list)
+  end
+
+  def default_sort_param
+    Import.arel_table[:created_at].asc
   end
 end

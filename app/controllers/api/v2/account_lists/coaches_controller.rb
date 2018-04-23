@@ -33,7 +33,7 @@ class Api::V2::AccountLists::CoachesController < Api::V2Controller
   def load_coaches
     @coaches = coach_scope.where(filter_params)
                           .reorder(sorting_param)
-                          .order(:created_at)
+                          .order(default_sort_param)
                           .page(page_number_param)
                           .per(per_page_param)
   end
@@ -68,5 +68,9 @@ class Api::V2::AccountLists::CoachesController < Api::V2Controller
     else
       current_user
     end
+  end
+
+  def default_sort_param
+    User::Coach.arel_table[:created_at].asc
   end
 end

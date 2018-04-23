@@ -45,7 +45,7 @@ class Api::V2::TasksController < Api::V2Controller
     @tasks = Task::Filterer.new(filter_params)
                            .filter(scope: task_scope, account_lists: account_lists)
                            .reorder(sorting_param)
-                           .order(:created_at)
+                           .order(Task.arel_table[:created_at].asc)
                            .page(page_number_param)
                            .per(per_page_param)
   end

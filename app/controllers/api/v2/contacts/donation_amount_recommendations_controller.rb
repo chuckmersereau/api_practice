@@ -37,7 +37,7 @@ class Api::V2::Contacts::DonationAmountRecommendationsController < Api::V2Contro
   def load_donation_amount_recommendations
     @donation_amount_recommendations = donation_amount_recommendation_scope.where(filter_params)
                                                                            .reorder(sorting_param)
-                                                                           .order(:created_at)
+                                                                           .order(default_sort_param)
                                                                            .page(page_number_param)
                                                                            .per(per_page_param)
   end
@@ -51,5 +51,9 @@ class Api::V2::Contacts::DonationAmountRecommendationsController < Api::V2Contro
 
   def pundit_user
     PunditContext.new(current_user, contact: current_contact)
+  end
+
+  def default_sort_param
+    DonationAmountRecommendation.arel_table[:created_at].asc
   end
 end

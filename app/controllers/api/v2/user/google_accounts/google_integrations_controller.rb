@@ -47,7 +47,7 @@ class Api::V2::User::GoogleAccounts::GoogleIntegrationsController < Api::V2Contr
   def load_google_integrations
     @google_integrations = google_integration_scope
                            .reorder(sorting_param)
-                           .order(:created_at)
+                           .order(default_sort_param)
                            .page(page_number_param)
                            .per(per_page_param)
   end
@@ -114,5 +114,9 @@ class Api::V2::User::GoogleAccounts::GoogleIntegrationsController < Api::V2Contr
 
   def permitted_filters
     [:account_list_id]
+  end
+
+  def default_sort_param
+    GoogleIntegration.arel_table[:created_at].asc
   end
 end

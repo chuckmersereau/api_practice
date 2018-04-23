@@ -86,7 +86,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
     @people = Person::Filterer.new(filter_params)
                               .filter(scope: person_scope, account_lists: account_lists)
                               .reorder(sorting_param)
-                              .order(:created_at)
+                              .order(default_sort_param)
                               .page(page_number_param)
                               .per(per_page_param)
   end
@@ -123,5 +123,9 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
 
   def permitted_filters
     @permitted_filters ||= Person::Filterer.filter_params
+  end
+
+  def default_sort_param
+    Person.arel_table[:created_at].asc
   end
 end
