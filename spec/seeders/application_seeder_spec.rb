@@ -1,7 +1,5 @@
 require 'rails_helper'
 
-require Rails.root.join('db/seeders/application_seeder.rb')
-
 describe ApplicationSeeder do
   let!(:seeder) { ApplicationSeeder.new }
 
@@ -12,5 +10,15 @@ describe ApplicationSeeder do
     expect(seeder.all_models_seeded?).to be_truthy, "If you've created a new model, please make "\
                                                     'sure that you add a corresponding factory, '\
                                                     "and add your seeds to #{described_class}"
+  end
+
+  context 'staging env' do
+    before do
+      allow(Rails).to receive(:env).and_return('staging')
+    end
+
+    it 'fails to run' do
+      expect { seeder.seed }.to raise_exception RuntimeError
+    end
   end
 end

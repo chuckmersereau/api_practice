@@ -1,5 +1,3 @@
-require_relative 'seeders/application_seeder'
-
 if Rails.env.development?
   ApplicationSeeder.new.seed
 else

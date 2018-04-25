@@ -1,5 +1,5 @@
 require 'rails_helper'
-require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
+require Rails.root.join('app', 'seeders', 'notification_types_seeder.rb')
 
 describe TntDataSyncImport do
   let(:user) { create(:user_with_account) }

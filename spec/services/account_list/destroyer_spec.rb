@@ -1,5 +1,4 @@
 require 'rails_helper'
-require Rails.root.join('db/seeders/application_seeder')
 
 RSpec.describe AccountList::Destroyer do
   let(:user) { User.order(:created_at).first }

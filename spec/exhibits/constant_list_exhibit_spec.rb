@@ -1,5 +1,5 @@
 require 'rails_helper'
-require_relative '../../db/seeders/notification_types_seeder'
+require Rails.root.join('app', 'seeders', 'notification_types_seeder.rb')
 
 describe ConstantListExhibit do
   subject { ConstantListExhibit.new(constant_list, context) }

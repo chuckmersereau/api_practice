@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-28 12:07+1300\n"
-"PO-Revision-Date: 2018-02-28 12:07+1300\n"
+"POT-Creation-Date: 2018-04-16 14:06-0400\n"
+"PO-Revision-Date: 2018-04-16 14:06-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -24,13 +24,40 @@ msgstr ""
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr ""
 
-msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
+msgid "%(This task was given the type \"#{unsupported_type_name}\" in TntConnect.)"
+msgstr ""
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You."
+msgstr ""
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift."
+msgstr ""
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You."
+msgstr ""
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You."
 msgstr ""
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
 msgstr ""
 
+msgid "%{contact_name} have not had a thank you note logged in the past year.  Send them a Thank You note."
+msgstr ""
+
+msgid "%{contact_name} have not had an attempted call logged in the past year. Call them."
+msgstr ""
+
+msgid "%{contact_name} is on the email newsletter but lacks a valid email address."
+msgstr ""
+
+msgid "%{contact_name} is on the physical newsletter but lacks a current mailing address."
+msgstr ""
+
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
+msgstr ""
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You."
 msgstr ""
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
@@ -243,7 +270,19 @@ msgstr ""
 msgid "Contact for Appointment"
 msgstr ""
 
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr ""
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr ""
+
 msgid "Contacts"
+msgstr ""
+
+msgid "Contacts missing a mailing address"
+msgstr ""
+
+msgid "Contacts missing an email address"
 msgstr ""
 
 msgid "Country"
@@ -434,6 +473,12 @@ msgid "Increased their giving in the last 3 months"
 msgstr ""
 
 msgid "Insights for "
+msgstr ""
+
+msgid "It is important to remind our financial partners who give on a less frequent basis of their upcoming gift. MPDX shows financial partners who have expected donations one month from now. Now would be a great time to remind them."
+msgstr ""
+
+msgid "It is so important to connect with our financial partners personally, but it is easy for time to get away from us. MPDX does not show a phone call to your financial partner in the past year. Now would be a great time to connect with them!​"
 msgstr ""
 
 msgid "Joined my team in the last 3 months"
@@ -667,6 +712,9 @@ msgstr ""
 msgid "One of my donors, %{donor} has a new current address."
 msgstr ""
 
+msgid "One of the most important things we can do is thank our partners, but it is easy for time to get away from us. MPDX does not show a thank you note for your financial partner in the past year. Now would be a great time to let them know how much you appreciate them!​"
+msgstr ""
+
 msgid "One or More Gifts"
 msgstr ""
 
@@ -688,6 +736,9 @@ msgstr ""
 msgid "Partner"
 msgstr ""
 
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr ""
+
 msgid "Partner - Financial"
 msgstr ""
 
@@ -695,6 +746,48 @@ msgid "Partner - Pray"
 msgstr ""
 
 msgid "Partner - Special"
+msgstr ""
+
+msgid "Partner gave a Special Gift"
+msgstr ""
+
+msgid "Partner gave a Special Gift: This notification is triggered anytime someone who does not have a status of 'Partner - Financial' gives a gift. If one or more of the people below are financial partners, please log into MPDX, edit that contact, and set their status to 'Partner - Financial'."
+msgstr ""
+
+msgid "Partner gave a gift that averages out to less than their commitment"
+msgstr ""
+
+msgid "Partner gave a gift to recontinue their giving after being two or more months late"
+msgstr ""
+
+msgid "Partner gave a gift with a long time frame (semi-annual, annual, or biennial"
+msgstr ""
+
+msgid "Partner gave a larger gift than commitment"
+msgstr ""
+
+msgid "Partner gave a larger gift than the commitment recorded in MPDX"
+msgstr ""
+
+msgid "Partner gave less than commitment"
+msgstr ""
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr ""
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr ""
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr ""
+
+msgid "Partner missed a gift"
+msgstr ""
+
+msgid "Partner recontinued giving"
+msgstr ""
+
+msgid "Partner started giving"
 msgstr ""
 
 msgid "Pending"
@@ -731,6 +824,9 @@ msgid "Pledge"
 msgstr ""
 
 msgid "Pledge Status"
+msgstr ""
+
+msgid "Prayer Letters Integration Settings"
 msgstr ""
 
 msgid "Prayer Request"
@@ -883,7 +979,7 @@ msgstr ""
 
 msgid ""
 "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n"
-"  automatically push changes over to prayerletters.com, please go to\n"
+"  automatically push changes over to prayerletters.com, please go to %{link}\n"
 "  and click the 'Enable' button"
 msgstr ""
 

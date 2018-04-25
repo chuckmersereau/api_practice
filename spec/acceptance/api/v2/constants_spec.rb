@@ -1,6 +1,6 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
-require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
+require Rails.root.join('app', 'seeders', 'notification_types_seeder.rb')
 
 resource 'Constants' do
   include_context :json_headers

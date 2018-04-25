@@ -1,5 +1,4 @@
 require 'rails_helper'
-require Rails.root.join('db/seeders/application_seeder')
 
 RSpec.describe AccountList::Restorer do
   describe 'initialize' do
