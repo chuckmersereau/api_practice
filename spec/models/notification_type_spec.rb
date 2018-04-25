@@ -68,6 +68,16 @@ describe NotificationType do
       end.to_not change(Notification, :count).from(1)
     end
 
+    it 'can have the same notification on two contacts' do
+      contact2 = create(:contact, account_list: account_list)
+      create(:notification, notification_type: notification_type, contact: contact2, donation: donation)
+
+      expect(notification_type).to receive(:check_for_donation_to_notify).with(contact).and_return(donation)
+      expect(notification_type).to receive(:check_for_donation_to_notify).with(contact2).and_return(donation)
+
+      expect { notification_type.check(account_list) }.to change(Notification, :count).by(1)
+    end
+
     it 'does not send a notification for gifts given a long time ago' do
       donation.update(donation_date: 75.days.ago)
       expect(notification_type).to receive(:check_for_donation_to_notify).with(contact).and_return(donation)

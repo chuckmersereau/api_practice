@@ -30,7 +30,7 @@ class NotificationType < ApplicationRecord
     check_contacts_filter(account_list.contacts).each do |contact|
       donation = check_for_donation_to_notify(contact)
       next unless donation && donation.donation_date > 60.days.ago # Don't notify for old gifts
-      next if Notification.active.where(notification_type_id: id, donation_id: donation.id).present?
+      next if contact.notifications.active.exists?(notification_type_id: id, donation_id: donation.id)
       notification = contact.notifications.create!(notification_type_id: id, donation: donation, event_date: Date.today)
       notifications << notification
     end

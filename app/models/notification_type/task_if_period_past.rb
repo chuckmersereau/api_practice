@@ -8,8 +8,10 @@ class NotificationType::TaskIfPeriodPast < NotificationType
     notifications = []
     check_contacts_filter(account_list.contacts).each do |contact|
       next unless contact.created_at < 1.year.ago || contact.activities.where('start_at < ?', 1.year.ago).any?
-      prior_notification = Notification.active.where(contact_id: contact.id, notification_type_id: id)
-                                       .find_by('event_date > ?', 1.year.ago)
+      prior_notification = Notification.active
+                                       .where(contact_id: contact.id, notification_type_id: id)
+                                       .where('event_date > ?', 1.year.ago)
+                                       .exists?
       next if prior_notification
       next unless notify_for_contact?(contact)
       notification = contact.notifications.create!(notification_type_id: id, event_date: Date.today)
