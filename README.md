@@ -42,13 +42,19 @@ $ bundle install
 
 ### Create Databases
 
-Create, migrate, and seed your databases with:
+Create, migrate, and seed your database with:
 
 ```bash
-$ bin/rake db:create && bin/rake db:migrate && bin/rake db:seed
+$ bin/rake db:setup
 ```
 
-**Note:** This application uses a structure.sql file instead of the Rails schema.rb file, the rake tasks `db:setup` and `db:schema:load` are not supported.
+To created some real organization data, we suggest running the following commands inside of `rails c`:
+```ruby
+OrganizationFromQueryUrlWorker.new.perform('Cru - USA', "https://staffweb.cru.org/ss/tntmpd/query.ini")
+Organization.create(name: 'Developer Org', query_ini_url: "#{SecureRandom.hex(8)}.example.com", api_class: 'OfflineOrg', addresses_url: 'example.com')
+```
+
+**Note:** This application uses a structure.sql file instead of the Rails schema.rb file, the rake tasks `db:schema:load` is not supported.
 
 ### Start Server
 
