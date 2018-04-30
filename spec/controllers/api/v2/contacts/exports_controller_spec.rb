@@ -9,6 +9,18 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
   let(:account_list) { user.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
   let(:second_account_list) { create(:account_list, users: [user]) }
+  let(:resource) { create(:export_log, user: user) }
+  let(:id) { resource.id }
+  let(:incorrect_attributes) { nil }
+  let(:correct_attributes) do
+    {
+      params: {
+        filter: {
+          status: 'active'
+        }
+      }
+    }
+  end
 
   let!(:contact) { create(:contact, account_list: account_list, name: 'Last Contact', primary_person: primary_person) }
   let!(:second_contact) { create(:contact_with_person, account_list: account_list, name: 'First Contact') }
@@ -28,7 +40,24 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
   let(:expected_headers1) { '"Primary Email","Spouse Email","Other Email","Spouse Other Email"' }
   let(:expected_headers2) { '"Primary Phone","Spouse Phone","Other Phone","Spouse Other Phone"' }
 
-  let(:id) { contact.id }
+  include_examples 'show_examples'
+  include_examples 'create_examples'
+
+  describe '#show' do
+    it 'only allows export display to occur once' do
+      api_login(user)
+      get :show, id: resource.id
+      expect(response.status).to eq(200)
+      get :show, id: resource.id
+      expect(response.status).to eq(403)
+    end
+
+    it 'sets active to false' do
+      api_login(user)
+      get :show, id: resource.id
+      expect(resource.reload.active).to eq(false)
+    end
+  end
 
   render_views
 
@@ -40,16 +69,23 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
       end
     end
 
-    it 'logs the export if successful' do
+    it 'logs the CSV export if successful' do
       api_login(user)
+      expect do
+        get :index, format: :csv
+      end.to change { ExportLog.count }.from(0).to(1)
+      expect(response.status).to eq(200)
+      expect(ExportLog.first.active).to eq(false)
+    end
 
-      [:csv, :xlsx].each do |format|
-        expect do
-          get :index, format: format
-        end.to change { ExportLog.count }.by(1)
-
-        expect(response.status).to eq(200)
-      end
+    it 'logs the XLSX export if successful' do
+      api_login(user)
+      expect do
+        get :index, format: :xlsx
+      end.to change { ExportLog.count }.from(0).to(1)
+      expect(response.status).to eq(200)
+      expect(ExportLog.first.active).to eq(false)
+      expect(ExportLog.first.type).to eq('Contacts')
     end
   end
 

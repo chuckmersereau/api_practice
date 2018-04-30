@@ -2,6 +2,14 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+# 26 April 2018
+- contacts/exports [LIST] is now deprecated
+- contacts/exports/mailing [LIST] is now deprecated
+- contacts/exports [POST] allows creating of export_logs
+- contacts/exports/:id [GET] allows users to retrieve a CSV or XLSX file directly from the API
+- contacts/exports/mailing [POST] allows creating of export_logs with a custom mailing format
+- contacts/exports/mailing/:id [GET] allows users to retrieve a CSV file directly from the API
+
 ## 6 April 2018
 - add designation_account_id & donor_account_id filter to account_list/donations
 - add designation_account_id & donor_account_id filter to reports/donor_currency_donations

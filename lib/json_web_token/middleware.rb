@@ -31,10 +31,14 @@ module JsonWebToken
       env['HTTP_AUTHORIZATION']
     end
 
+    def fetch_auth_param(env)
+      Rack::Request.new(env).params.dig('access_token')
+    end
+
     def fetch_http_token(env)
       auth_header = fetch_auth_header(env)
-
-      auth_header.split(' ').last if auth_header.present?
+      return auth_header.split(' ').last if auth_header.present?
+      fetch_auth_param(env)
     end
 
     def fetch_jwt_payload(env)

@@ -134,10 +134,10 @@ Rails.application.routes.draw do
 
             collection do
               get :analytics, to: 'analytics#show'
-              resources :exports, only: :index do
+              resources :exports, only: [:index, :show, :create] do
                 collection do
                   scope module: :exports do
-                    resources :mailing, only: :index
+                    resources :mailing, only: [:index, :show, :create]
                   end
                 end
               end

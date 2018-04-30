@@ -9,6 +9,18 @@ describe Api::V2::Contacts::Exports::MailingController, type: :controller do
   let(:account_list) { user.account_lists.order(:created_at).first }
   let(:account_list_id) { account_list.id }
   let(:second_account_list) { create(:account_list, users: [user]) }
+  let(:resource) { create(:export_log, user: user) }
+  let(:id) { resource.id }
+  let(:incorrect_attributes) { nil }
+  let(:correct_attributes) do
+    {
+      params: {
+        filter: {
+          status: 'active'
+        }
+      }
+    }
+  end
 
   let!(:contact) { create(:contact, account_list: account_list, name: 'Last Contact', addresses: [build(:address)]) }
   let!(:second_contact) do
@@ -18,7 +30,24 @@ describe Api::V2::Contacts::Exports::MailingController, type: :controller do
   end
   let!(:third_contact) { create(:contact, account_list: second_account_list, name: 'Missing Contact') }
 
-  let(:id) { contact.id }
+  include_examples 'show_examples'
+  include_examples 'create_examples'
+
+  describe '#show' do
+    it 'only allows export display to occur once' do
+      api_login(user)
+      get :show, id: resource.id
+      expect(response.status).to eq(200)
+      get :show, id: resource.id
+      expect(response.status).to eq(403)
+    end
+
+    it 'sets active to false' do
+      api_login(user)
+      get :show, id: resource.id
+      expect(resource.reload.active).to eq(false)
+    end
+  end
 
   render_views
 
@@ -33,12 +62,12 @@ describe Api::V2::Contacts::Exports::MailingController, type: :controller do
 
     it 'logs the export if successful' do
       api_login(user)
-
       expect do
         get :index, format: :csv
-      end.to change { ExportLog.count }.by(1)
-
+      end.to change { ExportLog.count }.from(0).to(1)
       expect(response.status).to eq(200)
+      expect(ExportLog.first.active).to eq(false)
+      expect(ExportLog.first.type).to eq('Contacts Mailing')
     end
 
     it 'renders the export alphabetically for users that are signed in' do
@@ -70,8 +99,8 @@ describe Api::V2::Contacts::Exports::MailingController, type: :controller do
       expect(response.body).to_not include(contact.name)
     end
 
-    it 'allows filtering by donation amount range' do
-      filters = { donation_amount_range: { max: '1000', min: '1' } }
+    it 'allows filtering by status' do
+      filters = { status: 'Call for Decision' }
       api_login(user)
 
       get :index, format: :csv, filter: filters

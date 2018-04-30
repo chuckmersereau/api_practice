@@ -1,0 +1,7 @@
+"<%== spreadsheet_header_titles_joined %>"
+<%== CSV.generate do |csv|
+  @contacts.each do |contact|
+    row = spreadsheet_values(contact)
+    csv << row unless row.empty?
+  end
+end %>

@@ -1,13 +1,10 @@
 actions:
   index_csv:
     title:
-      Export [INDEX]{CSV}
-  index_xlsx:
-    title:
-      Export [INDEX]{XLSX}
+      Mailing [INDEX]{CSV}
   show:
     description:
-      This endpoint when .csv or .xlsx is appended to the URI Path will produce a file with the contacts selected by the params attribute of the export_log
+      This endpoint when .csv is appended to the URI Path will produce a file with the contacts selected by the params attribute of the export_log
 relationships: &rels
   user:
     data:
@@ -18,7 +15,7 @@ attributes: &attrs
   params:
     description:
       A contact filter object that will select the contacts to export
-    type: string
+type: string
 object: &obj
   attributes:
     <<: *attrs
