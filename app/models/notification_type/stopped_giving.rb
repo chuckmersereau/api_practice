@@ -34,7 +34,7 @@ class NotificationType::StoppedGiving < NotificationType
     task
   end
 
-  def task_description_template
+  def task_description_template(_notification = nil)
     _('%{contact_name} seems to have missed a gift. Call to follow up.')
   end
 end

@@ -19,6 +19,10 @@ class DesignationAccount < ApplicationRecord
     designation_number
   end
 
+  def descriptor
+    name.presence || designation_number.presence || _('Unnamed Designation')
+  end
+
   # A given user should only have a designation account in one list
   def account_list(user)
     (user.account_lists & account_lists).first

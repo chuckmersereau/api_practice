@@ -12,7 +12,7 @@ class NotificationType::MissingEmailInNewsletter < NotificationType::MissingCont
            .where(email_addresses: { historic: [nil, false] })
   end
 
-  def task_description_template
+  def task_description_template(_notification = nil)
     _('%{contact_name} is on the email newsletter but lacks a valid email address.')
   end
 end

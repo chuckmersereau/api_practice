@@ -24,7 +24,12 @@ class NotificationType::RecontinuingGift < NotificationType
       contact.months_from_prev_to_last_donation >= (contact.pledge_frequency + MONTHS_LATE_WHEN_RECONTINUED)
   end
 
-  def task_description_template
-    _('%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You.')
+  def task_description_template(notification = nil)
+    if notification&.account_list&.designation_accounts&.many?
+      _('%{contact_name} recontinued their giving with a gift of %{amount} '\
+        'on %{date} to %{designation}. Send them a Thank You.')
+    else
+      _('%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You.')
+    end
   end
 end

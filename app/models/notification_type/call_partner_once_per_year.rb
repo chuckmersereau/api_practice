@@ -1,5 +1,5 @@
 class NotificationType::CallPartnerOncePerYear < NotificationType::TaskIfPeriodPast
-  def task_description_template
+  def task_description_template(_notification = nil)
     _('%{contact_name} have not had an attempted call logged in the past year. Call them.')
   end
 

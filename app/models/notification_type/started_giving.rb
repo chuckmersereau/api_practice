@@ -37,7 +37,7 @@ class NotificationType::StartedGiving < NotificationType
     task
   end
 
-  def task_description_template
+  def task_description_template(_notification = nil)
     _('%{contact_name} just gave their first gift. Send them a Thank You.')
   end
 

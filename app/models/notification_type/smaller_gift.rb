@@ -30,7 +30,12 @@ class NotificationType::SmallerGift < NotificationType
     'To Do'
   end
 
-  def task_description_template
-    _('%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift.')
+  def task_description_template(notification = nil)
+    if notification&.account_list&.designation_accounts&.many?
+      _('%{contact_name} gave a gift of %{amount} on %{date} to %{designation}, '\
+        'which is different from their pledge. Research the gift.')
+    else
+      _('%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift.')
+    end
   end
 end

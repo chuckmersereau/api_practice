@@ -37,7 +37,7 @@ class NotificationType::RemindPartnerInAdvance < NotificationType
     task
   end
 
-  def task_description_template
+  def task_description_template(_notification = nil)
     _('%{contact_name} have an expected gift in one month. Contact to follow up.')
   end
 end

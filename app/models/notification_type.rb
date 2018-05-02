@@ -55,7 +55,7 @@ class NotificationType < ApplicationRecord
     values = interpolation_values(notification)
 
     # insert %{link} in the place of the contact name so that it can be split out later.
-    localized = format(_(task_description_template), values.merge(contact_name: '%{link}'))
+    localized = format(_(task_description_template(notification)), values.merge(contact_name: '%{link}'))
 
     # replace each instance of %{contact_name} with a link
     # to the contact by splitting and joining in a safe way
@@ -67,7 +67,8 @@ class NotificationType < ApplicationRecord
   def interpolation_values(notification)
     { contact_name: notification.contact.name,
       amount: notification.donation&.localized_amount,
-      date: notification.donation&.localized_date }
+      date: notification.donation&.localized_date,
+      designation: notification.donation&.designation_account&.descriptor }
   end
 
   def contact_link(notification, context)
@@ -76,7 +77,7 @@ class NotificationType < ApplicationRecord
     context.link_to(name, url)
   end
 
-  def task_description_template
+  def task_description_template(_notification = nil)
     raise 'This method (or create_task and task_description) must be implemented in a subclass'
   end
 

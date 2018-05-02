@@ -9,7 +9,7 @@ class NotificationType::MissingAddressInNewsletter < NotificationType::MissingCo
             .where(addresses: { id: nil })
   end
 
-  def task_description_template
+  def task_description_template(_notification = nil)
     _('%{contact_name} is on the physical newsletter but lacks a current mailing address.')
   end
 end

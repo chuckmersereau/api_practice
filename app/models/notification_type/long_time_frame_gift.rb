@@ -15,7 +15,12 @@ class NotificationType::LongTimeFrameGift < NotificationType
     super(notification).merge(frequency: _(Contact.pledge_frequencies[notification.contact.pledge_frequency]))
   end
 
-  def task_description_template
-    _('%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You.')
+  def task_description_template(notification = nil)
+    if notification&.account_list&.designation_accounts&.many?
+      _('%{contact_name} gave their %{frequency} gift of %{amount} '\
+        'on %{date} to %{designation}. Send them a Thank You.')
+    else
+      _('%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You.')
+    end
   end
 end

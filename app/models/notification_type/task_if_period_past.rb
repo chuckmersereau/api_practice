@@ -33,7 +33,7 @@ class NotificationType::TaskIfPeriodPast < NotificationType
     task_activity_type
   end
 
-  def task_description_template
+  def task_description_template(_notification = nil)
     raise 'This method must be implemented in a subclass'
   end
 end
