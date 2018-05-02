@@ -17,8 +17,8 @@ class BulkResourceSerializer
         ErrorSerializer.new(hash: resource.errors, resource: resource, status: error_status_code(resource)).as_json(args)
       )
     else
-      serializer = ActiveModel::Serializer.serializer_for(resource).new(resource)
-      ActiveModelSerializers::Adapter.create(serializer).as_json(args)
+      serializer = ActiveModel::Serializer.serializer_for(resource).new(resource, args)
+      ActiveModelSerializers::Adapter.create(serializer, args).as_json(args)
     end
   end
 

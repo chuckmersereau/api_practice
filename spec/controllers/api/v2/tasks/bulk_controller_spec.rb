@@ -38,4 +38,20 @@ describe Api::V2::Tasks::BulkController, type: :controller do
   include_examples 'bulk_update_examples'
 
   include_examples 'bulk_destroy_examples'
+
+  describe '#post' do
+    before { api_login(user) }
+
+    let(:bulk_create_form_data) do
+      [{ data: { type: resource_type, id: SecureRandom.uuid, attributes: correct_attributes, relationships: relationships } }]
+    end
+
+    context 'with specified fields' do
+      it 'only returns specific fields' do
+        post :create, data: bulk_create_form_data, fields: { tasks: 'subject' }
+
+        expect(JSON.parse(response.body)[0]['data']['attributes'].keys).to eq ['subject']
+      end
+    end
+  end
 end

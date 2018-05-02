@@ -29,7 +29,7 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
 
   def destroy_tasks
     @destroyed_tasks = @tasks.select(&:destroy)
-    render json: BulkResourceSerializer.new(resources: @destroyed_tasks)
+    render_tasks(@destroyed_tasks)
   end
 
   def task_id_params
@@ -46,7 +46,13 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
     build_tasks
     authorize_tasks
     save_tasks
-    render json: BulkResourceSerializer.new(resources: @tasks)
+    render_tasks(@tasks)
+  end
+
+  def render_tasks(tasks)
+    render json: BulkResourceSerializer.new(resources: tasks),
+           include: include_params,
+           fields: field_params
   end
 
   def save_tasks

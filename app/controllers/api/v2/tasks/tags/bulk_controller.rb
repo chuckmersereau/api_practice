@@ -55,7 +55,9 @@ class Api::V2::Tasks::Tags::BulkController < Api::V2::BulkController
   end
 
   def render_tasks
-    render json: BulkResourceSerializer.new(resources: @tasks)
+    render json: BulkResourceSerializer.new(resources: @tasks),
+           include: include_params,
+           fields: field_params
   end
 
   def task_ids

@@ -84,6 +84,8 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2::BulkController
   end
 
   def render_contacts
-    render json: BulkResourceSerializer.new(resources: @contacts)
+    render json: BulkResourceSerializer.new(resources: @contacts),
+           include: include_params,
+           fields: field_params
   end
 end

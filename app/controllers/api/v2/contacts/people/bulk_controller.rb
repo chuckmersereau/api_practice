@@ -29,7 +29,7 @@ class Api::V2::Contacts::People::BulkController < Api::V2::BulkController
 
   def destroy_people
     @destroyed_people = @people.select(&:destroy)
-    render json: BulkResourceSerializer.new(resources: @destroyed_people)
+    render_people(@destroyed_people)
   end
 
   def pundit_user
@@ -50,7 +50,13 @@ class Api::V2::Contacts::People::BulkController < Api::V2::BulkController
     build_people
     authorize_people
     save_people
-    render json: BulkResourceSerializer.new(resources: @people)
+    render_people(@people)
+  end
+
+  def render_people(people)
+    render json: BulkResourceSerializer.new(resources: people),
+           include: include_params,
+           fields: field_params
   end
 
   def save_people

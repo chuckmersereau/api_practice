@@ -63,7 +63,9 @@ class Api::V2::Contacts::Merges::BulkController < Api::V2Controller
 
   def process_and_render_merges(&process)
     winners = @merges.map(&process)
-    render json: BulkResourceSerializer.new(resources: winners)
+    render json: BulkResourceSerializer.new(resources: winners),
+           include: include_params,
+           fields: field_params
   end
 
   def merge_contacts(merge)

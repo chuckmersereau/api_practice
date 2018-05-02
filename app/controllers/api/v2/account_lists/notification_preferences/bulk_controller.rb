@@ -37,7 +37,9 @@ class Api::V2::AccountLists::NotificationPreferences::BulkController < Api::V2::
     build_notification_preferences
     authorize_notification_preferences
     save_notification_preferences
-    render json: BulkResourceSerializer.new(resources: @notification_preferences)
+    render json: BulkResourceSerializer.new(resources: @notification_preferences),
+           include: include_params,
+           fields: field_params
   end
 
   def save_notification_preferences
