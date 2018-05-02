@@ -93,7 +93,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'awesome_print', '~> 1.7.0'
+  gem 'awesome_print', '~> 1.8.0'
   gem 'equivalent-xml', '~> 0.6.0'
   gem 'dotenv-rails', '~> 2.2.1', require: 'dotenv/rails-now'
   gem 'factory_girl_rails', '~> 4.5.0'
