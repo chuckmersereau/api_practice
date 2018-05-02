@@ -3,12 +3,14 @@ module Coaching::Contact
     def execute_query(contacts, filters)
       case filters[:pledge]
       when 'completed'
-        contacts.where(pledge_received: true)
+        contacts.financial_partners.where(pledge_received: true)
       when 'outstanding'
-        contacts.where(pledge_received: false)
+        contacts.financial_partners
+                .where(pledge_received: false)
                 .where('pledge_start_date < ?', today)
       when 'pending'
-        contacts.where(pledge_received: false)
+        contacts.financial_partners
+                .where(pledge_received: false)
                 .where('pledge_start_date >= ?', today)
       else # 'all'
         contacts.all
