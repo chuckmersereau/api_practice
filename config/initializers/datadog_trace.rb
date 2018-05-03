@@ -22,4 +22,12 @@ Datadog.configure do |c|
 
   # Sidekiq
   c.use :sidekiq, service_name: "#{base_name}-sidekiq"
+
+  # Net::HTTP
+  c.use :http, service_name: "#{base_name}-http"
 end
+
+# skipping the health check: if it returns true, the trace is dropped
+Datadog::Pipeline.before_flush(Datadog::Pipeline::SpanFilter.new do |span|
+  span.name == 'rack.request' && span.get_tag('http.url') == '/monitors/lb'
+end)
