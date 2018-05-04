@@ -1192,7 +1192,8 @@ CREATE TABLE public.partner_status_logs (
     pledge_received boolean,
     pledge_start_date date,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    pledge_currency character varying
 );
 
 
@@ -5049,4 +5050,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180302023505');
 INSERT INTO schema_migrations (version) VALUES ('20180321203714');
 
 INSERT INTO schema_migrations (version) VALUES ('20180425180956');
+
+INSERT INTO schema_migrations (version) VALUES ('20180504141434');
 

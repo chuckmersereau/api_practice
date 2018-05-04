@@ -14,7 +14,7 @@ class Contact < ApplicationRecord
 
   # Track status and pledge details at most once per day in separate table
   has_attributes_history for: [:status, :pledge_amount, :pledge_frequency,
-                               :pledge_received, :pledge_start_date],
+                               :pledge_received, :pledge_start_date, :pledge_currency],
                          with_model: PartnerStatusLog
 
   # Also track notes at most once per day in separate table
