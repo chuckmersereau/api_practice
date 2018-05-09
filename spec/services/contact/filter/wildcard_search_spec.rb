@@ -1,7 +1,4 @@
 require 'rails_helper'
-require_relative '../../../../app/services/contact/filter/base'
-require_relative '../../../../app/services/person/filter/wildcard_search'
-require_relative '../../../../app/services/person/filter/base'
 
 RSpec.describe Contact::Filter::WildcardSearch do
   let!(:user) { create(:user_with_account) }
@@ -54,7 +51,6 @@ RSpec.describe Contact::Filter::WildcardSearch do
         expect(wildcard_search('1234567890')).to eq [contact_one]
         expect(wildcard_search(person.last_name)).to eq [contact_three]
         expect(wildcard_search('122')).to eq [contact_three]
-        expect(wildcard_search('random notes')).to eq [contact_one]
         expect(wildcard_search('email')).to eq [contact_three]
       end
 

@@ -132,9 +132,13 @@ class Person < ApplicationRecord
   has_many :google_contacts,
            autosave: true
 
-  scope :alive,          -> { where.not(deceased: true) }
+  scope :alive, -> { where.not(deceased: true) }
   scope :by_anniversary, -> { order('anniversary_month, anniversary_day') }
-  scope :by_birthday,    -> { order('birthday_month, birthday_day') }
+  scope :by_birthday, -> { order('birthday_month, birthday_day') }
+  scope :search_for_contacts, lambda { |contacts = []|
+    joins(:contact_people)
+      .where(contact_people: { contact: contacts })
+  }
 
   accepts_nested_attributes_for :email_addresses,
                                 reject_if: -> (e) { e[:email].blank? },

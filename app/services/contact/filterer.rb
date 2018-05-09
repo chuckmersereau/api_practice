@@ -35,6 +35,7 @@ class Contact::Filterer < ApplicationFilterer
     DesignationAccountId
     TasksAllCompleted
     TaskDueDate
+    Notes
   ).freeze # These filters are displayed in this way on purpose, do not alphabetize them
 
   FILTERS_TO_HIDE = %w(

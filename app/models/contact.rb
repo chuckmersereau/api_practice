@@ -71,6 +71,10 @@ class Contact < ApplicationRecord
   scope :created_between, lambda { |start_date, end_date|
     where('contacts.created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone)
   }
+  scope :search_donor_account_numbers, lambda { |search_term|
+    joins(:donor_accounts)
+      .where('donor_accounts.account_number ilike ?', "%#{search_term}%")
+  }
 
   PERMITTED_ATTRIBUTES = [
     :account_list_id,

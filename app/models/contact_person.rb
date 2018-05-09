@@ -10,6 +10,9 @@ class ContactPerson < ApplicationRecord
 
   validates :person, presence: true
 
+  # Scopes
+  scope :find_ids_with_search_term, -> (search_term) { where(person: search_term) }
+
   private
 
   def delete_orphaned_person
