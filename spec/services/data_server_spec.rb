@@ -294,7 +294,7 @@ describe DataServer do
           'SUFFIX' => 'Sr.', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Moreno', 'SP_MIDDLE_NAME' => 'Celeste',
           'SP_TITLE' => 'Gonzalez', 'ADDR2' => 'Sra.', 'ADDR3' => '', 'ADDR4' => '', 'ADDR_CHANGED' => '',
           'PHONE_CHANGED' => '4/4/2003', 'CNTRY_DESCR' => '4/4/2003', 'PERSON_TYPE' => '', 'LAST_NAME_ORG' => 'P',
-          'SP_SUFFIX' => 'Rodriguez'
+          'SP_SUFFIX' => 'Rodriguez', 'EMAIL' => 'tony@starkindustries.com'
         }
       end
       let(:account_list) { create(:account_list) }
@@ -314,10 +314,8 @@ describe DataServer do
       end
       it 'should add a contact without an existing master person and create a master person' do
         expect do
-          expect do
-            data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
-          end.to change(MasterPerson, :count).by(1)
-        end.to change(Person, :count).by(2)
+          data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
+        end.to change(MasterPerson, :count).by(1).and(change(Person, :count).by(2))
       end
 
       it 'should add a new contact with no spouse prefix' do
@@ -345,6 +343,31 @@ describe DataServer do
         expect do
           data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
         end.to change(MasterPersonDonorAccount, :count).by(1)
+      end
+
+      it 'should add email address as primary if no other email addresses' do
+        data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
+        expect(Contact.first.people.first.email_addresses.pluck(:email)).to eq ['tony@starkindustries.com']
+      end
+
+      it 'should not override primary if email already exists' do
+        data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
+
+        Contact.first.people.first.email_addresses.create(email: 'tony@gmail.com', primary: true)
+
+        data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
+        expect(Contact.first.people.first.primary_email_address.email).to eq 'tony@gmail.com'
+      end
+
+      it 'should override primary if email address is new' do
+        expect do
+          data_server.send(:add_or_update_person, account_list, line.except('EMAIL'), donor_account, 1)
+        end.to_not change(EmailAddress, :count)
+
+        Contact.first.people.first.email_addresses.create(email: 'tony@gmail.com', primary: true)
+
+        data_server.send(:add_or_update_person, account_list, line, donor_account, 1)
+        expect(Contact.first.people.first.primary_email_address.email).to eq 'tony@starkindustries.com'
       end
     end
   end

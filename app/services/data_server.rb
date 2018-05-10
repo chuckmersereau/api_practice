@@ -437,7 +437,13 @@ class DataServer
     end
 
     # email address
-    person.email = line[prefix + 'EMAIL'] if line[prefix + 'EMAIL'] && line[prefix + 'EMAIL_VALID'] != 'FALSE'
+    if line[prefix + 'EMAIL'] && line[prefix + 'EMAIL_VALID'] != 'FALSE'
+      email = line[prefix + 'EMAIL'].downcase
+      unless person.email_addresses.exists?(email: email)
+        person.email_address = { email: email, primary: true, source: 'DataServer' }
+      end
+    end
+
     person.master_person_id ||= MasterPerson.find_or_create_for_person(person, donor_account: donor_account).try(:id)
     person.save(validate: false)
 
