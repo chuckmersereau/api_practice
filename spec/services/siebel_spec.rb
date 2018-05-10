@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 describe Siebel do
-  let(:wsapi) { 'https://wsapi.ccci.org/wsapi/rest' }
+  let(:wsapi) { 'https://wsapi.cru.org/wsapi/rest' }
   let(:org) { create(:organization) }
   let(:person) { create(:person) }
   let(:org_account) { build(:organization_account, person: person, organization: org) }
