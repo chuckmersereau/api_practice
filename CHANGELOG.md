@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+# 4 May 2018
+- reports/appointment_results [LIST] added
+
 # 26 April 2018
 - contacts/exports [LIST] is now deprecated
 - contacts/exports/mailing [LIST] is now deprecated

@@ -15,5 +15,6 @@ CONTROLLER_TO_SERIALIZER_LOOKUP = {
   'Api::V2::Reports::MonthlyLossesGraphsController' => 'Reports::MonthlyLossesGraphSerializer',
   'Api::V2::Reports::SalaryCurrencyDonationsController' => 'Reports::SalaryCurrencyDonationsSerializer',
   'Api::V2::Reports::YearDonationsController' => 'Reports::YearDonationsSerializer',
+  'Api::V2::Reports::AppointmentResultsController' => 'Reports::AppointmentResultsSerializer',
   'Api::V2::Tasks::AnalyticsController' => 'Task::AnalyticsSerializer'
 }.freeze

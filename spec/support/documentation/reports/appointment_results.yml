@@ -1,0 +1,37 @@
+attributes: &attrs
+  account_list_id:
+    description:
+      The account list to run the report on.
+    type: string
+  period:
+    description: |
+      A string defining the number of periods and how long they should be with an indictor:
+      (d)ay, (w)eek, (m)onth, (y)ear.
+      Examples: 30d, 2w, 12m, 1y.
+      Default: 4m
+    type: string
+  end_date:
+    description: |
+      The date in which you would like the report to end on.
+      This will be shifted to the end of the final period.
+      Default: today
+    type: string
+
+relationships: &rels
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+parameters:
+  index:
+    filters:
+      <<: *attrs
+      default_currency:
+        ignore: true
+
+response_fields:
+  show:
+    <<: *obj

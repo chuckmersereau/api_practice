@@ -65,6 +65,7 @@ API_DOC_LEGEND = {
     monthly_totals
     goal_progress
     monthly_giving
+    appointment_results
   )
 }.freeze
 

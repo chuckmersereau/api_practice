@@ -53,6 +53,6 @@ RSpec.shared_examples 'index_examples' do |options = {}|
       expect(json_body['meta']['pagination']['page']).to eq('2')
       expect(json_body['meta']['pagination']['total_count']).not_to be_nil
       expect(json_body['meta']['pagination']['total_pages']).not_to be_nil
-    end
+    end unless options[:except].include?(:pagination)
   end
 end
