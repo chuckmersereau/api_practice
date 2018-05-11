@@ -91,16 +91,6 @@ RSpec.configure do |config|
   config.include MpdxHelpers
   config.include AuthHelper, :auth
   config.include ActiveSupport::Testing::TimeHelpers
-
-  config.after(:suite) do
-    break unless Rails.env.test?
-
-    store_path = 'uploads/import/file/'
-    temp_path = FactoryGirl.build(:import).file.cache_dir
-
-    FileUtils.rm_rf(Dir["#{Rails.root}/public/#{store_path}/[^.]*"])
-    FileUtils.rm_rf(Dir["#{temp_path}/[^.]*"])
-  end
 end
 
 def response_json

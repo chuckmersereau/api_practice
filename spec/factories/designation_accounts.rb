@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :designation_account do
-    sequence(:designation_number, &:to_s)
+    sequence(:designation_number, 1) { |n| n&.to_s }
     association :organization
     balance 9.99
     name 'Designation Name'

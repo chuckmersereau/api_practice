@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :donation do
-    sequence(:remote_id, &:to_s)
+    sequence(:remote_id, 1) { |n| n&.to_s }
     amount '9.99'
     donation_date { Date.today }
     appeal_amount '0.00'
