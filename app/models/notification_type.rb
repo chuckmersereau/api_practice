@@ -40,9 +40,7 @@ class NotificationType < ApplicationRecord
   # Create a task that corresponds to this notification
   def create_task(account_list, notification)
     contact = notification.contact
-    task = account_list.tasks.create(subject: task_description(notification), start_at: Time.now,
-                                     no_date: $rollout.active?(:no_date_task, account_list),
-                                     activity_type: _(task_activity_type), notification_id: notification.id)
+    task = account_list.tasks.create(task_attributes(notification))
     task.activity_contacts.create(contact_id: contact.id)
     task
   end
@@ -81,8 +79,16 @@ class NotificationType < ApplicationRecord
     raise 'This method (or create_task and task_description) must be implemented in a subclass'
   end
 
+  def task_attributes(notification)
+    { subject: task_description(notification),
+      start_at: Time.now,
+      activity_type: _(task_activity_type),
+      notification_id: notification.id,
+      source: type }
+  end
+
   def task_activity_type
-    'Thank'
+    _('Thank')
   end
 
   def check_contacts_filter(contacts)

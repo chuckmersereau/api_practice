@@ -34,18 +34,7 @@ describe NotificationType do
       expect(activity.subject).to eq('Doe, John gave a gift of MyString9.99 on March 18, 2015')
       expect(activity.activity_type).to eq('Thank')
       expect(activity.no_date).to eq(false)
-    end
-
-    it 'creates a task for the activity list (no_date feature on)' do
-      allow($rollout).to receive(:active?) { true }
-      donation.update(donation_date: Date.new(2015, 3, 18))
-      expect do
-        notification_type.create_task(account_list, contact.notifications.new(donation_id: donation.id))
-      end.to change(Activity, :count).by(1)
-      activity = Activity.first
-      expect(activity.subject).to eq('Doe, John gave a gift of MyString9.99 on March 18, 2015')
-      expect(activity.activity_type).to eq('Thank')
-      expect(activity.no_date).to eq(true)
+      expect(activity.source).to eq('NotificationType::CallPartnerOncePerYear')
     end
 
     it 'associates the contact with the task created' do

@@ -29,15 +29,13 @@ class NotificationType::RemindPartnerInAdvance < NotificationType
     next_gift_date > Time.zone.today && next_gift_date <= Time.zone.today + days + 1.day
   end
 
-  def create_task(account_list, notification)
-    contact = notification.contact
-    task = account_list.tasks.create(subject: task_description(notification), start_at: Time.zone.now,
-                                     activity_type: _('To Do'), notification_id: notification.id)
-    task.activity_contacts.create(contact_id: contact.id)
-    task
-  end
-
   def task_description_template(_notification = nil)
     _('%{contact_name} have an expected gift in one month. Contact to follow up.')
+  end
+
+  protected
+
+  def task_activity_type
+    _('To Do')
   end
 end

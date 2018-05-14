@@ -29,14 +29,6 @@ class NotificationType::StartedGiving < NotificationType
     notifications
   end
 
-  def create_task(account_list, notification)
-    contact = notification.contact
-    task = account_list.tasks.create(subject: task_description(notification), start_at: Time.now,
-                                     activity_type: _('Thank'), notification_id: notification.id)
-    task.activity_contacts.create(contact_id: contact.id)
-    task
-  end
-
   def task_description_template(_notification = nil)
     _('%{contact_name} just gave their first gift. Send them a Thank You.')
   end
