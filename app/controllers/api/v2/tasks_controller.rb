@@ -44,10 +44,21 @@ class Api::V2::TasksController < Api::V2Controller
   def load_tasks
     @tasks = Task::Filterer.new(filter_params)
                            .filter(scope: task_scope, account_lists: account_lists)
-                           .reorder(sorting_param)
-                           .order(Task.arel_table[:created_at].asc)
                            .page(page_number_param)
                            .per(per_page_param)
+    order_tasks
+  end
+
+  def order_tasks
+    @tasks = @tasks.reorder(sorting_param)
+    @tasks = @tasks.select(
+      <<~SQL
+        "activities".*,
+        CASE WHEN "activities"."completed" != true AND "activities"."start_at" < now()
+        THEN "activities"."start_at" END AS "overdue"
+      SQL
+    ) if sorting_param == default_sort_param
+    @tasks = @tasks.order(Task.arel_table[:created_at].asc)
   end
 
   def load_task
@@ -107,7 +118,11 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def default_sort_param
-    'activities.completed ASC,activities.completed_at DESC,activities.start_at ASC NULLS LAST'
+    <<~SQL
+      "overdue" DESC NULLS LAST,
+      "activities"."completed_at" DESC,
+      "activities"."start_at" ASC NULLS LAST
+    SQL
   end
 
   def permitted_filters

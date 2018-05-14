@@ -56,15 +56,19 @@ RSpec.describe Api::V2::TasksController, type: :controller do
 
   describe 'default sorting' do
     before { api_login(user) }
+    let!(:resource_1) { create(:task, account_list: account_list, start_at: 1.minute.ago) }
+    let!(:resource_2) { create(:task, account_list: account_list, completed: true, start_at: 4.days.ago) }
+    let!(:resource_3) { create(:task, account_list: account_list, completed: true, start_at: 3.days.ago) }
+    let!(:resource_4) { create(:task, account_list: account_list, start_at: 2.days.from_now) }
+    let!(:resource_5) { create(:task, account_list: account_list, start_at: nil) }
 
     it 'orders results by completed and start_at' do
-      third_resource = create(:task, account_list: account_list, completed: true)
-      forth_resource = create(:task, account_list: account_list, start_at: 2.days.from_now)
-
       get :index
 
       ids = response_json['data'].map { |obj| obj['id'] }
-      expect(ids).to eq [resource.id, second_resource.id, forth_resource.id, third_resource.id]
+      expect(ids).to eq [
+        resource_1.id, resource.id, second_resource.id, resource_4.id, resource_5.id, resource_3.id, resource_2.id
+      ]
     end
   end
 
