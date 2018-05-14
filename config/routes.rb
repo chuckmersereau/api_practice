@@ -193,6 +193,7 @@ Rails.application.routes.draw do
           resource :year_donations, only: :show
 
           resources :monthly_losses_graphs, only: :show
+          resources :pledge_histories, only: :index
           resources :appointment_results, only: :index
         end
 

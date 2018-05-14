@@ -44,6 +44,7 @@ class AccountList < ApplicationRecord
   has_many :company_partnerships, dependent: :destroy
   has_many :contact_tags, through: :contacts, source: :base_tags
   has_many :contacts, dependent: :destroy
+  has_many :partner_status_logs, through: :contacts
   has_many :designation_accounts, through: :account_list_entries
   has_many :designation_organizations, -> { distinct }, through: :designation_accounts,
                                                         source: :organization

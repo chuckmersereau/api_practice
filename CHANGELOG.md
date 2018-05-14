@@ -3,7 +3,8 @@
 This changelog covers what's changed in the MPDX APIs.
 
 # 4 May 2018
-- reports/appointment_results [LIST] added
+- Added reports/pledge_histories endpoint
+- Added reports/appointment_results endpoint
 
 # 26 April 2018
 - contacts/exports [LIST] is now deprecated
