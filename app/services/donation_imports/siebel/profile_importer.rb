@@ -96,7 +96,8 @@ class DonationImports::Siebel
     def find_or_create_designation_account(designation_number, designation_profile, extra_attributes = {})
       designation_account = find_or_create_designation_account_by_number(designation_number)
 
-      designation_profile.designation_accounts << designation_account unless designation_profile.designation_accounts.include?(designation_account)
+      contains_des_account = designation_profile.designation_accounts.include?(designation_account)
+      designation_profile.designation_accounts << designation_account unless contains_des_account
       designation_account.update_attributes!(extra_attributes) if extra_attributes.present?
 
       designation_account.reload

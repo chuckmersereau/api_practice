@@ -3,7 +3,9 @@ RSpec.shared_examples 'common_variables' do
 
   let(:full_params)            { id_param.merge(defined?(parent_param) ? parent_param : {}) }
   let(:parent_param_if_needed) { defined?(parent_param) ? parent_param : {} }
-  let(:parent_association_if_needed) { defined?(parent_association) ? parent_association : parent_param_if_needed.keys.last.to_s.gsub('_id', '') }
+  let(:parent_association_if_needed) do
+    defined?(parent_association) ? parent_association : parent_param_if_needed.keys.last.to_s.gsub('_id', '')
+  end
 
   let(:full_correct_attributes) do
     {
@@ -72,10 +74,14 @@ RSpec.shared_examples 'common_variables' do
   let(:count_proc)      { defined?(count) ? count : -> { resources_count } }
 
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
-  let(:serializer_class) { defined?(given_serializer_class) ? given_serializer_class : ActiveModel::Serializer.serializer_for(resource) }
+  let(:serializer_class) do
+    defined?(given_serializer_class) ? given_serializer_class : ActiveModel::Serializer.serializer_for(resource)
+  end
   let(:serializer) { serializer_class.new(resource) }
   let(:defined_resource_type) { defined?(given_resource_type) ? given_resource_type : nil }
-  let(:resource_type) { defined_resource_type || serializer._type || resource.class.to_s.underscore.tr('/', '_').pluralize }
+  let(:resource_type) do
+    defined_resource_type || serializer._type || resource.class.to_s.underscore.tr('/', '_').pluralize
+  end
 
   let(:response_errors) { JSON.parse(response.body)['errors'] }
 

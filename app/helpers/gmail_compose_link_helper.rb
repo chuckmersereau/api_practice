@@ -6,9 +6,11 @@ module GmailComposeLinkHelper
 
   private
 
-  # See: http://stackoverflow.com/questions/6548570/url-to-compose-a-message-in-gmail-with-full-gmail-interface-and-specified-to-b
+  # See: https://stackoverflow.com/q/6548570/879524
   def gmail_compose_url(opts = {})
-    "https://mail.google.com/mail/?#{{ view: 'cm', fs: 1, to: opts[:to], su: opts[:subject], body: opts[:body], bcc: opts[:bcc], cc: opts[:cc] }
-      .select { |_, v| v.present? }.to_param}"
+    options = { view: 'cm', fs: 1, to: opts[:to], su: opts[:subject],
+                body: opts[:body], bcc: opts[:bcc], cc: opts[:cc] }
+    params = options.select { |_, v| v.present? }.to_param
+    "https://mail.google.com/mail/?#{params}"
   end
 end

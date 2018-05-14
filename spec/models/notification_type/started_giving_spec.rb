@@ -4,7 +4,11 @@ describe NotificationType::StartedGiving do
   let!(:started_giving) { NotificationType::StartedGiving.first_or_initialize }
   let!(:da) { create(:designation_account_with_donor) }
   let(:contact) { da.contacts.financial_partners.first }
-  let(:donation) { create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 5.days.ago, currency: '') }
+  let(:donation) do
+    create(:donation, donor_account: contact.donor_accounts.first,
+                      designation_account: da,
+                      donation_date: 5.days.ago, currency: '')
+  end
 
   context '#check' do
     before { contact.update_column(:direct_deposit, true) }
@@ -17,7 +21,9 @@ describe NotificationType::StartedGiving do
 
     it 'adds a notification if first gift came within past 2 weeks even if donor has given to another da' do
       other_da = create(:designation_account_with_special_donor)
-      create(:donation, donor_account: contact.donor_accounts.first, designation_account: other_da, donation_date: 20.days.ago)
+      create(:donation, donor_account: contact.donor_accounts.first,
+                        designation_account: other_da,
+                        donation_date: 20.days.ago)
       donation # create donation object from let above
       notifications = started_giving.check(contact.account_list)
       expect(notifications.length).to eq(1)
@@ -25,14 +31,18 @@ describe NotificationType::StartedGiving do
 
     it "doesn't add a notification if not first gift" do
       2.times do |i|
-        create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: (i * 30).days.ago)
+        create(:donation, donor_account: contact.donor_accounts.first,
+                          designation_account: da,
+                          donation_date: (i * 30).days.ago)
       end
       notifications = started_giving.check(contact.account_list)
       expect(notifications.length).to eq(0)
     end
 
     it "doesn't add a notification if first gift came more than 2 weeks ago" do
-      create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 37.days.ago)
+      create(:donation, donor_account: contact.donor_accounts.first,
+                        designation_account: da,
+                        donation_date: 37.days.ago)
       notifications = started_giving.check(contact.account_list)
       expect(notifications.length).to eq(0)
     end
@@ -85,7 +95,7 @@ describe NotificationType::StartedGiving do
       expect(notifications.length).to eq(0)
     end
 
-    it 'sets pledge received and defaults to a monthly pledge when first gift given for financial partner ' do
+    it 'sets pledge received and defaults to a monthly pledge when first gift given for financial partner' do
       contact.update(pledge_amount: nil, pledge_currency: nil, pledge_frequency: nil, pledge_received: false)
       donation
       started_giving.check(contact.account_list)
@@ -95,7 +105,7 @@ describe NotificationType::StartedGiving do
       expect(contact.pledge_received).to be true
     end
 
-    it 'sets pledge received and defaults to a monthly pledge and currency when first gift given for financial partner ' do
+    it 'sets pledge received and defaults to monthly pledge and currency when first gift given for financial partner' do
       contact.update(pledge_amount: nil, pledge_currency: nil, pledge_frequency: nil, pledge_received: false)
       donation.update(currency: 'EUR', amount: 21.50)
       started_giving.check(contact.account_list)

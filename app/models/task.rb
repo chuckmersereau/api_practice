@@ -236,7 +236,7 @@ class Task < Activity
   # end
 
   def attempted?
-    'Attempted' == result
+    result == 'Attempted'
   end
 
   def default_length

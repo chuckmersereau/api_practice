@@ -42,7 +42,8 @@ RSpec.describe Person::Filter::EmailAddressValid do
 
     context 'filter by email address invalid' do
       it 'returns only people that have an invalid email address' do
-        expect(described_class.query(scope, { email_address_valid: 'false' }, nil).to_a).to match_array [person_one, person_three, person_four]
+        results = described_class.query(scope, { email_address_valid: 'false' }, nil).to_a
+        expect(results).to match_array [person_one, person_three, person_four]
       end
     end
   end

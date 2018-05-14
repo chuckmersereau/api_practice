@@ -6,7 +6,7 @@ end
 
 def print_address_versions(contact)
   address_versions(contact).each do |v|
-    o = YAML.load(v.object)
+    o = YAML.safe_load(v.object)
     puts "#{v.event} #{v.item_id} at #{v.created_at} street: #{o['street']} added #{o['created_at'].to_date} by #{v.whodunnit}"
   end
   nil
@@ -16,7 +16,7 @@ def pl_param_history(contact, detail = false)
   address_change_versions = []
   last_pl_params = nil
   contact.versions.order(:created_at).each do |version|
-    object = YAML.load(version.object)
+    object = YAML.safe_load(version.object)
     pl_params = object['prayer_letters_params']
     if pl_params != last_pl_params
       data = {

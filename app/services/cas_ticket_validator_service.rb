@@ -57,7 +57,8 @@ class CasTicketValidatorService
 
   def url
     base_url = ENV['CAS_BASE_URL']
-    raise('expected CAS_BASE_URL environment variable to be present and using https') unless base_url.present? && base_url.starts_with?('https://')
+    https = base_url.present? && base_url.starts_with?('https://')
+    raise('expected CAS_BASE_URL environment variable to be present and using https') unless https
     "#{base_url}/p3/serviceValidate?ticket=#{ticket}&service=#{service}"
   end
 

@@ -109,7 +109,8 @@ class MailChimpReport
     puts_counts :active_contacts
 
     puts 'Opted Out = true:'
-    puts 'These emails addresses are primary on a person in MPDX who is labeled with "Opt-out of Email Newsletter", but are subscribed on Mailchimp.'
+    puts 'These emails addresses are primary on a person in MPDX who is labeled '\
+         'with "Opt-out of Email Newsletter", but are subscribed on Mailchimp.'
     puts 'They should either be unsubscribed on Mailchimp if they asked you to mark them as such,'
     puts 'or that flag should be removed in MPDX if they should be subscribed.'
     puts_counts :opted_out

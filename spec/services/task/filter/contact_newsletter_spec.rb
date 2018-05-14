@@ -34,32 +34,38 @@ RSpec.describe Task::Filter::ContactNewsletter do
 
     context 'filter by contact newsletter none' do
       it 'returns only tasks with contacts that have the none newsletter option selected' do
-        expect(described_class.query(tasks, { contact_newsletter: 'none' }, account_list).to_a).to eq [task_four]
+        results = described_class.query(tasks, { contact_newsletter: 'none' }, account_list).to_a
+        expect(results).to eq [task_four]
       end
     end
     context 'filter by contact newsletter none' do
       it 'returns only tasks with contacts that have the no_value newsletter option selected' do
-        expect(described_class.query(tasks, { contact_newsletter: 'no_value' }, account_list).to_a).to eq [task_five]
+        results = described_class.query(tasks, { contact_newsletter: 'no_value' }, account_list).to_a
+        expect(results).to eq [task_five]
       end
     end
     context 'filter by contact newsletter all' do
       it 'returns all tasks with contacts that have the all newsletter option selected, but not blank' do
-        expect(described_class.query(tasks, { contact_newsletter: 'all' }, account_list).to_a).to match_array [task_one, task_two, task_three]
+        results = described_class.query(tasks, { contact_newsletter: 'all' }, account_list).to_a
+        expect(results).to match_array [task_one, task_two, task_three]
       end
     end
     context 'filter by contact newsletter physical' do
       it 'returns all tasks with contacts that have physical or both newsletter options selected' do
-        expect(described_class.query(tasks, { contact_newsletter: 'address' }, account_list).to_a).to match_array [task_two, task_three]
+        results = described_class.query(tasks, { contact_newsletter: 'address' }, account_list).to_a
+        expect(results).to match_array [task_two, task_three]
       end
     end
     context 'filter by contact newsletter email' do
       it 'returns all tasks with contacts that have email or both newsletter options selected' do
-        expect(described_class.query(tasks, { contact_newsletter: 'email' }, account_list).to_a).to match_array [task_one, task_three]
+        results = described_class.query(tasks, { contact_newsletter: 'email' }, account_list).to_a
+        expect(results).to match_array [task_one, task_three]
       end
     end
     context 'filter by contact newsletter both' do
       it 'returns all tasks with contacts that have both newsletter options selected' do
-        expect(described_class.query(tasks, { contact_newsletter: 'both' }, account_list).to_a).to eq [task_three]
+        results = described_class.query(tasks, { contact_newsletter: 'both' }, account_list).to_a
+        expect(results).to eq [task_three]
       end
     end
   end

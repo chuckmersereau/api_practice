@@ -11,11 +11,12 @@ RSpec.describe Contact::Filter::PledgeCurrency do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' },
+                 { name: 'CAD', id: 'CAD' },
+                 { name: 'GBP', id: 'GBP' },
+                 { name: 'USD', id: 'USD' }]
       expect(described_class.config([account_list])).to include(name: :pledge_currency,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                          { name: 'CAD', id: 'CAD' },
-                                                                          { name: 'GBP', id: 'GBP' },
-                                                                          { name: 'USD', id: 'USD' }],
+                                                                options: options,
                                                                 parent: 'Commitment Details',
                                                                 title: 'Commitment Currency',
                                                                 type: 'multiselect')
@@ -36,8 +37,10 @@ RSpec.describe Contact::Filter::PledgeCurrency do
 
     context 'filter by address historic' do
       it 'returns only contacts that have the locale' do
-        expect(described_class.query(contacts, { pledge_currency: 'USD' }, [account_list]).to_a).to match_array [contact_three, contact_four]
-        expect(described_class.query(contacts, { pledge_currency: 'CAD' }, [account_list]).to_a).to eq [contact_one]
+        results = described_class.query(contacts, { pledge_currency: 'USD' }, [account_list]).to_a
+        expect(results).to match_array [contact_three, contact_four]
+        results = described_class.query(contacts, { pledge_currency: 'CAD' }, [account_list]).to_a
+        expect(results).to eq [contact_one]
       end
     end
   end

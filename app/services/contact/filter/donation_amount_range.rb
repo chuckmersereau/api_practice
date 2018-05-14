@@ -2,12 +2,18 @@ class Contact::Filter::DonationAmountRange < Contact::Filter::Base
   def execute_query(contacts, filters)
     sanitize_filters(filters)
     contacts = contacts.joins(donor_accounts: [:donations])
-    contacts = contacts.where('donations.amount >= :donation_amount_min AND donations.designation_account_id IN (:designation_account_ids)',
-                              donation_amount_min: filters[:donation_amount_range][:min],
-                              designation_account_ids: designation_account_ids) if filters[:donation_amount_range][:min].present?
-    contacts = contacts.where('donations.amount <= :donation_amount_max AND donations.designation_account_id IN (:designation_account_ids)',
-                              donation_amount_max: filters[:donation_amount_range][:max],
-                              designation_account_ids: designation_account_ids) if filters[:donation_amount_range][:max].present?
+    if filters[:donation_amount_range][:min].present?
+      contacts = contacts.where('donations.amount >= :donation_amount_min AND '\
+                                'donations.designation_account_id IN (:designation_account_ids)',
+                                donation_amount_min: filters[:donation_amount_range][:min],
+                                designation_account_ids: designation_account_ids)
+    end
+    if filters[:donation_amount_range][:max].present?
+      contacts = contacts.where('donations.amount <= :donation_amount_max AND '\
+                                'donations.designation_account_id IN (:designation_account_ids)',
+                                donation_amount_max: filters[:donation_amount_range][:max],
+                                designation_account_ids: designation_account_ids)
+    end
     contacts
   end
 
@@ -24,8 +30,10 @@ class Contact::Filter::DonationAmountRange < Contact::Filter::Base
   end
 
   def custom_options
-    highest_account_donation =
-      account_lists.collect { |account_list| account_list.donations.where.not(amount: nil).pluck(:amount).uniq.sort.last }.flatten.compact.max
+    account_list_highest = account_lists.collect do |account_list|
+      account_list.donations.where.not(amount: nil).reorder(:amount).last&.amount
+    end
+    highest_account_donation = account_list_highest.compact.max
     [{ name: _('Gift Amount Higher Than or Equal To'), id: 'min', placeholder: 0 },
      { name: _('Gift Amount Less Than or Equal To'), id: 'max', placeholder: highest_account_donation }]
   end

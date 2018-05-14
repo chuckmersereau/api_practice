@@ -20,6 +20,11 @@ class Contact::Filter::MetroArea < Contact::Filter::Base
   end
 
   def custom_options
-    [{ name: _('-- None --'), id: 'none' }] + account_lists.collect(&:metro_areas).flatten.uniq.reject(&:blank?).map { |s| { name: _(s), id: s } }
+    account_list_areas = account_lists.collect(&:metro_areas)
+                                      .flatten
+                                      .uniq
+                                      .reject(&:blank?)
+                                      .map { |s| { name: _(s), id: s } }
+    [{ name: _('-- None --'), id: 'none' }] + account_list_areas
   end
 end

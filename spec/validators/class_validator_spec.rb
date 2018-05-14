@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe ClassValidator do
-  subject { ClassValidator.new(attributes: [:tester], is_a: String).validate_each(record_double, :tester, record_double.tester) }
+  subject do
+    ClassValidator.new(attributes: [:tester], is_a: String).validate_each(record_double, :tester, record_double.tester)
+  end
 
   context 'valid' do
     let(:record_double) { double(errors: { tester: [] }, tester: 'A String') }
@@ -31,7 +33,10 @@ describe ClassValidator do
   end
 
   context 'allow_nil is false' do
-    subject { ClassValidator.new(attributes: [:tester], is_a: String, allow_nil: false).validate_each(record_double, :tester, record_double.tester) }
+    subject do
+      ClassValidator.new(attributes: [:tester], is_a: String, allow_nil: false)
+                    .validate_each(record_double, :tester, record_double.tester)
+    end
 
     let(:record_double) { double(errors: { tester: [] }, tester: nil) }
 
@@ -42,7 +47,10 @@ describe ClassValidator do
   end
 
   context 'allow_nil is true' do
-    subject { ClassValidator.new(attributes: [:tester], is_a: String, allow_nil: true).validate_each(record_double, :tester, record_double.tester) }
+    subject do
+      ClassValidator.new(attributes: [:tester], is_a: String, allow_nil: true)
+                    .validate_each(record_double, :tester, record_double.tester)
+    end
 
     let(:record_double) { double(errors: { tester: [] }, tester: nil) }
 

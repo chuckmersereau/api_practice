@@ -101,22 +101,24 @@ resource 'Account Lists > Imports > from TNT XML' do
       end
 
       with_options scope: [:data, :attributes] do
-        response_field 'account_list_id',         'Account List ID',                                                           type: 'Number'
-        response_field 'created_at',              'Created At',                                                                type: 'String'
-        response_field 'file_url',                'A URL to download the file',                                                type: 'String'
-        response_field 'file_headers_mappings',   'Not applicable to TNT XML imports.',                                        type: 'Object'
-        response_field 'file_headers',            'Not applicable to TNT XML imports.',                                        type: 'Object'
-        response_field 'file_constants',          'Not applicable to TNT XML imports.',                                        type: 'Object'
-        response_field 'file_constants_mappings', 'Not applicable to TNT XML imports.',                                        type: 'Object'
-        response_field 'group_tags',              'Group Tags',                                                                type: 'String'
-        response_field 'groups',                  'Groups',                                                                    type: 'Array[String]'
-        response_field 'import_by_group',         'Import by Group',                                                           type: 'String'
-        response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to false", type: 'Boolean'
-        response_field 'override',                'Override',                                                                  type: 'Boolean'
-        response_field 'source',                  'Source; Defaults to "tnt"',                                                 type: 'String'
-        response_field 'tag_list',                'Comma delimited list of Tags',                                              type: 'String'
-        response_field 'updated_at',              'Updated At',                                                                type: 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',                                                          type: 'String'
+        response_field 'account_list_id',         'Account List ID',                    type: 'Number'
+        response_field 'created_at',              'Created At',                         type: 'String'
+        response_field 'file_url',                'A URL to download the file',         type: 'String'
+        response_field 'file_headers_mappings',   'Not applicable to TNT XML imports.', type: 'Object'
+        response_field 'file_headers',            'Not applicable to TNT XML imports.', type: 'Object'
+        response_field 'file_constants',          'Not applicable to TNT XML imports.', type: 'Object'
+        response_field 'file_constants_mappings', 'Not applicable to TNT XML imports.', type: 'Object'
+        response_field 'group_tags',              'Group Tags',                         type: 'String'
+        response_field 'groups',                  'Groups',                             type: 'Array[String]'
+        response_field 'import_by_group',         'Import by Group',                    type: 'String'
+        response_field 'override',                'Override',                           type: 'Boolean'
+        response_field 'source',                  'Source; Defaults to "tnt"',          type: 'String'
+        response_field 'tag_list',                'Comma delimited list of Tags',       type: 'String'
+        response_field 'updated_at',              'Updated At',                         type: 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',                   type: 'String'
+        response_field 'in_preview',
+                       "The Import will not be performed while it's in preview; Defaults to false",
+                       type: 'Boolean'
       end
 
       with_options scope: [:data, :relationships] do

@@ -17,7 +17,8 @@ RSpec.describe Person::Filter::UpdatedAt do
 
     context 'filter by updated_at range' do
       it 'returns only people that haveupdated_at value within the range' do
-        expect(described_class.query(scope, { updated_at: Range.new(1.month.ago, 1.day.ago) }, nil).to_a).to match_array [person_two, person_three]
+        results = described_class.query(scope, { updated_at: Range.new(1.month.ago, 1.day.ago) }, nil).to_a
+        expect(results).to match_array [person_two, person_three]
       end
     end
   end

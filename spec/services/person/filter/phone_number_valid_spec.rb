@@ -42,7 +42,8 @@ RSpec.describe Person::Filter::PhoneNumberValid do
 
     context 'filter by phone number invalid' do
       it 'returns only people that have an invalid phone number' do
-        expect(described_class.query(scope, { phone_number_valid: 'false' }, nil).to_a).to match_array [person_one, person_three, person_four]
+        results = described_class.query(scope, { phone_number_valid: 'false' }, nil).to_a
+        expect(results).to match_array [person_one, person_three, person_four]
       end
     end
   end

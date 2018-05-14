@@ -57,3 +57,6 @@ Style/Documentation:
 
 Style/FormatString:
   EnforcedStyle: format
+
+Rails/UnknownEnv:
+  Environments: development, test, production, staging

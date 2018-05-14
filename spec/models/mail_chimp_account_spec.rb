@@ -4,7 +4,9 @@ describe MailChimpAccount do
   let(:api_prefix) { 'https://us4.api.mailchimp.com/3.0' }
   let(:primary_list_id) { '1e72b58b72' }
   let(:primary_list_id_2) { '29a77ba541' }
-  let(:mail_chimp_account) { create(:mail_chimp_account, api_key: 'fake-us4', primary_list_id: primary_list_id, account_list: account_list) }
+  let(:mail_chimp_account) do
+    create(:mail_chimp_account, api_key: 'fake-us4', primary_list_id: primary_list_id, account_list: account_list)
+  end
   let(:account_list) { create(:account_list) }
   let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
   let(:appeal) { create(:appeal, account_list: account_list) }
@@ -39,8 +41,10 @@ describe MailChimpAccount do
   end
 
   it 'validates the format of an api key' do
-    expect(MailChimpAccount.new(account_list_id: account_list.id, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
-    expect(MailChimpAccount.new(account_list_id: account_list.id, api_key: 'jk234lkwjntlkj3n5lk3j3kj-us4')).to be_valid
+    invalid_key = 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}'
+    expect(MailChimpAccount.new(account_list_id: account_list.id, api_key: invalid_key)).not_to be_valid
+    valid_key = 'jk234lkwjntlkj3n5lk3j3kj-us4'
+    expect(MailChimpAccount.new(account_list_id: account_list.id, api_key: valid_key)).to be_valid
   end
 
   it 'deactivates the account if the api key is invalid' do
@@ -77,7 +81,9 @@ describe MailChimpAccount do
           ]
         }.with_indifferent_access
       )
-      MailChimpAppealList.create(mail_chimp_account: mail_chimp_account, appeal_id: appeal.id, appeal_list_id: primary_list_id_2)
+      MailChimpAppealList.create(mail_chimp_account: mail_chimp_account,
+                                 appeal_id: appeal.id,
+                                 appeal_list_id: primary_list_id_2)
       mail_chimp_account.update!(active: true)
 
       expect(mail_chimp_account.appeal_open_rate).to eq(20)

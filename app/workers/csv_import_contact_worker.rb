@@ -39,7 +39,8 @@ class CsvImportContactWorker
 
   def message_for_exception(exception)
     if exception.is_a?(ActiveRecord::RecordNotUnique)
-      'Record not unique error: Please ensure you are not importing duplicate data (such as duplicate email addresses, which must be unique)'
+      'Record not unique error: Please ensure you are not importing duplicate '\
+      'data (such as duplicate email addresses, which must be unique)'
     else
       exception.message
     end

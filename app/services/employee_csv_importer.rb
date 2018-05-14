@@ -79,7 +79,8 @@ class EmployeeCsvImporter
     data    = CSV.read(file, csv_options)
     headers = data.first.to_h.keys.compact
 
-    raise InvalidHeadersError, invalid_headers_error(headers) unless REQUIRED_HEADERS.all? { |required_header| headers.include?(required_header) }
+    all_required_headers = REQUIRED_HEADERS.all? { |required_header| headers.include?(required_header) }
+    raise InvalidHeadersError, invalid_headers_error(headers) unless all_required_headers
 
     data
   end

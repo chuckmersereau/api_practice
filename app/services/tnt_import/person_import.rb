@@ -139,7 +139,7 @@ class TntImport::PersonImport
   end
 
   def true?(val)
-    val && val.casecmp('TRUE').zero?
+    val&.casecmp('TRUE')&.zero?
   end
 
   # TntMPD allows multiple emails to be marked as preferred and expresses that array of booleans as a

@@ -21,7 +21,8 @@ class DesignationProfile < ApplicationRecord
   def merge(other)
     DesignationProfile.transaction do
       other.designation_profile_accounts.each do |da|
-        designation_profile_accounts << da unless designation_profile_accounts.find { |dpa| dpa.designation_account_id == da.designation_account_id }
+        already_exists = designation_profile_accounts.find { |dpa| dpa.designation_account_id == da.designation_account_id }
+        designation_profile_accounts << da unless already_exists
       end
 
       other.reload

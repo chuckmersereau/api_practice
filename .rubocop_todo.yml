@@ -116,12 +116,6 @@ Lint/ReturnInVoidContext:
     - 'app/models/person/linkedin_account.rb'
 
 # Offense count: 1
-# Cop supports --auto-correct.
-Lint/ScriptPermission:
-  Exclude:
-    - 'Rakefile'
-
-# Offense count: 1
 # Configuration parameters: IgnoreImplicitReferences.
 Lint/ShadowedArgument:
   Exclude:
@@ -308,20 +302,6 @@ Rails/SkipsModelValidations:
 Rails/TimeZone:
   Enabled: false
 
-# Offense count: 1
-# Configuration parameters: Environments.
-# Environments: development, test, production
-Rails/UnknownEnv:
-  Exclude:
-    - 'app/services/mail_chimp/syncer.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Security/YAMLLoad:
-  Exclude:
-    - 'dev/util/address_history_util.rb'
-    - 'spec/services/tnt_import/contact_import_spec.rb'
-
 # Offense count: 6
 Style/ClassVars:
   Exclude:
@@ -335,12 +315,6 @@ Style/ClassVars:
 # Offense count: 31
 Style/DateTime:
   Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/EmptyLiteral:
-  Exclude:
-    - 'spec/controllers/api/v2/constants_controller_spec.rb'
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -426,14 +400,6 @@ Style/RedundantBegin:
     - 'lib/tasks/name_male_ratios.rake'
     - 'spec/services/import_callback_handler_spec.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: ConvertCodeThatCanStartToReturnNil.
-Style/SafeNavigation:
-  Exclude:
-    - 'app/services/tnt_import/person_import.rb'
-    - 'lib/json_web_token/middleware.rb'
-
 # Offense count: 270
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, MinSize.
@@ -441,22 +407,8 @@ Style/SafeNavigation:
 Style/SymbolArray:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/TrailingMethodEndStatement:
-  Exclude:
-    - 'spec/support/json_api_service_helper.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: all_comparison_operators, equality_operators_only
-Style/YodaCondition:
-  Exclude:
-    - 'app/models/task.rb'
-
 # Offense count: 8170
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 150
+  Max: 140

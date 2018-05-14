@@ -1,5 +1,5 @@
 RSpec.shared_examples 'sorting examples' do |options|
-  UNSUPPORTED_SORT_MESSAGE = 'Sorting by id is not supported for this endpoint.'.freeze
+  UNSUPPORTED_SORT_MESSAGE ||= 'Sorting by id is not supported for this endpoint.'.freeze
 
   let(:sorting_param) do
     described_class.new.send(:permitted_sorting_params).first || described_class::PERMITTED_SORTING_PARAM_DEFAULTS.second

@@ -6,7 +6,8 @@ describe MasterAddress do
   describe 'scope requires_geocode' do
     it 'compares updated_at and last_geocoded_at ignoring milliseconds' do
       master_address_two = build(:master_address, latitude: nil, longitude: nil)
-      master_address_two.last_geocoded_at = Time.current # last_geocoded_at and updated_at will have the same second, but different milliseconds.
+      # last_geocoded_at and updated_at will have the same second, but different milliseconds.
+      master_address_two.last_geocoded_at = Time.current
       master_address_two.save!
       expect(MasterAddress.requires_geocode.ids).to eq([address.id])
     end

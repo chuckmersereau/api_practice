@@ -41,7 +41,8 @@ describe Api::V2::Contacts::ExportToMailChimpController, type: :controller do
       )
       post :create, mail_chimp_list_id: primary_list_id
       expect(response.status).to eq(400)
-      expect(JSON.parse(response.body)['errors'].first['detail']).to eq('mail_chimp_list_id cannot be primary_list_id, select different list')
+      error = JSON.parse(response.body)['errors'].first['detail']
+      expect(error).to eq('mail_chimp_list_id cannot be primary_list_id, select different list')
     end
 
     it 'queues export when user is logged in and provides mailchimp_list_id' do

@@ -58,9 +58,11 @@ describe ContactMerge do
     account_list = create(:account_list)
     winner = create(:contact, account_list: account_list)
     loser = create(:contact, account_list: account_list)
-    duplicate_record_pair = DuplicateRecordPair.create!(record_one: winner, record_two: loser, account_list: account_list, reason: 'Testing')
+    duplicate_record_pair = DuplicateRecordPair.create!(record_one: winner, record_two: loser,
+                                                        account_list: account_list, reason: 'Testing')
     DuplicateRecordPair.new(record_one_id: winner.id, record_one_type: 'Person', record_two_id: loser.id,
-                            record_two_type: 'Contact', account_list: account_list, reason: 'Testing').save(validate: false)
+                            record_two_type: 'Contact', account_list: account_list, reason: 'Testing')
+                       .save(validate: false)
     expect { winner.merge(loser) }.to change { DuplicateRecordPair.count }.from(2).to(1)
     expect(DuplicateRecordPair.exists?(duplicate_record_pair.id)).to eq(false)
   end

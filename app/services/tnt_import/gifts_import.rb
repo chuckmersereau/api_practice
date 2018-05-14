@@ -111,7 +111,9 @@ class TntImport::GiftsImport
       gift_splits_by_gift_and_campaign(tnt_gift['id'], appeal.tnt_id.to_s)
     end.flatten.compact
 
-    gift_split_with_appeal = gift_splits.find { |gift_split| account_list_appeal_by_tnt_id(gift_split['CampaignID']).present? }
+    gift_split_with_appeal = gift_splits.find do |gift_split|
+      account_list_appeal_by_tnt_id(gift_split['CampaignID']).present?
+    end
 
     appeal = gift_split_with_appeal ? account_list_appeal_by_tnt_id(gift_split_with_appeal['CampaignID']) : nil
 
@@ -122,7 +124,8 @@ class TntImport::GiftsImport
     mpdx_donation.update(appeal: appeal, memo: new_memo, appeal_amount: appeal_amount)
   end
 
-  # If the Donation has an Appeal then we need to make sure there is also a matching Pledge. Otherwise MPDX won't assign the Donation to the Appeal.
+  # If the Donation has an Appeal then we need to make sure there is also a
+  # matching Pledge. Otherwise MPDX won't assign the Donation to the Appeal.
   def create_pledge_for_donation(mpdx_donation)
     return unless mpdx_donation&.appeal
 

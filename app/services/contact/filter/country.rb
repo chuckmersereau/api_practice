@@ -20,6 +20,11 @@ class Contact::Filter::Country < Contact::Filter::Base
   end
 
   def custom_options
-    [{ name: _('-- None --'), id: 'none' }] + account_lists.collect(&:countries).flatten.uniq.select(&:present?).map { |a| { name: a, id: a } }
+    account_list_countries = account_lists.collect(&:countries)
+                                          .flatten
+                                          .uniq
+                                          .select(&:present?)
+                                          .map { |a| { name: a, id: a } }
+    [{ name: _('-- None --'), id: 'none' }] + account_list_countries
   end
 end

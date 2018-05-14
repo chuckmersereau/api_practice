@@ -343,7 +343,8 @@ module JsonApiService
             end
 
             it 'raises an error' do
-              message = missing_type_error('/data/relationships/people/data/0/relationships/email_addresses/data/0/type')
+              message = missing_type_error('/data/relationships/people/data/0/'\
+                                           'relationships/email_addresses/data/0/type')
 
               expect { validator.validate! }
                 .to raise_error(MissingTypeError)
@@ -385,7 +386,8 @@ module JsonApiService
             end
 
             it 'raises an error' do
-              message = missing_type_error('/data/relationships/people/data/0/relationships/email_addresses/data/0/type')
+              message = missing_type_error('/data/relationships/people/data/0/'\
+                                           'relationships/email_addresses/data/0/type')
 
               expect { validator.validate! }
                 .to raise_error(MissingTypeError)
@@ -430,7 +432,8 @@ module JsonApiService
             end
 
             it 'raises an error' do
-              message = foreign_key_error('/data/relationships/people/data/0/relationships/email_addresses/data/0/attributes/account_list_id')
+              message = foreign_key_error('/data/relationships/people/data/0/relationships/'\
+                                          'email_addresses/data/0/attributes/account_list_id')
 
               expect { validator.validate! }
                 .to raise_error(ForeignKeyPresentError)

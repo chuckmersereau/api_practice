@@ -147,31 +147,63 @@ resource 'Account Lists > Imports > from CSV' do
 
     get '/api/v2/account_lists/:account_list_id/imports/csv/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'account_list_id',         'Account List ID',                                                            type: 'Number'
-        response_field 'created_at',              'Created At',                                                                 type: 'String'
-        response_field 'file_url',                'A URL to download the file',                                                 type: 'String'
-        response_field 'file_headers_mappings',   "An Object that maps attributes in MPDX (keys) to headers in the users's " \
-                                                  'CSV file (values); The client must supply this before import can begin; ' \
-                                                  'Please see the Constants endpoint for a list of supported attributes',       type: 'Object'
-        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Object'
-        response_field 'file_constants',          "File constants are intended to help map values in the user's CSV file to " \
-                                                  'MPDX constants. This is a list of unique values for each column in the ' \
-                                                  "CSV. Columns are ignored if they obviously aren't constants " \
-                                                  '(like "name"), so not every column is returned. At most ' \
-                                                  "#{CsvFileConstantsReader::MAX_MAPPINGS_PER_HEADER} results will be returned " \
-                                                  'for each column.', type: 'Object'
-        response_field 'file_constants_mappings', "An Object that maps constants in MPDX to constants in the users's " \
-                                                  'CSV file; The client must supply this before import can begin; ' \
-                                                  'Please see the Constants endpoint for a list of supported constants',        type: 'Object'
-        response_field 'group_tags',              'Group Tags',                                                                 type: 'String'
-        response_field 'groups',                  'Groups',                                                                     type: 'Array[String]'
-        response_field 'import_by_group',         'Import by Group',                                                            type: 'String'
-        response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to true",   type: 'Boolean'
-        response_field 'override',                'Override',                                                                   type: 'Boolean'
-        response_field 'source',                  'Source; Defaults to "csv"',                                                  type: 'String'
-        response_field 'tag_list',                'Comma delimited list of tags to apply to the imported Contacts',             type: 'String'
-        response_field 'updated_at',              'Updated At',                                                                 type: 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',                                                           type: 'String'
+        response_field 'account_list_id',
+                       'Account List ID',
+                       type: 'Number'
+        response_field 'created_at',
+                       'Created At',
+                       type: 'String'
+        response_field 'file_url',
+                       'A URL to download the file',
+                       type: 'String'
+        response_field 'file_headers_mappings',
+                       "An Object that maps attributes in MPDX (keys) to headers in the users's " \
+                       'CSV file (values); The client must supply this before import can begin; ' \
+                       'Please see the Constants endpoint for a list of supported attributes',
+                       type: 'Object'
+        response_field 'file_headers',
+                       'A list of all the headers in the uploaded CSV file',
+                       type: 'Object'
+        response_field 'file_constants',
+                       "File constants are intended to help map values in the user's CSV file to " \
+                       'MPDX constants. This is a list of unique values for each column in the ' \
+                       "CSV. Columns are ignored if they obviously aren't constants " \
+                       '(like "name"), so not every column is returned. At most ' \
+                       "#{CsvFileConstantsReader::MAX_MAPPINGS_PER_HEADER} results will be returned " \
+                       'for each column.',
+                       type: 'Object'
+        response_field 'file_constants_mappings',
+                       "An Object that maps constants in MPDX to constants in the users's " \
+                       'CSV file; The client must supply this before import can begin; ' \
+                       'Please see the Constants endpoint for a list of supported constants',
+                       type: 'Object'
+        response_field 'group_tags',
+                       'Group Tags',
+                       type: 'String'
+        response_field 'groups',
+                       'Groups',
+                       type: 'Array[String]'
+        response_field 'import_by_group',
+                       'Import by Group',
+                       type: 'String'
+        response_field 'in_preview',
+                       "The Import will not be performed while it's in preview; Defaults to true",
+                       type: 'Boolean'
+        response_field 'override',
+                       'Override',
+                       type: 'Boolean'
+        response_field 'source',
+                       'Source; Defaults to "csv"',
+                       type: 'String'
+        response_field 'tag_list',
+                       'Comma delimited list of tags to apply to the imported Contacts',
+                       type: 'String'
+        response_field 'updated_at',
+                       'Updated At',
+                       type: 'String'
+        response_field 'updated_in_db_at',
+                       'Updated In Db At',
+                       type: 'String'
       end
 
       example 'CSV Import [GET]', document: documentation_scope do
@@ -188,54 +220,94 @@ resource 'Account Lists > Imports > from CSV' do
 
     put '/api/v2/account_lists/:account_list_id/imports/csv/:id' do
       with_options scope: [:data, :attributes] do
-        parameter 'file',                    'The CSV file uploaded as form-data', type: 'String'
-        parameter 'file_headers_mappings',   "An Object that maps attributes in MPDX (keys) to headers in the users's " \
-                                             'CSV file (values); The client must supply this before import can begin; ' \
-                                             'Please see the Constants endpoint for a list of supported attributes', type: 'Object'
-        parameter 'file_constants_mappings', "An Object that maps constants in MPDX (keys) to constants in the users's " \
-                                             'CSV file (values); The client must supply this before import can begin; ' \
-                                             'Please see the Constants endpoint for a list of supported constants',        type: 'Object'
-        parameter 'groups',                  'Groups',                                                                     type: 'String'
-        parameter 'group_tags',              'Group Tags',                                                                 type: 'String'
-        parameter 'import_by_group',         'Import by Group',                                                            type: 'String'
-        parameter 'override',                'Override',                                                                   type: 'Boolean'
-        parameter 'source_account_id',       'Source Account ID',                                                          type: 'String'
-        parameter 'tag_list',                'Comma delimited list of Tags',                                               type: 'String'
-        parameter 'user_id',                 'User ID',                                                                    type: 'String'
+        parameter 'file',
+                  'The CSV file uploaded as form-data',
+                  type: 'String'
+        parameter 'file_headers_mappings',
+                  "An Object that maps attributes in MPDX (keys) to headers in the users's " \
+                  'CSV file (values); The client must supply this before import can begin; ' \
+                  'Please see the Constants endpoint for a list of supported attributes',
+                  type: 'Object'
+        parameter 'file_constants_mappings',
+                  "An Object that maps constants in MPDX (keys) to constants in the users's " \
+                  'CSV file (values); The client must supply this before import can begin; ' \
+                  'Please see the Constants endpoint for a list of supported constants',
+                  type: 'Object'
+        parameter 'groups',            'Groups',                       type: 'String'
+        parameter 'group_tags',        'Group Tags',                   type: 'String'
+        parameter 'import_by_group',   'Import by Group',              type: 'String'
+        parameter 'override',          'Override',                     type: 'Boolean'
+        parameter 'source_account_id', 'Source Account ID',            type: 'String'
+        parameter 'tag_list',          'Comma delimited list of Tags', type: 'String'
+        parameter 'user_id',           'User ID',                      type: 'String'
       end
 
       with_options scope: [:data, :attributes] do
-        response_field 'account_list_id',         'Account List ID',                                                            type: 'Number'
-        response_field 'created_at',              'Created At',                                                                 type: 'String'
-        response_field 'file_url',                'A URL to download the file',                                                 type: 'String'
-        response_field 'file_headers_mappings',   "An Object that maps attributes in MPDX (keys) to headers in the users's " \
-                                                  'CSV file (values); The client must supply this before import can begin; ' \
-                                                  'Please see the Constants endpoint for a list of supported attributes',       type: 'Object'
-        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Object'
-        response_field 'file_constants',          "File constants are intended to help map values in the user's CSV file to " \
-                                                  'MPDX constants. This is a list of unique values for each column in the ' \
-                                                  "CSV. Columns are ignored if they obviously aren't constants " \
-                                                  '(like "name"), so not every column is returned. At most ' \
-                                                  "#{CsvFileConstantsReader::MAX_MAPPINGS_PER_HEADER} results will be returned " \
-                                                  'for each column.', type: 'Object'
-        response_field 'file_constants_mappings', "An Object that maps constants in MPDX to constants in the users's " \
-                                                  'CSV file; The client must supply this before import can begin; ' \
-                                                  'Please see the Constants endpoint for a list of supported constants',        type: 'Object'
-        response_field 'group_tags',              'Group Tags',                                                                 type: 'String'
-        response_field 'groups',                  'Groups',                                                                     type: 'Array[String]'
-        response_field 'import_by_group',         'Import by Group',                                                            type: 'String'
-        response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to true",   type: 'Boolean'
-        response_field 'override',                'Override',                                                                   type: 'Boolean'
-        response_field 'source',                  'Source; Defaults to "csv"',                                                  type: 'String'
-        response_field 'tag_list',                'Comma delimited list of Tags to apply to the imported Contacts',             type: 'String'
-        response_field 'updated_at',              'Updated At',                                                                 type: 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',                                                           type: 'String'
+        response_field 'account_list_id',
+                       'Account List ID',
+                       type: 'Number'
+        response_field 'created_at',
+                       'Created At',
+                       type: 'String'
+        response_field 'file_url',
+                       'A URL to download the file',
+                       type: 'String'
+        response_field 'file_headers_mappings',
+                       "An Object that maps attributes in MPDX (keys) to headers in the users's " \
+                       'CSV file (values); The client must supply this before import can begin; ' \
+                       'Please see the Constants endpoint for a list of supported attributes',
+                       type: 'Object'
+        response_field 'file_headers',
+                       'A list of all the headers in the uploaded CSV file',
+                       type: 'Object'
+        response_field 'file_constants',
+                       "File constants are intended to help map values in the user's CSV file to " \
+                       'MPDX constants. This is a list of unique values for each column in the ' \
+                       "CSV. Columns are ignored if they obviously aren't constants " \
+                       '(like "name"), so not every column is returned. At most ' \
+                       "#{CsvFileConstantsReader::MAX_MAPPINGS_PER_HEADER} results will be returned " \
+                       'for each column.',
+                       type: 'Object'
+        response_field 'file_constants_mappings',
+                       "An Object that maps constants in MPDX to constants in the users's " \
+                       'CSV file; The client must supply this before import can begin; ' \
+                       'Please see the Constants endpoint for a list of supported constants',
+                       type: 'Object'
+        response_field 'group_tags',
+                       'Group Tags',
+                       type: 'String'
+        response_field 'groups',
+                       'Groups',
+                       type: 'Array[String]'
+        response_field 'import_by_group',
+                       'Import by Group',
+                       type: 'String'
+        response_field 'in_preview',
+                       "The Import will not be performed while it's in preview; Defaults to true",
+                       type: 'Boolean'
+        response_field 'override',
+                       'Override',
+                       type: 'Boolean'
+        response_field 'source',
+                       'Source; Defaults to "csv"',
+                       type: 'String'
+        response_field 'tag_list',
+                       'Comma delimited list of Tags to apply to the imported Contacts',
+                       type: 'String'
+        response_field 'updated_at',
+                       'Updated At',
+                       type: 'String'
+        response_field 'updated_in_db_at',
+                       'Updated In Db At',
+                       type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
         response_field 'user', 'User that the Import belongs to', type: 'Object'
-        response_field 'sample_contacts', 'The sample Contacts are a preview of what the imported Contacts would look like. ' \
-                                          'It uses the first few rows of the CSV file to generate the samples.', type: 'Object'
+        response_field 'sample_contacts',
+                       'The sample Contacts are a preview of what the imported Contacts would look like. ' \
+                       'It uses the first few rows of the CSV file to generate the samples.',
+                       type: 'Object'
       end
 
       example 'CSV Import [UPDATE]', document: documentation_scope do
@@ -257,54 +329,95 @@ resource 'Account Lists > Imports > from CSV' do
 
     post '/api/v2/account_lists/:account_list_id/imports/csv' do
       with_options scope: [:data, :attributes] do
-        parameter 'file',                    'The CSV file uploaded as form-data', type: 'String'
-        parameter 'file_headers_mappings',   "An Object that maps attributes in MPDX (keys) to headers in the users's " \
-                                             'CSV file (values); The client must supply this before import can begin; ' \
-                                             'Please see the Constants endpoint for a list of supported attributes', type: 'Object'
-        parameter 'file_constants_mappings', "An Object that maps constants in MPDX (keys) to constants in the users's " \
-                                             'CSV file (values); The client must supply this before import can begin; ' \
-                                             'Please see the Constants endpoint for a list of supported constants',        type: 'Object'
-        parameter 'groups',                  'Groups',                                                                     type: 'String'
-        parameter 'group_tags',              'Group Tags',                                                                 type: 'String'
-        parameter 'import_by_group',         'Import by Group',                                                            type: 'String'
-        parameter 'override',                'Override',                                                                   type: 'Boolean'
-        parameter 'source_account_id',       'Source Account ID',                                                          type: 'String'
-        parameter 'tag_list',                'Comma delimited list of Tags',                                               type: 'String'
-        parameter 'user_id',                 'User ID',                                                                    type: 'String'
+        parameter 'file',
+                  'The CSV file uploaded as form-data',
+                  type: 'String'
+        parameter 'file_headers_mappings',
+                  "An Object that maps attributes in MPDX (keys) to headers in the users's " \
+                  'CSV file (values); The client must supply this before import can begin; ' \
+                  'Please see the Constants endpoint for a list of supported attributes',
+                  type: 'Object'
+        parameter 'file_constants_mappings',
+                  "An Object that maps constants in MPDX (keys) to constants in the users's " \
+                  'CSV file (values); The client must supply this before import can begin; ' \
+                  'Please see the Constants endpoint for a list of supported constants',
+                  type: 'Object'
+        parameter 'groups',            'Groups',                       type: 'String'
+        parameter 'group_tags',        'Group Tags',                   type: 'String'
+        parameter 'import_by_group',   'Import by Group',              type: 'String'
+        parameter 'override',          'Override',                     type: 'Boolean'
+        parameter 'source_account_id', 'Source Account ID',            type: 'String'
+        parameter 'tag_list',          'Comma delimited list of Tags', type: 'String'
+        parameter 'user_id',           'User ID',                      type: 'String'
       end
 
       with_options scope: [:data, :attributes] do
-        response_field 'account_list_id',         'Account List ID',                                                            type: 'Number'
-        response_field 'created_at',              'Created At',                                                                 type: 'String'
-        response_field 'file_url',                'A URL to download the file',                                                 type: 'String'
-        response_field 'file_headers_mappings',   "An Object that maps attributes in MPDX (keys) to headers in the users's " \
-                                                  'CSV file (values); The client must supply this before import can begin; ' \
-                                                  'Please see the Constants endpoint for a list of supported attributes',       type: 'Object'
-        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Object'
-        response_field 'file_constants',          "File constants are intended to help map values in the user's CSV file to " \
-                                                  'MPDX constants. This is a list of unique values for each column in the ' \
-                                                  "CSV. Columns are ignored if they obviously aren't constants " \
-                                                  '(like "name"), so not every column is returned. At most ' \
-                                                  "#{CsvFileConstantsReader::MAX_MAPPINGS_PER_HEADER} results will be returned " \
-                                                  'for each column.', type: 'Object'
-        response_field 'file_constants_mappings', "An Object that maps constants in MPDX (keys) to constants in the users's " \
-                                                  'CSV file (values); The client must supply this before import can begin; ' \
-                                                  'Please see the Constants endpoint for a list of supported constants',        type: 'Object'
-        response_field 'group_tags',              'Group Tags',                                                                 type: 'String'
-        response_field 'groups',                  'Groups',                                                                     type: 'Array[String]'
-        response_field 'import_by_group',         'Import by Group',                                                            type: 'String'
-        response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to true",   type: 'Boolean'
-        response_field 'override',                'Override',                                                                   type: 'Boolean'
-        response_field 'source',                  'Source; Defaults to "csv"',                                                  type: 'String'
-        response_field 'tag_list',                'Comma delimited list of Tags to apply to the imported Contacts',             type: 'String'
-        response_field 'updated_at',              'Updated At',                                                                 type: 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',                                                           type: 'String'
+        response_field 'account_list_id',
+                       'Account List ID',
+                       type: 'Number'
+        response_field 'created_at',
+                       'Created At',
+                       type: 'String'
+        response_field 'file_url',
+                       'A URL to download the file',
+                       type: 'String'
+        response_field 'file_headers_mappings',
+                       "An Object that maps attributes in MPDX (keys) to headers in the users's " \
+                       'CSV file (values); The client must supply this before import can begin; ' \
+                       'Please see the Constants endpoint for a list of supported attributes',
+                       type: 'Object'
+        response_field 'file_headers',
+                       'A list of all the headers in the uploaded CSV file',
+                       type: 'Object'
+        response_field 'file_constants',
+                       "File constants are intended to help map values in the user's CSV file to " \
+                       'MPDX constants. This is a list of unique values for each column in the ' \
+                       "CSV. Columns are ignored if they obviously aren't constants " \
+                       '(like "name"), so not every column is returned. At most ' \
+                       "#{CsvFileConstantsReader::MAX_MAPPINGS_PER_HEADER} results will be returned " \
+                       'for each column.',
+                       type: 'Object'
+        response_field 'file_constants_mappings',
+                       "An Object that maps constants in MPDX (keys) to constants in the users's " \
+                       'CSV file (values); The client must supply this before import can begin; ' \
+                       'Please see the Constants endpoint for a list of supported constants',
+                       type: 'Object'
+
+        response_field 'group_tags',
+                       'Group Tags',
+                       type: 'String'
+        response_field 'groups',
+                       'Groups',
+                       type: 'Array[String]'
+        response_field 'import_by_group',
+                       'Import by Group',
+                       type: 'String'
+        response_field 'in_preview',
+                       "The Import will not be performed while it's in preview; Defaults to true",
+                       type: 'Boolean'
+        response_field 'override',
+                       'Override',
+                       type: 'Boolean'
+        response_field 'source',
+                       'Source; Defaults to "csv"',
+                       type: 'String'
+        response_field 'tag_list',
+                       'Comma delimited list of Tags to apply to the imported Contacts',
+                       type: 'String'
+        response_field 'updated_at',
+                       'Updated At',
+                       type: 'String'
+        response_field 'updated_in_db_at',
+                       'Updated In Db At',
+                       type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
         response_field 'user', 'User that the Import belongs to', type: 'Object'
-        response_field 'sample_contacts', 'The sample Contacts are a preview of what the imported Contacts would look like. ' \
-                                          'It uses the first few rows of the CSV file to generate the samples.', type: 'Object'
+        response_field 'sample_contacts',
+                       'The sample Contacts are a preview of what the imported Contacts would look like. ' \
+                       'It uses the first few rows of the CSV file to generate the samples.',
+                       type: 'Object'
       end
 
       example 'CSV Import [CREATE]', document: documentation_scope do

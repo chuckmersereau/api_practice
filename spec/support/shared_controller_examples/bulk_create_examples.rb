@@ -69,7 +69,10 @@ RSpec.shared_examples 'bulk_create_examples' do
 
       response_with_errors = response_body.detect { |hash| hash.dig('id') == second_id }
       expect(response_with_errors['errors']).to be_present
-      expect(response_with_errors['errors'].detect { |hash| hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}" }).to be_present
+      error = response_with_errors['errors'].detect do |hash|
+        hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}"
+      end
+      expect(error).to be_present
     end
 
     context 'resources forbidden' do

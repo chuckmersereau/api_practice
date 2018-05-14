@@ -64,4 +64,5 @@ class MockContact < MockResource; end
 class MockEmail < MockResource; end
 class MockPerson < MockResource; end
 class MockPerson::FacebookAccount < MockResource; end
-class MockTask < MockResource; end
+class MockTask < MockResource
+end

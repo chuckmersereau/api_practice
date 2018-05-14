@@ -20,7 +20,7 @@ RSpec.describe Api::V2::ConstantsController, type: :controller do
 
   describe '#index fields' do
     let(:resource_type) { 'constant_list' }
-    let(:parent_param_if_needed) { Hash.new }
+    let(:parent_param_if_needed) { {} }
     let(:serializer) { ConstantListSerializer.new(ConstantList.new) }
 
     include_examples 'sparse fieldsets examples',

@@ -11,13 +11,14 @@ RSpec.describe Task::Filter::ContactIds do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [{ name: '-- Any --', id: '', placeholder: 'None' }] +
+                account_list.contacts.order('name ASC').collect do |contact|
+                  { name: contact.to_s, id: contact.id, account_list_id: account_list.id }
+                end
       expect(described_class.config([account_list])).to include(default_selection: '',
                                                                 multiple: true,
                                                                 name: :contact_ids,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' }] +
-                                                                           account_list.contacts.order('name ASC').collect do |contact|
-                                                                             { name: contact.to_s, id: contact.id, account_list_id: account_list.id }
-                                                                           end,
+                                                                options: options,
                                                                 parent: nil,
                                                                 priority: 1,
                                                                 title: 'Contacts',
@@ -43,7 +44,8 @@ RSpec.describe Task::Filter::ContactIds do
       end
 
       it 'filters multiple contacts' do
-        expect(described_class.query(tasks, { contact_ids: "#{contact_one.id}, #{contact_two.id}" }, nil).to_a).to include(task_two)
+        results = described_class.query(tasks, { contact_ids: "#{contact_one.id}, #{contact_two.id}" }, nil).to_a
+        expect(results).to include(task_two)
       end
     end
   end

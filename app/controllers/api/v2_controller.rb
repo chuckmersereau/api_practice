@@ -101,7 +101,8 @@ class Api::V2Controller < ApiController
   end
 
   def verify_primary_id_placement
-    render_403(title: 'A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`') if params.dig(:data, :attributes, :id)
+    return unless params.dig(:data, :attributes, :id)
+    render_403(title: 'A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`')
   end
 
   def scope_request_to_time_zone(&block)

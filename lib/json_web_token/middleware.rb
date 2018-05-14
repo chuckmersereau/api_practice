@@ -23,7 +23,7 @@ module JsonWebToken
 
       if jwt_payload
         env['auth.jwt_payload'] = jwt_payload
-        @after_decode.call(env) if @after_decode
+        @after_decode&.call(env)
       end
     end
 

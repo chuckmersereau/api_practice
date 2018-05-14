@@ -14,7 +14,9 @@ describe ContactDupMergeWorker do
   end
 
   it 'merges contact duplicates' do
-    expect { ContactDupMergeWorker.new.perform(account_list.id, contact_one.id) }.to change { account_list.reload.contacts.count }.from(2).to(1)
+    expect do
+      ContactDupMergeWorker.new.perform(account_list.id, contact_one.id)
+    end.to change { account_list.reload.contacts.count }.from(2).to(1)
   end
 
   context 'account_list and contact do not exist' do

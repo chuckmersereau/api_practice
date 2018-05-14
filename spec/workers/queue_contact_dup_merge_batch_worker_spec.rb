@@ -19,7 +19,9 @@ describe QueueContactDupMergeBatchWorker do
   end
 
   it 'merges contact duplicates' do
-    expect { QueueContactDupMergeBatchWorker.new.perform(account_list.id, 0) }.to change { account_list.reload.contacts.count }.from(4).to(2)
+    expect do
+      QueueContactDupMergeBatchWorker.new.perform(account_list.id, 0)
+    end.to change { account_list.reload.contacts.count }.from(4).to(2)
   end
 
   it 'does not queue duplicate jobs' do
@@ -34,13 +36,16 @@ describe QueueContactDupMergeBatchWorker do
 
   it 'sets the batch description' do
     batch_status = Sidekiq::Batch::Status.new(QueueContactDupMergeBatchWorker.new.perform(account_list.id, 0))
-    expect(batch_status.description).to eq("Merge duplicate Contacts for AccountList #{account_list.id} since 1970-01-01 00:00:00 UTC")
+    expected_description = "Merge duplicate Contacts for AccountList #{account_list.id} since 1970-01-01 00:00:00 UTC"
+    expect(batch_status.description).to eq(expected_description)
   end
 
   it 'only merges contacts updated since the given time' do
     contact_three.update_column(:updated_at, 2.hours.ago)
     contact_four.update_column(:updated_at, 2.hours.ago)
-    expect { QueueContactDupMergeBatchWorker.new.perform(account_list.id, 1.hour.ago) }.to change { account_list.reload.contacts.count }.from(4).to(3)
+    expect do
+      QueueContactDupMergeBatchWorker.new.perform(account_list.id, 1.hour.ago)
+    end.to change { account_list.reload.contacts.count }.from(4).to(3)
   end
 
   context 'account_list does not exist' do

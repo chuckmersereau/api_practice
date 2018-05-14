@@ -63,7 +63,10 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
       end.to_not change { second_resource.reload.send(reference_key) }
       response_with_errors = response_body.detect { |hash| hash.dig('id') == second_resource.id }
       expect(response_with_errors['errors']).to be_present
-      expect(response_with_errors['errors'].detect { |hash| hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}" }).to be_present
+      expected_error = response_with_errors['errors'].detect do |hash|
+        hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}"
+      end
+      expect(expected_error).to be_present
     end
 
     context 'resources not found' do
@@ -157,7 +160,10 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
       end
 
       it 'does not update resources that do not belong to current user' do
-        put :update, data: [{ data: { type: resource_type, id: unauthorized_resource.id, attributes: { reference_key => reference_value } } }]
+        data_hash = {
+          type: resource_type, id: unauthorized_resource.id, attributes: { reference_key => reference_value }
+        }
+        put :update, data: [{ data: data_hash }]
 
         expect(unauthorized_resource.reload.send(reference_key)).to_not eq(reference_value)
         expect(response.status).to eq(404), invalid_status_detail

@@ -14,9 +14,11 @@ resource 'Account Lists > Mailchimp Accounts' do
   let(:primary_list_id)   { '1e72b58b72' }
   let(:primary_list_id_2) { '29a77ba541' }
 
-  let!(:mail_chimp_account)  { create(:mail_chimp_account, account_list: account_list, api_key: 'fake-us4', primary_list_id: primary_list_id) }
-  let(:appeal)               { create(:appeal, account_list: account_list) }
-  let(:form_data)            { build_data(api_key: 'fake-us4', primary_list_id: primary_list_id) }
+  let!(:mail_chimp_account) do
+    create(:mail_chimp_account, account_list: account_list, api_key: 'fake-us4', primary_list_id: primary_list_id)
+  end
+  let(:appeal)    { create(:appeal, account_list: account_list) }
+  let(:form_data) { build_data(api_key: 'fake-us4', primary_list_id: primary_list_id) }
 
   let(:resource_attributes) do
     %w(

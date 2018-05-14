@@ -4,7 +4,7 @@ describe TntImport::ContactImport do
   include TntImportHelpers
 
   def load_yaml_row(filename)
-    YAML.load(File.new(Rails.root.join("spec/fixtures/tnt/#{filename}.yaml")).read)
+    YAML.safe_load(File.new(Rails.root.join("spec/fixtures/tnt/#{filename}.yaml")).read)
   end
 
   def shared_attributes_options

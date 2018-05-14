@@ -20,6 +20,11 @@ class Contact::Filter::City < Contact::Filter::Base
   end
 
   def custom_options
-    [{ name: _('-- None --'), id: 'none' }] + account_lists.map(&:cities).flatten.uniq.select(&:present?).map { |city| { name: city, id: city } }
+    account_list_cities = account_lists.map(&:cities)
+                                       .flatten
+                                       .uniq
+                                       .select(&:present?)
+                                       .map { |city| { name: city, id: city } }
+    [{ name: _('-- None --'), id: 'none' }] + account_list_cities
   end
 end

@@ -4,7 +4,9 @@ RSpec.describe Reports::GoalProgress, type: :model do
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.order(:created_at).first }
   let!(:report) { Reports::GoalProgress.new(account_list: account_list) }
-  let!(:designation_account) { create(:designation_account, organization_id: account_list.salary_organization_id, balance: '9.99') }
+  let!(:designation_account) do
+    create(:designation_account, organization_id: account_list.salary_organization_id, balance: '9.99')
+  end
 
   before do
     account_list.designation_accounts << designation_account
@@ -20,7 +22,9 @@ RSpec.describe Reports::GoalProgress, type: :model do
 
   describe '#salary_balance' do
     it 'returns the total salary balance' do
-      account_list.designation_accounts << create(:designation_account, organization_id: account_list.salary_organization_id, balance: '0.01')
+      account_list.designation_accounts << create(:designation_account,
+                                                  organization_id: account_list.salary_organization_id,
+                                                  balance: '0.01')
       expect(report.salary_balance).to eq 10.00
     end
 

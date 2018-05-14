@@ -38,7 +38,8 @@ RSpec.describe Task::Filter::Tags do
         expect(described_class.query(tasks, { tags: 'tag1,tag2' }, nil).to_a).to eq [task_one]
       end
       it 'accepts tags as an array when any_tags is set to true' do
-        expect(described_class.query(tasks, { tags: 'tag1, tag3', any_tags: 'true' }, nil).to_a).to match_array [task_one, task_two, task_three]
+        result = described_class.query(tasks, { tags: 'tag1, tag3', any_tags: 'true' }, nil).to_a
+        expect(result).to match_array [task_one, task_two, task_three]
       end
     end
   end
