@@ -10,7 +10,7 @@ class Task < Activity
   after_destroy :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
   after_create :log_newsletter, if: -> { should_log_to_all_contacts? }
 
-  enum notification_type: %w(email)
+  enum notification_type: %w(email mobile both)
   enum notification_time_unit: %w(minutes hours)
 
   scope :of_type, -> (activity_type) { where(activity_type: activity_type) }
