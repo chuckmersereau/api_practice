@@ -141,6 +141,6 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def excluded_filter_keys_from_casting_validation
-    [:date_range, :no_date]
+    [:date_range]
   end
 end

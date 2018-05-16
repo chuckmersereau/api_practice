@@ -418,7 +418,7 @@ class Task < Activity
   end
 
   def google_sync_should_not_take_place?
-    result.present? || start_at.nil? || Time.now > start_at || no_date?
+    result.present? || start_at.nil? || Time.now > start_at
   end
 
   def log_newsletter

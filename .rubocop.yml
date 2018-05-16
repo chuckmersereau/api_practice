@@ -28,9 +28,6 @@ Metrics/MethodLength:
   CountComments: false
   Max: 20
 
-GlobalVars:
-  AllowedVariables: ['$rollout']
-
 GuardClause:
   MinBodyLength: 3
 

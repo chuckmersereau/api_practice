@@ -452,7 +452,6 @@ describe DataServer do
     end
 
     it 'updates the contact address based on the donor account' do
-      allow($rollout).to receive(:active?) { true }
       updater = instance_double(DataServer::ContactAddressUpdate,
                                 update_from_donor_account: nil)
       allow(DataServer::ContactAddressUpdate).to receive(:new) { updater }

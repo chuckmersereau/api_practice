@@ -81,7 +81,6 @@ resource 'Tasks' do
       parameter 'filter[date_range]',      'Filter by Date Range; Accepts values "last_month", '\
                                             '"last_year", "last_two_years", "last_week", '\
                                             '"overdue", "today", "tomorrow", "future", and "upcoming"', required: false
-      parameter 'filter[no_date]',         'Filter by No Date; Accepts values "true", or "false"',      required: false
       parameter 'filter[overdue]',         'Filter by Overdue; Accepts values "true", or "false"',      required: false
       parameter 'filter[starred]',         'Filter by Starred; Accepts values "true", or "false"',      required: false
       parameter 'filter[tags][]',          'Filter by Tags; Accepts multiple '\

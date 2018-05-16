@@ -115,7 +115,6 @@ module JsonApiService
           attributes: {
             activity_type: 'Appointment',
             start_at: '2017-02-09T22:17:28.854Z',
-            no_date: true,
             subject: 'An appointment to talk about Orange Soda'
           },
           relationships: {
@@ -146,7 +145,6 @@ module JsonApiService
           attributes: {
             activity_type: 'Appointment',
             start_at: '2017-02-09T22:17:28.854Z',
-            no_date: true,
             subject: 'An appointment to talk about Orange Soda'
           },
           relationships: {

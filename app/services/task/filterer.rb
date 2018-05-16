@@ -29,7 +29,6 @@ class Task::Filterer < ApplicationFilterer
     DateRange
     ExcludeTags
     Ids
-    NoDate
     Overdue
     Starred
     Tags

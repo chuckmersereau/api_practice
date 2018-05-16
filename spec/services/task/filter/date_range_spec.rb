@@ -49,12 +49,14 @@ RSpec.describe Task::Filter::DateRange do
         expect(described_class.query(tasks, { date_range: 'tomorrow' }, nil).to_a).to eq([task_tomorrow])
       end
       it 'filters where task start_at future' do
-        expect(described_class.query(tasks, { date_range: 'future' }, nil).to_a).to match_array([task_today, task_tomorrow, task_next_week])
+        future_tasks = [task_today, task_tomorrow, task_next_week]
+        expect(described_class.query(tasks, { date_range: 'future' }, nil).to_a).to match_array(future_tasks)
       end
       it 'filters where task start_at upcoming' do
-        expect(described_class.query(tasks, { date_range: 'upcoming' }, nil).to_a).to match_array([task_tomorrow, task_next_week])
+        upcoming_tasks = [task_tomorrow, task_next_week]
+        expect(described_class.query(tasks, { date_range: 'upcoming' }, nil).to_a).to match_array(upcoming_tasks)
       end
-      it 'filters where task start_at upcoming' do
+      it 'filters where task start_at is nil' do
         expect(described_class.query(tasks, { date_range: 'no_date' }, nil).to_a).to eq([task_no_date])
       end
     end

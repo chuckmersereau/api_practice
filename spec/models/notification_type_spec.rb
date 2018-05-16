@@ -25,7 +25,7 @@ describe NotificationType do
       expect(notification_type).to receive(:task_description_template).and_return(description)
     end
 
-    it 'creates a task for the activity list (no_date feature off)' do
+    it 'creates a task for the activity list' do
       donation.update(donation_date: Date.new(2015, 3, 18))
       expect do
         notification_type.create_task(account_list, contact.notifications.new(donation_id: donation.id))
@@ -33,7 +33,6 @@ describe NotificationType do
       activity = Activity.first
       expect(activity.subject).to eq('Doe, John gave a gift of MyString9.99 on March 18, 2015')
       expect(activity.activity_type).to eq('Thank')
-      expect(activity.no_date).to eq(false)
       expect(activity.source).to eq('NotificationType::CallPartnerOncePerYear')
     end
 

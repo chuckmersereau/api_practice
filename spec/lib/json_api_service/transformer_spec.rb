@@ -583,7 +583,6 @@ module JsonApiService
             attributes: {
               activity_type: 'Appointment',
               start_at: '2017-02-09T22:17:28.854Z',
-              no_date: true,
               subject: 'An appointment to talk about Orange Soda'
             },
             relationships: {
@@ -636,7 +635,6 @@ module JsonApiService
           mock_task: {
             activity_type: 'Appointment',
             start_at: '2017-02-09T22:17:28.854Z',
-            no_date: true,
             subject: 'An appointment to talk about Orange Soda',
             mock_account_list_id: '144b83e8-b7f6-48c8-9c0e-688785bf6164',
             mock_comments_attributes: [

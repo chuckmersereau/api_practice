@@ -148,12 +148,8 @@ parameters:
         description:
           Filter by Date Range; Accepts values "last_month", "last_year",
           "last_two_years", "last_week", "overdue", "today", "tomorrow",
-          "future", and "upcoming"
+          "future", "upcoming" and "no_date"
         type: string
-      no_date:
-        description:
-          Filter by No Date; Accepts values "true", or "false"
-        type: boolean
       overdue:
         description:
           Filter by overdue; Accepts values "true", or "false"

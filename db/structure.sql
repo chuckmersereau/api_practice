@@ -162,7 +162,6 @@ CREATE TABLE public.activities (
     remote_id character varying,
     source character varying,
     next_action character varying,
-    no_date boolean DEFAULT false,
     notification_type integer,
     notification_time_before integer,
     notification_time_unit integer,
@@ -5052,4 +5051,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180321203714');
 INSERT INTO schema_migrations (version) VALUES ('20180425180956');
 
 INSERT INTO schema_migrations (version) VALUES ('20180504141434');
+
+INSERT INTO schema_migrations (version) VALUES ('20180509181110');
 
