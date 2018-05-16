@@ -18,7 +18,7 @@ RSpec.describe Task::Analytics, type: :service do
     let(:tasks)              { account_list.tasks }
 
     let(:activity_type_keys) do
-      Task::TASK_ACTIVITIES.map { |type| type.parameterize.underscore.to_sym }
+      (Task::TASK_ACTIVITIES + ['no_type']).map { |type| type.parameterize.underscore.to_sym }
     end
 
     before do
@@ -36,9 +36,6 @@ RSpec.describe Task::Analytics, type: :service do
     describe '#tasks_overdue_or_due_today_counts' do
       it 'pulls the counts for the tasks that are overdue or due today' do
         counts_data = analytics.tasks_overdue_or_due_today_counts
-        labels      = counts_data.map { |count_data| count_data[:label] }
-
-        expect(labels).to match_array Task::TASK_ACTIVITIES
 
         counts_data.each do |count_data|
           expect(count_data[:count]).to eq 2
@@ -52,12 +49,21 @@ RSpec.describe Task::Analytics, type: :service do
           counts_data = analytics.tasks_overdue_or_due_today_counts
           labels      = counts_data.map { |count_data| count_data[:label] }
 
-          expect(labels).to match_array Task::TASK_ACTIVITIES
+          expect(labels).to match_array(Task::TASK_ACTIVITIES + [nil])
 
           counts_data.each do |count_data|
             expect(count_data[:count]).to eq 0
           end
         end
+      end
+
+      it 'counts tasks with no type' do
+        create(:task, activity_type: nil, account_list: account_list)
+
+        counts_data = analytics.tasks_overdue_or_due_today_counts
+
+        no_type_report = counts_data.find { |count_data| count_data[:label].nil? }
+        expect(no_type_report[:count]).to eq 3
       end
     end
 

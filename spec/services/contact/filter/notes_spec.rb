@@ -41,7 +41,7 @@ RSpec.describe Contact::Filter::Notes do
 
     context 'filter notes with wildcard search' do
       it 'returns only contacts that match the search query' do
-        expect(wildcard_search_notes('Jones', 'notes')).to eq [contact_one, contact_three]
+        expect(wildcard_search_notes('Jones', 'notes')).to match_array [contact_one, contact_three]
         expect(wildcard_search_notes('Jones', 'missing notes')).to eq [contact_three]
         expect(wildcard_search_notes('Freddie', 'random notes')).to eq [contact_one]
       end

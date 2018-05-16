@@ -42,5 +42,9 @@ FactoryGirl.define do
         activity_type activity_type
       end
     end
+
+    trait :no_type do
+      activity_type nil
+    end
   end
 end

@@ -119,11 +119,9 @@ resource 'Tasks > Analytics' do
                 .iso8601
             )
 
-          expect(returned_overdue_or_due_today_data.count)
-            .to eq Task::TASK_ACTIVITIES.count
+          expect(returned_overdue_or_due_today_data.count).to eq Task::TASK_ACTIVITIES.count + 1
 
-          expect(returned_total_tasks_due_count)
-            .to eq Task::TASK_ACTIVITIES.count
+          expect(returned_total_tasks_due_count).to eq Task::TASK_ACTIVITIES.count
         end
       end
     end
@@ -155,14 +153,11 @@ resource 'Tasks > Analytics' do
                 .iso8601
             )
 
-          expect(returned_physical_newsletter_completed_at)
-            .to be_nil
+          expect(returned_physical_newsletter_completed_at).to be_nil
 
-          expect(returned_overdue_or_due_today_data.count)
-            .to eq Task::TASK_ACTIVITIES.count
+          expect(returned_overdue_or_due_today_data.count).to eq Task::TASK_ACTIVITIES.count + 1
 
-          expect(returned_total_tasks_due_count)
-            .to eq 0
+          expect(returned_total_tasks_due_count).to eq 0
         end
       end
     end

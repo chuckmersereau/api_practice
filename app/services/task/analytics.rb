@@ -24,7 +24,7 @@ class Task::Analytics
   end
 
   def tasks_overdue_or_due_today_counts
-    Task::TASK_ACTIVITIES.map do |label|
+    analyzed_types.map do |label|
       {
         label: label,
         count: hash_of_task_activities_counts[label] || 0
@@ -37,6 +37,10 @@ class Task::Analytics
   end
 
   private
+
+  def analyzed_types
+    Task::TASK_ACTIVITIES + [nil]
+  end
 
   def hash_of_task_activities_counts
     @hash_of_task_activities_counts ||= tasks.overdue_and_today

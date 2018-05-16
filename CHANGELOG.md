@@ -14,6 +14,9 @@ This changelog covers what's changed in the MPDX APIs.
 - contacts/exports/mailing [POST] allows creating of export_logs with a custom mailing format
 - contacts/exports/mailing/:id [GET] allows users to retrieve a CSV file directly from the API
 
+## 20 April 2018
+- add nil activity type to Activity analytics
+
 ## 6 April 2018
 - add designation_account_id & donor_account_id filter to account_list/donations
 - add designation_account_id & donor_account_id filter to reports/donor_currency_donations
