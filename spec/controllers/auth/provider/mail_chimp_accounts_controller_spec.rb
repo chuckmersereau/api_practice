@@ -16,6 +16,7 @@ describe Auth::Provider::MailChimpAccountsController, :auth, type: :controller d
       expect do
         get :create, nil, account_list_id: account_list_id
       end.to change(MailChimpAccount, :count).by(1)
+      expect(MailChimpAccount.order(:created_at).last.active).to be true
     end
   end
 
@@ -32,7 +33,7 @@ describe Auth::Provider::MailChimpAccountsController, :auth, type: :controller d
       expect do
         get :create, nil, account_list_id: account_list_id
         mail_chimp_account.reload
-      end.to change { mail_chimp_account.api_key }
+      end.to change { mail_chimp_account.api_key }.and(change { mail_chimp_account.active }.to(true))
     end
   end
 end

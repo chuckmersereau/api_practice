@@ -4,7 +4,7 @@ module Auth
       protected
 
       def find_or_create_account
-        mail_chimp_account.attributes = { api_key: auth_hash.extra.api_token_with_dc }
+        mail_chimp_account.attributes = { api_key: auth_hash.extra.api_token_with_dc, active: true }
         mail_chimp_account.save
       end
 
