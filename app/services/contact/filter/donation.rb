@@ -1,5 +1,5 @@
 class Contact::Filter::Donation < Contact::Filter::Base
-  attr_accessor :contacts, :filters
+  attr_accessor :contacts, :filters, :all_filters
 
   def execute_query(query_contacts, query_filters)
     self.contacts = query_contacts.includes(donor_accounts: [:donations])
@@ -29,6 +29,7 @@ class Contact::Filter::Donation < Contact::Filter::Base
   private
 
   def filters=(filters)
+    @all_filters = filters
     @filters = parse_list(filters[:donation])
   end
 
@@ -42,7 +43,8 @@ class Contact::Filter::Donation < Contact::Filter::Base
 
   def no_gifts
     return unless filters.include?('none')
-    self.contacts = contacts.where.not(id: contact_ids_with_donation_to_account_lists)
+    contact_ids_with_donation = contact_ids_with_donation_to_account_lists(all_filters[:donation_date])
+    self.contacts = contacts.where.not(id: contact_ids_with_donation)
   end
 
   def one_or_more_gifts
@@ -60,12 +62,16 @@ class Contact::Filter::Donation < Contact::Filter::Base
     self.contacts = contacts.where(donations: { id: last_donation_ids_for_each_donor_account })
   end
 
-  def contact_ids_with_donation_to_account_lists
-    @contact_ids_with_donation_to_account_lists ||=
+  def contact_ids_with_donation_to_account_lists(date_range = nil)
+    date_range = nil unless date_range?(date_range)
+
+    @contact_ids_with_donations_cache ||= {}
+    @contact_ids_with_donations_cache[date_range] ||=
       ::Donation.unscoped
                 .where(account_lists_donations_as_sql_condition)
                 .joins(donor_account: [:contacts])
                 .where(contacts: { account_list_id: account_lists })
+                .where(date_range ? { donation_date: date_range } : nil)
                 .distinct
                 .pluck('"contacts"."id"')
   end

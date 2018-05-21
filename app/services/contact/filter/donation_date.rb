@@ -1,5 +1,8 @@
 class Contact::Filter::DonationDate < Contact::Filter::Base
   def execute_query(contacts, filters)
+    # Contact::Filter::Donation handles date range if looking for no donations during period
+    return contacts if filters[:donation] == 'none'
+
     params = daterange_params(filters[:donation_date])
     contacts = contacts.joins(donor_accounts: [:donations]) if params.present?
     if params[:start]

@@ -4,14 +4,14 @@ RSpec.describe Contact::Filter::Donation do
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.order(:created_at).first }
 
-  let!(:contact_one) { create(:contact, account_list_id: account_list.id) }
+  let!(:contact_one) { create(:contact, account_list_id: account_list.id, name: 'Contact 1') }
   let!(:donor_account_one) { create(:donor_account) }
   let!(:designation_account_one) { create(:designation_account) }
   let!(:donation_one) do
     create(:donation, donor_account: donor_account_one, designation_account: designation_account_one)
   end
 
-  let!(:contact_two) { create(:contact, account_list_id: account_list.id) }
+  let!(:contact_two) { create(:contact, account_list_id: account_list.id, name: 'Contact 2') }
   let!(:donor_account_two) { create(:donor_account) }
   let!(:designation_account_two) { create(:designation_account) }
   let!(:donation_two) do
@@ -21,8 +21,8 @@ RSpec.describe Contact::Filter::Donation do
     create(:donation, donor_account: donor_account_two, designation_account: designation_account_two)
   end
 
-  let!(:contact_three) { create(:contact, account_list_id: account_list.id) }
-  let!(:contact_four) { create(:contact, account_list_id: account_list.id) }
+  let!(:contact_three) { create(:contact, account_list_id: account_list.id, name: 'Contact 3') }
+  let!(:contact_four) { create(:contact, account_list_id: account_list.id, name: 'Contact 4') }
 
   before do
     account_list.designation_accounts << designation_account_one
@@ -101,15 +101,15 @@ RSpec.describe Contact::Filter::Donation do
         expect(
           Contact::Filterer.new(
             donation: 'none',
-            donation_date: Range.new(2.years.ago, 6.months.ago)
+            donation_date: Range.new(2.years.ago.to_datetime, 6.months.ago.to_datetime)
           ).filter(scope: contacts, account_lists: [account_list]).to_a
-        ).to eq []
+        ).to match_array [contact_two, contact_three, contact_four]
         expect(
           Contact::Filterer.new(
             donation: 'none',
-            donation_date: Range.new(2.weeks.ago, 1.day.ago)
+            donation_date: Range.new(2.weeks.ago.to_datetime, 1.day.ago.to_datetime)
           ).filter(scope: contacts, account_lists: [account_list]).to_a
-        ).to eq []
+        ).to match_array [contact_one, contact_three, contact_four]
       end
     end
 
@@ -163,6 +163,7 @@ RSpec.describe Contact::Filter::Donation do
         ).to eq [contact_two]
       end
     end
+
     context 'donations to designations outside of the specified account_list' do
       let!(:account_list_two) { create(:account_list) }
       let!(:donor_account_three) { create(:donor_account) }
@@ -184,6 +185,7 @@ RSpec.describe Contact::Filter::Donation do
         end
       end
     end
+
     context 'contact has donor_account with donations and donor_account with no donations' do
       before do
         contact_three.donor_accounts << donor_account_one
