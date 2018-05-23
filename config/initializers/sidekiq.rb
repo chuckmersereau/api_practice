@@ -12,7 +12,7 @@ if Sidekiq::Client.method_defined? :reliable_push!
 end
 
 Sidekiq.configure_server do |config|
-  Sidekiq::Logging.logger.level = Logger::FATAL unless Rails.env.development?
+  Sidekiq::Logging.logger.level = Logger::WARN unless Rails.env.development?
 
   Rails.logger = Sidekiq::Logging.logger
 
