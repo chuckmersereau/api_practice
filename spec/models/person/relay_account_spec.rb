@@ -10,7 +10,7 @@ describe Person::RelayAccount do
                          ssoGuid: guid, relayGuid: guid, keyGuid: guid }]
     @auth_hash = Hashie::Mash.new(uid: 'JOHN.DOE@EXAMPLE.COM', extra: { attributes: user_attributes })
     @wsapi_headers = { 'Authorization' => "Bearer #{ENV.fetch('WSAPI_KEY')}" }
-    stub_request(:get, "https://wsapi.cru.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=#{guid}")
+    stub_request(:get, "https://wsapi.cru.org/wsapi/rest/profiles?response_timeout=600&ssoGuid=#{guid}")
       .with(headers: @wsapi_headers)
       .to_return(status: 200, body: '[]', headers: {})
   end
@@ -37,7 +37,7 @@ describe Person::RelayAccount do
     end
 
     it 'creates an organization account if this user has a profile at cru' do
-      stub_request(:get, "https://wsapi.cru.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=#{guid}")
+      stub_request(:get, "https://wsapi.cru.org/wsapi/rest/profiles?response_timeout=600&ssoGuid=#{guid}")
         .with(headers: @wsapi_headers)
         .to_return(status: 200, headers: {},
                    body: '[{"name":"Staff Account(000555555)",'\

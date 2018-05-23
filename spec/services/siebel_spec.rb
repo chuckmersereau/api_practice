@@ -27,7 +27,7 @@ describe Siebel do
     let!(:relay) { create(:relay_account, person: person) }
 
     it 'imports profiles for a relay guid' do
-      stub_request(:get, "#{wsapi}/profiles?response_timeout=60000&ssoGuid=#{org_account.remote_id}")
+      stub_request(:get, "#{wsapi}/profiles?response_timeout=600&ssoGuid=#{org_account.remote_id}")
         .to_return(body: '[ { "name": "Staff Account (0559826)", "designations": [ { "number": "0559826", "description": "Joshua and Amanda Starcher (0559826)", "staffAccountId": "000559826" } ] }]')
 
       expect(siebel).to receive(:find_or_create_designation_account)
@@ -40,9 +40,9 @@ describe Siebel do
 
   context '#import_profile_balance' do
     it 'sets the profile balance to the sum of designation account balances in this profile' do
-      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=1&response_timeout=60000")
+      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=1&response_timeout=600")
         .to_return(body: '{ "1": { "primary": 1 }}')
-      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=2&response_timeout=60000")
+      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=2&response_timeout=600")
         .to_return(body: '{ "2": { "primary": 2 }}')
 
       designation_profile.designation_accounts << designation_account_one
@@ -54,7 +54,7 @@ describe Siebel do
     end
 
     it 'updates the balance of a designation account on that profile' do
-      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=1&response_timeout=60000")
+      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=1&response_timeout=600")
         .to_return(body: '{ "1": { "primary": 1 }}')
 
       designation_profile.designation_accounts << designation_account_one
@@ -65,9 +65,9 @@ describe Siebel do
     end
 
     it 'sets inactive designation accounts to a zero balance thus excluding their amount from the profile total' do
-      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=1&response_timeout=60000")
+      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=1&response_timeout=600")
         .to_return(body: '{ "1": { "primary": 1 }}')
-      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=2&response_timeout=60000")
+      stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=2&response_timeout=600")
         .to_return(body: '{ "2": { "primary": 2 }}')
 
       designation_profile.designation_accounts << designation_account_one
@@ -181,10 +181,10 @@ describe Siebel do
     def stub_donations(donations_json)
       today = Date.today.strftime('%Y-%m-%d')
       stub_request(:get, "#{wsapi}/donations?designations=#{designation_account_one.designation_number}&"\
-                   "posted_date_end=#{today}&response_timeout=60000&posted_date_start=2004-01-01")
+                   "posted_date_end=#{today}&response_timeout=600&posted_date_start=2004-01-01")
         .to_return(body: donations_json)
       stub_request(:get, "#{wsapi}/donations?designations=#{designation_account_one.designation_number}&"\
-                   "donation_date_end=#{today}&response_timeout=60000&donation_date_start=2004-01-01")
+                   "donation_date_end=#{today}&response_timeout=600&donation_date_start=2004-01-01")
         .to_return(body: donations_json)
     end
 
@@ -192,7 +192,7 @@ describe Siebel do
       date_str = date.strftime('%Y-%m-%d')
       stub_request(:get, "#{wsapi}/donations?designations=#{designation_account_one.designation_number}&"\
                    "donors=#{donor_account.account_number}&end_date=#{date_str}&"\
-                   "response_timeout=60000&start_date=#{date_str}")
+                   "response_timeout=600&start_date=#{date_str}")
         .to_return(body: '[]')
     end
   end
@@ -271,7 +271,7 @@ describe Siebel do
 
     it "fetches the donor from siebel if the donor isn't already on this account list" do
       donor_account.destroy
-      stub_request(:get, "#{wsapi}/donors?ids=MyString&response_timeout=60000")
+      stub_request(:get, "#{wsapi}/donors?ids=MyString&response_timeout=600")
         .to_return(body: '[{ "id": "602506447", "accountName": "Hillside Evangelical Free Church"}]', headers: {})
 
       expect do
@@ -295,7 +295,7 @@ describe Siebel do
     before do
       designation_profile.designation_accounts << designation_account_one
 
-      stub_request(:get, "#{wsapi}/donors?account_address_filter=primary&contact_email_filter=all&contact_filter=all&contact_phone_filter=all&having_given_to_designations=#{designation_account_one.designation_number}&response_timeout=60000")
+      stub_request(:get, "#{wsapi}/donors?account_address_filter=primary&contact_email_filter=all&contact_filter=all&contact_phone_filter=all&having_given_to_designations=#{designation_account_one.designation_number}&response_timeout=600")
         .to_return(body: '[{"id":"602506447","accountName":"HillsideEvangelicalFreeChurch","type":"Business","updatedAt":"' + Date.today.to_s(:db) + '"}]')
     end
 

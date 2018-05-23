@@ -322,7 +322,7 @@ class DataServer
       method: :post,
       url: url,
       payload: params,
-      timeout: nil,
+      timeout: 600,
       user: u(org_account.username),
       password: u(org_account.password)
     }
