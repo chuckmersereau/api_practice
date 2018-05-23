@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 source 'https://gems.contribsys.com/' do
-  gem 'sidekiq-pro', '~> 3.5.0'
+  gem 'sidekiq-pro', '< 4'
 end
 
 gem 'auth', path: 'engines/auth'
@@ -52,7 +52,7 @@ gem 'mail', '~> 2.6.6'
 gem 'newrelic_rpm', '~> 5.0.0'
 gem 'oauth', git: 'https://github.com/CruGlobal/oauth-ruby'
 gem 'oj', '~> 2.18.5'
-gem 'pg', '~> 0.20.0'
+gem 'pg', '~> 0.20'
 gem 'phonelib', '~> 0.5.4'
 gem 'premailer-rails', '~> 1.9.7'
 gem 'puma', '~> 3.6.0'
