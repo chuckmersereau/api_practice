@@ -47,7 +47,7 @@ RSpec.describe Reports::AppointmentResults, type: :model do
                                        new_monthly_partners: 1,
                                        new_special_pledges: 1,
                                        pledge_increase: 1)
-      period_double.stub(:monthly_increase) { monthly_increase_periods[i += 1] }
+      allow(period_double).to receive(:monthly_increase) { monthly_increase_periods[i += 1] }
       allow(Reports::AppointmentResultsPeriod).to receive(:new).and_return(period_double)
 
       # the average is 60.5, but we expect it to round up
