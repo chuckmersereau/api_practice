@@ -48,3 +48,4 @@
   - ["api_task_notifications_worker",                    2]
   - ["mailers",                                          10]
   - ["api_donation_amount_recommendation_remote_worker", 10]
+  - ["api_user_adobe_campaign_subscriber",               1]

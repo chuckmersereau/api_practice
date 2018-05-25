@@ -1,4 +1,6 @@
 class User < Person
+  include AdobeCampaignable
+
   has_many :account_list_users, dependent: :destroy
   has_many :account_lists, -> { uniq }, through: :account_list_users
   has_many :account_list_coaches, dependent: :destroy, foreign_key: :coach_id

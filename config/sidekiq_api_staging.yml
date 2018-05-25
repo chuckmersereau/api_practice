@@ -42,4 +42,5 @@
   - ["mailers",                                          10]
   - ["api_donation_amount_recommendation_remote_worker", 10]
   - ["api_audit_change_worker",                          2]
+  - ["api_user_adobe_campaign_subscriber",               1]
   - ["api_run_once",                                     1]

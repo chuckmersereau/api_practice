@@ -10,5 +10,12 @@ FactoryGirl.define do
         create(:email_address, primary: true, email: email_address, person: person)
       end
     end
+
+    factory :person_with_gender do
+      after(:build) do |person|
+        email_address = "#{person.first_name.downcase}@example.com"
+        create(:email_address, primary: true, email: email_address, person: person)
+      end
+    end
   end
 end

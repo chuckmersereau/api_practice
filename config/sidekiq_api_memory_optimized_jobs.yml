@@ -13,5 +13,6 @@
   - ["api_google_email_sync_enqueuer_worker",        1]
   - ["api_google_plus_account_fetcher_worker",       1]
   - ["api_import_csv",                               1]
-  - ["mailers",                                      1]
+  - ["mailers",                                      10]
   - ["api_audit_change_worker",                      1]
+  - ["api_user_adobe_campaign_subscriber",           1]
