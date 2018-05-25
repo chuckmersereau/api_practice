@@ -422,23 +422,21 @@ class Task < Activity
   end
 
   def log_newsletter
-    contacts = account_list.contacts.where(
-      send_newsletter: [activity_type.sub('Newsletter - ', ''), 'Both']
-    )
-    contacts.each do |contact|
-      task = account_list.tasks.create(
+    letter_type = activity_type.sub('Newsletter - ', '')
+    contacts_ids = account_list.contacts.where(send_newsletter: [letter_type, 'Both']).ids
+    contacts_ids.each do |contact_id|
+      task = Task.new(
+        account_list: account_list,
         subject: subject,
         activity_type: activity_type,
-        contacts: [contact],
         completed_at: completed_at,
         completed: completed
       )
+      task.activity_contacts.new(contact_id: contact_id, skip_task_counter_update: completed)
       comments.each do |comment|
-        task.comments.create(
-          person_id: comment.person_id,
-          body: comment.body
-        )
+        task.comments.new(person_id: comment.person_id, body: comment.body)
       end
+      task.save
     end
   end
 

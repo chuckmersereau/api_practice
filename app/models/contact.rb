@@ -564,8 +564,7 @@ class Contact < ApplicationRecord
   end
 
   def update_uncompleted_tasks_count
-    self.uncompleted_tasks_count = tasks.uncompleted.count
-    save(validate: false)
+    update_column(:uncompleted_tasks_count, tasks.uncompleted.count)
   end
 
   def find_timezone
