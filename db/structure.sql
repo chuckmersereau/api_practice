@@ -3973,6 +3973,13 @@ CREATE INDEX index_taggings_on_tag_id ON public.taggings USING btree (tag_id);
 
 
 --
+-- Name: index_taggings_on_tag_id_and_taggable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_taggings_on_tag_id_and_taggable_id ON public.taggings USING btree (tag_id, taggable_id);
+
+
+--
 -- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5053,4 +5060,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180425180956');
 INSERT INTO schema_migrations (version) VALUES ('20180504141434');
 
 INSERT INTO schema_migrations (version) VALUES ('20180509181110');
+
+INSERT INTO schema_migrations (version) VALUES ('20180522114733');
 
