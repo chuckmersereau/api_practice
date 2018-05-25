@@ -48,7 +48,7 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2::BulkController
   end
 
   def contacts_scope
-    Contact.where(contacts_query).tap(&:first!)
+    @contacts_scope ||= scope_exists!(Contact.where(contacts_query))
   end
   alias tags_scope contacts_scope
 

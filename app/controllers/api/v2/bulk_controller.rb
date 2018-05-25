@@ -39,4 +39,12 @@ class Api::V2::BulkController < Api::V2Controller
     raise Exceptions::BadRequestError,
           'An `id` is required for every top-level object within the /data array being sent in bulk requests'
   end
+
+  def scope_exists!(scope)
+    return scope if scope.exists?
+
+    # exception pulled from
+    # https://github.com/rails/rails/blob/4-2-stable/activerecord/lib/active_record/relation/finder_methods.rb#L489
+    raise ActiveRecord::RecordNotFound, "Couldn't find #{scope.klass.name} with [#{scope.arel.where_sql}]"
+  end
 end

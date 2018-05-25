@@ -73,7 +73,7 @@ class Api::V2::Tasks::Tags::BulkController < Api::V2::BulkController
   end
 
   def tasks_scope
-    Task.where(tasks_query).tap(&:first!)
+    @tasks_scope ||= scope_exists!(Task.where(tasks_query))
   end
   alias tags_scope tasks_scope
 end
