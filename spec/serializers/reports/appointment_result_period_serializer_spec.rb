@@ -18,6 +18,8 @@ describe Reports::AppointmentResultsPeriodSerializer do
                                          :created_at,
                                          :id,
                                          :updated_at,
-                                         :updated_in_db_at]
+                                         :updated_in_db_at,
+                                         :pledge_increase_contacts,
+                                         :new_pledges]
   end
 end

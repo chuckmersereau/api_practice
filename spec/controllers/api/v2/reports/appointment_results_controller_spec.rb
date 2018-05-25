@@ -13,7 +13,15 @@ RSpec.describe Api::V2::Reports::AppointmentResultsController, type: :controller
 
   let(:correct_attributes) { {} }
 
-  include_examples 'index_examples', except: [:sorting, :pagination]
+  describe 'index' do
+    before do
+      contact = create(:contact, account_list: account_list)
+      account_list.primary_appeal = create(:appeal)
+      create(:pledge, contact: contact, appeal: account_list.primary_appeal)
+    end
+
+    include_examples 'index_examples', except: [:sorting, :pagination]
+  end
 
   describe 'Filters' do
     it 'allows a user to request from their account_list' do
@@ -51,6 +59,44 @@ RSpec.describe Api::V2::Reports::AppointmentResultsController, type: :controller
           fields: { reports_appointment_results_periods: 'individual_appointments,group_appointments' }
 
       expect(averages.keys).to eq %w(average_individual_appointments average_group_appointments)
+    end
+  end
+
+  context 'as coach' do
+    include_context 'common_variables'
+
+    let(:coach) { create(:user).becomes(User::Coach) }
+    let(:contact) do
+      create(:contact, account_list: account_list,
+                       created_at: 4.months.ago,
+                       status: 'Call for Appointment',
+                       pledge_amount: nil)
+    end
+
+    before do
+      travel_to(1.week.ago) { contact.update(status: 'Partner - Financial', pledge_amount: 100) }
+
+      account_list.coaches << coach
+      full_params[:include] = 'pledge_increase_contacts,pledge_increase_contacts.contact'
+      full_params[:account_list_id] = account_list.id
+    end
+
+    it 'allows access to report' do
+      api_login(coach)
+      get :index, full_params
+      expect(response.status).to eq(200), invalid_status_detail
+    end
+
+    it 'renders pledges and contacts with coach serializers' do
+      api_login(coach)
+
+      expect(Coaching::Reports::AppointmentResultsPeriodSerializer).to receive(:new).exactly(4).times.and_call_original
+      expect(Coaching::ContactSerializer).to receive(:new).exactly(2).times.and_call_original
+
+      get :index, full_params
+
+      contact_json = response_json['included'].find { |json| json['id'] == contact.id }
+      expect(contact_json).to_not be nil
     end
   end
 end

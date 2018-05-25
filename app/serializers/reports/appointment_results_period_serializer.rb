@@ -10,6 +10,10 @@ class Reports::AppointmentResultsPeriodSerializer < ServiceSerializer
   attributes(*REPORT_ATTRIBUTES)
   delegate(*REPORT_ATTRIBUTES, to: :object)
 
+  has_many :pledge_increase_contacts
+  has_many :new_pledges
+  delegate(:pledge_increase_contacts, :new_pledges, to: :object)
+
   def id
     start_date.strftime('%F')
   end

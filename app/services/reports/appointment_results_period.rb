@@ -10,8 +10,8 @@ class Reports::AppointmentResultsPeriod < ActiveModelSerializers::Model
   end
 
   def new_monthly_partners
-    cached_changed_contacts_with_pledges.count do |_contact, pledges|
-      pledges[:beginning].zero? && pledges[:end].positive?
+    @new_monthly_partners ||= cached_changed_contacts_with_pledges.count do |monthly_increase|
+      monthly_increase.beginning_monthly.zero? && monthly_increase.end_monthly.positive?
     end
   end
 
@@ -24,17 +24,21 @@ class Reports::AppointmentResultsPeriod < ActiveModelSerializers::Model
   end
 
   def monthly_increase
-    cached_changed_contacts_with_pledges.sum do |contact, pledges|
-      delta = pledges[:end] - pledges[:beginning]
-      next 0 unless delta.positive?
-      CurrencyRate.convert_with_latest(amount: delta,
-                                       from: contact.pledge_currency,
-                                       to: account_list.salary_currency_or_default)
-    end.to_i
+    pledge_increase_contacts.sum(&:increase_amount)
   end
 
   def pledge_increase
-    Pledge.where(appeal: account_list.primary_appeal, created_at: start_date..end_date).sum(:amount)
+    new_pledges.sum(:amount)
+  end
+
+  def new_pledges
+    Pledge.where(appeal: account_list.primary_appeal, created_at: start_date..end_date)
+  end
+
+  def pledge_increase_contacts
+    @pledge_increase_contacts ||= cached_changed_contacts_with_pledges.select do |monthly_increase|
+      monthly_increase.increase_amount.positive?
+    end
   end
 
   private
@@ -50,23 +54,11 @@ class Reports::AppointmentResultsPeriod < ActiveModelSerializers::Model
     # it might be just as fast to load all of the logs at once
     logs = PartnerStatusLog.where(contact_id: ids).where('recorded_on >= ?', start_date).order(recorded_on: :asc)
 
-    contacts_with_changes.each_with_object({}) do |contact, hash|
+    contacts_with_changes.map do |contact|
       old_status = logs.find { |log| log.contact_id == contact.id }
-      old_pledge = pledge_from_status(old_status)
-
       end_status = logs.find { |log| log.contact_id == contact.id && log.recorded_on > end_date.to_date }
-      # use current contact values if there have been no changes since the end of the window
-      end_status ||= contact
-      end_pledge = pledge_from_status(end_status)
-
-      hash[contact] = { beginning: old_pledge, end: end_pledge }
+      ::Reports::PledgeIncreaseContact.new(contact: contact, beginning: old_status, end_status: end_status)
     end
-  end
-
-  def pledge_from_status(status)
-    return 0 unless status&.status == 'Partner - Financial'
-
-    status.pledge_amount.to_i / (status.pledge_frequency || 1)
   end
 
   def changed_contacts

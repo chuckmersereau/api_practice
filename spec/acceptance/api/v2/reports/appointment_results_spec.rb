@@ -36,7 +36,7 @@ resource 'Reports > Appointments Report' do
       example doc_helper.title_for(:index), document: doc_helper.document_scope do
         explanation doc_helper.description_for(:index)
         do_request
-        check_collection_resource(4)
+        check_collection_resource(4, %w(relationships))
         expect(response_status).to eq 200
       end
     end

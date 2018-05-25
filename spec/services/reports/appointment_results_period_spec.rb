@@ -24,7 +24,7 @@ RSpec.describe Reports::AppointmentResultsPeriod, type: :model do
     create(:contact, account_list: account_list, status: 'Call for Decision', created_at: '2018-03-04 13:00:00')
   end
   let!(:existing_partner_contact) do
-    create(:contact, account_list: account_list, status: 'Partner - Financial',
+    create(:contact, name: 'Existing Partner', account_list: account_list, status: 'Partner - Financial',
                      pledge_amount: 10, created_at: '2018-03-04 13:00:00')
   end
 
@@ -186,7 +186,31 @@ RSpec.describe Reports::AppointmentResultsPeriod, type: :model do
       expect(report.monthly_increase).to eq 215
     end
 
-    it 'knows if it should count only positive or negative too'
+    it 'counts change in currency as increase' do
+      allow(CurrencyRate).to receive(:latest_for).with('DBL').and_return(0.5)
+      allow(CurrencyRate).to receive(:latest_for).with('USD').and_return(1)
+      new_financial_partner.delete
+
+      travel_to '2018-04-11 18:31' do
+        existing_partner_contact.update(pledge_currency: 'DBL')
+      end
+
+      # 10 for existing_partner_contact support doubling through conversion rate
+      expect(report.monthly_increase).to eq 10
+    end
+
+    it 'knows if it should count only positive or negative too' do
+      travel_to '2018-03-19 18:30' do
+        new_partner_contact.update(pledge_amount: 100, status: 'Partner - Financial')
+      end
+      travel_to '2018-04-11 18:31' do
+        new_partner_contact.update(pledge_amount: 90)
+        existing_partner_contact.update(pledge_amount: 0)
+      end
+
+      # 10 for new_financial_partner
+      expect(report.monthly_increase).to eq 10
+    end
   end
 
   describe '#pledge_increase' do

@@ -13,6 +13,11 @@ class Api::V2::Reports::AppointmentResultsController < Api::V2Controller
     true
   end
 
+  def coach?
+    !load_account_list.users.where(id: current_user).exists? &&
+      load_account_list.coaches.where(id: current_user).exists?
+  end
+
   def load_report
     @report ||= ::Reports::AppointmentResults.new(report_params)
   end
@@ -26,10 +31,14 @@ class Api::V2::Reports::AppointmentResultsController < Api::V2Controller
   end
 
   def render_report
-    render json: @report.periods_data,
-           fields: field_params,
-           include: include_params,
-           meta: meta_hash
+    options = {
+      json: @report.periods_data,
+      fields: field_params,
+      include: include_params,
+      meta: meta_hash
+    }
+    options[:each_serializer] = Coaching::Reports::AppointmentResultsPeriodSerializer if coach?
+    render options
   end
 
   def meta_hash
