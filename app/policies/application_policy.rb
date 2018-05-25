@@ -1,9 +1,10 @@
 class ApplicationPolicy
-  attr_reader :user, :resource
+  attr_reader :resource, :user, :coach
 
-  def initialize(user, resource)
-    @user = user
+  def initialize(context, resource)
     @resource = resource
+    @user = context.is_a?(User) ? context : context.user
+    @coach = @user.becomes(User::Coach)
   end
 
   def show?
@@ -20,5 +21,15 @@ class ApplicationPolicy
 
   def destroy?
     resource_owner?
+  end
+
+  protected
+
+  def resource_owner?
+    raise 'Must Override'
+  end
+
+  def resource_coach?
+    raise 'Must Override'
   end
 end

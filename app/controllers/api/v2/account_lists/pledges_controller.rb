@@ -3,10 +3,7 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
     authorize_pledges
     load_pledges
 
-    render json: @pledges.preload_valid_associations(include_associations),
-           meta: meta_hash(@pledges),
-           include: include_params,
-           fields: field_params
+    render_pledges
   end
 
   def show
@@ -33,7 +30,18 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
     destroy_pledge
   end
 
+  protected
+
+  def permit_coach?
+    %w(index show).include? params[:action]
+  end
+
   private
+
+  def coach?
+    !load_account_list.users.where(id: current_user).exists? &&
+      load_account_list.coaches.where(id: current_user).exists?
+  end
 
   def pledge_params
     params
@@ -46,7 +54,12 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
   end
 
   def pledge_scope
-    load_account_list.pledges
+    scope = load_account_list.pledges
+    if coach?
+      scope = scope.where('expected_date < ?', Date.today)
+                   .where(appeal_id: load_account_list.primary_appeal_id, status: :not_received)
+    end
+    scope
   end
 
   def authorize_pledge
@@ -76,11 +89,20 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
   end
 
   def load_pledges
-    @pledges = pledge_scope.where(filter_params)
-                           .joins(sorting_join)
-                           .reorder(sorting_param)
-                           .page(page_number_param)
-                           .per(per_page_param)
+    @pledges = filter_pledges.joins(sorting_join)
+                             .reorder(sorting_param)
+                             .page(page_number_param)
+                             .per(per_page_param)
+  end
+
+  def filter_pledges
+    filters = if coach?
+                # only allow coach to filter by contact_id
+                filter_params.slice(:contact_id)
+              else
+                filter_params
+              end
+    pledge_scope.where(filters)
   end
 
   def permitted_filters
@@ -102,11 +124,24 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
     %w(amount expected_date contact.name)
   end
 
+  def render_pledges
+    options = base_render_options.merge(json: @pledges.preload_valid_associations(include_associations),
+                                        meta: meta_hash(@pledges))
+    options[:each_serializer] = Coaching::PledgeSerializer if coach?
+    render options
+  end
+
   def render_pledge
-    render json: @pledge,
-           status: success_status,
-           include: include_params,
-           fields: field_params
+    options = base_render_options.merge(json: @pledge, status: success_status)
+    options[:serializer] = Coaching::PledgeSerializer if coach?
+    render options
+  end
+
+  def base_render_options
+    {
+      include: include_params,
+      fields: field_params
+    }
   end
 
   def save_pledge
