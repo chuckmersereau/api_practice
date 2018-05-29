@@ -143,8 +143,8 @@ describe DonorAccount do
       context 'account_number does not start with' do
         let!(:donor_account) { create(:donor_account, account_number: '1234') }
 
-        it 'returns no donor_accounts' do
-          expect(described_class.filter(account_list, wildcard_search: '34')).to be_empty
+        it 'returns donor_accounts' do
+          expect(described_class.filter(account_list, wildcard_search: '34')).to eq([donor_account])
         end
       end
 

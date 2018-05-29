@@ -27,9 +27,9 @@ class DonorAccount < ApplicationRecord
     includes(:contacts)
       .references(:contacts).where('"contacts"."name" ilike :name AND "contacts"."account_list_id" = :account_list_id OR '\
                                    '"donor_accounts"."name" ilike :name OR '\
-                                   '"donor_accounts"."account_number" LIKE :account_number',
+                                   '"donor_accounts"."account_number" iLIKE :account_number',
                                    name: "%#{wildcard_search_params}%",
-                                   account_number: "#{wildcard_search_params}%",
+                                   account_number: "%#{wildcard_search_params}%",
                                    account_list_id: account_list.id)
   }
 

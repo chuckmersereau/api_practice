@@ -57,9 +57,9 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
       context 'account_number does not start with' do
         let!(:donor_account) { create(factory_type, account_number: '1234') }
         before { contact.donor_accounts << donor_account }
-        it 'returns no donor_accounts' do
+        it 'returns donor_accounts' do
           get :index, account_list_id: account_list_id, filter: { wildcard_search: '34' }
-          expect(JSON.parse(response.body)['data'].count).to eq(0)
+          expect(JSON.parse(response.body)['data'].count).to eq(1)
         end
       end
       context 'name contains' do
