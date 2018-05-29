@@ -1,6 +1,8 @@
 class DonationAmountRecommendation::RemoteWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :api_donation_amount_recommendation_remote_worker
+  sidekiq_options queue: :api_donation_amount_recommendation_remote_worker,
+                  unique: :until_executed,
+                  unique_expiration: 3.days
 
   def perform
     import_donation_amount_recommendations

@@ -34,7 +34,7 @@ Sidekiq.default_worker_options = {
   # import / email jobs not getting queued because the locks don't
   # always get cleared properly (perhaps on new deploys/out of memory
   # errors).
-  unique_job_expiration: 24.hours
+  unique_expiration: 24.hours
 }
 
 Sidekiq::Extensions.enable_delay!

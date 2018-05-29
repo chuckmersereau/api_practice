@@ -18,7 +18,7 @@ class AccountList < ApplicationRecord
   # Expire the uniqueness for AccountList import after 24 hours because the
   # uniqueness locks were staying around incorrectly and causing some people's
   # donor import to not go through.
-  sidekiq_options queue: :api_account_list, retry: false, unique: :until_executed, unique_job_expiration: 24.hours
+  sidekiq_options queue: :api_account_list, retry: false, unique: :until_executed
 
   validates :name, presence: true
   validate :active_mpd_start_at_is_before_active_mpd_finish_at
