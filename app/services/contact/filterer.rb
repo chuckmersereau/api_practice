@@ -10,6 +10,7 @@ class Contact::Filterer < ApplicationFilterer
     Referrer
     Likely
     ContactType
+    PrimaryAddress
     City
     State
     Country

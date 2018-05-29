@@ -25,6 +25,45 @@ describe Contact do
     create(:mail_chimp_account, account_list: account_list)
   end
 
+  describe 'scopes' do
+    let!(:contact_one) { create(:contact, account_list: account_list) }
+    let!(:contact_two) { create(:contact, account_list: account_list) }
+    let!(:contact_three) { create(:contact, account_list: account_list) }
+    let!(:contact_four) { create(:contact, account_list: account_list) }
+    let!(:primary) { create(:address, country: 'United States', primary_mailing_address: true, addressable: contact_one) }
+    let!(:non_primary) { create(:address, country: 'United States', primary_mailing_address: false, addressable: contact_two) }
+    let!(:historical) { create(:address, country: 'United States', historic: true, addressable: contact_three) }
+    let!(:non_historical) { create(:address, country: 'United States', historic: false, addressable: contact_four) }
+
+    context 'primary addresses' do
+      it 'should return only the contacts that have a primary address' do
+        expect(Contact.primary_addresses).to include(contact_one)
+      end
+
+      it 'should not return non primary addresses' do
+        expect(Contact.non_primary_addresses).to_not include(contact_one)
+      end
+
+      it 'should return only non primary addresses' do
+        expect(Contact.non_primary_addresses).to include(contact_two)
+      end
+    end
+
+    context 'historical addresses' do
+      it 'should return only the contacts that have a historical address' do
+        expect(Contact.historical_addresses).to include(contact_three)
+      end
+
+      it 'should not return non historical addresses' do
+        expect(Contact.non_historical_addresses).to_not include(contact_three)
+      end
+
+      it 'should return only non historical addresses' do
+        expect(Contact.non_historical_addresses).to include(contact_four)
+      end
+    end
+  end
+
   describe 'saving addresses' do
     it 'should create an address' do
       address = build(:address, addressable: nil)

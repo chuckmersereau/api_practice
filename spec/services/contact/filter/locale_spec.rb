@@ -12,25 +12,25 @@ RSpec.describe Contact::Filter::Locale do
 
   describe '#config' do
     it 'returns expected config' do
+      options = [
+        { name: '-- Any --', id: '', placeholder: 'None' },
+        { id: 'null', name: '-- Unspecified --' },
+        { name: 'Something else', id: 'Something else' },
+        { name: 'US English', id: 'en-US' },
+        { name: 'Canadian French', id: 'fr-CA' },
+        { name: 'fr-FR', id: 'fr-FR' }
+      ]
       expected_config = {
         name: :locale,
         multiple: true,
         default_selection: '',
-        options: [
-          { name: '-- Any --', id: '', placeholder: 'None' },
-          { id: 'null', name: '-- Unspecified --' },
-          { name: 'Something else', id: 'Something else' },
-          { name: 'US English', id: 'en-US' },
-          { name: 'Canadian French', id: 'fr-CA' },
-          { name: 'fr-FR', id: 'fr-FR' }
-        ],
+        options: options,
         parent: 'Contact Details',
-        priority: 26,
         title: 'Language',
         type: 'multiselect'
       }
 
-      expect(described_class.config([account_list])).to match(expected_config)
+      expect(described_class.config([account_list])).to include(expected_config)
     end
   end
 

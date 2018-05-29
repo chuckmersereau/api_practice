@@ -75,6 +75,10 @@ class Contact < ApplicationRecord
     joins(:donor_accounts)
       .where('donor_accounts.account_number ilike ?', "%#{search_term}%")
   }
+  scope :primary_addresses, -> { joins(:addresses).where(addresses: { primary_mailing_address: true }) }
+  scope :non_primary_addresses, -> { joins(:addresses).where(addresses: { primary_mailing_address: false }) }
+  scope :non_historical_addresses, -> { joins(:addresses).where(addresses: { historic: false }) }
+  scope :historical_addresses, -> { joins(:addresses).where(addresses: { historic: true }) }
 
   PERMITTED_ATTRIBUTES = [
     :account_list_id,
