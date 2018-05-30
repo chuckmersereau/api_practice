@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-05-07 13:39+0000\n"
+"PO-Revision-Date: 2018-05-07 13:39+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ar\n"
@@ -150,6 +150,9 @@ msgstr "الرصيد: %{balance}"
 msgid "Both"
 msgstr "كلاهما"
 
+msgid "Both Only"
+msgstr "كلاهما فقط"
+
 msgid "Brother"
 msgstr "أخ"
 
@@ -267,6 +270,9 @@ msgstr "مطلق"
 msgid "Done"
 msgstr "انتهى"
 
+msgid "Donor"
+msgstr "متبرع"
+
 msgid "Donor system"
 msgstr "نظام المتبرع"
 
@@ -278,6 +284,18 @@ msgstr "الأجل"
 
 msgid "Email"
 msgstr "الإيميل "
+
+msgid "Email 1"
+msgstr "الإيميل 1"
+
+msgid "Email 2"
+msgstr "الإيميل 2"
+
+msgid "Email Only"
+msgstr "الإميل فقط"
+
+msgid "Email and Both"
+msgstr "الإيميل و كلاهما"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
@@ -325,6 +343,9 @@ msgstr "الاسم الشخصي"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "من أجل لإدماج لـ MailChimp نوصيك بإعداد قائمة جديدة في MailChimp للإستعمال (ليس حسابا جديدا، مجرد قائمة جديدة وفقط)، و أترك كل الإعدادات الافتراضية لـ MailChimp لهذه القائمة كما هي.\nإذا إعددتها بقائمة جديدة، كل واحد تم ضبطه على استلام نشرتك الدورية سيتم نسخة  مرة أخرى تلقائياً، وبعد ذلك يمكنك إدارة كل التحديثات من MPDX (مثال عندما تغير عنوان إيميل في MPDX سيتم تحديثه في mailchimp)."
+
+msgid "Full Name"
+msgstr "الاسم الكامل"
 
 msgid "Future"
 msgstr "المستقبل"
@@ -672,8 +693,23 @@ msgstr "في الانتظار"
 msgid "Person"
 msgstr "شخص"
 
+msgid "Phone 1"
+msgstr "الهاتف 1"
+
+msgid "Phone 2"
+msgstr "الهاتف 2"
+
+msgid "Phone 3"
+msgstr "الهاتف 3"
+
 msgid "Physical"
 msgstr "مادي"
+
+msgid "Physical Only"
+msgstr "المادي فقط"
+
+msgid "Physical and Both"
+msgstr "المادي و كلاهما"
 
 msgid "Please try updating it here: %{link}"
 msgstr "يُرجى محاولة تحديثها هنا: %{link}"
@@ -717,6 +753,9 @@ msgstr "استلم، ولم يعالج بعد"
 msgid "Referrals"
 msgstr "إحالات"
 
+msgid "Referred By"
+msgstr "إحالة من طرف"
+
 msgid "Referrer"
 msgstr "الموجه"
 
@@ -736,6 +775,9 @@ msgstr "كاهن "
 msgid "Seasonal"
 msgstr "موسمي"
 
+msgid "Send Appeals?"
+msgstr "هل ترسل طلبات؟"
+
 msgid "Separated"
 msgstr "مفصول"
 
@@ -754,6 +796,9 @@ msgstr "بريد القرين"
 
 msgid "Spouse First Name"
 msgstr "اسم القرين"
+
+msgid "Spouse Last Name"
+msgstr "لقب القرين"
 
 msgid "Spouse Other Email"
 msgstr "البريد الآخر للقرين"
@@ -778,6 +823,9 @@ msgstr "وضعية"
 
 msgid "Stopped giving for the last 2 months"
 msgstr "توقفوا عن منح عطايا في الأشهر الثلاثة الأخيرة"
+
+msgid "Street"
+msgstr "شارع"
 
 msgid "Support Letter"
 msgstr "رسالة دعم"
@@ -893,6 +941,9 @@ msgstr "القادم"
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "لقد فصلنا قائمة بريدك لـ MailChimp من MPDX لمنع حدوث أخطاء أكثر. بمجرد اختيارك لواحد من الخيارات في الأعلى، يُرجى العودة إلى %{link} و قم بتحديث إعدادات MailChimp الخاصة بك."
 
+msgid "Website"
+msgstr "الموقع الالكتروني"
+
 msgid "Weekly"
 msgstr "أسبوعي"
 
@@ -935,6 +986,16 @@ msgstr "لقد تمت دعوتك لتكون مدرباً لحساب في MPDX"
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "جهة اتصالك لـ MPDX \"%{contact}\" لديه شخص <a href=\"%{edit_person_url}\">%{person_name}</a> تم مزامنته أو تصديره إلى  MailChimp لكن لديه إيميل لا يمكن التواصل عبره معه:%{email}"
 
+msgid "Your credentials are missing for this account."
+msgstr "معلومات الدخول تنقص في هذا الحساب."
+
+msgid "Your credentials for %{org} are invalid."
+msgstr "معلومات الدخول لـ %{org} غير صحيحة"
+
+#. Postal code
+msgid "Zip"
+msgstr "الرمز البريدي"
+
 msgid "Your username and password are missing for this account."
 msgstr "اسم المستخدم و كلمة السر تنقص في هذا الحساب."
 
@@ -946,6 +1007,9 @@ msgstr "[MPDX] تتمة استيراد جهات اتصالك لـ %{source}"
 
 msgid "[MPDX] Importing your %{source} contacts failed"
 msgstr "فشل استيراد [MPDX] لجهات اتصالك %{source}"
+
+msgid "[MPDX] Your credentials for %{source} are invalid"
+msgstr "[MPDX] معلومات الدخول لـ %{source} غير صالحة"
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] اسم المستخدم و كلمة سرك لـ %{source} غير صالحتين"

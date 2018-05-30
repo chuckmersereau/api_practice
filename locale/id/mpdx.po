@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-05-07 13:41+0000\n"
+"PO-Revision-Date: 2018-05-07 13:41+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: id\n"
@@ -150,6 +150,9 @@ msgstr "Saldo: %{saldo}"
 msgid "Both"
 msgstr "Dua-duanya"
 
+msgid "Both Only"
+msgstr "Hanya Keduanya"
+
 msgid "Brother"
 msgstr "Saudara laki-laki"
 
@@ -267,6 +270,9 @@ msgstr "Bercerai"
 msgid "Done"
 msgstr "Selesai"
 
+msgid "Donor"
+msgstr "Donor"
+
 msgid "Donor system"
 msgstr "Sistem Donor"
 
@@ -278,6 +284,18 @@ msgstr "Jatuh Tempo"
 
 msgid "Email"
 msgstr "Email"
+
+msgid "Email 1"
+msgstr "Email 1"
+
+msgid "Email 2"
+msgstr "Email 2"
+
+msgid "Email Only"
+msgstr "Hanya Email"
+
+msgid "Email and Both"
+msgstr "Email dan Keduanya"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
@@ -325,6 +343,9 @@ msgstr "Nama Depan"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "Untuk Integrasi MailChimp kami merekomendasikan Anda untuk menetapkan daftar baru pada MailChimp untuk digunakan (bukan akun baru, hanya daftar baru), dan tetapkan MailChimp secara default untuk daftar tersebut.\nJika Anda menetapkan dengan daftar baru, semua orang akan disalin secara otomatis utnuk menerima buletin Anda, dan Anda dapat mengatur semua pembaruan dari MPDX (Misalnya saat Anda ingin mengubah alamat email dalam MPDX, maka akan dieprbarui pada mailchimp)"
+
+msgid "Full Name"
+msgstr "Nalam Lengkap"
 
 msgid "Future"
 msgstr "Masa Depan"
@@ -672,8 +693,23 @@ msgstr "Tertunda"
 msgid "Person"
 msgstr "Orang"
 
+msgid "Phone 1"
+msgstr "Telepon 1"
+
+msgid "Phone 2"
+msgstr "Telepon 2"
+
+msgid "Phone 3"
+msgstr "Telepon 3"
+
 msgid "Physical"
 msgstr "Fisik"
+
+msgid "Physical Only"
+msgstr "Hanya Fisik"
+
+msgid "Physical and Both"
+msgstr "Fisikan dan Keduanya"
 
 msgid "Please try updating it here: %{link}"
 msgstr "Silakan coba memperbarui di sini: %{link}"
@@ -717,6 +753,9 @@ msgstr "Diterima, namun belum diproses"
 msgid "Referrals"
 msgstr "Referal"
 
+msgid "Referred By"
+msgstr "Dirujuk Oleh"
+
 msgid "Referrer"
 msgstr "Perujuk"
 
@@ -736,6 +775,9 @@ msgstr "Pdt."
 msgid "Seasonal"
 msgstr "Musiman"
 
+msgid "Send Appeals?"
+msgstr "Kirim Banding?"
+
 msgid "Separated"
 msgstr "Terpisah"
 
@@ -754,6 +796,9 @@ msgstr "Email Pasangan (suami/Istri)"
 
 msgid "Spouse First Name"
 msgstr "Nama Depan Pasangan"
+
+msgid "Spouse Last Name"
+msgstr "Nama Belakang Pasangan"
 
 msgid "Spouse Other Email"
 msgstr "Email Lain Pasangan"
@@ -778,6 +823,9 @@ msgstr "Status"
 
 msgid "Stopped giving for the last 2 months"
 msgstr "Berhenti memberi untuk 2 bulan terakhir"
+
+msgid "Street"
+msgstr "Jalan"
 
 msgid "Support Letter"
 msgstr "Surat Pendukung"
@@ -893,6 +941,9 @@ msgstr "Akan datang"
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "Kami sudah memisahkan daftar MailChimp Anda dari MPDX untuk sementara untuk menghindari eror. Setelah Anda emmilih salah satu pilihan di atas, silahkan kembali ke %{link} dan perbarui pengaturan MailChimp Anda."
 
+msgid "Website"
+msgstr "Situs web"
+
 msgid "Weekly"
 msgstr "Mingguan"
 
@@ -935,6 +986,16 @@ msgstr "Anda sudah diundang untuk menjadi pembina untuk akun pada MPDX"
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "Kontak MPDX Anda \"%{contact}\" memiliki seorang <a href=\"%{edit_person_url}\">%{person_name}</a> yang disinkronisasi atau diekspor ke MailChimp namun sekarang merupakan email tidak terkirm: %{email}"
 
+msgid "Your credentials are missing for this account."
+msgstr "Kredensial Anda tidak ada untuk akun ini."
+
+msgid "Your credentials for %{org} are invalid."
+msgstr "Kredensial Anda untuk %{org} tidak valid."
+
+#. Postal code
+msgid "Zip"
+msgstr "Kode pos"
+
 msgid "Your username and password are missing for this account."
 msgstr "Nama pengguna dan sandi Anda tidak ada untuk akun ini"
 
@@ -946,6 +1007,9 @@ msgstr "[MPDX] selesai mengimpor %{source} kontak Anda"
 
 msgid "[MPDX] Importing your %{source} contacts failed"
 msgstr "[MPDX] gagal mengimpor %{source} kontak Anda"
+
+msgid "[MPDX] Your credentials for %{source} are invalid"
+msgstr "[MPDX] Kredensial Anda untuk %{source} tidak valid"
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] nama pengguna dan kata sandi Anda untuk %{source} invalid"

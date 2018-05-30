@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-05-07 13:40+0000\n"
+"PO-Revision-Date: 2018-05-07 13:40+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: th\n"
@@ -150,6 +150,9 @@ msgstr "ยอดดุล: %{balance}"
 msgid "Both"
 msgstr "ทั้งสอง"
 
+msgid "Both Only"
+msgstr "ทั้งสองอย่างเท่านั้น"
+
 msgid "Brother"
 msgstr "พี่/น้องชาย"
 
@@ -267,6 +270,9 @@ msgstr "หย่า"
 msgid "Done"
 msgstr "เสร็จ"
 
+msgid "Donor"
+msgstr "ผู้บริจาค"
+
 msgid "Donor system"
 msgstr "ระบบผู้บริจาค"
 
@@ -278,6 +284,18 @@ msgstr "วันครบกำหนด"
 
 msgid "Email"
 msgstr "อีเมล"
+
+msgid "Email 1"
+msgstr "อีเมล 1"
+
+msgid "Email 2"
+msgstr "อีเมล 2"
+
+msgid "Email Only"
+msgstr "อีเมลเท่านั้น"
+
+msgid "Email and Both"
+msgstr "อีเมลและทั้งสองอย่าง"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
@@ -325,6 +343,9 @@ msgstr "ชื่อ"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "ในการรวม MailChimp เราขอแนะนำให้คุณตั้งค่ารายชื่อใหม่ใน MailChimp (รายชื่อใหม่ ไม่ใช่บัญชีใหม่) แล้วเก็บค่าเริ่มต้นทั้งหมดของ MailChimp ไว้\n  หากคุณตั้งค่ารายชื่อใหม่ ทุกคนที่กำหนดให้ได้รับจดหมายข่าวจะได้ถูกคัดลอกโดยอัตโนมัติ และจากนั้นคุณจะสามารถจัดการอัปเดตทั้งหมดจาก MPDX ได้ (เมื่อคุณเปลี่ยนที่อยู่อีเมลใน MPDX ระบบจะอัปเดตข้อมูลใน mailchimp)"
+
+msgid "Full Name"
+msgstr "ชื่อจริง"
 
 msgid "Future"
 msgstr "อนาคต"
@@ -672,8 +693,23 @@ msgstr "รอดำเนินการ"
 msgid "Person"
 msgstr "บุคคล"
 
+msgid "Phone 1"
+msgstr "โทรศัพท์ 1"
+
+msgid "Phone 2"
+msgstr "โทรศัพท์ 2"
+
+msgid "Phone 3"
+msgstr "โทรศัพท์ 3"
+
 msgid "Physical"
 msgstr "ฉบับตีพิมพ์"
+
+msgid "Physical Only"
+msgstr "ฉบับตีพิมพ์เท่านั้น"
+
+msgid "Physical and Both"
+msgstr "ฉบับตีพิมพ์และทั้งสองอย่าง"
 
 msgid "Please try updating it here: %{link}"
 msgstr "โปรดอัปเดตที่นี่: %{link}"
@@ -717,6 +753,9 @@ msgstr "ได้รับแล้วแต่ยังไม่ได้ดำ
 msgid "Referrals"
 msgstr "ผู้ได้รับการแนะนำ"
 
+msgid "Referred By"
+msgstr "แนะนำโดย"
+
 msgid "Referrer"
 msgstr "ผู้แนะนำ"
 
@@ -736,6 +775,9 @@ msgstr "บาทหลวง"
 msgid "Seasonal"
 msgstr "ฤดูกาล"
 
+msgid "Send Appeals?"
+msgstr "ส่งคำขออนุเคราะห์ไหม?"
+
 msgid "Separated"
 msgstr "แยกทาง"
 
@@ -754,6 +796,9 @@ msgstr "ที่อยู่คู่สมรส"
 
 msgid "Spouse First Name"
 msgstr "ชื่อคู่สมรส"
+
+msgid "Spouse Last Name"
+msgstr "นามสกุลคู่สมรส"
 
 msgid "Spouse Other Email"
 msgstr "อีเมลอื่นของคู่สมรส"
@@ -778,6 +823,9 @@ msgstr "สถานะ"
 
 msgid "Stopped giving for the last 2 months"
 msgstr "หยุดให้ในช่วง 2 เดือนที่ผ่านมา"
+
+msgid "Street"
+msgstr "ถนน"
 
 msgid "Support Letter"
 msgstr "จดหมายช่วยเหลือ"
@@ -893,6 +941,9 @@ msgstr "เร็วๆ นี้"
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "เราแยกรายชื่อ MailChimp ออกจาก MPDX ชั่วคราวเพื่อป้องกันข้อผิดพลาด หลังจากเลือกตัวเลือกด้านบนแล้ว โปรดกลับไปที่ %{link}\n  แล้วอัปเดตการตั้งค่า MailChimp"
 
+msgid "Website"
+msgstr "เว็บไซต์"
+
 msgid "Weekly"
 msgstr "รายสัปดาห์"
 
@@ -935,6 +986,16 @@ msgstr "คุณได้รับเชิญให้เป็นโค้ช
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "ผู้ติดต่อ MPDX \"%{contact}\" ให้ <a href=\"%{edit_person_url}\">%{person_name}</a> ซิงค์หรือส่งออกไปยัง MailChimp แต่มีอีเมลที่ไม่สามารถส่งได้ตอนนี้: %{email}"
 
+msgid "Your credentials are missing for this account."
+msgstr "ไม่มีหนังสือสำคัญของคุณในบัญชีนี้"
+
+msgid "Your credentials for %{org} are invalid."
+msgstr "หนังสือสำคัญ %{org} ของคุณไม่ถูกต้อง"
+
+#. Postal code
+msgid "Zip"
+msgstr "รหัสไปรษณีย์"
+
 msgid "Your username and password are missing for this account."
 msgstr "ไม่มีชื่อผู้ใช้และรหัสผ่านของคุณในบัญชีนี้"
 
@@ -946,6 +1007,9 @@ msgstr "[MPDX] นำเข้ารายชื่อติดต่อ %{sourc
 
 msgid "[MPDX] Importing your %{source} contacts failed"
 msgstr "[MPDX] นำเข้ารายชื่อติดต่อ %{source} ไม่สำเร็จ"
+
+msgid "[MPDX] Your credentials for %{source} are invalid"
+msgstr "[MPDX] หนังสือสำคัญ %{source} ของคุณไม่ถูกต้อง"
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] ชื่อผู้ใช้และรหัสผ่าน %{source} ไม่ถูกต้อง"

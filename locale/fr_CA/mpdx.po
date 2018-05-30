@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-04-23 19:20+0000\n"
+"PO-Revision-Date: 2018-04-23 19:20+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: fr_CA\n"
@@ -150,6 +150,9 @@ msgstr "Solde : %{balance}"
 msgid "Both"
 msgstr "Les deux"
 
+msgid "Both Only"
+msgstr "Les deux seulement"
+
 msgid "Brother"
 msgstr "Frère"
 
@@ -267,6 +270,9 @@ msgstr "Divorcé(e)"
 msgid "Done"
 msgstr "Terminé"
 
+msgid "Donor"
+msgstr "Donateur"
+
 msgid "Donor system"
 msgstr "Système de dons"
 
@@ -278,6 +284,18 @@ msgstr "Échéance"
 
 msgid "Email"
 msgstr "Courriel"
+
+msgid "Email 1"
+msgstr "Courriel 1"
+
+msgid "Email 2"
+msgstr "Courriel 2"
+
+msgid "Email Only"
+msgstr "Courriel seulement"
+
+msgid "Email and Both"
+msgstr "Courriel et les deux"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
@@ -325,6 +343,9 @@ msgstr "Prénom"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "Pour l'intégration à MailChimp, nous vous recommandons de créer une nouvelle liste dans MailChimp à utiliser (pas un nouveau compte, juste une nouvelle liste), et de laisser tous les paramètres par défaut MailChimp en place pour cette liste. En créant une nouvelle liste, toutes les personnes inscrites à votre lettre de nouvelles seront copiées automatiquement. Vous pourrez ensuite gérer toutes les mises à jour depuis MPDX (p. ex., en cas de changement d'adresse courriel dans MPDX, la mise à jour sera également effectuée dans MailChimp)."
+
+msgid "Full Name"
+msgstr "Nom au complet"
 
 msgid "Future"
 msgstr "Plus tard"
@@ -672,8 +693,23 @@ msgstr "En attente"
 msgid "Person"
 msgstr "Personne"
 
+msgid "Phone 1"
+msgstr "Téléphone 1"
+
+msgid "Phone 2"
+msgstr "Téléphone 2"
+
+msgid "Phone 3"
+msgstr "Téléphone 3"
+
 msgid "Physical"
 msgstr "Papier"
+
+msgid "Physical Only"
+msgstr "Papier seulement"
+
+msgid "Physical and Both"
+msgstr "Papier et les deux"
 
 msgid "Please try updating it here: %{link}"
 msgstr "Essayez de le mettre à jour ici : %{link}"
@@ -717,6 +753,9 @@ msgstr "Reçu, pas encore traité"
 msgid "Referrals"
 msgstr "Références"
 
+msgid "Referred By"
+msgstr "Recommandé par"
+
 msgid "Referrer"
 msgstr "Référent"
 
@@ -736,6 +775,9 @@ msgstr "Pasteur"
 msgid "Seasonal"
 msgstr "Saisonnier"
 
+msgid "Send Appeals?"
+msgstr "Envoyer des appels aux dons?"
+
 msgid "Separated"
 msgstr "Séparé(e)"
 
@@ -754,6 +796,9 @@ msgstr "Courriel du conjoint ou de la conjointe"
 
 msgid "Spouse First Name"
 msgstr "Prénom du conjoint ou de la conjointe"
+
+msgid "Spouse Last Name"
+msgstr "Nom de famille du conjoint ou de la conjointe"
 
 msgid "Spouse Other Email"
 msgstr "Autre adresse courriel du conjoint ou de la conjointe"
@@ -778,6 +823,9 @@ msgstr "État"
 
 msgid "Stopped giving for the last 2 months"
 msgstr "A interrompu les dons au cours des 2 derniers mois"
+
+msgid "Street"
+msgstr "Rue"
 
 msgid "Support Letter"
 msgstr "Lettre de soutien"
@@ -893,6 +941,9 @@ msgstr "Prochainement"
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "Nous avons temporairement déconnecté votre liste MailChimp de MPDX pour prévenir des erreurs ultérieures. Une fois que vous aurez sélectionné l'une des options ci-dessus, veuillez revenir à %{link} et mettre à jour vos paramètres MailChimp."
 
+msgid "Website"
+msgstr "Site Web"
+
 msgid "Weekly"
 msgstr "Hebdomadaire"
 
@@ -935,6 +986,16 @@ msgstr "Vous avez été invité(e) à être coach pour un compte dans MPDX"
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "Votre contact MPDX « %{contact} » a une personne <a href=\"%{edit_person_url}\">%{person_name}</a> synchronisée ou exportée vers MailChimp, mais a maintenant une adresse courriel non valide : %{email}"
 
+msgid "Your credentials are missing for this account."
+msgstr "Vos identifiants sont manquants pour ce compte."
+
+msgid "Your credentials for %{org} are invalid."
+msgstr "Vos identifiants pour %{org} ne sont pas valides."
+
+#. Postal code
+msgid "Zip"
+msgstr "Code postal"
+
 msgid "Your username and password are missing for this account."
 msgstr "Votre nom d'utilisateur et mot de passe sont manquants pour ce compte."
 
@@ -946,6 +1007,9 @@ msgstr "[MPDX] Importation de vos contacts %{source} terminée"
 
 msgid "[MPDX] Importing your %{source} contacts failed"
 msgstr "[MPDX] Importation de vos contacts %{source} échouée"
+
+msgid "[MPDX] Your credentials for %{source} are invalid"
+msgstr "[MPDX] Vos identifiants pour %{source} ne sont pas valides."
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] Votre nom d'utilisateur et mot de passe pour %{source} ne sont pas valides."

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-05-07 13:42+0000\n"
+"PO-Revision-Date: 2018-05-07 13:42+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -150,6 +150,9 @@ msgstr "Баланс: %{balance}"
 msgid "Both"
 msgstr "Оба"
 
+msgid "Both Only"
+msgstr "Только оба"
+
 msgid "Brother"
 msgstr "Брат"
 
@@ -267,6 +270,9 @@ msgstr "Разведен / Разведена"
 msgid "Done"
 msgstr "Готово"
 
+msgid "Donor"
+msgstr "Даритель"
+
 msgid "Donor system"
 msgstr "Система пожертвований"
 
@@ -278,6 +284,18 @@ msgstr "Дата оплаты"
 
 msgid "Email"
 msgstr "Эл. почта"
+
+msgid "Email 1"
+msgstr "Эл. почта 1"
+
+msgid "Email 2"
+msgstr "Эл. почта 2"
+
+msgid "Email Only"
+msgstr "Только эл. почта"
+
+msgid "Email and Both"
+msgstr "Эл. почта и оба"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
@@ -325,6 +343,9 @@ msgstr "Имя"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "Для интеграции MailChimp рекомендуется создать новый список для использования в MailChimp\n  (не новую учетную запись, а новый список) и включить в этот список все элементы MailChimp по умолчанию.\n  Если вы создадите новый список, то все контакты, получающие вашу новостную рассылку, будут автоматически\n  скопированы, и после этого вы сможете управлять всеми обновлениями из MPDX (например, при смене адреса\n  эл. почты в MPDX он изменится и в MailChimp)."
+
+msgid "Full Name"
+msgstr "Полное имя"
 
 msgid "Future"
 msgstr "Будущее"
@@ -672,8 +693,23 @@ msgstr "Ожидается"
 msgid "Person"
 msgstr "Человек"
 
+msgid "Phone 1"
+msgstr "Телефон 1"
+
+msgid "Phone 2"
+msgstr "Телефон 2"
+
+msgid "Phone 3"
+msgstr "Телефон 3"
+
 msgid "Physical"
 msgstr "В натуральной форме"
+
+msgid "Physical Only"
+msgstr "Только почта"
+
+msgid "Physical and Both"
+msgstr "Почта и оба"
 
 msgid "Please try updating it here: %{link}"
 msgstr "Попробуйте обновить здесь: %{link}"
@@ -717,6 +753,9 @@ msgstr "Получено, но не обработано"
 msgid "Referrals"
 msgstr "Рекомендации"
 
+msgid "Referred By"
+msgstr "Рекомендатель"
+
 msgid "Referrer"
 msgstr "Рекомендатель"
 
@@ -736,6 +775,9 @@ msgstr "Ред."
 msgid "Seasonal"
 msgstr "Сезонный"
 
+msgid "Send Appeals?"
+msgstr "Отправлять просьбы?"
+
 msgid "Separated"
 msgstr "Отделено"
 
@@ -754,6 +796,9 @@ msgstr "Эл. почта супруга(-и)"
 
 msgid "Spouse First Name"
 msgstr "Имя супруга(-и)"
+
+msgid "Spouse Last Name"
+msgstr "Фамилия супруга/супруги"
 
 msgid "Spouse Other Email"
 msgstr "Другой адрес эл. почты супруга(-и)"
@@ -778,6 +823,9 @@ msgstr "Статус"
 
 msgid "Stopped giving for the last 2 months"
 msgstr "Пользователь прекратил передавать взносы последние 2 месяца"
+
+msgid "Street"
+msgstr "Улица"
 
 msgid "Support Letter"
 msgstr "Письмо поддержки"
@@ -893,6 +941,9 @@ msgstr "Скоро"
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "Мы временно отключили привязку вашего списка MailChimp к MPDX во избежание дальнейших ошибок. После того как вы\n  выберете один из вариантов выше, перейдите по адресу %{link}\n  и обновите настройки MailChimp."
 
+msgid "Website"
+msgstr "Веб-сайт"
+
 msgid "Weekly"
 msgstr "Еженедельно"
 
@@ -935,6 +986,16 @@ msgstr "Вас пригласили в качестве консультанта
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "Ваш контакт MPDX «%{contact}» содержит человека <a href=\"%{edit_person_url}\">%{person_name}</a>, который был синхронизирован или экспортирован в MailChimp с недействующим адресом эл. почты: %{email}"
 
+msgid "Your credentials are missing for this account."
+msgstr "Отсутствуют учетные данные для этой учетной записи."
+
+msgid "Your credentials for %{org} are invalid."
+msgstr "Учетные данные для %{org} введены неверно."
+
+#. Postal code
+msgid "Zip"
+msgstr "Индекс"
+
 msgid "Your username and password are missing for this account."
 msgstr "В этой учетной записи нет вашего имени и пароля."
 
@@ -946,6 +1007,9 @@ msgstr "[MPDX] Завершен импорт ваших контактов из 
 
 msgid "[MPDX] Importing your %{source} contacts failed"
 msgstr "[MPDX] Не удалось импортировать ваши контакты из %{source}"
+
+msgid "[MPDX] Your credentials for %{source} are invalid"
+msgstr "[MPDX] Учетные данные для %{source} введены неверно"
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] Ваше имя и пароль недействительны для %{source}"

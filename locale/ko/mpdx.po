@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2018-05-07 13:39+0000\n"
+"PO-Revision-Date: 2018-05-07 13:39+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -150,6 +150,9 @@ msgstr "잔액: %{balance}"
 msgid "Both"
 msgstr "둘 다"
 
+msgid "Both Only"
+msgstr "양쪽만 가능"
+
 msgid "Brother"
 msgstr "형제"
 
@@ -267,6 +270,9 @@ msgstr "이혼함"
 msgid "Done"
 msgstr "완료"
 
+msgid "Donor"
+msgstr "기부자"
+
 msgid "Donor system"
 msgstr "기부 시스템"
 
@@ -278,6 +284,18 @@ msgstr "만기일"
 
 msgid "Email"
 msgstr "이메일"
+
+msgid "Email 1"
+msgstr "이메일 1"
+
+msgid "Email 2"
+msgstr "이메일 2"
+
+msgid "Email Only"
+msgstr "이메일만 가능"
+
+msgid "Email and Both"
+msgstr "이메일 및 양쪽 모두"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
@@ -325,6 +343,9 @@ msgstr "이름"
 
 msgid "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n  (not a new account, just a new list), and leave all the MailChimp defaults in place for that list.\n  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n  address on MPDX it will update on mailchimp)."
 msgstr "MailChimp 통합을 위해 MailChimp에 새 목록을 설치해두기를 추천합니다.\n (새 계정이 아닌 새 목록만) 그리고 모든 MailChimp 기본 사항을 그 목록에 놓으세요.\n 새 목록을 설정했다면, 모든 사람들이 자동으로 복사된 뉴스레터를\n 받을 것이며, 오직 본인만이 MPDX의 모든 업데이트를 관리할 수 있습니다. (예를 덜어 MPDX의 이메일 주소를\n 변경한다면, MailChimp에도 업데이트됩니다.)"
+
+msgid "Full Name"
+msgstr "성명"
 
 msgid "Future"
 msgstr "미래"
@@ -672,8 +693,23 @@ msgstr "대기 중"
 msgid "Person"
 msgstr "사람"
 
+msgid "Phone 1"
+msgstr "전화 1"
+
+msgid "Phone 2"
+msgstr "전화 2"
+
+msgid "Phone 3"
+msgstr "전화 3"
+
 msgid "Physical"
 msgstr "실제"
+
+msgid "Physical Only"
+msgstr "실물만 사용 가능"
+
+msgid "Physical and Both"
+msgstr "실물 및 양쪽 모두"
 
 msgid "Please try updating it here: %{link}"
 msgstr "이 주소에서 업데이트를 시도하세요: %{link}"
@@ -717,6 +753,9 @@ msgstr "수령되었으나, 아직 처리되지 않음"
 msgid "Referrals"
 msgstr "소개"
 
+msgid "Referred By"
+msgstr "다음 추천인"
+
 msgid "Referrer"
 msgstr "소개자"
 
@@ -736,6 +775,9 @@ msgstr "목사"
 msgid "Seasonal"
 msgstr "계절별"
 
+msgid "Send Appeals?"
+msgstr "기금을 전송할까요?"
+
 msgid "Separated"
 msgstr "별거"
 
@@ -754,6 +796,9 @@ msgstr "배우자 이메일"
 
 msgid "Spouse First Name"
 msgstr "배우자 이름"
+
+msgid "Spouse Last Name"
+msgstr "배우자 성"
 
 msgid "Spouse Other Email"
 msgstr "배우자 기타 이메일"
@@ -778,6 +823,9 @@ msgstr "상태"
 
 msgid "Stopped giving for the last 2 months"
 msgstr "지난 2개월 내에 기부 중지"
+
+msgid "Street"
+msgstr "거리"
 
 msgid "Support Letter"
 msgstr "지원 편지"
@@ -893,6 +941,9 @@ msgstr "차기"
 msgid "We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have\n  chosen one of the options above, please go back to %{link}\n  and update your MailChimp settings."
 msgstr "오류를 방지하기 위해 MailChimp 목록과 MPDX의 연동을 일시적으로 중지했습니다.\n 위의 옵션 중 하나를 선택한 후,  %{link}에 돌아가\n MailChimp 설정을 업데이트하세요."
 
+msgid "Website"
+msgstr "웹사이트"
+
 msgid "Weekly"
 msgstr "주간"
 
@@ -935,6 +986,16 @@ msgstr "MPDX 계정의 코치로 초대를 받았습니다"
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> synced or exported to MailChimp but now has an undeliverable email: %{email}"
 msgstr "MPDX 연락처 \"%{contact}\"에 싱크되거나 MailChimp에 보내졌지만 이제는 메일을 전달할 수 없는 사람<a href=\"%{edit_person_url}\">%{person_name}</a>이 있습니다. %{email}"
 
+msgid "Your credentials are missing for this account."
+msgstr "귀하의 해당 계정의 개인 정보가 누락됐습니다."
+
+msgid "Your credentials for %{org} are invalid."
+msgstr "귀하의 %{org}의 개인 정보가 유효하지 않습니다."
+
+#. Postal code
+msgid "Zip"
+msgstr "우편 번호"
+
 msgid "Your username and password are missing for this account."
 msgstr "이 계정의 ID와 비밀번호가 사라졌습니다."
 
@@ -946,6 +1007,9 @@ msgstr "[MPDX]의 %{source} 연락처 불러오기 완료"
 
 msgid "[MPDX] Importing your %{source} contacts failed"
 msgstr "[MPDX]의 %{source} 연락처 불러오기 실패"
+
+msgid "[MPDX] Your credentials for %{source} are invalid"
+msgstr "[MPDX] 귀하의 %{source}의 개인 정보가 유효하지 않습니다"
 
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] %{source}의 ID와 비밀번호가 유효하지 않습니다."
