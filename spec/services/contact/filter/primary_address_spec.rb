@@ -40,7 +40,7 @@ RSpec.describe Contact::Filter::PrimaryAddress do
   it 'returns the expected config' do
     options = [{ name: _('Primary'), id: 'primary' },
                { name: _('Active'), id: 'active' },
-               { name: _('InActive'), id: 'inactive' },
+               { name: _('Inactive'), id: 'inactive' },
                { name: _('All'), id: 'null' }]
     expect(described_class.config([account_list])).to include(name: :primary_address,
                                                               options: options,

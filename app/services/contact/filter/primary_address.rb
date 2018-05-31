@@ -36,7 +36,7 @@ class Contact::Filter::PrimaryAddress < Contact::Filter::Base
     [
       { name: _('Primary'), id: 'primary' },
       { name: _('Active'), id: 'active' },
-      { name: _('InActive'), id: 'inactive' },
+      { name: _('Inactive'), id: 'inactive' },
       { name: _('All'), id: 'null' }
     ]
   end
