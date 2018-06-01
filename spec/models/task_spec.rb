@@ -180,6 +180,14 @@ describe Task do
         end
       end
     end
+    it 'does not try to update uncompleted_tasks_count' do
+      expect_any_instance_of(Contact).to_not receive(:update_uncompleted_tasks_count)
+
+      subject.activity_type = 'Newsletter - Email'
+      subject.completed = true
+      subject.source = nil
+      subject.save
+    end
   end
 
   describe '#update_completed_at' do

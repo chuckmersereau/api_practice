@@ -5,6 +5,8 @@ class Task < Activity
   include Sidekiq::Worker
   sidekiq_options queue: :api_task, backtrace: true, unique: :until_executed
 
+  attr_accessor :skip_contact_task_counter_update
+
   before_validation :update_completed_at
   after_save :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
   after_destroy :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
@@ -406,7 +408,7 @@ class Task < Activity
   end
 
   def update_contact_uncompleted_tasks_count
-    contacts.map(&:update_uncompleted_tasks_count)
+    contacts.map(&:update_uncompleted_tasks_count) unless skip_contact_task_counter_update
   end
 
   def queue_sync_to_google_calendar
@@ -432,10 +434,11 @@ class Task < Activity
         completed_at: completed_at,
         completed: completed
       )
-      task.activity_contacts.new(contact_id: contact_id, skip_task_counter_update: completed)
+      task.activity_contacts.new(contact_id: contact_id, skip_contact_task_counter_update: completed)
       comments.each do |comment|
         task.comments.new(person_id: comment.person_id, body: comment.body)
       end
+      task.skip_contact_task_counter_update = completed
       task.save
     end
   end

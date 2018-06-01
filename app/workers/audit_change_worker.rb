@@ -1,7 +1,7 @@
 class AuditChangeWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: :api_audit_change_worker, unique: :until_executed
+  sidekiq_options queue: :api_audit_change_worker
 
   def perform(attrs)
     send_audit_to_elastic(attrs)

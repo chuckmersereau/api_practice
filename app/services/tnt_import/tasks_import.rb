@@ -90,10 +90,7 @@ class TntImport::TasksImport
 
     task = create_task_from_prototype!(task_prototype, contact_id)
 
-    ActivityContact.where(activity_id: task.id, contact_id: contact_id).first_or_create! do |activity_contact|
-      activity_contact.skip_task_counter_update = true
-    end
-    task.reload if task.id
+    task.reload
 
     [task, contact_id]
   end
@@ -104,6 +101,12 @@ class TntImport::TasksImport
 
   def create_task_from_prototype!(prototype, contact_id)
     dup_task(prototype, contact_id).tap do |task|
+      task.skip_contact_task_counter_update = true
+
+      task.activity_contacts.where(contact_id: contact_id).first_or_initialize do |activity_contact|
+        activity_contact.skip_contact_task_counter_update = true
+      end
+
       task.save!
 
       row = @xml.find(xml_table_name, task.remote_id)

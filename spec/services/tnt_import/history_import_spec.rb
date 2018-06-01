@@ -68,6 +68,18 @@ describe TntImport::HistoryImport do
         subject.import
         Task.all.each { |task| expect(task.contacts.size).to eq 1 }
       end
+
+      context 'activity_type of Newsletter - Physical' do
+        before do
+          xml.tables['History'].first['TaskTypeID'] = 60
+        end
+
+        it 'does not create a task for every contact' do
+          expect_any_instance_of(Task).to_not receive(:log_newsletter)
+
+          expect { subject.import }.to change { Task.count }.by(contacts.size)
+        end
+      end
     end
 
     it 'does not increment the tasks counts' do
@@ -75,15 +87,6 @@ describe TntImport::HistoryImport do
       contact = contacts.first
 
       expect { subject.import }.to change { contact.tasks.count }.by(1).and change { contact.uncompleted_tasks_count }.by(0)
-    end
-
-    context 'with appeal mapping' do
-      it 'returns mapping of contacts to appeal ids' do
-        appeal_id = xml.tables['Appeal'].first['id']
-        history_row['AppealID'] = appeal_id
-
-        expect(subject.import).to eq(appeal_id => contact_ids.values)
-      end
     end
 
     context 'with LoggedByUserID' do
@@ -107,59 +110,6 @@ describe TntImport::HistoryImport do
         expect(comments).to include "Completed By: #{user_row['UserName']}"
         expect(comments).to include note
       end
-    end
-
-    context 'with multiple task contacts per task' do
-      let(:tnt_import) do
-        create(:tnt_import_with_multiple_task_contacts, override: true, user: user)
-      end
-
-      it 'creates one for each contact' do
-        expect { subject.import }.to change { Task.count }.by(contacts.size)
-      end
-
-      it 'creates tasks with only a single associated contact' do
-        subject.import
-        Task.all.each { |task| expect(task.contacts.size).to eq 1 }
-      end
-    end
-
-    it 'does not increment the tasks counts' do
-      expect(contacts.count).to be 1
-      contact = contacts.first
-
-      expect { subject.import }.to change { contact.tasks.count }.by(1).and change { contact.uncompleted_tasks_count }.by(0)
-    end
-
-    context 'with appeal mapping' do
-      it 'returns mapping of contacts to appeal ids' do
-        appeal_id = xml.tables['Appeal'].first['id']
-        history_row['AppealID'] = appeal_id
-
-        expect(subject.import).to eq(appeal_id => contact_ids.values)
-      end
-    end
-
-    context 'with multiple task contacts per task' do
-      let(:tnt_import) do
-        create(:tnt_import_with_multiple_task_contacts, override: true, user: user)
-      end
-
-      it 'creates one for each contact' do
-        expect { subject.import }.to change { Task.count }.by(contacts.size)
-      end
-
-      it 'creates tasks with only a single associated contact' do
-        subject.import
-        Task.all.each { |task| expect(task.contacts.size).to eq 1 }
-      end
-    end
-
-    it 'does not increment the tasks counts' do
-      expect(contacts.count).to be 1
-      contact = contacts.first
-
-      expect { subject.import }.to change { contact.tasks.count }.by(1).and change { contact.uncompleted_tasks_count }.by(0)
     end
   end
 end
