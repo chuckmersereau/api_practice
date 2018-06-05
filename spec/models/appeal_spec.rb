@@ -102,20 +102,7 @@ describe Appeal do
 
     describe '#pledges_amount_total' do
       it 'returns the total amount of all pledges' do
-        expect(ConvertedTotal).to receive(:new).with(
-          [
-            [processed_pledge.amount,
-             processed_pledge.contact.read_attribute(:pledge_currency),
-             processed_pledge.created_at],
-            [received_not_processed_pledge.amount,
-             received_not_processed_pledge.contact.read_attribute(:pledge_currency),
-             received_not_processed_pledge.created_at],
-            [not_received_not_processed_pledge.amount,
-             not_received_not_processed_pledge.contact.read_attribute(:pledge_currency),
-             not_received_not_processed_pledge.created_at]
-          ],
-          subject.account_list.salary_currency_or_default
-        ).and_call_original
+        expect(ConvertedTotal).to receive(:new).and_call_original
         expect(subject.pledges_amount_total).to eq(900.00)
       end
     end
@@ -208,7 +195,7 @@ describe Appeal do
       }
 
       subject.save
-      expect(subject.contacts).to eq([contact1, contact4])
+      expect(subject.contacts).to match_array [contact1, contact4]
       expect(subject.appeal_contacts.first.id).to be_present
     end
 
