@@ -6,7 +6,8 @@ class TaskNotificationsWorker
   sidekiq_options queue: :api_task_notifications_worker, unique: :until_executed
 
   def perform
-    tasks = Task.where(start_at: Time.now..65.minutes.from_now, notification_scheduled: nil)
+    types = [Task.notification_types[:email], Task.notification_types[:both]]
+    tasks = Task.where(start_at: Time.now..24.hours.from_now, notification_scheduled: nil, notification_type: types)
                 .where.not(notification_time_before: nil)
 
     tasks.find_each do |task|

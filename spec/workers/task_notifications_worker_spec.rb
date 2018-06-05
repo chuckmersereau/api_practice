@@ -9,15 +9,22 @@ describe TaskNotificationsWorker, sidekiq: :testing_disabled do
              account_list: account_list,
              start_at: 55.minutes.from_now,
              notification_time_before: 3,
-             notification_time_unit: 1)
+             notification_time_unit: 1,
+             notification_type: 'both')
+    end
+
+    before do
+      clear_uniqueness_locks
     end
 
     it 'queues the job' do
-      clear_uniqueness_locks
-      Sidekiq::ScheduledSet.new.clear
-      expect do
-        subject.perform
-      end.to change(Sidekiq::ScheduledSet.new, :size).by(1)
+      expect { subject.perform }.to change(Sidekiq::ScheduledSet.new, :size).by(1)
+    end
+
+    it 'does not query a job if mobile only' do
+      task.update(notification_type: 'mobile')
+
+      expect { subject.perform }.to_not change(Sidekiq::ScheduledSet.new, :size)
     end
   end
 end
