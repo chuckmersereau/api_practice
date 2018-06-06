@@ -15,10 +15,17 @@ describe TaskNotificationsWorker, sidekiq: :testing_disabled do
 
     before do
       clear_uniqueness_locks
+      Sidekiq::ScheduledSet.new.clear
     end
 
     it 'queues the job' do
       expect { subject.perform }.to change(Sidekiq::ScheduledSet.new, :size).by(1)
+    end
+
+    it 'queues the job into the mailer queue' do
+      subject.perform
+
+      expect(Sidekiq::ScheduledSet.new.to_a.last.queue).to eq 'mailers'
     end
 
     it 'does not query a job if mobile only' do
