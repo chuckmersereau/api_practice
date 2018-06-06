@@ -13,7 +13,7 @@ describe NotificationType::SpecialGift do
       expect(notifications.length).to eq(1)
     end
 
-    it "doesn't add a notification if first gift came more than 2 weeks ago" do
+    it "doesn't add a notification if first gift came more than 1 month ago" do
       create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 37.days.ago)
       notifications = special_gift.check(contact.account_list)
       expect(notifications.length).to eq(0)
