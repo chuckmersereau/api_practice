@@ -79,6 +79,9 @@ class Contact < ApplicationRecord
   scope :non_primary_addresses, -> { joins(:addresses).where(addresses: { primary_mailing_address: false }) }
   scope :non_historical_addresses, -> { joins(:addresses).where(addresses: { historic: false }) }
   scope :historical_addresses, -> { joins(:addresses).where(addresses: { historic: true }) }
+  scope :distinct_church_names, -> { select('DISTINCT on (church_name) church_name, id') }
+  scope :list_church_names, -> { distinct_church_names.where.not(church_name: nil).order('church_name asc') }
+  scope :search_church_names, ->(term) { where('church_name iLIKE ?', "%#{term}%") }
 
   PERMITTED_ATTRIBUTES = [
     :account_list_id,

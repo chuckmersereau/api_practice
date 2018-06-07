@@ -26,10 +26,10 @@ describe Contact do
   end
 
   describe 'scopes' do
-    let!(:contact_one) { create(:contact, account_list: account_list) }
-    let!(:contact_two) { create(:contact, account_list: account_list) }
-    let!(:contact_three) { create(:contact, account_list: account_list) }
-    let!(:contact_four) { create(:contact, account_list: account_list) }
+    let!(:contact_one) { create(:contact, account_list: account_list, church_name: 'Cross of Christ') }
+    let!(:contact_two) { create(:contact, account_list: account_list, church_name: 'Calvary Chapel') }
+    let!(:contact_three) { create(:contact, account_list: account_list, church_name: 'Harvest') }
+    let!(:contact_four) { create(:contact, account_list: account_list, church_name: 'Cross of Christ') }
     let!(:primary) { create(:address, country: 'United States', primary_mailing_address: true, addressable: contact_one) }
     let!(:non_primary) { create(:address, country: 'United States', primary_mailing_address: false, addressable: contact_two) }
     let!(:historical) { create(:address, country: 'United States', historic: true, addressable: contact_three) }
@@ -60,6 +60,16 @@ describe Contact do
 
       it 'should return only non historical addresses' do
         expect(Contact.non_historical_addresses).to include(contact_four)
+      end
+    end
+
+    context 'church names' do
+      it 'should return only church names and ids' do
+        expect(Contact.list_church_names.map(&:church_name)).to eq(['Calvary Chapel', 'Cross of Christ', 'Harvest'])
+      end
+
+      it 'should search by church name' do
+        expect(Contact.search_church_names('cross').first.church_name).to eq('Cross of Christ')
       end
     end
   end

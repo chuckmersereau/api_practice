@@ -94,6 +94,7 @@ Rails.application.routes.draw do
               namespace :tags do
                 resource :bulk, only: [:create, :destroy], controller: :bulk
               end
+              resources :church_names, only: :index
               constraints(id: /.+/) do
                 resources :duplicates, only: [:index, :show, :update]
                 namespace :people do
