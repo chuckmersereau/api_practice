@@ -20,7 +20,7 @@ class RunOnceMailer < ApplicationMailer
     @unsubscribe = unsubscribe_details
     @url = WebRouter.person_url(Person.find(@unsubscribe[:person_id]), Contact.find(@unsubscribe[:contact_id]))
 
-    mail to: to, from: 'paul.alexander@cru.org', reply_to: 'support@mpdx.org',
+    mail to: to, from: 'Paul Alexander <paul.alexander@cru.org>', reply_to: 'support@mpdx.org',
          subject: '[Action Required] Important Message About Some Of Your MPDX Contacts'
   end
 end
