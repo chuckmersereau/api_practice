@@ -44,8 +44,9 @@ class WebRouter
     "#{base_url}/tasks"
   end
 
-  def self.person_url(person)
-    "#{base_url}/contacts/#{person.contact.id}?personId=#{person.id}"
+  def self.person_url(person, contact = nil)
+    contact ||= person.contact
+    "#{base_url}/contacts/#{contact.id}?personId=#{person.id}"
   end
 
   def self.logout_url
