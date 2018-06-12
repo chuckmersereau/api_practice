@@ -27,6 +27,19 @@ RSpec.describe MailChimp::CampaignLogger do
       end
     end
 
+    context 'automation type campaign' do
+      before do
+        allow(mock_gibbon).to receive(:campaigns).with('Random_id').and_return(mock_gibbon_campaigns)
+        campaign_values = { 'send_time' => 30.minutes.ago.to_s, 'type' => 'automation' }
+        allow(mock_gibbon_campaigns).to receive(:retrieve).and_return(campaign_values)
+      end
+
+      it 'should not log' do
+        expect(subject).to_not receive(:log_sent_campaign!)
+        subject.log_sent_campaign('Random_id', 'Random Subject')
+      end
+    end
+
     context 'error handling' do
       it 'handles case where campaign not completely sent' do
         expect(subject).to receive(:log_sent_campaign!).and_raise(Gibbon::MailChimpError, 'code 301')
@@ -111,16 +124,13 @@ RSpec.describe MailChimp::CampaignLogger do
 
         allow(mock_gibbon).to receive(:campaigns).with('second_random_campaign_id').and_return(mock_second_gibbon_campaigns)
         allow(mock_second_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 2.days.ago.to_s)
+
+        allow(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
+        allow(mock_gibbon_reports).to receive(:sent_to).and_return(mock_gibbon_sent_to)
+        allow(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
       end
 
-      before { travel_to(Time.local(2017, 1, 1, 12, 0, 0)) }
-      after { travel_back }
-
       it 'logs the sent campaign' do
-        expect(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
-        expect(mock_gibbon_reports).to receive(:sent_to).and_return(mock_gibbon_sent_to)
-        expect(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
-
         expect do
           subject.log_sent_campaign('random_campaign_id', 'Random Subject')
         end.to change { Task.count }.by(1)
@@ -131,10 +141,6 @@ RSpec.describe MailChimp::CampaignLogger do
       end
 
       it 'does not log the same campaign more than once' do
-        expect(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
-        expect(mock_gibbon_reports).to receive(:sent_to).and_return(mock_gibbon_sent_to)
-        expect(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
-
         expect { subject.log_sent_campaign('random_campaign_id', 'Random Subject') }.to change { Task.count }.by(1)
 
         expect(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
@@ -145,17 +151,29 @@ RSpec.describe MailChimp::CampaignLogger do
       end
 
       it 'does log two campaigns with the same subject but sent at different times' do
-        expect(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
-        expect(mock_gibbon_reports).to receive(:sent_to).and_return(mock_gibbon_sent_to)
-        expect(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
-
-        expect { subject.log_sent_campaign('random_campaign_id', 'Random Subject') }.to change { Task.count }.by(1)
+        logger1 = subject
+        expect { logger1.log_sent_campaign('random_campaign_id', 'Random Subject') }.to change { Task.count }.by(1)
 
         expect(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
         expect(mock_gibbon_reports).to receive(:sent_to).and_return(mock_gibbon_sent_to)
         expect(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
 
-        expect { subject.log_sent_campaign('second_random_campaign_id', 'Random Subject') }.to change { Task.count }.by(1)
+        logger2 = described_class.new(mail_chimp_account)
+        expect { logger2.log_sent_campaign('second_random_campaign_id', 'Random Subject') }.to change { Task.count }.by(1)
+      end
+
+      it 'updates prayer_letter_last_sent' do
+        expect do
+          subject.log_sent_campaign('random_campaign_id', 'Random Subject')
+        end.to change { mail_chimp_account.prayer_letter_last_sent }
+      end
+
+      it 'does not updates prayer_letter_last_sent if lower' do
+        mail_chimp_account.update(prayer_letter_last_sent: DateTime.now)
+
+        expect do
+          subject.log_sent_campaign('random_campaign_id', 'Random Subject')
+        end.to_not change { mail_chimp_account.prayer_letter_last_sent }
       end
     end
   end

@@ -31,10 +31,7 @@ RSpec.describe MailChimp::Webhook::AppealList do
 
     it 'queues it if the status is sent' do
       expect(MailChimp::CampaignLoggerWorker).to receive(:perform_async).with(mail_chimp_account.id, '1', 'subject')
-
-      expect do
-        subject.campaign_status_hook('1', 'sent', 'subject')
-      end.to change { mail_chimp_account.reload.prayer_letter_last_sent }
+      subject.campaign_status_hook('1', 'sent', 'subject')
     end
   end
 end
