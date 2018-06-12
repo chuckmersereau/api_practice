@@ -51,17 +51,32 @@ RSpec.describe Api::V2::Reports::SalaryCurrencyDonationsController, type: :contr
                                 donation_date: Date.today)
     end
 
+    let!(:donor_account_4) { create(:donor_account) }
+    let!(:designation_account_4) { create(:designation_account) }
+    let!(:contact_4) { create(:contact, account_list: account_list) }
+    let!(:donor_4_start_date) { Date.today - 2.years }
+    let!(:donor_4_end_date) { Date.today - 1.year }
+    let!(:donations_4) do
+      create_list(:donation, 2, donor_account: donor_account_4,
+                                designation_account: designation_account_4,
+                                amount: 350.00,
+                                donation_date: (donor_4_start_date + 1.week))
+    end
+
     before do
       account_list.designation_accounts << designation_account_1
       account_list.designation_accounts << designation_account_2
       account_list.designation_accounts << designation_account_3
+      account_list.designation_accounts << designation_account_4
       contact_1.donor_accounts << donor_account_1
       contact_2.donor_accounts << donor_account_2
       contact_3.donor_accounts << donor_account_3
+      contact_4.donor_accounts << donor_account_4
+
+      api_login(user)
     end
 
     it 'allows a user to request all data' do
-      api_login(user)
       get :show, account_list_id: account_list.id
       expect(response_json['data']['attributes']['donor_infos'].map { |c| c['contact_id'] }).to contain_exactly(
         contact_1.id, contact_2.id, contact_3.id
@@ -69,7 +84,6 @@ RSpec.describe Api::V2::Reports::SalaryCurrencyDonationsController, type: :contr
     end
 
     it 'allows a user to filter by designation_account_id' do
-      api_login(user)
       get :show, account_list_id: account_list.id, filter: { designation_account_id: designation_account_1.id }
       expect(response_json['data']['attributes']['donor_infos'].map { |c| c['contact_id'] }).to contain_exactly(
         contact_1.id
@@ -77,7 +91,6 @@ RSpec.describe Api::V2::Reports::SalaryCurrencyDonationsController, type: :contr
     end
 
     it 'allows a user to filter by multiple designation_account_ids' do
-      api_login(user)
       get :show,
           account_list_id: account_list.id,
           filter: { designation_account_id: "#{designation_account_1.id},#{designation_account_2.id}" }
@@ -87,7 +100,6 @@ RSpec.describe Api::V2::Reports::SalaryCurrencyDonationsController, type: :contr
     end
 
     it 'allows a user to filter by donor_account_id' do
-      api_login(user)
       get :show, account_list_id: account_list.id, filter: { donor_account_id: donor_account_2.id }
       expect(response_json['data']['attributes']['donor_infos'].map { |c| c['contact_id'] }).to contain_exactly(
         contact_2.id
@@ -95,12 +107,20 @@ RSpec.describe Api::V2::Reports::SalaryCurrencyDonationsController, type: :contr
     end
 
     it 'allows a user to filter by multiple donor_account_ids' do
-      api_login(user)
       get :show,
           account_list_id: account_list.id,
           filter: { donor_account_id: "#{donor_account_1.id},#{donor_account_2.id}" }
       expect(response_json['data']['attributes']['donor_infos'].map { |c| c['contact_id'] }).to contain_exactly(
         contact_1.id, contact_2.id
+      )
+    end
+
+    it 'allows a user to filter by a date range' do
+      get :show,
+          account_list_id: account_list.id,
+          filter: { donor_account_id: donor_account_4.id, month_range: "#{donor_4_start_date}...#{donor_4_end_date}" }
+      expect(response_json['data']['attributes']['donor_infos'].map { |c| c['contact_id'] }).to contain_exactly(
+        contact_4.id
       )
     end
   end

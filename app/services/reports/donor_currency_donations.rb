@@ -1,17 +1,11 @@
 class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
   include Concerns::Reports::DonationSumHelper
-
-  MONTHS_BACK = 12
+  include Concerns::Reports::DateRangeFilterable
 
   attr_accessor :account_list, :filter_params
 
   def donor_infos
     received_donations_object.donors
-  end
-
-  def months
-    @months ||=
-      MONTHS_BACK.downto(0).map { |i| i.months.ago.to_date.beginning_of_month }
   end
 
   def currency_groups
@@ -88,10 +82,6 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
         account_list: account_list,
         donations_scoper: ->(donations) { self.donations(donations) }
       )
-  end
-
-  def start_date
-    @start_date ||= MONTHS_BACK.months.ago.beginning_of_month
   end
 
   def all_received_donations

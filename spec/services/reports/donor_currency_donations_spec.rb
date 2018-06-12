@@ -98,6 +98,26 @@ RSpec.describe Reports::DonorCurrencyDonations, type: :model do
       end
     end
 
+    context 'can allow custom start and end date for donation viewing' do
+      let(:starting) { Date.today - 3.years }
+      let(:ending) { Date.today - 1.year }
+
+      subject do
+        described_class.new(
+          account_list: account_list,
+          filter_params: { month_range: (starting..ending) }
+        )
+      end
+
+      it 'should have the correct start date' do
+        expect(subject.start_date).to eq(starting.beginning_of_month)
+      end
+
+      it 'should have the correct end date' do
+        expect(subject.end_date).to eq(ending)
+      end
+    end
+
     context 'designation_account_id present in filter_params' do
       subject do
         described_class.new(

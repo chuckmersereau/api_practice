@@ -20,6 +20,15 @@ RSpec.describe CastedValueValidator, type: :validator do
         expect(result).to be_nil
       end
 
+      it 'is valid when using a date range' do
+        result = CastedValueValidator.validate!(
+          attribute: 'month_range',
+          value: (Date.yesterday..Date.today)
+        )
+
+        expect(result).to be_truthy
+      end
+
       date_values = {
         date: Date.new,
         datetime: DateTime.new,
