@@ -8,7 +8,9 @@ RSpec.describe Api::V2::Reports::AppointmentResultsController, type: :controller
   let(:given_resource_type) { 'reports_appointment_results_periods' }
   let(:factory_type) { :account_list }
   let(:resource) do
-    Reports::AppointmentResultsPeriod.new(account_list: account_list, start_date: 1.week.ago, end_date: DateTime.now)
+    Reports::AppointmentResultsPeriod.new(account_list: account_list,
+                                          start_date: 1.week.ago,
+                                          end_date: DateTime.current)
   end
 
   let(:correct_attributes) { {} }

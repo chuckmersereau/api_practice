@@ -286,7 +286,7 @@ describe Contact do
   describe '#update_late_at' do
     before do
       contact.late_at = 2.weeks.ago
-      contact.pledge_start_date = Time.now
+      contact.pledge_start_date = Time.now.utc
     end
 
     context 'set to nil when' do

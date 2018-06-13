@@ -6,8 +6,8 @@ RSpec.describe Api::V2::Reports::DonationMonthlyTotalsController, type: :control
 
   let(:resource) do
     Reports::DonationMonthlyTotals.new(account_list: account_list,
-                                       start_date: DateTime.new(2017, 1, 3),
-                                       end_date: DateTime.new(2017, 3, 3))
+                                       start_date: DateTime.new(2017, 1, 3).utc,
+                                       end_date: DateTime.new(2017, 3, 3).utc)
   end
 
   let(:parent_param) do

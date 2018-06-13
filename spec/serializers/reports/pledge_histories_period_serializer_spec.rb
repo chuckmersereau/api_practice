@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Reports::PledgeHistoriesPeriodSerializer do
   let(:account_list) { create(:account_list) }
   let(:object) do
-    Reports::PledgeHistoriesPeriod.new(account_list: account_list, start_date: 1.week.ago, end_date: DateTime.now)
+    Reports::PledgeHistoriesPeriod.new(account_list: account_list, start_date: 1.week.ago, end_date: DateTime.current)
   end
 
   subject { described_class.new(object) }

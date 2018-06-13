@@ -7,7 +7,7 @@ class TaskNotificationMailerPreview < ApplicationPreview
     end
     @task = account_list.tasks.create(
       subject: 'Call for Decision',
-      start_at: Time.now,
+      start_at: Time.current,
       activity_type: 'Call',
       location: '142 Emailer Road, Railstown',
       contacts: @contacts

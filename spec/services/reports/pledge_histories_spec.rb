@@ -20,7 +20,7 @@ RSpec.describe Reports::PledgeHistories, type: :model do
     context 'range of 2m' do
       before { subject.filter_params[:range] = '2m' }
       around(:example) do |example|
-        travel_to DateTime.new(2018, 4, 12, 12, 0, 0), &example
+        travel_to DateTime.new(2018, 4, 12, 12, 0, 0).getlocal, &example
       end
 
       it 'creates two month-long periods' do

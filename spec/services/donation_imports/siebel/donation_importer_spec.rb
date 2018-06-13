@@ -99,7 +99,7 @@ RSpec.describe DonationImports::Siebel::DonationImporter do
     before do
       expect(SiebelDonations::Donation).to receive(:find)
         .with(posted_date_start: 2.weeks.ago.strftime('%Y-%m-%d'),
-              posted_date_end: Time.now.strftime('%Y-%m-%d'),
+              posted_date_end: Time.now.getlocal.strftime('%Y-%m-%d'),
               designations: 'the_designation_number')
         .and_return(siebel_donations)
     end

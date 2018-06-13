@@ -11,7 +11,7 @@ describe Activity do
     it '#overdue only includes uncompleted tasks' do
       history_task =  create(:task, account_list: account_list, start_at: Date.yesterday, completed: true)
       overdue_task = create(:task, account_list: account_list, start_at: Date.yesterday)
-      today_task = create(:task, account_list: account_list, start_at: Time.now)
+      today_task = create(:task, account_list: account_list, start_at: Time.now.getlocal)
 
       overdue_tasks = account_list.tasks.overdue
 

@@ -9,7 +9,7 @@ RSpec.describe Api::V2::Reports::PledgeHistoriesController, type: :controller do
   let(:factory_type) { :account_list }
   let(:resource) do
     Reports::PledgeHistoriesPeriod.new(
-      account_list: account_list, start_date: 1.week.ago, end_date: DateTime.now
+      account_list: account_list, start_date: 1.week.ago, end_date: DateTime.current
     )
   end
 

@@ -7,7 +7,7 @@ class NotificationMailerPreview < ApplicationPreview
                             donation_date: Date.yesterday,
                             designation_account: contact.account_list.designation_accounts.first)
     notification = Notification.new(notification_type: type, contact: contact,
-                                    event_date: DateTime.now, donation: donation)
+                                    event_date: DateTime.current, donation: donation)
     NotificationMailer.notify(user, type => [notification])
   end
 end

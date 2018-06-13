@@ -10,7 +10,7 @@ RSpec.describe Person::Filter::UpdatedAt do
   let!(:person_one)   { create(:person, contacts: [contact_one], updated_at: 2.months.ago) }
   let!(:person_two)   { create(:person, contacts: [contact_one], updated_at: 5.days.ago) }
   let!(:person_three) { create(:person, contacts: [contact_two], updated_at: 2.days.ago) }
-  let!(:person_four)  { create(:person, contacts: [contact_two], updated_at: Time.now) }
+  let!(:person_four)  { create(:person, contacts: [contact_two], updated_at: Time.now.getlocal) }
 
   describe '#query' do
     let(:scope) { Person.all }

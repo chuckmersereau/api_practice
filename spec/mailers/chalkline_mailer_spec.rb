@@ -10,7 +10,7 @@ describe ChalklineMailer do
       expect(account_list).to receive(:user_emails_with_names).and_return(['john@d.com', 'jane@d.com'])
       expect(CsvExport).to receive(:mailing_addresses).with(account_list.contacts).and_return("a,b\n1,2\n")
 
-      time = Time.new(2013, 3, 15, 18, 35, 20)
+      time = Time.new(2013, 3, 15, 18, 35, 20).getlocal
       expect(Time).to receive(:now).at_least(:once).and_return(time)
       expect(time).to receive(:in_time_zone).with(ChalklineMailer::TIME_ZONE).and_return(time)
 

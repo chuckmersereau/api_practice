@@ -47,7 +47,7 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
     end
 
     def expect_admin_user_to_be_able_to_impersonate_with_id(user_key)
-      travel_to(Time.now)
+      travel_to(Time.now.getlocal)
       api_login(user)
       expect do
         full_correct_attributes[:data][:attributes][:user] = user_key

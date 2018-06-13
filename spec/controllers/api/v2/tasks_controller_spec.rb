@@ -5,7 +5,7 @@ RSpec.describe Api::V2::TasksController, type: :controller do
   let(:account_list)     { user.account_lists.order(:created_at).first }
   let(:factory_type)     { :task }
   let!(:resource)        { create(:task, account_list: account_list, start_at: 2.days.ago) }
-  let!(:second_resource) { create(:task, account_list: account_list, start_at: Time.now) }
+  let!(:second_resource) { create(:task, account_list: account_list, start_at: Time.now.getlocal) }
   let(:id)               { resource.id }
 
   let(:unpermitted_relationships) do
@@ -22,7 +22,7 @@ RSpec.describe Api::V2::TasksController, type: :controller do
   let(:correct_attributes) do
     {
       subject: 'test subject',
-      start_at: Time.now,
+      start_at: Time.now.getlocal,
       tag_list: 'tag1'
     }
   end
@@ -30,7 +30,7 @@ RSpec.describe Api::V2::TasksController, type: :controller do
   let(:unpermitted_attributes) do
     {
       subject: 'test subject',
-      start_at: Time.now
+      start_at: Time.now.getlocal
     }
   end
 

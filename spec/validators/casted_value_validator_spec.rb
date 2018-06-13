@@ -14,7 +14,7 @@ RSpec.describe CastedValueValidator, type: :validator do
       it "is nil when the attribute doesn't end with date endings" do
         result = CastedValueValidator.validate!(
           attribute: 'not_in_date_endings',
-          value: DateTime.new
+          value: DateTime.new.utc
         )
 
         expect(result).to be_nil
@@ -31,7 +31,7 @@ RSpec.describe CastedValueValidator, type: :validator do
 
       date_values = {
         date: Date.new,
-        datetime: DateTime.new,
+        datetime: DateTime.new.utc,
         date_range: Date.new(2017, 2, 10)..Date.new(2017, 3, 10)
       }
 
@@ -51,7 +51,7 @@ RSpec.describe CastedValueValidator, type: :validator do
       it "is nil when the attribute doesn't end with date endings" do
         result = CastedValueValidator.validate!(
           attribute: 'not_in_date_endings',
-          value: DateTime.new
+          value: DateTime.new.utc
         )
 
         expect(result).to be_nil

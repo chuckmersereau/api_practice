@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe GoogleContactsIntegrator do
+  let(:now) { Time.now.utc }
+
   before do
     stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
 
@@ -33,7 +35,6 @@ describe GoogleContactsIntegrator do
         .and_return(Contact.where(id: @contact.id))
       expect(@integrator).to receive(:sync_contact).with(@contact)
 
-      now = Time.now
       expect(Time).to receive(:now).at_least(:once).and_return(now)
 
       @integrator.sync_contacts
@@ -61,7 +62,6 @@ describe GoogleContactsIntegrator do
     end
 
     it 'returns queried contacts for subsequent sync' do
-      now = Time.now
       @integration.update_column(:contacts_last_synced, now)
       g_contact = double(id: 'id_1', given_name: 'John', family_name: 'Google')
       expect(@account.contacts_api_user).to receive(:contacts_updated_min)
@@ -144,13 +144,13 @@ describe GoogleContactsIntegrator do
       expect_contact_sync_query([])
       @contact.addresses.first.update_column(:updated_at, 2.hours.since)
       expect_contact_sync_query([@contact])
-      @contact.addresses.first.update_column(:updated_at, Time.now)
+      @contact.addresses.first.update_column(:updated_at, now)
       expect_contact_sync_query([])
 
       # People
       @person.update_column(:updated_at, 2.hours.since)
       expect_contact_sync_query([@contact])
-      @person.update_column(:updated_at, Time.now)
+      @person.update_column(:updated_at, now)
       expect_contact_sync_query([])
 
       # Email
@@ -159,7 +159,7 @@ describe GoogleContactsIntegrator do
       expect_contact_sync_query([])
       @person.email_addresses.first.update_column(:updated_at, 2.hours.since)
       expect_contact_sync_query([@contact])
-      @person.email_addresses.first.update_column(:updated_at, Time.now)
+      @person.email_addresses.first.update_column(:updated_at, now)
       expect_contact_sync_query([])
 
       # Phone
@@ -168,7 +168,7 @@ describe GoogleContactsIntegrator do
       expect(contacts_to_sync_query).to eq([])
       @person.phone_numbers.first.update_column(:updated_at, 2.hours.since)
       expect(contacts_to_sync_query).to eq([@contact])
-      @person.phone_numbers.first.update_column(:updated_at, Time.now)
+      @person.phone_numbers.first.update_column(:updated_at, now)
       expect(contacts_to_sync_query).to eq([])
 
       # Website
@@ -177,7 +177,7 @@ describe GoogleContactsIntegrator do
       expect(contacts_to_sync_query).to eq([])
       @person.websites.first.update_column(:updated_at, 2.hours.since)
       expect(contacts_to_sync_query).to eq([@contact])
-      @person.websites.first.update_column(:updated_at, Time.now)
+      @person.websites.first.update_column(:updated_at, now)
       expect(contacts_to_sync_query).to eq([])
     end
 
@@ -708,7 +708,6 @@ describe GoogleContactsIntegrator do
         .with(headers: { 'Authorization' => "Bearer #{@account.token}" })
         .to_return(body: contact_feed.to_json)
 
-      now = Time.now
       expect(Time).to receive(:now).at_least(:once).and_return(now)
       update_request_xml = <<-EOS
        <feed xmlns='http://www.w3.org/2005/Atom'

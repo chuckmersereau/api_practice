@@ -2,7 +2,11 @@ require 'rails_helper'
 
 describe Reports::AppointmentResultsPeriodSerializer do
   let(:account_list) { create(:account_list) }
-  let(:object) { Reports::AppointmentResultsPeriod.new(account_list: account_list, start_date: 1.week.ago, end_date: DateTime.now) }
+  let(:object) do
+    Reports::AppointmentResultsPeriod.new(account_list: account_list,
+                                          start_date: 1.week.ago,
+                                          end_date: DateTime.current)
+  end
 
   subject { Reports::AppointmentResultsPeriodSerializer.new(object).as_json }
 

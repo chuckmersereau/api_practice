@@ -711,7 +711,7 @@ describe DataServer do
       expect(data_server).to receive(:find_or_create_designation_account)
       expect(data_server).to receive(:add_or_update_donation)
       expect(data_server).to receive(:delete_removed_donations)
-      data_server.import_donations(profile, DateTime.new(1951, 1, 1), '2/2/2012')
+      data_server.import_donations(profile, DateTime.new(1951, 1, 1).utc, '2/2/2012')
     end
 
     it 'removes non-manual donations in the date range but no longer in import', versioning: true do
@@ -874,7 +874,7 @@ describe DataServer do
       end
 
       it 'returns the date for a time if given' do
-        expect(data_server.send(:parse_date, Time.now)).to eq Date.today
+        expect(data_server.send(:parse_date, Time.now.getlocal)).to eq Date.today
       end
     end
   end

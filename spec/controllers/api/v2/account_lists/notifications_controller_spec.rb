@@ -18,7 +18,7 @@ describe Api::V2::AccountLists::NotificationsController, type: :controller do
   let(:correct_attributes) do
     {
       cleared: true,
-      event_date: Time.now
+      event_date: Time.now.getlocal
     }
   end
 

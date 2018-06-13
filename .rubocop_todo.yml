@@ -296,11 +296,12 @@ Rails/Present:
 Rails/SkipsModelValidations:
   Enabled: false
 
-# Offense count: 105
+# Offense count: 49
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: strict, flexible
 Rails/TimeZone:
-  Enabled: false
+  Exclude:
+    - 'app/**/*'
 
 # Offense count: 6
 Style/ClassVars:

@@ -64,21 +64,21 @@ class AddAccountsToDonations
   end
 
   def log_action(donation, status)
-    logger.info("Start script at #{Time.now}") if status.zero?
+    logger.info("Start script at #{Time.zone.now}") if status.zero?
     logger.info("Don. ##{donation.id}: DonorAcc has more than 1 Contact.") if status == 1
     logger.info("Don. ##{donation.id}: AccountList has more than 1 OrgAcc.") if status == 2
     logger.info("Don. ##{donation.id}: DesignationAcc was not found for OrgAcc.") if status == 3
     logger.info("Don. ##{donation.id}: DesignationAcc was added to donation.") if status == 4
-    logger.info("End of script at #{Time.now}") if status == 5
+    logger.info("End of script at #{Time.zone.now}") if status == 5
   end
 
   def log_action_for_donor(donor_account, status)
-    logger.info("Start script at #{Time.now}") if status.zero?
+    logger.info("Start script at #{Time.zone.now}") if status.zero?
     logger.info("DA. ##{donor_account.id}: DonorAcc has more than 1 Contact.") if status == 1
     logger.info("DA. ##{donor_account.id}: AccountList has more than 1 OrgAcc.") if status == 2
     logger.info("DA. ##{donor_account.id}: DesignationAcc was not found for OrgAcc.") if status == 3
     logger.info("DA. ##{donor_account.id}: DesignationAcc was added to donations.") if status == 4
-    logger.info("End of script at #{Time.now}") if status == 5
+    logger.info("End of script at #{Time.zone.now}") if status == 5
   end
 
   def logger

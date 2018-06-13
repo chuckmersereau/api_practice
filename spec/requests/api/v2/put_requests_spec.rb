@@ -153,7 +153,7 @@ RSpec.describe 'Patch Requests', type: :request do
           id: task.id,
           type: 'tasks',
           attributes: {
-            updated_in_db_at: Time.parse('2016-01-26')
+            updated_in_db_at: Time.parse('2016-01-26').utc
           }
         }
       }

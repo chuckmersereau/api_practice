@@ -400,7 +400,7 @@ describe TntImport do
 
       # Survies the second import even if you rename the appeal
       # Also check that it updates created_at to match tnt
-      appeal.update(name: 'Test new name', created_at: Time.now)
+      appeal.update(name: 'Test new name', created_at: Time.zone.now)
       expect do
         tnt_import.import
       end.to_not change(Appeal, :count).from(1)

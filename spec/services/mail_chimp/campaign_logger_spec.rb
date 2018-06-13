@@ -169,7 +169,7 @@ RSpec.describe MailChimp::CampaignLogger do
       end
 
       it 'does not updates prayer_letter_last_sent if lower' do
-        mail_chimp_account.update(prayer_letter_last_sent: DateTime.now)
+        mail_chimp_account.update(prayer_letter_last_sent: DateTime.now.utc)
 
         expect do
           subject.log_sent_campaign('random_campaign_id', 'Random Subject')

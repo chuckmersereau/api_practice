@@ -54,6 +54,6 @@ end
 def build_donation(donor_account)
   Donation.create!(donor_account_id: donor_account.id,
                    designation_account_id: nil,
-                   donation_date: Time.now,
+                   donation_date: Time.now.utc,
                    amount: 15)
 end

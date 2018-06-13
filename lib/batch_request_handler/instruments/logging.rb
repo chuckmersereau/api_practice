@@ -15,7 +15,7 @@ module BatchRequestHandler
         @request_index += 1
         Rails.logger.info("Started #{rack_request.request_method} \"#{rack_request.path}\" as "\
                           "part of batch (#{@request_index}/#{@request_count}) for "\
-                          "#{rack_request.ip} at #{Time.now}")
+                          "#{rack_request.ip} at #{Time.now.getlocal}")
         yield env
       end
     end

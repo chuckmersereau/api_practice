@@ -93,7 +93,7 @@ RSpec.describe Contact::Filter::PledgeAmountIncreasedRange do
         expect(
           described_class.query(
             contacts,
-            { pledge_amount_increased_range: Range.new(3.months.ago.to_datetime, DateTime.now) },
+            { pledge_amount_increased_range: Range.new(3.months.ago.to_datetime, DateTime.now.getlocal) },
             nil
           )
         ).to eq([increasing_contact])

@@ -79,7 +79,7 @@ describe Appeal do
         status: :processed,
         amount: 200.00,
         appeal: subject,
-        created_at: Time.now.beginning_of_day
+        created_at: Time.now.getlocal.beginning_of_day
       )
     end
     let!(:received_not_processed_pledge) do
@@ -88,7 +88,7 @@ describe Appeal do
         status: :received_not_processed,
         amount: 300.00,
         appeal: subject,
-        created_at: Time.now.beginning_of_day
+        created_at: Time.now.getlocal.beginning_of_day
       )
     end
     let!(:not_received_not_processed_pledge) do
@@ -96,7 +96,7 @@ describe Appeal do
         :pledge,
         amount: 400.00,
         appeal: subject,
-        created_at: Time.now.beginning_of_day
+        created_at: Time.now.getlocal.beginning_of_day
       )
     end
 

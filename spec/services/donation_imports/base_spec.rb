@@ -15,8 +15,8 @@ RSpec.describe DonationImports::Base do
 
     it 'returns the date when given a datetime object' do
       expect(subject.parse_date(Date.new(2001, 11, 15))).to eq(Date.new(2001, 11, 15))
-      expect(subject.parse_date(Time.new(2001, 11, 15))).to eq(Date.new(2001, 11, 15))
-      expect(subject.parse_date(DateTime.new(2001, 11, 15))).to eq(Date.new(2001, 11, 15))
+      expect(subject.parse_date(Time.new(2001, 11, 15).utc)).to eq(Date.new(2001, 11, 15))
+      expect(subject.parse_date(DateTime.new(2001, 11, 15).utc)).to eq(Date.new(2001, 11, 15))
     end
 
     it 'rescues Argument errors when parsing' do

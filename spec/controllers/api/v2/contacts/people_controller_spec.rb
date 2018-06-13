@@ -10,7 +10,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   let(:id) { resource.id }
   let(:parent_param) { { contact_id: contact.id } }
   let(:correct_attributes) do
-    { first_name: 'Billy', email_address: { email: 'billy@internet.com' }, updated_at: Time.now + 1.day }
+    { first_name: 'Billy', email_address: { email: 'billy@internet.com' }, updated_at: 1.day.from_now }
   end
   let(:incorrect_attributes) { nil }
   let(:factory_type) { :person }

@@ -40,7 +40,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
           .with(validator.attributes)
           .and_return(user)
 
-        travel_to(Time.now)
+        travel_to(Time.now.getlocal)
       end
 
       after { travel_back }
@@ -65,7 +65,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
 
       it 'updates the user tracked fields' do
         user.update_columns(current_sign_in_at: 1.year.ago, last_sign_in_at: 2.years.ago, sign_in_count: 2)
-        expect { subject }.to change { user.current_sign_in_at }.to(Time.now)
+        expect { subject }.to change { user.current_sign_in_at }.to(Time.now.utc)
         expect(user.last_sign_in_at).to eq(1.year.ago)
         expect(user.sign_in_count).to eq(3)
       end
