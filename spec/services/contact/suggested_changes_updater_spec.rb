@@ -156,4 +156,36 @@ RSpec.describe Contact::SuggestedChangesUpdater, type: :model do
       expect { service.update_status_suggestions }.to change { contact.reload.suggested_changes }.from({})
     end
   end
+
+  describe 'the financial partner giving extra' do
+    before do
+      contact.update_columns(status: 'Partner - Financial',
+                             status_valid: true,
+                             pledge_frequency: nil,
+                             pledge_amount: nil,
+                             pledge_currency: nil)
+      create_donations_to_match_frequency(1.0)
+    end
+
+    it 'should NOT be suggested for "Partner - Special"' do
+      service.update_status_suggestions
+      expect(contact.suggested_changes.keys.include?(:status)).to be false
+    end
+  end
+
+  describe 'the financial partner misses one month' do
+    before do
+      contact.update_columns(status: 'Partner - Financial',
+                             status_valid: true,
+                             pledge_frequency: nil,
+                             pledge_amount: nil,
+                             pledge_currency: nil)
+      create_donations_with_missing_month(1.0)
+    end
+
+    it 'should NOT be suggested for "Partner - Special"' do
+      service.update_status_suggestions
+      expect(contact.suggested_changes.keys.include?(:status)).to be false
+    end
+  end
 end

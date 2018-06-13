@@ -6,10 +6,15 @@ class Contact::StatusSuggester
   # This number should not be lower than 4.
   NUMBER_OF_DONATIONS_TO_SAMPLE = 4
 
-  attr_reader :contact
+  attr_reader :contact, :pledge_frequencies, :donation_scope, :sample_donations,
+              :samples_most_frequent_amount
 
   def initialize(contact:)
     @contact = contact
+    @pledge_frequencies = Contact.pledge_frequencies.keys
+    @donation_scope = contact.donations.order(donation_date: :desc)
+    @sample_donations = donation_scope.limit(NUMBER_OF_DONATIONS_TO_SAMPLE)
+    @samples_most_frequent_amount = find_most_frequent_amount_in_sample_donations
   end
 
   def suggested_pledge_frequency
@@ -19,7 +24,7 @@ class Contact::StatusSuggester
 
   def suggested_pledge_amount
     return @suggested_pledge_amount if defined?(@suggested_pledge_amount)
-    @suggested_pledge_amount = suggested_status == 'Partner - Financial' ? find_most_frequent_amount_in_sample_donations : nil
+    @suggested_pledge_amount = suggested_status == 'Partner - Financial' ? samples_most_frequent_amount : nil
   end
 
   def suggested_pledge_currency
@@ -29,7 +34,7 @@ class Contact::StatusSuggester
 
   # We currently only suggest two possible statuses: Partner - Financial, or Partner - Special
   def suggested_status
-    if find_suggested_pledge_frequency.present? && !contact_has_stopped_giving?
+    if (find_suggested_pledge_frequency.present? && !contact_has_stopped_giving?) || extra_donation_given?
       'Partner - Financial'
     elsif sample_donations.present?
       'Partner - Special'
@@ -45,36 +50,61 @@ class Contact::StatusSuggester
   private
 
   def find_suggested_pledge_frequency
-    return @found_suggested_pledge_frequency if defined?(@found_suggested_pledge_frequency)
-    return @found_suggested_pledge_frequency = nil if donation_scope.blank?
-    @found_suggested_pledge_frequency = find_pledge_frequency_using_primary_method || find_pledge_frequency_using_secondary_method
+    return nil if donation_scope.blank?
+    @found_suggested_pledge_frequency ||= find_pledge_frequency_using_primary_method || find_pledge_frequency_using_secondary_method
   end
 
+  # This method counts the number of times the Contact donated at the given frequency and amount.
+  # This approach is intended to catch inconsistent donations, as it doesn't matter when exactly the donation was made,
+  # as long as it was sometime within the expected period.
   def find_pledge_frequency_using_primary_method
+    find_donations_given_within_a_period
+  end
+
+  def extra_donation_given?
+    return nil if donation_scope.blank?
+    find_donations_given_within_a_period(NUMBER_OF_DONATIONS_TO_SAMPLE + 1)
+  end
+
+  def find_donations_given_within_a_period(sample_size = NUMBER_OF_DONATIONS_TO_SAMPLE)
     pledge_frequencies.sort.detect do |pledge_frequency|
-      contact_gave_the_expected_number_of_donations_of_amount_during_frequency?(amount: find_most_frequent_amount_in_sample_donations,
-                                                                                pledge_frequency: pledge_frequency)
+      look_back_date = find_look_back_date_for_pledge_frequency(pledge_frequency)
+      # Count the number of donations given within the look back period (we also need to consider the current period, which is incomplete)
+      donation_scope.where(amount: samples_most_frequent_amount)
+                    .where('donation_date >= ?', look_back_date)
+                    .count == sample_size
     end
   end
 
+  # This method calculates the number of days in-between the donations,
+  # and then finds the most frequently occurring number.
+  # This method is useful if there are not very many donations available to analyze (maybe the donor is new).
   def find_pledge_frequency_using_secondary_method
-    look_for_a_common_frequency_between_donations_with_the_amount(amount: find_most_frequent_amount_in_sample_donations)
+    donations = sample_donations.where(amount: samples_most_frequent_amount)
+
+    # Convert the number days in-between donations into pledge frequencies
+    frequencies = number_of_days_in_between_donations(donations).collect do |d|
+      convert_number_of_days_to_pledge_frequency(d)
+    end
+
+    # Find the most frequently occuring frequency, and return it
+    frequencies.uniq.max_by do |frequency_to_look_for|
+      frequencies.count { |frequency| frequency == frequency_to_look_for }
+    end
   end
 
-  def convert_pledge_frequency_to_days(pledge_frequency)
-    (pledge_frequency * 30).round
-  end
+  # Based on the given pledge_frequency, find the earliest date after which the donor
+  # would hopefully have given the number of donations equal to NUMBER_OF_DONATIONS_TO_SAMPLE.
+  def find_look_back_date_for_pledge_frequency(pledge_frequency)
+    frequency_in_days = convert_pledge_frequency_to_days(pledge_frequency)
 
-  def pledge_frequencies
-    Contact.pledge_frequencies.keys
-  end
+    # The range of time we will look within is based on the most recent donation,
+    # this let's us guess the frequency even if they have stopped giving.
+    latest_donation_date = donation_scope.first.donation_date
+    look_back_date = latest_donation_date - (frequency_in_days * NUMBER_OF_DONATIONS_TO_SAMPLE).round.days
 
-  def donation_scope
-    contact.donations.order(donation_date: :desc)
-  end
-
-  def sample_donations
-    donation_scope.limit(NUMBER_OF_DONATIONS_TO_SAMPLE)
+    # Remove half of one period, otherwise periods will start to overlap too much and we'll get worse results.
+    look_back_date + (frequency_in_days / 2).round.days
   end
 
   # Donors that have pledged regular support usually give the same amount each time,
@@ -82,7 +112,7 @@ class Contact::StatusSuggester
   # We want to exclude the one-off gifts. So, we will find the most frequently given amount,
   # and use that as our guess for the suggested_pledge_amount.
   def find_most_frequent_amount_in_sample_donations
-    amounts = sample_donations.pluck(:tendered_amount)
+    amounts = sample_donations.pluck(:amount)
     amounts.max_by do |amount_to_look_for|
       amounts.count { |amount| amount == amount_to_look_for }
     end
@@ -90,46 +120,14 @@ class Contact::StatusSuggester
 
   # Find the currency that matches our suggested_pledge_amount.
   def find_most_frequent_currency_in_sample_donations
-    currencies = sample_donations.where(tendered_amount: suggested_pledge_amount).pluck(:tendered_currency)
+    currencies = sample_donations.where(amount: suggested_pledge_amount).pluck(:currency)
     currencies.max_by do |currency_to_look_for|
       currencies.count { |currency| currency == currency_to_look_for }
     end
   end
 
-  # This method counts the number of times the Contact donated at the given frequency and amount.
-  # This approach is intended to catch inconsistent donations, as it doesn't matter when exactly the donation was made,
-  # as long as it was sometime within the expected period.
-  def contact_gave_the_expected_number_of_donations_of_amount_during_frequency?(pledge_frequency:, amount:)
-    look_back_date = find_look_back_date_for_pledge_frequency(pledge_frequency)
-    # Count the number of donations given within the look back period (we also need to consider the current period, which is incomplete)
-    donation_scope.where(tendered_amount: amount).where('donation_date >= ?', look_back_date).count == NUMBER_OF_DONATIONS_TO_SAMPLE
-  end
-
-  # Based on the given pledge_frequency, find the earliest date after which the donor
-  # would hopefully have given the number of donations equal to NUMBER_OF_DONATIONS_TO_SAMPLE.
-  def find_look_back_date_for_pledge_frequency(pledge_frequency)
-    frequency_in_days = convert_pledge_frequency_to_days(pledge_frequency)
-    # The range of time we will look within is based on the most recent donation,
-    # this let's us guess the frequency even if they have stopped giving.
-    latest_donation_date = donation_scope.first.donation_date
-    look_back_date = latest_donation_date - (frequency_in_days * NUMBER_OF_DONATIONS_TO_SAMPLE).round.days
-    # Remove half of one period, otherwise periods will start to overlap too much and we'll get worse results.
-    look_back_date + (frequency_in_days / 2).round.days
-  end
-
-  # This method calculates the number of days in-between the donations,
-  # and then finds the most frequently occurring number.
-  # This method is useful if there are not very many donations available to analyze (maybe the donor is new).
-  def look_for_a_common_frequency_between_donations_with_the_amount(amount:)
-    donations = sample_donations.where(tendered_amount: amount)
-
-    # Convert the number days in-between donations into pledge frequencies
-    pledge_frequencies = number_of_days_in_between_donations(donations).collect { |d| convert_number_of_days_to_pledge_frequency(d) }
-
-    # Find the most frequently occuring frequency, and return it
-    pledge_frequencies.uniq.max_by do |frequency_to_look_for|
-      pledge_frequencies.count { |frequency| frequency == frequency_to_look_for }
-    end
+  def convert_pledge_frequency_to_days(frequency)
+    (frequency * 30).round
   end
 
   def number_of_days_in_between_donations(donations)
