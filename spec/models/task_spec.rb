@@ -64,6 +64,26 @@ describe Task do
     end
   end
 
+  describe '#deletable' do
+    let(:account_list) { create(:account_list) }
+    let(:person)       { create(:person) }
+    let(:task)         { create(:task, account_list: account_list) }
+    let(:delete_task)  { task.destroy }
+
+    it 'should save a reference to the task that was deleted' do
+      expect { delete_task }.to change { DeletedRecord.count }.by(1)
+    end
+
+    it 'should record the deleted objects details' do
+      delete_task
+      record = DeletedRecord.find_by(deletable_type: 'Activity', deletable_id: task.id)
+      expect(record.deletable_type).to eq('Activity')
+      expect(record.deletable_id).to eq(task.id)
+      expect(record.account_list_id).to eq(task.account_list_id)
+      expect(record.deleted_by_id).to eq(task.account_list.creator_id)
+    end
+  end
+
   context '#calculate_location' do
     let(:contact) { create(:contact, account_list: account_list) }
     let(:person) { create(:person, first_name: 'John', last_name: 'Smith') }

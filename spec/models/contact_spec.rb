@@ -25,6 +25,23 @@ describe Contact do
     create(:mail_chimp_account, account_list: account_list)
   end
 
+  describe '#deletable' do
+    let(:delete_contact) { contact.destroy }
+
+    it 'should save a reference to the contact that was deleted' do
+      expect { delete_contact }.to change { DeletedRecord.count }.by(1)
+    end
+
+    it 'should record the deleted objects details' do
+      delete_contact
+      record = DeletedRecord.find_by(deletable_type: 'Contact', deletable_id: contact.id)
+      expect(record.deletable_type).to eq('Contact')
+      expect(record.deletable_id).to eq(contact.id)
+      expect(record.account_list_id).to eq(contact.account_list_id)
+      expect(record.deleted_by_id).to eq(contact.account_list.creator_id)
+    end
+  end
+
   describe 'scopes' do
     let!(:contact_one) { create(:contact, account_list: account_list, church_name: 'Cross of Christ') }
     let!(:contact_two) { create(:contact, account_list: account_list, church_name: 'Calvary Chapel') }

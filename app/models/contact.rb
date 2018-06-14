@@ -2,6 +2,7 @@ class Contact < ApplicationRecord
   include AddressMethods
   acts_as_taggable
   extend ApplicationHelper
+  include Deletable
 
   PAPER_TRAIL_IGNORED_FIELDS = [
     :account_list_id, :updated_at, :notes_saved_at, :status_confirmed_at,

@@ -2,6 +2,7 @@ require 'async'
 
 class Task < Activity
   include Async
+  include Deletable
   include Sidekiq::Worker
   sidekiq_options queue: :api_task, backtrace: true, unique: :until_executed
 

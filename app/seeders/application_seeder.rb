@@ -187,5 +187,6 @@ class ApplicationSeeder
     create :background_batch
 
     create :export_log
+    create :deleted_record
   end
 end

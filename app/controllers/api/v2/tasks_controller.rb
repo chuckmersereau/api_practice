@@ -37,6 +37,7 @@ class Api::V2::TasksController < Api::V2Controller
   private
 
   def destroy_task
+    @task.deleted_by = current_user
     @task.destroy
     head :no_content
   end

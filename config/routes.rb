@@ -197,6 +197,8 @@ Rails.application.routes.draw do
           resources :appointment_results, only: :index
         end
 
+        resources :deleted_records, only: [:index]
+
         namespace :tools do
           get :analytics, to: 'analytics#show'
         end

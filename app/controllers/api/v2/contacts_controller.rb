@@ -35,6 +35,7 @@ class Api::V2::ContactsController < Api::V2Controller
   private
 
   def destroy_contact
+    @contact.deleted_by = current_user
     @contact.destroy
     head :no_content
   end

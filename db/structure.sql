@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.3
--- Dumped by pg_dump version 10.3
+-- Dumped from database version 10.4 (Ubuntu 10.4-2.pgdg18.04+1)
+-- Dumped by pg_dump version 10.4 (Ubuntu 10.4-2.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -537,6 +537,22 @@ CREATE TABLE public.currency_rates (
     code character varying NOT NULL,
     rate numeric(20,10) NOT NULL,
     source character varying NOT NULL
+);
+
+
+--
+-- Name: deleted_records; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deleted_records (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    account_list_id uuid NOT NULL,
+    deleted_by_id uuid,
+    deleted_at timestamp without time zone NOT NULL,
+    deletable_id uuid,
+    deletable_type character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1840,6 +1856,14 @@ ALTER TABLE ONLY public.currency_rates
 
 
 --
+-- Name: deleted_records deleted_records_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deleted_records
+    ADD CONSTRAINT deleted_records_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: designation_accounts designation_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2843,6 +2867,27 @@ CREATE UNIQUE INDEX index_currency_rates_on_code_and_exchanged_on ON public.curr
 --
 
 CREATE INDEX index_currency_rates_on_exchanged_on ON public.currency_rates USING btree (exchanged_on);
+
+
+--
+-- Name: index_deleted_records_on_account_list_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_deleted_records_on_account_list_id ON public.deleted_records USING btree (account_list_id);
+
+
+--
+-- Name: index_deleted_records_on_deletable_id_and_deletable_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_deleted_records_on_deletable_id_and_deletable_type ON public.deleted_records USING btree (deletable_id, deletable_type);
+
+
+--
+-- Name: index_deleted_records_on_deleted_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_deleted_records_on_deleted_at ON public.deleted_records USING btree (deleted_at);
 
 
 --
@@ -5062,4 +5107,8 @@ INSERT INTO schema_migrations (version) VALUES ('20180504141434');
 INSERT INTO schema_migrations (version) VALUES ('20180509181110');
 
 INSERT INTO schema_migrations (version) VALUES ('20180522114733');
+
+INSERT INTO schema_migrations (version) VALUES ('20180530134251');
+
+INSERT INTO schema_migrations (version) VALUES ('20180608133404');
 
