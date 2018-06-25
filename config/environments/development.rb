@@ -72,4 +72,11 @@ Rails.application.configure do
 
   Rails.application.routes.default_url_options[:host] = config.action_mailer.default_url_options[:host]
   Rails.application.routes.default_url_options[:protocol] = config.action_mailer.default_url_options[:protocol]
+
+  config.middleware.insert_before 0, 'Rack::Cors' do
+    allow do
+      origins '*'
+      resource '*', headers: :any, methods: [:get, :post, :delete, :put, :options]
+    end
+  end
 end

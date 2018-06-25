@@ -88,6 +88,7 @@ group :development do
   gem 'letter_opener', '~> 1.4.1'
   gem 'railroady', '~> 1.5.2'
   gem 'rails-footnotes', '~> 4.1.8'
+  gem 'rack-cors', require: 'rack/cors'
 end
 
 group :development, :test do
