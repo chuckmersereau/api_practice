@@ -79,7 +79,7 @@ describe Task do
       record = DeletedRecord.find_by(deletable_type: 'Activity', deletable_id: task.id)
       expect(record.deletable_type).to eq('Activity')
       expect(record.deletable_id).to eq(task.id)
-      expect(record.account_list_id).to eq(task.account_list_id)
+      expect(record.deleted_from_id).to eq(task.account_list_id)
       expect(record.deleted_by_id).to eq(task.account_list.creator_id)
     end
   end

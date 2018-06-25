@@ -275,6 +275,10 @@ class Contact < ApplicationRecord
     name
   end
 
+  def deleted_from
+    account_list
+  end
+
   def add_person(person, donor_account = nil)
     # Nothing to do if this person is already on the contact
     new_person = people.find_by(master_person_id: person.master_person_id)

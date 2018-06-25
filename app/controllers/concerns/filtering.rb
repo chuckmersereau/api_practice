@@ -1,7 +1,8 @@
 module Filtering
   BASE_DATE_REGEX = /\d{4}\-\d{2}\-\d{2}/
   DATE_REGEX = /(#{BASE_DATE_REGEX})/
-  DATE_TIME_REGEX = /(#{BASE_DATE_REGEX}T\d{2}\:\d{2}\:\d{2}(?:Z|\+00:00))/
+  DATE_TIME_REGEX = /(#{BASE_DATE_REGEX}T\d{2}\:\d{2}\:\d{2}(?:Z|\+\d{2}:\d{2}))/
+
   DATE_RANGE_REGEX = /(#{BASE_DATE_REGEX})(\.\.\.?)(#{BASE_DATE_REGEX})/
   DATE_TIME_RANGE_REGEX = /#{DATE_TIME_REGEX}(\.\.\.?)#{DATE_TIME_REGEX}/
   DEFAULT_PERMITTED_FILTERS = %i(updated_at).freeze

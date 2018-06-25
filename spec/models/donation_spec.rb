@@ -38,6 +38,22 @@ describe Donation do
     end
   end
 
+  describe '#deletable' do
+    let(:delete_donation) { donation.destroy }
+
+    it 'should save a reference to the donation that was deleted' do
+      expect { delete_donation }.to change { DeletedRecord.count }.by(1)
+    end
+
+    it 'should record the deleted objects details' do
+      delete_donation
+      record = DeletedRecord.find_by(deletable_type: 'Donation', deletable_id: donation.id)
+      expect(record.deletable_type).to eq('Donation')
+      expect(record.deletable_id).to eq(donation.id)
+      expect(record.deleted_from_id).to eq(donation.designation_account_id)
+    end
+  end
+
   describe '#update_related_pledge' do
     let(:pledge)   { create(:pledge, amount: 100.00) }
     let(:donation) { build(:donation, appeal: create(:appeal)) }

@@ -1,4 +1,5 @@
 class Donation < ApplicationRecord
+  include Deletable
   audited on: [:destroy]
 
   belongs_to :donor_account
@@ -60,6 +61,10 @@ class Donation < ApplicationRecord
   after_destroy :reset_totals
 
   before_validation :set_amount_from_tendered_amount
+
+  def deleted_from
+    designation_account
+  end
 
   def localized_amount
     amount.to_f.localize.to_currency.to_s(currency: currency)

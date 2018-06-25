@@ -9,11 +9,11 @@ resource 'DeletedRecords' do
   # first user
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.order(:created_at).first }
-  let!(:resource) { create(:deleted_record, account_list: account_list, deleted_by: user, deleted_at: Date.current - 1.day) }
-  let!(:second_resource) { create(:deleted_record, account_list: account_list, deleted_by: user, deleted_at: Date.current - 1.day) }
-  let!(:third_resource) { create(:deleted_record, account_list: account_list, deleted_by: user, deleted_at: Date.current - 2.years) }
+  let!(:resource) { create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 1.day) }
+  let!(:second_resource) { create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 1.day) }
+  let!(:third_resource) { create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 2.years) }
   let!(:second_deleted_task_record) do
-    create(:deleted_task_record, account_list: account_list, deleted_by: user, deleted_at: Date.current - 2.years)
+    create(:deleted_task_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 2.years)
   end
 
   let(:resource_attributes) do
@@ -36,7 +36,7 @@ resource 'DeletedRecords' do
 
       example 'Deleted Records [LIST]', document: documentation_scope do
         explanation 'List Deleted Records'
-        do_request filter: { since_date: (Date.today - 1.year), types: 'Contact' }
+        do_request filter: { since_date: (Date.today - 1.year), types: 'Contact, Activity' }
 
         expect(response_status).to eq(200)
       end

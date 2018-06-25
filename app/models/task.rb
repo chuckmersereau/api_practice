@@ -238,6 +238,10 @@ class Task < Activity
   #   end
   # end
 
+  def deleted_from
+    account_list
+  end
+
   def attempted?
     result == 'Attempted'
   end

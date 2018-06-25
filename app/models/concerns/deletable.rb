@@ -19,7 +19,8 @@ module Deletable
     deleted_records.create!(
       deleted_by: deleted_by,
       deleted_at: ::Time.current,
-      account_list: account_list
+      deleted_from_id: deleted_from.id,
+      deleted_from_type: deleted_from.class.to_s
     )
   end
 end

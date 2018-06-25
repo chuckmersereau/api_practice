@@ -19,7 +19,7 @@ class Api::V2::DeletedRecordsController < Api::V2Controller
   # we'll do an early detection and put today's date as the end date, if needed.
   def format_since_date
     return unless params[:filter] && params[:filter][:since_date]
-    params[:filter][:since_date] += "..#{1.day.from_now}" unless params[:filter][:since_date].include?('..')
+    params[:filter][:since_date] += "..#{1.day.from_now.iso8601}" unless params[:filter][:since_date].include?('..')
   end
 
   def filter_deleted_records
@@ -27,7 +27,15 @@ class Api::V2::DeletedRecordsController < Api::V2Controller
   end
 
   def deleted_records_scope
-    DeletedRecord.where(account_list_id: account_lists.map(&:id))
+    DeletedRecord.where(deleted_from_id: deleted_from_ids)
+  end
+
+  def deleted_from_ids
+    account_lists.map(&:id) + designation_account_ids
+  end
+
+  def designation_account_ids
+    @designation_account_ids ||= AccountListEntry.where(account_list_id: account_lists.map(&:id)).distinct.pluck(:designation_account_id)
   end
 
   def authorize_index

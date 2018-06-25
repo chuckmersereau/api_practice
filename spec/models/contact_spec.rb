@@ -37,7 +37,7 @@ describe Contact do
       record = DeletedRecord.find_by(deletable_type: 'Contact', deletable_id: contact.id)
       expect(record.deletable_type).to eq('Contact')
       expect(record.deletable_id).to eq(contact.id)
-      expect(record.account_list_id).to eq(contact.account_list_id)
+      expect(record.deleted_from_id).to eq(contact.account_list_id)
       expect(record.deleted_by_id).to eq(contact.account_list.creator_id)
     end
   end

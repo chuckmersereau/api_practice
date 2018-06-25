@@ -546,13 +546,14 @@ CREATE TABLE public.currency_rates (
 
 CREATE TABLE public.deleted_records (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    account_list_id uuid NOT NULL,
     deleted_by_id uuid,
     deleted_at timestamp without time zone NOT NULL,
     deletable_id uuid,
     deletable_type character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    deleted_from_id uuid,
+    deleted_from_type character varying
 );
 
 
@@ -2317,6 +2318,13 @@ CREATE INDEX all_fields ON public.master_addresses USING btree (street, city, st
 
 
 --
+-- Name: deleted_from_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX deleted_from_index ON public.deleted_records USING btree (deleted_from_id, deleted_from_type);
+
+
+--
 -- Name: designation_p_to_a; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2867,13 +2875,6 @@ CREATE UNIQUE INDEX index_currency_rates_on_code_and_exchanged_on ON public.curr
 --
 
 CREATE INDEX index_currency_rates_on_exchanged_on ON public.currency_rates USING btree (exchanged_on);
-
-
---
--- Name: index_deleted_records_on_account_list_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_deleted_records_on_account_list_id ON public.deleted_records USING btree (account_list_id);
 
 
 --
@@ -5111,4 +5112,10 @@ INSERT INTO schema_migrations (version) VALUES ('20180522114733');
 INSERT INTO schema_migrations (version) VALUES ('20180530134251');
 
 INSERT INTO schema_migrations (version) VALUES ('20180608133404');
+
+INSERT INTO schema_migrations (version) VALUES ('20180612162302');
+
+INSERT INTO schema_migrations (version) VALUES ('20180615175942');
+
+INSERT INTO schema_migrations (version) VALUES ('20180618144452');
 
