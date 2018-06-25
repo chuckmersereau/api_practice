@@ -3,3 +3,5 @@ test: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV['REDIS_PORT_6379_TCP_
 staging: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV['REDIS_PORT_6379_TCP_PORT'] || 6379 %>
 qa: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV['REDIS_PORT_6379_TCP_PORT'] || 6379 %>
 production: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV['REDIS_PORT_6379_TCP_PORT'] || 6379 %>
+session: "<%= ENV['REDIS_PORT_6379_TCP_ADDR_SESSION'] || ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:\
+          <%= ENV['REDIS_PORT_6379_TCP_PORT_SESSION'] || 6379 %>"

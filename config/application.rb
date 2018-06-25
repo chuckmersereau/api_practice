@@ -62,5 +62,15 @@ module Mpdx
     config.after_initialize do |app|
       app.routes.append{ match '*a', :to => 'api/error#not_found', via: [:get, :post] } unless config.consider_all_requests_local
     end
+
+    resid_envs = YAML.load(ERB.new(File.read(Rails.root.join('config', 'redis.yml'))).result)
+    redis_host, redis_port = resid_envs['session'].split(':')
+    config.cache_store = :redis_store, {
+      host: redis_host,
+      port: redis_port,
+      db: 1,
+      namespace: "MPDX:#{Rails.env}:cache",
+      expires_in: 1.day
+    }
   end
 end
