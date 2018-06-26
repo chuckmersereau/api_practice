@@ -1,6 +1,15 @@
 def anonymize_contacts_by_email(emails)
-  return if emails.blank?
-  Contact.joins(people: :email_addresses).where(email_addresses: { email: emails }).find_each do |contact|
+  if emails.blank?
+    p 'No email addresses provided'
+  end
+  contacts = Contact.joins(people: :email_addresses).where(email_addresses: { email: emails })
+  contacts.find_each do |contact|
+    p "CONTACT: #{contact.id} #{contact.name}"
+  end
+  p "#{contacts.count} contact(s) found. Continue (Y/N)?"
+  confirm = $stdin.gets.chomp.upcase
+  return unless confirm == 'Y'
+  contacts.find_each do |contact|
     new_contact_name = "DataPrivacy, Deleted #{Date.today.strftime('%Y/%m/%d')}"
     contact.taggings.destroy_all
     contact.tasks.destroy_all
@@ -29,5 +38,7 @@ def anonymize_contacts_by_email(emails)
       likely_to_give: nil,
       locale: nil
     )
+    Rollbar.scope(contact: { id: contact.id }).info("PII Removal Completed for #{contact.id}")
+    p "COMPLETED PII Removal for #{contact.id}"
   end
 end
