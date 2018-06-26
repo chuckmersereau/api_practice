@@ -1,7 +1,5 @@
 def anonymize_contacts_by_email(emails)
-  if emails.blank?
-    p 'No email addresses provided'
-  end
+  p 'WARNING No email addresses provided' if emails.blank?
   contacts = Contact.joins(people: :email_addresses).where(email_addresses: { email: emails })
   contacts.find_each do |contact|
     p "CONTACT: #{contact.id} #{contact.name}"
