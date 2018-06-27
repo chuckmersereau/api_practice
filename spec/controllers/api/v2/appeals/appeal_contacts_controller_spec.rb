@@ -28,6 +28,15 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
     }
   end
 
+  let(:full_correct_attributes_with_force) do
+    {
+      data: {
+        type: resource_type,
+        attributes: correct_attributes.merge(overwrite: true, force_list_deletion: true)
+      }.merge(relationships_params)
+    }.merge(full_params)
+  end
+
   include_examples 'index_examples'
 
   describe 'filtering' do
@@ -117,10 +126,19 @@ describe Api::V2::Appeals::AppealContactsController, type: :controller do
                appeal: appeal)
       end
 
-      it 'destroys appeal_excluded_appeal_contact' do
+      it 'destroys appeal_excluded_appeal_contact not allowed' do
         api_login(user)
         expect do
           post :create, full_correct_attributes
+          appeal.appeal_contacts.reload
+        end.not_to change { appeal.excluded_appeal_contacts.count }
+        expect(response.status).to eq(400)
+      end
+
+      it 'will force destroy the appeal_excluded_appeal_contact' do
+        api_login(user)
+        expect do
+          post :create, full_correct_attributes_with_force
           appeal.appeal_contacts.reload
         end.to change { appeal.excluded_appeal_contacts.count }.by(-1)
         expect(response.status).to eq(200)

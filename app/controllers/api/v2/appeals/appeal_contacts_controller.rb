@@ -47,7 +47,7 @@ class Api::V2::Appeals::AppealContactsController < Api::V2Controller
     build_appeal_contact
     authorize_appeal_contact
 
-    if save_appeal_contact && @appeal_contact.destroy_related_excluded_appeal_contact
+    if save_appeal_contact
       render_appeal_contact
     else
       render_with_resource_errors(@appeal_contact)
