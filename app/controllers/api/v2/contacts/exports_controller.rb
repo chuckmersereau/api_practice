@@ -7,6 +7,7 @@ class Api::V2::Contacts::ExportsController < Api::V2Controller
 
   include ActionController::MimeResponds
   include ActionController::Helpers
+  include Filtering::Contacts
   include ContactsHelper
   helper ContactsHelper
 

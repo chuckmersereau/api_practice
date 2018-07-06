@@ -57,6 +57,24 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
       get :show, id: resource.id
       expect(resource.reload.active).to eq(false)
     end
+
+    it 'uses contact filtering instead of generic filtering' do
+      resource.update(
+        params: {
+          filter: {
+            donation_amount_range: {
+              min: '500'
+            },
+            account_list_id: account_list_id,
+            any_tags: false
+          }
+        }.to_json
+      )
+
+      api_login(user)
+      get :show, id: resource.id, format: :csv
+      expect(response.status).to eq(200)
+    end
   end
 
   render_views
