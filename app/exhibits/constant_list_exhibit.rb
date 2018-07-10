@@ -46,10 +46,10 @@ class ConstantListExhibit < DisplayCase::Exhibit
 
   def bulk_update_options
     {}.tap do |options|
-      options['likely_to_give'] = assignable_likely_to_give.dup
-      options['status'] = assignable_statuses.dup
-      options['send_newsletter'] = assignable_send_newsletter.dup
-      options['pledge_received'] = %w(Yes No)
+      options['likely_to_give'] = translate_array_to_strings(assignable_likely_to_give)
+      options['status'] = translate_array_to_strings(assignable_statuses)
+      options['send_newsletter'] = translate_array_to_strings(assignable_send_newsletter)
+      options['pledge_received'] = [_('Yes'), _('No')]
       options['pledge_currency'] = pledge_currencies_code_symbol_map
     end
   end
@@ -130,6 +130,10 @@ class ConstantListExhibit < DisplayCase::Exhibit
         value: _(value)
       }
     end
+  end
+
+  def translate_array_to_strings(array)
+    array.dup.map { |string| _(string) }
   end
 
   def twitter_cldr_currency_information_hash(code)

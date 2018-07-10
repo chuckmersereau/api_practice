@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-05-07 13:41+0000\n"
-"PO-Revision-Date: 2018-05-07 13:41+0000\n"
+"POT-Creation-Date: 2018-07-05 20:16+0000\n"
+"PO-Revision-Date: 2018-07-05 20:16+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: id\n"
@@ -17,14 +17,59 @@ msgstr " ditunjuk untuk \"%{appeal_name}\" banding."
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "%{name} (donor #%{account_number})"
 
+msgid "%(This task was given the type \"#{unsupported_type_name}\" in TntConnect.)"
+msgstr "%(Tugas ini diberi tipe \"#{unsupported_type_name}\" di TntConnect.)"
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} memberikan %{amount} Hadiah Spesial pada %{date} untuk %{designation}. Kirim ucapan Terima Kasih."
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} memberikan %{amount} Hadiah Spesial pada %{date}. Kirim ucapan Terima Kasih."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date} to %{designation}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name} memberikan %{amount} hadiah pada %{date} untuk %{designation}, yang berbeda dari akadnya. Cari tahu hadiahnya."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name} memberikan %{amount} hadiah pada %{date} yang berbeda dari akadnya. Cari tahu hadiahnya."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} memberikan %{amount} hadiah yang lebih besar dari biasanya pada %{date} untuk %{designation}. Kirim ucapan Terima Kasih."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} memberikan %{amount} hadiah yang lebih besar dari biasanya pada %{date}. Kirim ucapan Terima Kasih."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} memberikan %{frequency} hadiah sejumlah %{amount}  pada %{date} untuk %{designation}. Kirim ucapan Terima Kasih."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} memberikan %{frequency} hadiah sejumlah %{amount} pada %{date}. Kirim ucapan Terima Kasih."
+
 msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 msgstr "%(Tugas ini diberikan tipe \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
 msgstr "%{contact_name} memiliki hadiah tak terduga dalam 1 bulan. Hubungi untuk mengetahui lebih lanjut."
 
+msgid "%{contact_name} have not had a thank you note logged in the past year.  Send them a Thank You note."
+msgstr "%{contact_name} belum memiliki catatan terima kasih yang tercatat pada tahun lalu. Kirim catatan Terima Kasih."
+
+msgid "%{contact_name} have not had an attempted call logged in the past year. Call them."
+msgstr "%{contact_name} belum memiliki panggilan yang tercatat pada tahun lalu. Telepon mereka."
+
+msgid "%{contact_name} is on the email newsletter but lacks a valid email address."
+msgstr "%{contact_name} ada di buletin email namun tidak memiliki alamat email yang valid."
+
+msgid "%{contact_name} is on the physical newsletter but lacks a current mailing address."
+msgstr "%{contact_name} ada di buletin cetak namun tidak memiliki alamat surat saat ini."
+
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
 msgstr "%{contact_name} baru saja memberikan hadiah pertama. Kirim ucapan terima kasih."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} melanjutkan kembali pemberiannya dengan hadiah sejumlah %{amount} pada %{date} untuk %{designation}. Kirim ucapan Terima Kasih."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} melanjutkan kembali pemberiannya dengan hadiah sejumlah %{amount} pada %{date}. Kirim ucapan Terima Kasih."
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
 msgstr "%{contact_name} sepertinya kelewatan sebuah hadiah. Hubungi untuk mengetahui lebih lanjut."
@@ -95,6 +140,9 @@ msgstr "Daftar Akun"
 msgid "Action"
 msgstr "Aksi"
 
+msgid "Active"
+msgstr "Aktif"
+
 msgid "Add an Account"
 msgstr "Tambah Akun"
 
@@ -106,6 +154,9 @@ msgstr "Alamat"
 
 msgid "Address No Longer Valid"
 msgstr "Alamat Sudah Tidak Valid"
+
+msgid "Address Type"
+msgstr "Jenis Alamat"
 
 msgid "All"
 msgstr "Semua"
@@ -237,8 +288,20 @@ msgstr "Tipe Kontak"
 msgid "Contact for Appointment"
 msgstr "Kontak untuk Janji Temu"
 
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "Kontak ada dalam buletin email tetapi tidak ada orang dengan alamat email yang valid."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "Kontak ada dalam buletin fisik tetapi tidak ada alamat pengiriman."
+
 msgid "Contacts"
 msgstr "Kontak"
+
+msgid "Contacts missing a mailing address"
+msgstr "Tidak ada alamat surat pada kontak"
+
+msgid "Contacts missing an email address"
+msgstr "Tidak ada alamat surat pada kontak"
 
 msgid "Country"
 msgstr "Negara"
@@ -260,6 +323,9 @@ msgstr "Anak Perempuan"
 
 msgid "Dear Donation Services"
 msgstr "Layanan Donasi Yang Terhormat"
+
+msgid "Designation Acccount"
+msgstr "Akun yang Disebutkan"
 
 msgid "Details"
 msgstr "Rincian"
@@ -417,6 +483,9 @@ msgstr "Suami"
 msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
 msgstr "Jika Anda ingin menggunakan daftar lama Anda, Anda harus menjadikan bidang gabungan tambahan sebagai bidang wajib."
 
+msgid "Inactive"
+msgstr "Tidak Aktif"
+
 msgid "Increase Gift Recommendation"
 msgstr "Rekomendasi Kenaikan Hadiah"
 
@@ -425,6 +494,12 @@ msgstr "Meningkatkan pemberian mereka dalam 3 bulan terakhir"
 
 msgid "Insights for "
 msgstr "Wawasan untuk "
+
+msgid "It is important to remind our financial partners who give on a less frequent basis of their upcoming gift. MPDX shows financial partners who have expected donations one month from now. Now would be a great time to remind them."
+msgstr "Sangat penting untuk mengingatkan mitra keuangan kami yang ke depannya lebih jarang memberikan hadiah. MPDX menunjukkan mitra keuangan yang mengharapkan donasi satu bulan dari sekarang. Sekarang merupakan waktu yang tepat untuk mengingatkannya."
+
+msgid "It is so important to connect with our financial partners personally, but it is easy for time to get away from us. MPDX does not show a phone call to your financial partner in the past year. Now would be a great time to connect with them!​"
+msgstr "Sangat penting untuk terhubung dengan mitra keuangan kami secara personal, namun hubungan dengan mitra terkadang menjadi jauh. MPDX tidak menunjukkan panggilan telepon kepada mitra keuangan Anda pada tahun lalu. Sekarang merupakan waktu yang tepat untuk terhubung dengannya!"
 
 msgid "Joined my team in the last 3 months"
 msgstr "Bergabung dengan tim saya dalam 3 bulan terakhir"
@@ -657,6 +732,9 @@ msgstr "Notifikasi dari MPDX"
 msgid "One of my donors, %{donor} has a new current address."
 msgstr "Salah satu dari donor saya, %{donor} memiliki alamat baru."
 
+msgid "One of the most important things we can do is thank our partners, but it is easy for time to get away from us. MPDX does not show a thank you note for your financial partner in the past year. Now would be a great time to let them know how much you appreciate them!​"
+msgstr "Salah satu hal terpenting yang dapat kami lakukan adalah berterima kasih kepada para mitra kami, namun hubungan dengan mitra terkadang menjadi jauh. MPDX tidak menunjukkan catatan terima kasih untuk mitra keuangan Anda pada tahun lalu. Sekarang merupakan waktu yang tepat untuk memberi tahu betapa Anda sangat menghargainya."
+
 msgid "One or More Gifts"
 msgstr "1 atau lebih hadiah"
 
@@ -678,6 +756,9 @@ msgstr "Terlambat"
 msgid "Partner"
 msgstr "Pasangan"
 
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "Mitra (Semianual, anual, dll) memiliki donasi yang diharapkan satu bulan dari sekarang. Kirimkan pengingat kepada mereka."
+
 msgid "Partner - Financial"
 msgstr "Partner - Keuangan"
 
@@ -686,6 +767,48 @@ msgstr "Pasangan - Doa"
 
 msgid "Partner - Special"
 msgstr "Partner - Spesial"
+
+msgid "Partner gave a Special Gift"
+msgstr "Mitra memberikan Hadiah Spesial"
+
+msgid "Partner gave a Special Gift: This notification is triggered anytime someone who does not have a status of 'Partner - Financial' gives a gift. If one or more of the people below are financial partners, please log into MPDX, edit that contact, and set their status to 'Partner - Financial'."
+msgstr "Mitra memberikan Hadiah Spesial: Notifikasi ini muncul ketika seseorang yang tidak memiliki status 'Mitra - Keuangan' memberikan hadiah. Jika satu atau lebih orang di bawah ini adalah mitra keuangan, silakan masuk ke MPDX, edit kontak orang tersebut, lalu atur statusnya menjadi 'Mitra - Keuangan'."
+
+msgid "Partner gave a gift that averages out to less than their commitment"
+msgstr "Mitra memberikan hadiah yang rata-rata kurang dari komitmennya"
+
+msgid "Partner gave a gift to recontinue their giving after being two or more months late"
+msgstr "Mitra memberikan hadiah untuk melanjutkan kembali pemberiannya setelah mengalami keterlambatan dua bulan atau lebih"
+
+msgid "Partner gave a gift with a long time frame (semi-annual, annual, or biennial"
+msgstr "Mitra memberikan hadiah dengan jangka waktu yang panjang (setengah tahunan, tahunan, dua tahunan)"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "Mitra memberikan hadiah yang lebih besar dari pada komitmen"
+
+msgid "Partner gave a larger gift than the commitment recorded in MPDX"
+msgstr "Mitra memberikan hadiah yang lebih besar dari komitmennya yang tercatat di MDPX"
+
+msgid "Partner gave less than commitment"
+msgstr "Mitra memberikan hadiah lebih sedikit dari pada komitmen"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "Mitra memberi komitmen semi-anual atau lebih"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "Mitra belum memiliki catatan terima kasih yang tercatat di tahun lalu"
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "Mitra belum memiliki panggilan yang tercatat di tahun lalu"
+
+msgid "Partner missed a gift"
+msgstr "Mitra melewatkan hadiah"
+
+msgid "Partner recontinued giving"
+msgstr "Mitra tidak melanjutkan memberi"
+
+msgid "Partner started giving"
+msgstr "Mitra mulai memberi"
 
 msgid "Pending"
 msgstr "Tertunda"
@@ -723,11 +846,17 @@ msgstr "Janji"
 msgid "Pledge Status"
 msgstr "Status Janji"
 
+msgid "Prayer Letters Integration Settings"
+msgstr "Pengaturan Integrasi Prayer Letters"
+
 msgid "Prayer Request"
 msgstr "Permintaan Doa"
 
 msgid "Pre Call Letter"
 msgstr "Surat Pra Panggilan"
+
+msgid "Primary"
+msgstr "Utama"
 
 msgid "Primary Email"
 msgstr "Email Utama"
@@ -771,6 +900,12 @@ msgstr "Riset Diabaikan"
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "Pdt."
+
+msgid "Search Notes"
+msgstr "Catatan Pencarian"
+
+msgid "Search note contents"
+msgstr "Konten catatan pencarian"
 
 msgid "Seasonal"
 msgstr "Musiman"
@@ -863,6 +998,12 @@ msgstr "Daftar alamat MailChimp yang sudah Anda hubungkan dengan akun MPDX memil
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "Koneksi dengna akun LinkedIn harus diperbarui."
 
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link} and click on 'Edit', 'Setup',\n  and then click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "Tautan antara MPDX dan akun Google Anda telah berhenti berfungsi. Jika ingin terus menyinkronkan MPDX secara otomatis dengan akun Google Anda, buka %{link} dan klik 'Edit, 'Setup', kemudian klik tombol 'Muat Ulang Akun Google'. Setelah itu, Anda harus mengaktifkan kembali secara manual integrasi yang sudah Anda atur."
+
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to %{link}\n  and click the 'Enable' button"
+msgstr "Tautan antara MPDX dan akun prayerletters.com Anda telah berhenti berfungsi. Jika ingin terus mendorong perubahan MPDX melalui prayerletters.com, buka %{link} dan klik tombol 'Aktifkan'"
+
 msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
 msgstr "Tautan antara MPDX dan akun Google Anda telah berhenti bekerja. Jika Anda ingin MPDX untuk secara otomatis meng-sinkronisasi dengan akun Google Anda, silahkan ke %{link} dan klik tombol 'Segarkan Akun Google'. Kemudian, Anda harus secara manual mengaktifkan integrasi yang sudah Anda tetapkan."
 
@@ -931,6 +1072,9 @@ msgstr "Paman"
 
 msgid "Unknown"
 msgstr "Tidak diketahui"
+
+msgid "Unnamed Designation"
+msgstr "Sebutan yang Belum Diberi Nama"
 
 msgid "Unresponsive"
 msgstr "Tidak ada reaksi"

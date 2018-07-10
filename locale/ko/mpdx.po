@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-05-07 13:39+0000\n"
-"PO-Revision-Date: 2018-05-07 13:39+0000\n"
+"POT-Creation-Date: 2018-07-05 20:16+0000\n"
+"PO-Revision-Date: 2018-07-05 20:16+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -17,14 +17,59 @@ msgstr " \"%{appeal_name}\" 호소로 지정되었습니다."
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "%{name} (donor #%{account_number})"
 
+msgid "%(This task was given the type \"#{unsupported_type_name}\" in TntConnect.)"
+msgstr "%(이 과제는 TntConnect에 \"#{unsupported_type_name}\" 유형이 주어졌습니다.)"
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} 님이 %{amount}의 특별 선물을 %{date}에 %{designation}(으)로 보냈습니다. 감사 인사를 전하세요."
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} 님이 %{amount}의 특별 선물을 %{date}에 보냈습니다. 감사 인사를 전하세요."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date} to %{designation}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name} 님이 약속과는 다른 %{amount}의 특별 선물을 %{date}에 %{designation}(으)로 보냈습니다. 선물을 확인해 보세요."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name} 님이 약속과는 다른 %{amount}의 특별 선물을 %{date}에 보냈습니다. 선물을 확인해 보세요."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} 님이 %{amount}의 평소보다 큰 선물을 %{date}에 %{designation}(으)로 보냈습니다. 감사 인사를 전하세요."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} 님이 %{amount}의 평소보다 큰 선물을 %{date}에 보냈습니다. 감사 인사를 전하세요."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} 님이 %{amount}의 %{frequency} 선물을 %{date}에 %{designation}(으)로 보냈습니다. 감사 인사를 전하세요."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} 님이 %{amount}의 %{frequency} 선물을 %{date}에 보냈습니다. 감사 인사를 전하세요."
+
 msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 msgstr "%(이 과제는 다음 유형이 주어졌습니다 \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
 msgstr "%{contact_name}님이 한 달 안에 선물을 보낼 것입니다. 더 알아보려면 연락하세요."
 
+msgid "%{contact_name} have not had a thank you note logged in the past year.  Send them a Thank You note."
+msgstr "%{contact_name} 님이 작년에 감사장을 받은 기록이 없습니다. 감사장을 보내세요."
+
+msgid "%{contact_name} have not had an attempted call logged in the past year. Call them."
+msgstr "%{contact_name} 님이 작년에 시도한 통화 기록이 없습니다. 통화를 하세요."
+
+msgid "%{contact_name} is on the email newsletter but lacks a valid email address."
+msgstr "%{contact_name} 님이 이메일 뉴스레터에 있지만 유효한 이메일 주소가 부족합니다."
+
+msgid "%{contact_name} is on the physical newsletter but lacks a current mailing address."
+msgstr "%{contact_name} 님이 실제 뉴스레터에 있지만 현재 우편 주소가 부족합니다."
+
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
 msgstr "%{contact_name}님이 첫 선물을 보냈습니다. 감사의 마음을 전하세요."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} 님이 %{amount}의 %{frequency} 선물을 %{date}에 %{designation}(으)로 다시 보내기 시작했습니다. 감사 인사를 전하세요."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} 님이 %{amount}의 %{frequency} 선물을 %{date}에 다시 보내기 시작했습니다. 감사 인사를 전하세요."
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
 msgstr "%{contact_name}님이 선물을 보내지 않았습니다. 더 알아보려면 연락하세요."
@@ -95,6 +140,9 @@ msgstr "계정 목록"
 msgid "Action"
 msgstr "행동"
 
+msgid "Active"
+msgstr "활성"
+
 msgid "Add an Account"
 msgstr "계정 추가"
 
@@ -106,6 +154,9 @@ msgstr "주소"
 
 msgid "Address No Longer Valid"
 msgstr "더 이상 유효하지 않은 계정"
+
+msgid "Address Type"
+msgstr "주소 유형"
 
 msgid "All"
 msgstr "모두"
@@ -237,8 +288,20 @@ msgstr "연락처 유형"
 msgid "Contact for Appointment"
 msgstr "약속 연락처"
 
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "연락처가 이메일 뉴스레터에 존재하지만 유효한 이메일 주소를 가진 사람이 없습니다."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "연락처가 실제 뉴스레터에 존재하지만 이메일 주소가 없습니다."
+
 msgid "Contacts"
 msgstr "연락처"
+
+msgid "Contacts missing a mailing address"
+msgstr "연락처가 없는 우편 주소"
+
+msgid "Contacts missing an email address"
+msgstr "연락처가 없는 이메일 주소"
 
 msgid "Country"
 msgstr "국가"
@@ -260,6 +323,9 @@ msgstr "딸"
 
 msgid "Dear Donation Services"
 msgstr "기부 서비스에"
+
+msgid "Designation Acccount"
+msgstr "지정 계정"
 
 msgid "Details"
 msgstr "내용"
@@ -417,6 +483,9 @@ msgstr "남편"
 msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
 msgstr "현재 목록을 유지하고 싶지 않다면, 필수 필드가 아닌 추가 통합 필드가\n 필요할 것입니다."
 
+msgid "Inactive"
+msgstr "비활성"
+
 msgid "Increase Gift Recommendation"
 msgstr "선물 권장 사항 증가"
 
@@ -425,6 +494,12 @@ msgstr "지난 3개월 안에 기부액 증가"
 
 msgid "Insights for "
 msgstr "이해"
+
+msgid "It is important to remind our financial partners who give on a less frequent basis of their upcoming gift. MPDX shows financial partners who have expected donations one month from now. Now would be a great time to remind them."
+msgstr "다음 선물을 덜 빈번하게 보내는 금융 파트너에게 알림을 해주는 것은 중요합니다. MPDX는 현재부터 1개월 동안 기부를 할 것이라고 예측되는 금융 파트너를 표시합니다. 지금이 알림을 할 최적의 시간입니다."
+
+msgid "It is so important to connect with our financial partners personally, but it is easy for time to get away from us. MPDX does not show a phone call to your financial partner in the past year. Now would be a great time to connect with them!​"
+msgstr "금융 파트너와 개인적으로 연결하는 것은 매우 중요하지만, 저희를 떠나는 것도 쉽습니다. MPDX는 귀하의 작년 금융 파트너에게 전화 통화를 보여드리지 않습니다. 지금이 연결할 최적의 시간입니다!"
 
 msgid "Joined my team in the last 3 months"
 msgstr "지난 3개월 안에 팀 가입"
@@ -657,6 +732,9 @@ msgstr "MPDX 공지"
 msgid "One of my donors, %{donor} has a new current address."
 msgstr "기부자 %{donor}님의 새 현재 주소입니다."
 
+msgid "One of the most important things we can do is thank our partners, but it is easy for time to get away from us. MPDX does not show a thank you note for your financial partner in the past year. Now would be a great time to let them know how much you appreciate them!​"
+msgstr "저희가 할 수 있는 가장 중요한 것 중 하나는 파트너에게 고마움을 표현하는 것이지만, 저희를 떠나는 것도 쉽습니다. MPDX는 귀하의 작년 금융 파트너에게 감사장을 보여주지 않습니다. 지금이 고마움을 표현할 최적의 시간입니다!"
+
 msgid "One or More Gifts"
 msgstr "한 개 이상의 선물"
 
@@ -678,6 +756,9 @@ msgstr "기한 지남"
 msgid "Partner"
 msgstr "파트너"
 
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "파트너 (반기별, 연례 등)에게 1개월 후 예상 기부가 있습니다. 알림을 보내 주십시오."
+
 msgid "Partner - Financial"
 msgstr "파트너 - 금융"
 
@@ -686,6 +767,48 @@ msgstr "파트너 - 기도"
 
 msgid "Partner - Special"
 msgstr "파트너 - 특별"
+
+msgid "Partner gave a Special Gift"
+msgstr "파트너로부터 특별 선물이 왔습니다"
+
+msgid "Partner gave a Special Gift: This notification is triggered anytime someone who does not have a status of 'Partner - Financial' gives a gift. If one or more of the people below are financial partners, please log into MPDX, edit that contact, and set their status to 'Partner - Financial'."
+msgstr "특별 선물은 준 파트너: 이 알림은 '파트너 - 금융' 상태가 아닌 사람이 선물을 줄 때마다 발동됩니다. 아래에 있는 사람 중 한 명 이상이 금융 파트너인 경우 MPDX에 로그인하고, 연락처를 편집하고, 상태를 '파트너 - 금융'으로 설정하세요."
+
+msgid "Partner gave a gift that averages out to less than their commitment"
+msgstr "평균보다 적은 금액의 선물을 준 파트너"
+
+msgid "Partner gave a gift to recontinue their giving after being two or more months late"
+msgstr "2개월 이상 늦게 선물을 다시 준 파트너"
+
+msgid "Partner gave a gift with a long time frame (semi-annual, annual, or biennial"
+msgstr "장기간(반년, 1년 또는 2년)으로 선물을 준 파트너"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "파트너가 지불액보다 큰 선물을 보냈습니다"
+
+msgid "Partner gave a larger gift than the commitment recorded in MPDX"
+msgstr "MPDX에 기록된 금액보다 큰 선물을 준 파트너"
+
+msgid "Partner gave less than commitment"
+msgstr "파트너가 지불액보다 적게 보냈습니다"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "파트너가 반기별 이상 지불액을 보냈습니다"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "파트너가 지난 1년간 감사장을 받은 로그가 없습니다"
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "파트너가 지난 1년간 연락 시도를 받은 로그가 없습니다"
+
+msgid "Partner missed a gift"
+msgstr "파트너가 선물을 받지 못했습니다"
+
+msgid "Partner recontinued giving"
+msgstr "파트너가 기부를 재시작했습니다"
+
+msgid "Partner started giving"
+msgstr "파트너가 기부를 시작했습니다"
 
 msgid "Pending"
 msgstr "대기 중"
@@ -723,11 +846,17 @@ msgstr "담보금"
 msgid "Pledge Status"
 msgstr "서약 상태"
 
+msgid "Prayer Letters Integration Settings"
+msgstr "기도 편지 통합 설정"
+
 msgid "Prayer Request"
 msgstr "기도 요청"
 
 msgid "Pre Call Letter"
 msgstr "전화 전 편지"
+
+msgid "Primary"
+msgstr "기본"
 
 msgid "Primary Email"
 msgstr "예비 이메일"
@@ -771,6 +900,12 @@ msgstr "연구 취소됨"
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "목사"
+
+msgid "Search Notes"
+msgstr "검색 메모"
+
+msgid "Search note contents"
+msgstr "검색 메모 내용"
 
 msgid "Seasonal"
 msgstr "계절별"
@@ -863,6 +998,12 @@ msgstr "MPDX 계정에 링크된 MailChimp 메일링 목록은 직접 생성하�
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "LinkedIn 계정과의 연결을 갱신해야 합니다."
 
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link} and click on 'Edit', 'Setup',\n  and then click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "MPDX와 Google 계정 간 연결이 작동 중지됐습니다. MPDX와 \nGoogle 계정을 계속 자동 동기화하고 싶다면, %{link}에 접속해서\n'편집', '설정'을 클릭한 다음\n'Google 계정 새로고침' 버튼을 클릭하세요. 그리고 이미 설정한 \n모든 통합을 수동으로 다시 켜야 합니다."
+
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to %{link}\n  and click the 'Enable' button"
+msgstr "MPDX와 prayerletters.com 계정 간 연결이 작동 중지됐습니다. MPDX로 \nprayerletters.com에 자동 변화를 계속 주고 싶다면 \n%{link}에 접속해서 '켜기' 버튼을 클릭하세요."
+
 msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
 msgstr "MPDX와 Google 계정간의 링크 작동이 중지되었습니다. MPDX가 자동으로\n Google 계정에 싱크되게 만들고 싶다면, %{link}에 가서\n 'Google 계정 새로고침' 버튼을 클릭하세요. 그 후, 이미 설정해뒀던 통합 사항들을\n 수동으로 다시 허용하세요."
 
@@ -931,6 +1072,9 @@ msgstr "삼촌"
 
 msgid "Unknown"
 msgstr "알 수 없음"
+
+msgid "Unnamed Designation"
+msgstr "이름 없는 지정"
 
 msgid "Unresponsive"
 msgstr "응답 없음"

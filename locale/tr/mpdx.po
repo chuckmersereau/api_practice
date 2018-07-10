@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-05-07 13:40+0000\n"
-"PO-Revision-Date: 2018-05-07 13:40+0000\n"
+"POT-Creation-Date: 2018-07-05 20:16+0000\n"
+"PO-Revision-Date: 2018-07-05 20:16+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: tr\n"
@@ -17,14 +17,59 @@ msgstr " \"%{appeal_name}\" isteğine tayin edildi."
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "\"%{name}\" (bağışçı #%{account_number})"
 
+msgid "%(This task was given the type \"#{unsupported_type_name}\" in TntConnect.)"
+msgstr "%(Bu göreve TntConnect'te \"#{unsupported_type_name}\" türü verildi.)"
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name}, %{date} tarihinde %{designation} konumuna %{amount} değerinde Özel Hediye verdi. Onlara bir Teşekkür gönderin."
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name}, %{date} tarihinde %{amount} değerinde Özel Hediye verdi. Onlara bir Teşekkür gönderin."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date} to %{designation}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name}, %{date} tarihinde %{designation} konumuna %{amount} değerinde Özel Hediye verdi ve bu hediye vaatlerinden farklı. Hediyeyi araştırın."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name}, %{date} tarihinde %{amount} değerinde Özel Hediye verdi ve bu hediye vaatlerinden farklı. Hediyeyi araştırın."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name}, %{date} tarihinde %{designation} konumuna %{amount} değerinde olağandan daha büyük bir hediye verdi. Onlara bir Teşekkür gönderin."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name}, %{date} tarihinde %{amount} değerinde olağandan daha büyük bir hediye verdi. Onlara bir Teşekkür gönderin."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name}, %{date} tarihinde %{designation} konumuna %{amount} değerinde olan %{frequency} hediyesini verdi. Onlara bir Teşekkür gönderin."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name}, %{date} tarihinde %{amount} değerinde olan %{frequency} hediyesini verdi. Onlara bir Teşekkür gönderin."
+
 msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 msgstr "%(Bu göreve TntConnect'te \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" türü verildi.)"
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
 msgstr "%{contact_name} adlı kişinin bir ay içinde beklenen bir hediyesi var. Takip etmek için iletişim kurun."
 
+msgid "%{contact_name} have not had a thank you note logged in the past year.  Send them a Thank You note."
+msgstr "%{contact_name} adlı kişinin geçtiğimiz yılda günlüğe kaydedilen teşekkür notu yok. Onlara bir Teşekkür notu gönderin."
+
+msgid "%{contact_name} have not had an attempted call logged in the past year. Call them."
+msgstr "%{contact_name} adlı kişinin geçtiğimiz yılda günlüğe kaydedilen denenmiş bir araması yok. Onları arayın."
+
+msgid "%{contact_name} is on the email newsletter but lacks a valid email address."
+msgstr "%{contact_name}, e-posta haber bülteninde ama geçerli bir e-posta adresi yok."
+
+msgid "%{contact_name} is on the physical newsletter but lacks a current mailing address."
+msgstr "%{contact_name}, fiziksel haber bülteninde ama güncel bir posta adresi yok."
+
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
 msgstr "%{contact_name} ilk hediyesini verdi. Ona bir Teşekkür gönderin."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name}, %{date} tarihinde %{designation} konumuna %{amount} değerinde bir hediyeyle bağışa tekrar devam etti. Onlara bir Teşekkür gönderin."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name}, %{date} tarihinde %{amount} değerinde bir hediyeyle bağışa tekrar devam etti. Onlara bir Teşekkür gönderin."
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
 msgstr "%{contact_name} adlı kişi bir hediye kaçırmış gibi görünüyor. Takip etmek için arayın."
@@ -95,6 +140,9 @@ msgstr "Hesap Listesi"
 msgid "Action"
 msgstr "Eylem"
 
+msgid "Active"
+msgstr "Aktif"
+
 msgid "Add an Account"
 msgstr "Bir Hesap Ekleyin"
 
@@ -106,6 +154,9 @@ msgstr "Adres"
 
 msgid "Address No Longer Valid"
 msgstr "Adres Artık Geçerli Değil"
+
+msgid "Address Type"
+msgstr "Adres Türü"
 
 msgid "All"
 msgstr "Tümü"
@@ -237,8 +288,20 @@ msgstr "Kişi Türü"
 msgid "Contact for Appointment"
 msgstr "Randevu için İletişime Geçin"
 
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "Kişi, fiziksel haber bülteninde ama geçerli e-posta adresine sahip kimsesi yok."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "Kişi, fiziksel haber bülteninde ama posta adresi yok."
+
 msgid "Contacts"
 msgstr "Kontaklar"
+
+msgid "Contacts missing a mailing address"
+msgstr "Kişilerin posta adresi yok"
+
+msgid "Contacts missing an email address"
+msgstr "Kişilerin e-posta adresi yok"
 
 msgid "Country"
 msgstr "Ülke"
@@ -260,6 +323,9 @@ msgstr "Kız çocuk"
 
 msgid "Dear Donation Services"
 msgstr "Sevgili Bağış Hizmetleri"
+
+msgid "Designation Acccount"
+msgstr "Atama Hesabı"
 
 msgid "Details"
 msgstr "Ayrıntılar"
@@ -417,6 +483,9 @@ msgstr "Koca"
 msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
 msgstr "Var olan listenize bağlı kalmak istiyorsanız, ekstra birleşim alanını zorunlu olmayan alan haline getirmeniz gerekecek."
 
+msgid "Inactive"
+msgstr "Aktif değil"
+
 msgid "Increase Gift Recommendation"
 msgstr "Hediye Artırma Önerisi"
 
@@ -425,6 +494,12 @@ msgstr "Son 3 ay içinde bağışlarını artırdılar"
 
 msgid "Insights for "
 msgstr "Görüşler: "
+
+msgid "It is important to remind our financial partners who give on a less frequent basis of their upcoming gift. MPDX shows financial partners who have expected donations one month from now. Now would be a great time to remind them."
+msgstr "Daha az sıklıkta bağış yapan finansal ortaklarımıza yaklaşan hediyelerini hatırlatmak önemlidir. MPDX, şu andan itibaren bir ay içinde beklenen bağışı olan finansal ortakları göstermektedir. Şimdi onlara hatırlatma yapmak için harika zamanlama olacaktır."
+
+msgid "It is so important to connect with our financial partners personally, but it is easy for time to get away from us. MPDX does not show a phone call to your financial partner in the past year. Now would be a great time to connect with them!​"
+msgstr "Finansal ortaklarımızla kişisel olarak bağlantı kurmak çok önemlidir, ancak zamanın bizden uzaklaşması kolaydır. MPDX, geçen yıl içinde finansal ortağınızla yaptığınız bir telefon konuşmasını göstermez. Onlarla bağlantı kurmak için şu an harika bir zaman!"
 
 msgid "Joined my team in the last 3 months"
 msgstr "Son 3 ay içinde takımıma katıldı"
@@ -657,6 +732,9 @@ msgstr "MPDX'ten Bildirimler"
 msgid "One of my donors, %{donor} has a new current address."
 msgstr "Bağışçılarımdan biri olan %{donor}, yeni bir adrese sahip."
 
+msgid "One of the most important things we can do is thank our partners, but it is easy for time to get away from us. MPDX does not show a thank you note for your financial partner in the past year. Now would be a great time to let them know how much you appreciate them!​"
+msgstr "Yapabileceğimiz en önemli şeylerden biri ortaklarımıza teşekkür etmektir, ancak zamanın bizden uzaklaşması kolaydır. MPDX, geçen yıl içinde finansal ortağınıza gönderdiğiniz bir teşekkür notunu göstermez. Onlara ne kadar minnettar olduğunuzu göstermek için şu an harika bir zaman!"
+
 msgid "One or More Gifts"
 msgstr "Bir ya da Daha Fazla Hediye"
 
@@ -678,6 +756,9 @@ msgstr "Süresi geçti"
 msgid "Partner"
 msgstr "Ortak"
 
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "Ortağın (altı aylık, yıllık, vs.) şu andan bir ay sonra beklenen bir bağışı var. Ona bir hatırlatıcı gönderin."
+
 msgid "Partner - Financial"
 msgstr "Ortak - Finansal"
 
@@ -686,6 +767,48 @@ msgstr "Ortak - Dua"
 
 msgid "Partner - Special"
 msgstr "Ortak - Özel"
+
+msgid "Partner gave a Special Gift"
+msgstr "Ortak, Özel Bir Hediye verdi"
+
+msgid "Partner gave a Special Gift: This notification is triggered anytime someone who does not have a status of 'Partner - Financial' gives a gift. If one or more of the people below are financial partners, please log into MPDX, edit that contact, and set their status to 'Partner - Financial'."
+msgstr "Ortak Özel Bir Hediye verdi: Bu bildirim, 'Ortak - Finansal' durumuna sahip olmayan herhangi birisi bir hediye verdiğinde tetiklenir. Aşağıdaki bir veya daha fazla kişi finansal ortaksa, lütfen MPDX'te oturum açın, o kişiyi düzenleyin ve durumunu 'Ortak - Finansal' olarak değiştirin."
+
+msgid "Partner gave a gift that averages out to less than their commitment"
+msgstr "Ortak, taahhütünden daha az miktara denk gelen bir hediye verdi"
+
+msgid "Partner gave a gift to recontinue their giving after being two or more months late"
+msgstr "Ortak, iki ay veya daha uzun süre geç kaldıktan sonra bağışlarına devam etmek için bir hediye verdi"
+
+msgid "Partner gave a gift with a long time frame (semi-annual, annual, or biennial"
+msgstr "Ortak, uzun zaman çerçevesine (altı aylık, yıllık veya iki yıllık"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "Ortak, taahhütten daha büyük bir hediye verdi"
+
+msgid "Partner gave a larger gift than the commitment recorded in MPDX"
+msgstr "Ortak, MPDX'te kayıtlı olan taahhüdünden daha büyük bir hediye verdi"
+
+msgid "Partner gave less than commitment"
+msgstr "Ortak, taahhütten az verdi"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "Ortak altı aylık veya daha fazla bir taahhütle verdi"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "Ortağın geçtiğimiz yılda günlüğe kaydedilen teşekkür notu yok."
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "Ortağın geçtiğimiz yılda günlüğe kaydedilen denenmiş bir araması yok."
+
+msgid "Partner missed a gift"
+msgstr "Ortak bir hediyeyi kaçırdı"
+
+msgid "Partner recontinued giving"
+msgstr "Ortak hibeye tekrar devam etti"
+
+msgid "Partner started giving"
+msgstr "Ortak hibeye başladı"
 
 msgid "Pending"
 msgstr "Beklemede"
@@ -723,11 +846,17 @@ msgstr "Vaat"
 msgid "Pledge Status"
 msgstr "Bağış Durumu"
 
+msgid "Prayer Letters Integration Settings"
+msgstr "Prayer Letters Entegrasyon Ayarları"
+
 msgid "Prayer Request"
 msgstr "Dua İsteği"
 
 msgid "Pre Call Letter"
 msgstr "Ön Aramalı Mektup"
+
+msgid "Primary"
+msgstr "Birincil"
 
 msgid "Primary Email"
 msgstr "Birincil E-posta"
@@ -771,6 +900,12 @@ msgstr "Araştırma bırakıldı"
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "Peder"
+
+msgid "Search Notes"
+msgstr "Notları Ara"
+
+msgid "Search note contents"
+msgstr "Not içeriklerinde ara"
 
 msgid "Seasonal"
 msgstr "Mevsimsel"
@@ -863,6 +998,12 @@ msgstr "MPDX hesabınıza bağlamış olduğunuz MailChimp e-posta listesi oluş
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "Linkedin hesabınıza bağlantınızın yenilenmesi gerekiyor."
 
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link} and click on 'Edit', 'Setup',\n  and then click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "MPDX ve Google hesabınız arasındaki bağlantı çalışmayı durdurdu. MPDX'in Google hesabınızla otomatik olarak eşitlenmeye devam etmesini istiyorsanız, lütfen %{link} adresine gidin ve 'Düzenle'ye, 'Kurulum'a tıklayıp ardından 'Google Hesabını Yenile' tuşuna tıklayın. Bundan sonra, daha önce ayarlamış olduğunuz tüm entegrasyonları yeniden manuel olarak etkinleştirmeniz gerekecek."
+
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to %{link}\n  and click the 'Enable' button"
+msgstr "MPDX ve prayerletters.com hesabınız arasındaki bağlantı çalışmayı durdurdu. MPDX'in değişiklikleri prayerletters.com'a otomatik olarak göndermeye devam etmesini istiyorsanız, lütfen %{link} adresine gidip 'Etkinleştir' tuşuna tıklayın."
+
 msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
 msgstr "MPDX ve Google hesabınız arasındaki bağlantı çalışmayı durdurdu. MPDX'in Google hesabınızla otomatik olarak eşleşmeye devam etmesini istiyorsanız, lütfen %{link} adresine gidin ve 'Google Hesabını Yenile' tuşuna tıklayın. Bundan sonra, daha önce ayarlamış olduğunuz tüm entegrasyonları yeniden manuel olarak etkinleştirmeniz gerekecek."
 
@@ -931,6 +1072,9 @@ msgstr "Amca/Dayı"
 
 msgid "Unknown"
 msgstr "Bilinmiyor"
+
+msgid "Unnamed Designation"
+msgstr "Adlandırılmamış Atama"
 
 msgid "Unresponsive"
 msgstr "Tepkisiz"

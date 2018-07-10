@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-05-07 13:42+0000\n"
-"PO-Revision-Date: 2018-05-07 13:42+0000\n"
+"POT-Creation-Date: 2018-07-05 20:16+0000\n"
+"PO-Revision-Date: 2018-07-05 20:16+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -17,14 +17,59 @@ msgstr "назначен на просьбу \"%{appeal_name}\"."
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "\"%{name}\" (жертвователь #%{account_number})"
 
+msgid "%(This task was given the type \"#{unsupported_type_name}\" in TntConnect.)"
+msgstr "%(Данному заданию был присвоен тип «#{unsupported_type_name}» в TntConnect.)"
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{date} пользователь %{contact_name} передал специальный подарок в размере %{amount} для %{designation}. Отправьте ему благодарность."
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{date} пользователь %{contact_name} передал специальный подарок в размере %{amount}. Отправьте ему благодарность."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date} to %{designation}, which is different from their pledge. Research the gift."
+msgstr "%{date} пользователь %{contact_name} передал подарок в размере %{amount} для %{designation}, что отличается от исходного обещания. Изучите подробности."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift."
+msgstr "%{date} пользователь %{contact_name} передал подарок в размере %{amount}, что отличается от исходного обещания. Изучите подробности."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{date} пользователь %{contact_name} передал больший чем обычно подарок в размере %{amount} для %{designation}. Отправьте ему благодарность."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{date} пользователь %{contact_name} передал больший чем обычно подарок в размере %{amount}. Отправьте ему благодарность."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{date} пользователь %{contact_name} передал %{frequency} подарок в размере %{amount} для %{designation}. Отправьте ему благодарность."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{date} пользователь %{contact_name} передал %{frequency} подарок в размере %{amount}. Отправьте ему благодарность."
+
 msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 msgstr "%(Этому заданию присвоен тип «#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}» в TntConnect.)"
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
 msgstr "Подарок от пользователя %{contact_name} ожидается в течение месяца. Связаться для отслеживания."
 
+msgid "%{contact_name} have not had a thank you note logged in the past year.  Send them a Thank You note."
+msgstr "Пользователь %{contact_name} не получал сообщений с благодарностью за последний год.  Отправьте ему сообщение с благодарностью."
+
+msgid "%{contact_name} have not had an attempted call logged in the past year. Call them."
+msgstr "Пользователь %{contact_name} не получал звонков за последний год. Позвоните ему."
+
+msgid "%{contact_name} is on the email newsletter but lacks a valid email address."
+msgstr "Пользователь %{contact_name} включен в электронную рассылку, но его адрес эл. почты не указан."
+
+msgid "%{contact_name} is on the physical newsletter but lacks a current mailing address."
+msgstr "Пользователь %{contact_name} включен в почтовую рассылку, но его почтовый адрес не указан."
+
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
 msgstr "%{contact_name} только что отправил(а) первый подарок. Не забудьте отправить благодарность."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{date} пользователь %{contact_name} возобновил передачу подарков в размере %{amount} для %{designation}. Отправьте ему благодарность."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{date} пользователь %{contact_name} возобновил передачу подарков в размере %{amount}. Отправьте ему благодарность."
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
 msgstr "Похоже, %{contact_name} пропустил(а) подарок. Позвонить для отслеживания."
@@ -95,6 +140,9 @@ msgstr "Список учетных записей"
 msgid "Action"
 msgstr "Действие"
 
+msgid "Active"
+msgstr "Активный"
+
 msgid "Add an Account"
 msgstr "Добавить учетную запись"
 
@@ -106,6 +154,9 @@ msgstr "Адрес"
 
 msgid "Address No Longer Valid"
 msgstr "Адрес больше недействителен"
+
+msgid "Address Type"
+msgstr "Тип адреса"
 
 msgid "All"
 msgstr "Все"
@@ -237,8 +288,20 @@ msgstr "Тип контакта"
 msgid "Contact for Appointment"
 msgstr "Связаться для назначения встречи"
 
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "Данный контакт включен в список рассылки электронного бюллетеня, но не указан действующий адрес эл. почты."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "Данный контакт включен в список рассылки печатного бюллетеня, но почтовый адрес не указан."
+
 msgid "Contacts"
 msgstr "Контакты"
+
+msgid "Contacts missing a mailing address"
+msgstr "У контакта отсутствует почтовый адрес"
+
+msgid "Contacts missing an email address"
+msgstr "У контакта отсутствует адрес эл. почты"
 
 msgid "Country"
 msgstr "Страна"
@@ -260,6 +323,9 @@ msgstr "Дочь"
 
 msgid "Dear Donation Services"
 msgstr "Уважаемая служба пожертвований"
+
+msgid "Designation Acccount"
+msgstr "Счет назначения"
 
 msgid "Details"
 msgstr "Подробно"
@@ -417,6 +483,9 @@ msgstr "Муж"
 msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
 msgstr "Если вы хотите продолжить пользоваться существующим списком, вам следует сделать это дополнительное объединенное поле\n  необязательным."
 
+msgid "Inactive"
+msgstr "Неактивный"
+
 msgid "Increase Gift Recommendation"
 msgstr "Увеличить рекомендованный подарок"
 
@@ -425,6 +494,12 @@ msgstr "Пользователь увеличил свои взносы в те�
 
 msgid "Insights for "
 msgstr "Сведения для "
+
+msgid "It is important to remind our financial partners who give on a less frequent basis of their upcoming gift. MPDX shows financial partners who have expected donations one month from now. Now would be a great time to remind them."
+msgstr "Важно напоминать нашим финансовым партнерам, делающим подарки менее регулярно, об истекающем времени на каждое пожертвование. В MPDX отображаются финансовые партнеры, чьи пожертвования ожидаются в течение одного месяца с текущего момента."
+
+msgid "It is so important to connect with our financial partners personally, but it is easy for time to get away from us. MPDX does not show a phone call to your financial partner in the past year. Now would be a great time to connect with them!​"
+msgstr "Очень важно лично общаться с финансовыми партнерами, а время бежит очень быстро. В MPDX нет данных о телефонных звонках вашему финансовому партнеру за последний год. Самое время связаться с ним!"
 
 msgid "Joined my team in the last 3 months"
 msgstr "Пользователь вступил в мою команду в течение последних 3 месяцев"
@@ -657,6 +732,9 @@ msgstr "Уведомления от MPDX"
 msgid "One of my donors, %{donor} has a new current address."
 msgstr "Один из моих жертвователей, %{donor}, сменил свой адрес."
 
+msgid "One of the most important things we can do is thank our partners, but it is easy for time to get away from us. MPDX does not show a thank you note for your financial partner in the past year. Now would be a great time to let them know how much you appreciate them!​"
+msgstr "Важно не забывать благодарить своих партнеров, а время бежит очень быстро. В MPDX нет данных о сообщениях с благодарностью вашему финансовому партнеру за последний год. Самое время высказать свою благодарность!"
+
 msgid "One or More Gifts"
 msgstr "Не менее одного подарка"
 
@@ -678,6 +756,9 @@ msgstr "Просрочено"
 msgid "Partner"
 msgstr "Партнер"
 
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "Партнер (полугодовое, годовое сотрудничество и т. д.) должен сделать пожертвование через один месяц. Отправьте ему напоминание."
+
 msgid "Partner - Financial"
 msgstr "Финансовый партнер"
 
@@ -686,6 +767,48 @@ msgstr "Партнер в молитве"
 
 msgid "Partner - Special"
 msgstr "Особый партнер"
+
+msgid "Partner gave a Special Gift"
+msgstr "Партнер сделал особый подарок"
+
+msgid "Partner gave a Special Gift: This notification is triggered anytime someone who does not have a status of 'Partner - Financial' gives a gift. If one or more of the people below are financial partners, please log into MPDX, edit that contact, and set their status to 'Partner - Financial'."
+msgstr "Партнер передал специальный подарок: это уведомление приходит каждый раз, когда пользователь, не обладающий статусом «Партнер — Финансовый», передает подарок. Если кто-либо из данных жертвователей является финансовым партнером, войдите в MPDX, отредактируйте контакт и установите статус «Партнер — Финансовый»."
+
+msgid "Partner gave a gift that averages out to less than their commitment"
+msgstr "Партнер сделал подарок меньшего размера, чем обычные"
+
+msgid "Partner gave a gift to recontinue their giving after being two or more months late"
+msgstr "Партнер сделал подарок после отсутствия подарков в течение не менее чем двух месяцев"
+
+msgid "Partner gave a gift with a long time frame (semi-annual, annual, or biennial"
+msgstr "Партнер, редко делающий подарки (один раз в полгода, год или два года), сделал подарок"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "Партнер пожертвовал больше, чем требовалось"
+
+msgid "Partner gave a larger gift than the commitment recorded in MPDX"
+msgstr "Партнер сделал подарок большего размера, чем обычные, зарегистрированные в MPDX"
+
+msgid "Partner gave less than commitment"
+msgstr "Партнер пожертвовал меньше, чем требовалось"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "Партнер сделал пожертвование и принял обязательства на полгода или более"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "Партнер не получил благодарственное письмо в прошлом году"
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "Партнер не ответил на звонок в прошлом году"
+
+msgid "Partner missed a gift"
+msgstr "Партнер пропустил пожертвование"
+
+msgid "Partner recontinued giving"
+msgstr "Партнер снова начал делать пожертвования"
+
+msgid "Partner started giving"
+msgstr "Партнер начал делать пожертвования"
 
 msgid "Pending"
 msgstr "Ожидается"
@@ -723,11 +846,17 @@ msgstr "Обещание"
 msgid "Pledge Status"
 msgstr "Статус обещание"
 
+msgid "Prayer Letters Integration Settings"
+msgstr "Настройки интеграции Prayer Letters"
+
 msgid "Prayer Request"
 msgstr "Просьба о молитве"
 
 msgid "Pre Call Letter"
 msgstr "Письмо перед звонком"
+
+msgid "Primary"
+msgstr "Основной"
 
 msgid "Primary Email"
 msgstr "Основной адрес эл. почты"
@@ -771,6 +900,12 @@ msgstr "Исследование прекращено"
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "Ред."
+
+msgid "Search Notes"
+msgstr "Поиск заметок"
+
+msgid "Search note contents"
+msgstr "Поиск по содержимому заметок"
 
 msgid "Seasonal"
 msgstr "Сезонный"
@@ -863,6 +998,12 @@ msgstr "Список новостной рассылки MailChimp, привяз
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "Необходимо обновить привязку к вашей учетной записи LinkedIn."
 
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link} and click on 'Edit', 'Setup',\n  and then click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "Привязка MPDX к вашей учетной записи Google перестала работать. Если вы хотите продолжить автоматическую синхронизацию MPDX\n  с учетной записью Google, перейдите по ссылке %{link}, нажмите «Редактировать», «Настроить»\n  и нажмите на кнопку «Обновить учетную запись Google». После этого необходимо вручную повторно включить все\n  ранее установленные интеграции."
+
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to %{link}\n  and click the 'Enable' button"
+msgstr "Привязка MPDX к вашей учетной записи prayerletters.com перестала работать. Если вы хотите продолжить автоматическую синхронизацию MPDX\n  с prayerletters.com, перейдите по ссылке %{link}\n  и нажмите на кнопку «Активировать»"
+
 msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
 msgstr "Привязка MPDX к вашей учетной записи Google перестала работать. Если вы хотите, чтобы приложение MPDX продолжило\n  автоматически синхронизироваться с учетной записью Google, перейдите по адресу %{link}\n  и нажмите кнопку «Обновить учетную запись Google».  После этого вам необходимо вручную заново установить ранее\n  существовавшие интеграции."
 
@@ -931,6 +1072,9 @@ msgstr "Дядя"
 
 msgid "Unknown"
 msgstr "Неизвестно"
+
+msgid "Unnamed Designation"
+msgstr "Без отметки о назначении"
 
 msgid "Unresponsive"
 msgstr "Без ответа"

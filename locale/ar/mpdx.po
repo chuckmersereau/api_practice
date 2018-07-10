@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-05-07 13:39+0000\n"
-"PO-Revision-Date: 2018-05-07 13:39+0000\n"
+"POT-Creation-Date: 2018-07-05 20:16+0000\n"
+"PO-Revision-Date: 2018-07-05 20:16+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ar\n"
@@ -17,14 +17,59 @@ msgstr " مخصص لطلبات \"%{appeal_name}\""
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "\"%{name}\" (المتبرع #%{account_number})"
 
+msgid "%(This task was given the type \"#{unsupported_type_name}\" in TntConnect.)"
+msgstr "%(تم إعطاء هذه المهمة النوع \"#{unsupported_type_name}\" في TntConnect.)"
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} أعطى هدية مميزة قدرها %{amount} في%{date} إلى%{designation}. أرسل لهم تشكراتك."
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} أعطى هدية مميزة قدرها %{amount} في%{date}. أرسل لهم تشكراتك."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date} to %{designation}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name} أعطى هدية مميزة قدرها %{amount} في%{date} إلى%{designation}، وهذا مختلف عن تعهدهم.\nابحث الهدية."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name} أعطى هدية مميزة قدرها %{amount} في%{date} ، وهذا مختلف عن تعهدهم. ابحث الهدية."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} أعطى هدية تفوق الهدية المعتادة وقدرها %{amount} في %{date} إلى %{designation}. بلغهم شكرك"
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} أعطى هدية تفوق الهدية المعتادة وقدرها %{amount} في %{date}. بلغهم شكرك"
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} أعطى %{frequency} عن الهدية المعتادة من %{amount} في %{date} إلى %{designation}. بلغهم شكرك"
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} أعطى %{frequency} عن الهدية المعتادة من %{amount} في %{date}. بلغهم شكرك"
+
 msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 msgstr "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
 msgstr "%{contact_name} لديه هدية متوقعة منتظرة في غضون شهر. اتصل للمتابعة."
 
+msgid "%{contact_name} have not had a thank you note logged in the past year.  Send them a Thank You note."
+msgstr "%{contact_name} لم يحصل على شكر مسجلة في العام الماضي. بلغهم شكرك في ملاحظة."
+
+msgid "%{contact_name} have not had an attempted call logged in the past year. Call them."
+msgstr "%{contact_name} لم يجر مكاملة مسجلة في العام الماضي. اتصل بهم."
+
+msgid "%{contact_name} is on the email newsletter but lacks a valid email address."
+msgstr "%{contact_name} في النشرة الدورية للبريد الإلكتروني لكن بدون عنوان  إلكتروني صالح."
+
+msgid "%{contact_name} is on the physical newsletter but lacks a current mailing address."
+msgstr "%{contact_name} في النشرة الدورية لبريد المراسلة لكن بدون عنوان إلكتروني صالح."
+
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
 msgstr "%{contact_name} منحوا للتو هديتهم الأولى. بلغهم شكرك."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} عاودوا الاستمرار في عطائهم بهدية قدرها %{amount} في %{date} إلى %{designation}. بلغهم شكرك."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} عاودوا الاستمرار في عطائهم بهدية قدرها %{amount} في %{date}. بلغهم شكرك."
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
 msgstr "يبدو أن %{contact_name} قد فاتته الهدية. اتصل للمتابعة."
@@ -95,6 +140,9 @@ msgstr "قائمة الحساب"
 msgid "Action"
 msgstr "العمل"
 
+msgid "Active"
+msgstr "نشط"
+
 msgid "Add an Account"
 msgstr "إضافة حساب"
 
@@ -106,6 +154,9 @@ msgstr "عنوان"
 
 msgid "Address No Longer Valid"
 msgstr "لم يعد العنوان صالحا"
+
+msgid "Address Type"
+msgstr "نوع العنوان"
 
 msgid "All"
 msgstr "الكل"
@@ -237,8 +288,20 @@ msgstr "نوع جهة الاتصال"
 msgid "Contact for Appointment"
 msgstr "الإتصال من أجل موعد"
 
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "جهة الاتصال في  النشرة الدورية للبريد الإلكتروني لكن بدون أشخاص ببريد إلكتروني صالح."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "جهة الاتصال في  النشرة الدورية لكن بدون بريد مراسلة."
+
 msgid "Contacts"
 msgstr "جهات الاتصال"
+
+msgid "Contacts missing a mailing address"
+msgstr "جهة الاتصال ينقصها عنوان المراسلة"
+
+msgid "Contacts missing an email address"
+msgstr "جهات الاتصال ينقصها عنوان المراسلة"
 
 msgid "Country"
 msgstr "البلد"
@@ -260,6 +323,9 @@ msgstr "ابنة"
 
 msgid "Dear Donation Services"
 msgstr "خدمات تبرع محبوبة"
+
+msgid "Designation Acccount"
+msgstr "حساب التعيين"
 
 msgid "Details"
 msgstr "التفاصيل"
@@ -417,6 +483,9 @@ msgstr "زوج"
 msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
 msgstr "إذا أردت الالتزام بقائمتك الموجودة، ستحتاج لجعل حقل الإدماج هذا غير اجباري."
 
+msgid "Inactive"
+msgstr "غير نشط"
+
 msgid "Increase Gift Recommendation"
 msgstr "توصية بزيادة الهدايا"
 
@@ -425,6 +494,12 @@ msgstr "زادو عطاياهم في الأشهر الثلاثة الأخيرة"
 
 msgid "Insights for "
 msgstr "رؤى حول "
+
+msgid "It is important to remind our financial partners who give on a less frequent basis of their upcoming gift. MPDX shows financial partners who have expected donations one month from now. Now would be a great time to remind them."
+msgstr "من المهم تذكير شركائنا الماليين الذين يعطون بشكل متكرر أقل بهديتهم القادمة. MPDX يظهر الشركاء الماليين الذين توقعواتبرعات متوقعة منذ شهرا من الآن. الآن وقت مناسب لتذكيرهم."
+
+msgid "It is so important to connect with our financial partners personally, but it is easy for time to get away from us. MPDX does not show a phone call to your financial partner in the past year. Now would be a great time to connect with them!​"
+msgstr "من المهم جدا الاتصال بشركائنا الماليين شخصيا، لكن من السهل أن يضيع منا الوقت. MPDX لا يظهر اتصالا هاتفيا لشريكك المالي في السنة الماضية. الآن وقت مناسب للاتصال بهم!"
 
 msgid "Joined my team in the last 3 months"
 msgstr "انضموا إلى فريقي في الأشهر الثلاثة الأخيرة"
@@ -657,6 +732,9 @@ msgstr "إشعارات من MPDX"
 msgid "One of my donors, %{donor} has a new current address."
 msgstr "واحد من متبرعي، %{donor} له عنوان حالي جديد."
 
+msgid "One of the most important things we can do is thank our partners, but it is easy for time to get away from us. MPDX does not show a thank you note for your financial partner in the past year. Now would be a great time to let them know how much you appreciate them!​"
+msgstr "واحدة من الأشياء المهمة التي يمكن أن نقوم بها لشكر شركائنا، لكن من السهل أن يضيع منا الوقت. MPDX لا يظهر ملاحظة شكر لشريكك المالي في السنة الماضية. الآن وقت مناسب  لتقديرهم!"
+
 msgid "One or More Gifts"
 msgstr "هدية أو أكثر"
 
@@ -678,6 +756,9 @@ msgstr "متأخر"
 msgid "Partner"
 msgstr "شريك"
 
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "الشريك (نصف سنوي، سنوي، إلخ) لديه تبرع منتظر بشهر واحد من الآن. أرسل لهم تذكيرا."
+
 msgid "Partner - Financial"
 msgstr "شريك - مالي"
 
@@ -686,6 +767,48 @@ msgstr "شريك - صلاة"
 
 msgid "Partner - Special"
 msgstr "شريك - مميز"
+
+msgid "Partner gave a Special Gift"
+msgstr "الشريك أعطاك هدية مميزة"
+
+msgid "Partner gave a Special Gift: This notification is triggered anytime someone who does not have a status of 'Partner - Financial' gives a gift. If one or more of the people below are financial partners, please log into MPDX, edit that contact, and set their status to 'Partner - Financial'."
+msgstr "شريك أعطى هدية مميزة. يظهر هذا الإشعار في أي وقت كلما كان شخص لا يملك وضعي 'شريك -مالي' يعطي هدية، يرجى تسجيل الدخول إلى MPDX، تعديل جهة الاتصال هذه، وضبط وضعيتهم إلى 'شريك -مالي'."
+
+msgid "Partner gave a gift that averages out to less than their commitment"
+msgstr "الشريك أعطى هدية ذات معدل أقل من الإيداع الخاص بهم"
+
+msgid "Partner gave a gift to recontinue their giving after being two or more months late"
+msgstr "الشريك أعطى هدية لمعاودة الاستمرار في عطائهم بعد تأخرهم بشهرين أو أكثر"
+
+msgid "Partner gave a gift with a long time frame (semi-annual, annual, or biennial"
+msgstr "الشريك أعطى هدية بإطار زمني كبير (شبه سنوي، سنوي، أو نصف سنوي)"
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "الشريط أعطى هدية أكبر من الإيداع"
+
+msgid "Partner gave a larger gift than the commitment recorded in MPDX"
+msgstr "الشريط أعطى هدية أكبر من الإيداع المسجل في MPDX"
+
+msgid "Partner gave less than commitment"
+msgstr "الشريك أعطى أقل من الإيداع"
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "الشريك أعطى مع الإيداع نص السنوي أو أكثر"
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "الشريك لم يحصل على شكر مسجلة في العام الماضي."
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "الشريك لم يجر مكاملة مسجلة في العام الماضي."
+
+msgid "Partner missed a gift"
+msgstr "الشريك فوت هدية"
+
+msgid "Partner recontinued giving"
+msgstr "الشريك أعاد مواصلة العطاء"
+
+msgid "Partner started giving"
+msgstr "الشريك بدأ العطاء"
 
 msgid "Pending"
 msgstr "في الانتظار"
@@ -723,11 +846,17 @@ msgstr "تعهد"
 msgid "Pledge Status"
 msgstr "وضعية تعهد"
 
+msgid "Prayer Letters Integration Settings"
+msgstr "إعدادات إدماج رسائل الصلاة"
+
 msgid "Prayer Request"
 msgstr "طلب صلاة"
 
 msgid "Pre Call Letter"
 msgstr "رسائل ما قبل المكالمة"
+
+msgid "Primary"
+msgstr "رئيسي"
 
 msgid "Primary Email"
 msgstr "الإيميل الرئيسي"
@@ -771,6 +900,12 @@ msgstr "تم ترك البحث"
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "كاهن "
+
+msgid "Search Notes"
+msgstr "البحث في الملاحظات"
+
+msgid "Search note contents"
+msgstr "البحث في محتوى الملاحظات"
 
 msgid "Seasonal"
 msgstr "موسمي"
@@ -863,6 +998,12 @@ msgstr "القائمة البريدية لـ MailChimp التي ربطتها ب�
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "الاتصال بحسابك في LinkedIn يحتاج للتجديد."
 
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link} and click on 'Edit', 'Setup',\n  and then click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "لقد توقف الرابط بين MPDX وحسابك على غوغل عن العمل. إذا أردت الاستمرار في جعل MPDX يقوم بالمزامنة تلقائيا مع حسابك في غوغل، يُرجى زيارة\n%{link} و الضغط على ‘تعديل‘، ‘تنصيب‘، ثم الضغط على زر  'تحديث حساب غوغل'. بعد هذا، سيتوجب عليك إعادة تمكين أية ادماجات يدويا قمت بضبطتها من قبل."
+
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to %{link}\n  and click the 'Enable' button"
+msgstr "الرابط بين MPDX و حسابك في prayerletters.com توقف عن العمل. إذا أردت الاستمرار في جعل MPDX تلقائياً يقوم بالتغييرات في prayerletters.com،\nيُرجى زيارة%{link}\nو لاضغط على زر  'تمكين '"
+
 msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
 msgstr "لقد توقف الرابط بين MPDX وحسابك على غوغل عن العمل. إذا أردت الاستمرار في جعل MPDX يقوم بالمزامنة تلقائيا مع حسابك في غوغل، يُرجى زيارة\n%{link}\nو الضغط على زر \"تحديث حساب غوغل\". بعد هذا، سيتوجب عليك إعادة تمكين أية ادماجات يدويا قمت بضبطتها من قبل."
 
@@ -931,6 +1072,9 @@ msgstr "عم"
 
 msgid "Unknown"
 msgstr "مجهول"
+
+msgid "Unnamed Designation"
+msgstr "تعيين غير مسمى"
 
 msgid "Unresponsive"
 msgstr "غير متجاوب"
