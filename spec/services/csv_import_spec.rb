@@ -416,4 +416,52 @@ describe CsvImport do
       )
     end
   end
+
+  context 'with full name' do
+    let!(:csv_import) { build(:csv_import_fullname, tags: 'csv, test') }
+    let!(:import) { CsvImport.new(csv_import) }
+
+    before do
+      csv_import.update(in_preview: true)
+      csv_import.file_headers_mappings = {
+        'full_name'            => 'full_name',
+        'city'                 => 'mailing_city',
+        'pledge_amount'        => 'commitment_amount',
+        'pledge_frequency'     => 'commitment_frequency',
+        'country'              => 'mailing_country',
+        'email_1'              => 'primary_email',
+        'envelope_greeting'    => 'envelope_greeting',
+        'greeting'             => 'greeting',
+        'newsletter'           => 'newsletter',
+        'notes'                => 'notes',
+        'phone_1'              => 'primary_phone',
+        'spouse_email'         => 'spouse_email',
+        'spouse_first_name'    => 'spouse_first_name',
+        'spouse_phone'         => 'spouse_phone',
+        'state'                => 'mailing_state',
+        'status'               => 'status',
+        'street'               => 'mailing_street_address',
+        'tags'                 => 'tags',
+        'zip'                  => 'mailing_postal_code'
+      }
+      csv_import.file_constants_mappings = {
+        'pledge_frequency' => [
+          { id: 'Monthly', values: ['Monthly'] }
+        ],
+        'newsletter' => [
+          { id: 'Both', values: ['Both'] }
+        ],
+        'status' => [
+          { id: 'Partner - Pray', values: ['Partner - Pray'] }
+        ]
+      }
+      import.update_cached_file_data
+    end
+
+    it 'returns contact with full name' do
+      csv_import.update(in_preview: false)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
+      expect(Contact.first.name).to eq('Doe, John and Jane')
+    end
+  end
 end

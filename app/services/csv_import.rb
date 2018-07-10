@@ -45,10 +45,7 @@ class CsvImport
   end
 
   def self.required_headers
-    {
-      first_name: _('First Name'),
-      last_name: _('Last Name')
-    }
+    {}
   end
 
   def self.constants
