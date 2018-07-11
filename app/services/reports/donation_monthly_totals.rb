@@ -25,16 +25,6 @@ class Reports::DonationMonthlyTotals < ActiveModelSerializers::Model
     end
   end
 
-  protected
-
-  def donation_currency(donation)
-    donation.currency
-  end
-
-  def donation_amount(donation)
-    donation.amount
-  end
-
   private
 
   def amounts_by_currency(donations_for_one_month)

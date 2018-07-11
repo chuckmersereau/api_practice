@@ -25,14 +25,6 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
 
   protected
 
-  def donation_currency(donation)
-    donation.currency
-  end
-
-  def donation_amount(donation)
-    donation.amount
-  end
-
   def donations(donations)
     donations = donations.where('donation_date >= ?', start_date)
     if filter_params && filter_params[:designation_account_id]

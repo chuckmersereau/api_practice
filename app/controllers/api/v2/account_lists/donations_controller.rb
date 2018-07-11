@@ -1,10 +1,11 @@
 class Api::V2::AccountLists::DonationsController < Api::V2Controller
+  include Concerns::Reports::DonationSumHelper
   def index
     authorize load_account_list, :show?
     load_donations
     render json: @donations.preload(include_associations.except(:contact)),
            scope: { account_list: load_account_list, locale: locale },
-           meta: meta_hash(@donations),
+           meta: meta_hash_with_totals,
            include: include_params,
            fields: field_params
   end
@@ -110,5 +111,10 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
 
   def pundit_user
     PunditContext.new(current_user, account_list: load_account_list)
+  end
+
+  def meta_hash_with_totals
+    hash = meta_hash(@donations)
+    hash.merge(totals: donoations_with_currency(@donations))
   end
 end

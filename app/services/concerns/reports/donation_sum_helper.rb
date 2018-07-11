@@ -1,4 +1,26 @@
 module Concerns::Reports::DonationSumHelper
+  protected
+
+  def donation_currency(donation)
+    donation.currency
+  end
+
+  def donation_amount(donation)
+    donation.amount
+  end
+
+  def donoations_with_currency(donations)
+    donations.currencies.select(&:present?).map do |currency|
+      donos     = donations.where(currency: currency)
+      converted = donos.map(&:converted_amount).inject(:+) || 0
+      {
+        amount:     donos.sum(:amount),
+        converted:  converted,
+        currency:   currency
+      }
+    end
+  end
+
   private
 
   def donations_by_currency(donations)

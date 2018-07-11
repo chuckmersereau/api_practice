@@ -77,5 +77,10 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
       expect(response_json['data'].map { |donation| donation['id'] }).to match_array(donations_1.map(&:id))
       expect(response_json['meta']['filter']['donor_account_id']).to eq(donor_account_1.id)
     end
+
+    it 'has donation totals within the meta' do
+      get :index, account_list_id: account_list_id, filter: { donor_account_id: donor_account_1.id }
+      expect(response_json['meta']['totals'].first['amount']).to eq(donor_account_1.donations.sum(:amount).to_s)
+    end
   end
 end
