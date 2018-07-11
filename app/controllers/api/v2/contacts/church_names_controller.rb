@@ -20,7 +20,7 @@ class Api::V2::Contacts::ChurchNamesController < Api::V2Controller
   end
 
   def contact_scope
-    Contact.where(account_list_id: account_lists.map(&:id))
+    Contact.where(account_list_id: account_lists.pluck(:id))
   end
 
   def authorize_index

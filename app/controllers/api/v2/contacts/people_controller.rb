@@ -51,7 +51,8 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def person_scope
-    Person.joins(:contact_people).where(contact_people: { contact: contact_scope })
+    Person.joins(:contact_people)
+          .where(contact_people: { contact: contact_scope })
   end
 
   def contact_scope
@@ -122,7 +123,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def permitted_filters
-    @permitted_filters ||= Person::Filterer.filter_params
+    @permitted_filters ||= Person::Filterer.filter_params + [:account_list_id]
   end
 
   def default_sort_param

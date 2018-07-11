@@ -4,7 +4,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   let(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.order(:created_at).first }
   let(:resource_type) { :person }
-  let(:contact) { create(:contact, account_list: user.account_lists.order(:created_at).first) }
+  let(:contact) { create(:contact, account_list: account_list) }
   let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
   let!(:second_resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
   let(:id) { resource.id }
@@ -48,6 +48,19 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
     let(:filter_params) { { phone_number_valid: 'false' } }
     before { Contact.first.people.first.delete }
     include_examples 'filtering examples', action: :index
+  end
+
+  context 'account_list_id filter' do
+    let!(:account_list_two) { create(:account_list, users: [user]) }
+    let!(:person_two) { create(:contact_with_person, account_list: account_list_two).primary_person }
+
+    it 'filters results' do
+      api_login(user)
+      get :index, filter: { account_list_id: account_list_two.id }
+
+      expect(response.status).to eq(200), invalid_status_detail
+      expect(JSON.parse(response.body)['data'].length).to eq(1)
+    end
   end
 
   describe 'Nested Examples' do

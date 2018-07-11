@@ -51,7 +51,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
 
   def render_notification
     render json: @notification,
-           scope: { account_list: @account_list, locale: locale },
+           scope: { account_list: load_account_list, locale: locale },
            status: success_status,
            include: include_params,
            fields: field_params
