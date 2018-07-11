@@ -37,7 +37,10 @@ describe Api::V2::Contacts::ExportToMailChimpController, type: :controller do
     it 'returns a 400 with error message when mailchimp_list_id is the primary_list_id' do
       api_login(user)
       expect(MailChimp::ExportContactsWorker).not_to receive(:perform_async).with(
-        mail_chimp_account.id, primary_list_id, [first_contact.id, second_contact.id], true
+        mail_chimp_account.id,
+        primary_list_id,
+        a_collection_containing_exactly(first_contact.id, second_contact.id),
+        true
       )
       post :create, mail_chimp_list_id: primary_list_id
       expect(response.status).to eq(400)
@@ -48,7 +51,10 @@ describe Api::V2::Contacts::ExportToMailChimpController, type: :controller do
     it 'queues export when user is logged in and provides mailchimp_list_id' do
       api_login(user)
       expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
-        mail_chimp_account.id, second_list_id, [first_contact.id, second_contact.id], true
+        mail_chimp_account.id,
+        second_list_id,
+        a_collection_containing_exactly(first_contact.id, second_contact.id),
+        true
       )
       post :create, mail_chimp_list_id: second_list_id
       expect(response).to be_success

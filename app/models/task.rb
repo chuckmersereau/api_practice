@@ -26,6 +26,11 @@ class Task < Activity
   }
   scope :that_belong_to, -> (user) { where(account_list_id: user.account_list_ids) }
 
+  scope :starting_between, ->(time_range) { where(start_at: time_range) }
+  scope :unscheduled, -> { where(notification_scheduled: nil) }
+  scope :with_notification_time, -> { where.not(notification_time_before: nil) }
+  scope :notify_by, ->(types) { where(notification_type: types) }
+
   PERMITTED_ATTRIBUTES = [
     :account_list_id,
     :activity_type,

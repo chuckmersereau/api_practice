@@ -33,5 +33,12 @@ describe TaskNotificationsWorker, sidekiq: :testing_disabled do
 
       expect { subject.perform }.to_not change(Sidekiq::ScheduledSet.new, :size)
     end
+
+    it 'will queue a task and use the default time unit if it is missing' do
+      task.update(notification_time_unit: nil, notification_scheduled: nil)
+      notifier = TaskNotificationsWorker.new
+      start_time = task.start_at - task.notification_time_before.send('minutes')
+      expect(notifier.determine_start_time(task)).to eq(start_time)
+    end
   end
 end
