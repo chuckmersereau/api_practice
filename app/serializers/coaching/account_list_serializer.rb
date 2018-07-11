@@ -13,7 +13,8 @@ class Coaching::AccountListSerializer < AccountListSerializer
              :progress,
              :received,
              :staff_account_ids,
-             :weeks_on_mpd
+             :weeks_on_mpd,
+             :primary_appeal
 
   has_many :users, serializer: Coaching::PersonSerializer
 

@@ -26,8 +26,45 @@ describe Api::V2::AccountListsController, type: :controller do
   end
 
   include_examples 'index_examples'
-
   include_examples 'show_examples'
-
   include_examples 'update_examples'
+
+  context 'User::Coach' do
+    include_context 'common_variables'
+
+    let(:contact) { create(:contact, account_list: account_list) }
+    let!(:pledge) do
+      create(:pledge,
+             account_list: account_list,
+             contact: contact,
+             amount: 9.99,
+             expected_date: 1.month.ago)
+    end
+    let!(:second_pledge) do
+      create(:pledge,
+             account_list: account_list,
+             amount: 10.00,
+             expected_date: 2.months.from_now)
+    end
+    let!(:appeal) { create(:appeal, account_list: account_list) }
+    let(:coach) { create(:user).becomes(User::Coach) }
+
+    before do
+      pledge.update(appeal: appeal)
+      account_list.coaches << coach
+      account_list.update(primary_appeal_id: appeal.id)
+    end
+
+    describe '#show' do
+      it 'shows list of resources to the coach who is signed in' do
+        api_login(coach)
+        get :show, full_params
+        expect(response.status).to eq(200), invalid_status_detail
+        expect(json_response['data']['attributes']['primary_appeal']).to_not be_nil
+        %w(balance committed currency monthly_goal primary_appeal progress received total_pledges).each do |key|
+          expect(json_response['data']['attributes']).to have_key(key)
+        end
+      end
+    end
+  end
 end

@@ -48,6 +48,7 @@ resource 'Coaching Account Lists' do
       updated_at
       updated_in_db_at
       weeks_on_mpd
+      primary_appeal
     )
   end
 

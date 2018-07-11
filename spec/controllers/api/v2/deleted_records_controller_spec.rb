@@ -44,7 +44,7 @@ describe Api::V2::DeletedRecordsController, type: :controller do
 
     it 'that have been created by a specific DateTime' do
       api_login(user)
-      get :index, filter: { since_date: DateTime.current.beginning_of_year.iso8601 }
+      get :index, filter: { since_date: Time.current.beginning_of_year.utc.iso8601 }
       data = JSON.parse(response.body)['data']
 
       expect(data.size).to eq(4)

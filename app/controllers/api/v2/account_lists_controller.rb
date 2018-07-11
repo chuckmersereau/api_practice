@@ -1,10 +1,7 @@
 class Api::V2::AccountListsController < Api::V2Controller
   def index
     load_account_lists
-    render json: @account_lists.preload_valid_associations(include_associations),
-           meta: meta_hash(@account_lists),
-           include: include_params,
-           fields: field_params
+    render_account_lists
   end
 
   def show
@@ -21,6 +18,15 @@ class Api::V2::AccountListsController < Api::V2Controller
 
   private
 
+  def coach?
+    if params[:action] == 'show'
+      !load_account_list.users.where(id: current_user).exists? &&
+        load_account_list.coaches.where(id: current_user).exists?
+    else
+      false
+    end
+  end
+
   def load_account_lists
     @account_lists = account_list_scope.where(filter_params)
                                        .reorder(sorting_param)
@@ -34,10 +40,25 @@ class Api::V2::AccountListsController < Api::V2Controller
   end
 
   def render_account_list
-    render json: @account_list,
-           status: success_status,
-           include: include_params,
-           fields: field_params
+    options = {
+      json:     @account_list,
+      status:   success_status,
+      include:  include_params,
+      fields:   field_params
+    }
+    options[:serializer] = Coaching::AccountListSerializer if coach?
+    render options
+  end
+
+  def render_account_lists
+    options = {
+      json:     @account_lists.preload_valid_associations(include_associations),
+      meta:     meta_hash(@account_lists),
+      include:  include_params,
+      fields:   field_params
+    }
+    options[:each_serializer] = Coaching::AccountListSerializer if coach?
+    render options
   end
 
   def persist_account_list
@@ -75,7 +96,11 @@ class Api::V2::AccountListsController < Api::V2Controller
   end
 
   def pundit_user
-    PunditContext.new(current_user, account_list: load_account_list)
+    if action_name == 'show'
+      current_user
+    else
+      PunditContext.new(current_user, account_list: load_account_list)
+    end
   end
 
   def default_sort_param
