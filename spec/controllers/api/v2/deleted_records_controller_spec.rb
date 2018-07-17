@@ -7,25 +7,21 @@ describe Api::V2::DeletedRecordsController, type: :controller do
   let!(:account_list) { user.account_lists.order(:created_at).first }
   let!(:designation_account) { create(:designation_account) }
   let!(:account_list_entry) { create(:account_list_entry, account_list: account_list, designation_account: designation_account) }
-  let!(:resource) { create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 1.day) }
-  let!(:second_resource) { create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 1.day) }
-  let!(:third_resource) { create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 2.years) }
-  let!(:fourth_resource) { create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Time.current) }
-  let!(:second_deleted_task_record) do
+  let!(:second_user) { create(:user_with_account) }
+  let!(:second_account_list) { second_user.account_lists.order(:created_at).first }
+
+  before(:each) do
+    3.times do |number|
+      create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - number.day)
+    end
+
+    create(:deleted_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 2.years)
     create(:deleted_task_record, deleted_from: account_list, deleted_by: user, deleted_at: Date.current - 2.years)
-  end
-  let!(:deleted_donation_record) do
     create(:deleted_donation_record,
            deleted_from_id: designation_account.id,
            deleted_from_type: designation_account.class.name,
            deleted_by: user,
            deleted_at: Date.current)
-  end
-
-  # second user
-  let!(:second_user) { create(:user_with_account) }
-  let!(:second_account_list) { second_user.account_lists.order(:created_at).first }
-  let!(:deleted_task_record) do
     create(:deleted_task_record, deleted_from: second_account_list, deleted_by: user, deleted_at: Date.current - 1.day)
   end
 
@@ -33,7 +29,7 @@ describe Api::V2::DeletedRecordsController, type: :controller do
   let(:correct_attributes) { attributes_for(:deleted_record, deleted_from: account_list, deleted_by: user) }
   let(:incorrect_attributes) { attributes_for(:deleted_record, deleted_from: nil) }
 
-  context 'get all deleted records' do
+  describe 'get all deleted records' do
     it 'that have been created by a specific time' do
       api_login(user)
       get :index, filter: { since_date: Date.current.beginning_of_year.iso8601 }

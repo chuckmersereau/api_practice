@@ -5,7 +5,7 @@ RSpec.describe DuplicateTasksPerContact do
   let(:filter_account_list) { nil }
   let(:min_contacts) { 2 }
 
-  let(:task) { create(:task) }
+  let!(:task) { create(:task) }
   let!(:contact_one) { create(:contact, tasks: [task]) }
   let!(:contact_two) { create(:contact, tasks: [task]) }
 
@@ -56,7 +56,7 @@ RSpec.describe DuplicateTasksPerContact do
     expect(Task.all.reject { |t| t.contacts.size == 1 }).to be_empty
   end
 
-  it 'resuses the existing Task for the first Comment' do
+  it 'resuses the existing Task for the first Contact' do
     subject
     contact_one.reload
     contact_two.reload

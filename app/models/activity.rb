@@ -1,6 +1,8 @@
 class Activity < ApplicationRecord
   acts_as_taggable
 
+  REPORT_STATES = %w(completed uncompleted).freeze
+
   audited associated_with: :account_list, except: [:updated_at, :activity_comments_count, :notification_scheduled]
 
   belongs_to :account_list

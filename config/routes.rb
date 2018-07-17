@@ -195,6 +195,7 @@ Rails.application.routes.draw do
           resources :monthly_losses_graphs, only: :show
           resources :pledge_histories, only: :index
           resources :appointment_results, only: :index
+          resources :activity_results, only: :index
         end
 
         resources :deleted_records, only: [:index]
