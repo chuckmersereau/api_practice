@@ -1,5 +1,6 @@
 require 'sidekiq_job_args_logger'
 require 'sidekiq_mem_notifier'
+require 'datadog/statsd'
 require Rails.root.join('config', 'initializers', 'redis').to_s
 
 Sidekiq.configure_client do |config|
@@ -36,6 +37,10 @@ Sidekiq.default_worker_options = {
   # errors).
   unique_expiration: 24.hours
 }
+
+unless Rails.env.development?
+  Sidekiq::Pro.dogstatsd = -> { Datadog::Statsd.new(ENV['DATADOG_HOST'], ENV['DATADOG_PORT']) }
+end
 
 Sidekiq::Extensions.enable_delay!
 

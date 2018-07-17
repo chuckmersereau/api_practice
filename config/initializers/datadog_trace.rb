@@ -3,8 +3,8 @@ enabled = ENV['DATADOG_TRACE'].to_s == 'true'
 
 Datadog.configure do |c|
   # Tracer
-  c.tracer hostname: 'datadog-apm.aws.cru.org',
-           port: 8126,
+  c.tracer hostname: ENV['DATADOG_HOST'],
+           port: ENV['DATADOG_PORT'],
            tags: { app: base_name },
            debug: false,
            enabled: enabled,

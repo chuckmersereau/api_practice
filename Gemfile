@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 source 'https://gems.contribsys.com/' do
-  gem 'sidekiq-pro', '< 4'
+  gem 'sidekiq-pro', '< 5'
 end
 
 gem 'auth', path: 'engines/auth'
@@ -23,10 +23,11 @@ gem 'carrierwave', '~> 0.11.2'
 gem 'charlock_holmes', '~> 0.7.6'
 gem 'cloudinary', '~> 1.8.1'
 gem 'country_select', git: 'https://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
-gem 'ddtrace', '~> 0.11.2'
+gem 'ddtrace', '~> 0.11.4'
 gem 'deadlock_retry', '~> 1.2.0'
 gem 'devise', '~> 4.4.3'
 gem 'display_case', '= 0.0.5'
+gem 'dogstatsd-ruby', '~> 3.3.0'
 gem 'elasticsearch-persistence', '~> 5.0.1'
 gem 'email_reply_parser', '~> 0.5.9'
 gem 'email_validator', '~> 1.6.0'
