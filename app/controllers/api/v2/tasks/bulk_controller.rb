@@ -67,7 +67,6 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
     @tasks.each do |task|
       task_index = data_attribute_index(task)
       attributes = params.require(:data)[task_index][:task]
-
       task.assign_attributes(
         task_params(attributes)
       )
