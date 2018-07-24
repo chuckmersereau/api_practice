@@ -165,8 +165,7 @@ CREATE TABLE public.activities (
     notification_type integer,
     notification_time_before integer,
     notification_time_unit integer,
-    notification_scheduled boolean,
-    subject_hidden boolean DEFAULT false
+    notification_scheduled boolean
 );
 
 
@@ -2464,13 +2463,6 @@ CREATE INDEX index_activities_on_remote_id ON public.activities USING btree (rem
 --
 
 CREATE INDEX index_activities_on_start_at ON public.activities USING btree (start_at);
-
-
---
--- Name: index_activities_on_subject_hidden; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_activities_on_subject_hidden ON public.activities USING btree (subject_hidden);
 
 
 --
@@ -5127,6 +5119,4 @@ INSERT INTO schema_migrations (version) VALUES ('20180612162302');
 INSERT INTO schema_migrations (version) VALUES ('20180615175942');
 
 INSERT INTO schema_migrations (version) VALUES ('20180618144452');
-
-INSERT INTO schema_migrations (version) VALUES ('20180710220521');
 

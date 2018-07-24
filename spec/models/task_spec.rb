@@ -24,15 +24,6 @@ describe Task do
     expect(contact.reload.uncompleted_tasks_count).to eq(1)
   end
 
-  it 'auto generates the subject line when one is missing' do
-    contact = create(:contact, account_list: account_list, name: 'Holloway, Max')
-    task = Task.new(activity_type: 'Call', subject: nil, account_list: account_list)
-    task.contacts << contact
-    task.save
-    expect(task.subject).to eq('Call Holloway, Max')
-    expect(task.subject_hidden).to eq(true)
-  end
-
   context 'google calendar integration' do
     let(:google_integration) { double('GoogleIntegration', async: true, id: 1234) }
 

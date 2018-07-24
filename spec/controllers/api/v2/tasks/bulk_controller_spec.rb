@@ -52,46 +52,6 @@ describe Api::V2::Tasks::BulkController, type: :controller do
 
         expect(JSON.parse(response.body)[0]['data']['attributes'].keys).to eq ['subject']
       end
-
-      it 'will leave subject_hidden as false' do
-        post :create, data: bulk_create_form_data, fields: { tasks: 'subject,subject_hidden' }
-        attributes = JSON.parse(response.body)[0]['data']['attributes']
-        expect(attributes['subject_hidden']).to eq(false)
-      end
-    end
-
-    context 'with a missing subject' do
-      let!(:contact) { create(:contact, account_list: account_list) }
-      let(:contact_relationship) do
-        {
-          account_list: {
-            data: {
-              type: 'account_lists',
-              id: account_list_id
-            }
-          },
-          contacts: {
-            data: [
-              {
-                id: contact.id,
-                type: 'contacts'
-              }
-            ]
-          }
-        }
-      end
-
-      let!(:contact_attributes) { attributes_for(:task, subject: nil, activity_type: 'Call') }
-      let(:bulk_create_form_data_with_missing_subject) do
-        [{ data: { type: resource_type, id: SecureRandom.uuid, attributes: contact_attributes, relationships: contact_relationship } }]
-      end
-
-      it 'will set the subject_hidden to true' do
-        post :create, data: bulk_create_form_data_with_missing_subject, fields: { tasks: 'subject,subject_hidden' }
-        attributes = JSON.parse(response.body)[0]['data']['attributes']
-        expect(attributes['subject_hidden']).to eq(true)
-        expect(attributes['subject']).to eq("Call #{contact.name}")
-      end
     end
   end
 end

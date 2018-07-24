@@ -40,7 +40,6 @@ resource 'Tasks' do
       starred
       start_at
       subject
-      subject_hidden
       tag_list
       updated_at
       updated_in_db_at

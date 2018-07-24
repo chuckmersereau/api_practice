@@ -11,7 +11,6 @@ class ActivitySerializer < ApplicationSerializer
              :starred,
              :start_at,
              :subject,
-             :subject_hidden,
              :tag_list
 
   attribute :activity_comments_count, key: :comments_count

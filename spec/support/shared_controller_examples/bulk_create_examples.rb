@@ -53,6 +53,28 @@ RSpec.shared_examples 'bulk_create_examples' do
       expect(response.status).to eq(400), invalid_status_detail
     end
 
+    it 'creates the resources which belong to users and do not have errors' do
+      expect do
+        post :create, bulk_create_attributes
+      end.to change { resource.class.count }.by(2)
+      expect(response_body.detect { |hash| hash.dig('data', 'id') == first_id }['errors']).to be_blank
+      expect(response_body.detect { |hash| hash.dig('id') == second_id }['errors']).to be_present
+      expect(response_body.detect { |hash| hash.dig('data', 'id') == third_id }['errors']).to be_blank
+    end
+
+    it 'returns error objects for resources that were not created, but belonged to user' do
+      expect do
+        put :create, bulk_create_attributes
+      end.to_not change { second_resource.reload.send(reference_key) }
+
+      response_with_errors = response_body.detect { |hash| hash.dig('id') == second_id }
+      expect(response_with_errors['errors']).to be_present
+      error = response_with_errors['errors'].detect do |hash|
+        hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}"
+      end
+      expect(error).to be_present
+    end
+
     context 'resources forbidden' do
       let!(:bulk_create_attributes_with_forbidden_resource) do
         {
