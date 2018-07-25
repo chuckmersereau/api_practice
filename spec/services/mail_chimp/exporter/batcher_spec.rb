@@ -120,6 +120,12 @@ RSpec.describe MailChimp::Exporter::Batcher do
       subject.subscribe_contacts([contact])
     end
 
+    it 'adds worker to watch batch results' do
+      expect do
+        subject.subscribe_contacts([contact])
+      end.to change(MailChimp::BatchResultsWorker.jobs, :size).by(1)
+    end
+
     it "doesn't send null on last name or greeting" do
       person.update!(last_name: nil)
       contact.update!(greeting: nil)

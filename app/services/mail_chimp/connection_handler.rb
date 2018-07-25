@@ -44,7 +44,7 @@ class MailChimp::ConnectionHandler
   def handle_request_or_account_or_server_error
     return stop_trying_to_sync_and_send_invalid_api_key_email if api_key_disabled?
     return forget_primary_list_and_send_merge_field_explanation_email if invalid_merge_fields?
-    return forget_primary_list if invalid_mail_chimp_list? || resource_not_found?
+    return forget_primary_list if invalid_mail_chimp_list?
     return if invalid_email? || email_already_subscribed?
 
     handle_server_error
@@ -70,10 +70,6 @@ class MailChimp::ConnectionHandler
        @error.message =~ /An email address must contain a single @/)
   end
 
-  def resource_not_found?
-    @error.message.include?('The requested resource could not be found.')
-  end
-
   def email_already_subscribed?
     @error.message.include?('code 214')
   end
@@ -91,7 +87,12 @@ class MailChimp::ConnectionHandler
   end
 
   def invalid_mail_chimp_list?
-    @error.message.include?('code 200')
+    return true if @error.message.include?('code 200')
+
+    # check if primary list still exists. This is the best guess we have at why a 404 would be thrown
+    @error.message.include?('The requested resource could not be found.') &&
+      mail_chimp_account.primary_list_id.present? &&
+      mail_chimp_account.gibbon_wrapper.list(mail_chimp_account.primary_list_id).nil?
   end
 
   def inactive_account?

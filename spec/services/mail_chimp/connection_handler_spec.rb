@@ -81,6 +81,8 @@ RSpec.describe MailChimp::ConnectionHandler do
 
       it 'removes the primary_list_id from the mail chimp account' do
         raise_error_on_two_way_sync
+        lists_url = 'https://us4.api.mailchimp.com/3.0/lists?count=100'
+        stub_request(:get, lists_url).to_return(body: { lists: [] }.to_json)
 
         expect do
           subject.call_mail_chimp(mail_chimp_syncer, :two_way_sync_with_primary_list)

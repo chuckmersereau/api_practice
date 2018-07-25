@@ -147,6 +147,7 @@ class MailChimp::Exporter
           comment: self_link
         )
       end
+      MailChimp::BatchResultsWorker.perform_in(15.minutes, mail_chimp_account.id, batch['id'])
     end
 
     def escape_intermittent_bad_request_error
