@@ -8,22 +8,17 @@ class NotificationType::SmallerGift < NotificationType
   end
 
   def smaller_gift?(contact)
-    return unless contact.pledge_frequency && contact.pledge_amount
+    return unless contact.pledge_frequency&.positive? && contact.pledge_amount
 
-    without_gift_aid = contact.donations.without_gift_aid
+    donations = contact.donations.without_gift_aid.order(donation_date: :asc)
+    return unless donations.any?
 
-    if contact.pledge_frequency < 1 && without_gift_aid.any?
-      return contact.last_donation.present? &&
-             contact.amount_with_gift_aid(without_gift_aid.first.amount) < contact.pledge_amount
-    end
+    last_donation_date = donations.last&.donation_date
+    start_last_donation_period = last_donation_date - pledge_frequency_as_time(contact.pledge_frequency)
 
-    monthly_avg_with_prev_gift_without_gift_aid =
-      contact.amount_with_gift_aid(contact.monthly_avg_with_prev_gift)
-    last_monthly_total_without_gift_aid =
-      contact.amount_with_gift_aid(contact.monthly_avg_current(except_payment_method: Donation::GIFT_AID))
-    monthly_avg_with_prev_gift_without_gift_aid < contact.monthly_pledge &&
-      contact.last_monthly_total.positive? && last_monthly_total_without_gift_aid != contact.monthly_pledge &&
-      !NotificationType::RecontinuingGift.had_recontinuing_gift?(contact)
+    amount_given = donations.where(donation_date: start_last_donation_period..last_donation_date).sum(:amount)
+
+    amount_given < contact.pledge_amount && !NotificationType::RecontinuingGift.had_recontinuing_gift?(contact)
   end
 
   def task_activity_type
@@ -37,5 +32,21 @@ class NotificationType::SmallerGift < NotificationType
     else
       _('%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift.')
     end
+  end
+
+  private
+
+  def pledge_frequency_as_time(pledge_frequency)
+    {
+      0.23076923076923.to_d => 1.week,
+      0.46153846153846.to_d => 2.weeks,
+      1.0.to_d => 1.month,
+      2.0.to_d => 2.months,
+      3.0.to_d => 3.months,
+      4.0.to_d => 4.months,
+      6.0.to_d => 6.months,
+      12.0.to_d => 1.year,
+      24.0.to_d => 2.years
+    }[pledge_frequency]
   end
 end

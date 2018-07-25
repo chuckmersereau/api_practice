@@ -28,15 +28,27 @@ describe NotificationType::SmallerGift do
     it 'does not experience rounding errors' do
       contact.update(pledge_amount: 250, pledge_frequency: 3.0)
       donation.update(amount: 250.0, tendered_amount: 250.0)
-      expect(subject.check(account_list).size).to eq(0)
+      expect(subject.check(account_list)).to be_empty
     end
 
-    it 'does not add a notification if the correct size gift comes in' do
-      contact.update(pledge_amount: 1200.0, pledge_frequency: 12.0)
-      donation.update(amount: 1200.0, tendered_amount: 1200.0)
-      contact.update_donation_totals(donation)
-      contact.update(first_donation_date: nil, last_donation_date: nil) # sometimes these aren't set
-      expect(subject.check(account_list)).to be_empty
+    context 'annually' do
+      it 'does not add a notification if the correct size gift comes in' do
+        contact.update(pledge_amount: 1200.0, pledge_frequency: 12.0)
+        donation.update(amount: 1200.0, tendered_amount: 1200.0)
+        contact.update_donation_totals(donation)
+        contact.update(first_donation_date: nil, last_donation_date: nil) # sometimes these aren't set
+        expect(subject.check(account_list)).to be_empty
+      end
+    end
+
+    context 'weekly' do
+      it 'does not add a notification if the correct size gift comes in' do
+        contact.update(pledge_amount: 1200.0, pledge_frequency: 0.23076923076923.to_d)
+        donation.update(amount: 1200.0, tendered_amount: 1200.0, donation_date: 1.week.ago)
+        contact.update_donation_totals(donation)
+        contact.update(first_donation_date: nil, last_donation_date: nil) # sometimes these aren't set
+        expect(subject.check(account_list)).to be_empty
+      end
     end
 
     it 'does not raise an error if all donations are by GIFT_AID' do
@@ -44,8 +56,13 @@ describe NotificationType::SmallerGift do
       donation.update!(payment_method: Donation::GIFT_AID)
 
       expect do
-        expect(subject.check(account_list).size).to eq(1)
+        expect(subject.check(account_list)).to be_empty
       end.not_to raise_error
+    end
+
+    it 'does not add a notification if recontinuing gift notification being sent' do
+      allow(NotificationType::RecontinuingGift).to receive(:had_recontinuing_gift?).with(contact).and_return(true)
+      expect(subject.check(account_list)).to be_empty
     end
   end
 end
