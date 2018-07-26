@@ -11,6 +11,7 @@ class ActivitySerializer < ApplicationSerializer
              :starred,
              :start_at,
              :subject,
+             :subject_hidden,
              :tag_list
 
   attribute :activity_comments_count, key: :comments_count
@@ -26,5 +27,9 @@ class ActivitySerializer < ApplicationSerializer
 
   def tag_list
     object.tags.collect(&:name)
+  end
+
+  def subject_hidden
+    !!object.subject_hidden
   end
 end

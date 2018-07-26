@@ -9,6 +9,7 @@ class Task < Activity
   attr_accessor :skip_contact_task_counter_update
 
   before_validation :update_completed_at
+  before_validation :auto_generate_subject, on: :create
   after_save :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
   after_destroy :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
   after_create :log_newsletter, if: -> { should_log_to_all_contacts? }
@@ -48,6 +49,7 @@ class Task < Activity
     :starred,
     :start_at,
     :subject,
+    :subject_hidden,
     :tag_list,
     :updated_at,
     :updated_in_db_at,
@@ -456,5 +458,11 @@ class Task < Activity
   def should_log_to_all_contacts?
     (activity_type == 'Newsletter - Physical' || (activity_type == 'Newsletter - Email' && source.nil?)) &&
       contacts.empty?
+  end
+
+  def auto_generate_subject
+    return unless subject.blank?
+    self.subject_hidden = true
+    self.subject = "#{activity_type} #{contacts.first&.name}"
   end
 end

@@ -55,5 +55,9 @@ Style/Documentation:
 Style/FormatString:
   EnforcedStyle: format
 
+# This has been set to false in future versions of Rubocop, so setting it here.
+Style/DoubleNegation:
+  Enabled: false
+
 Rails/UnknownEnv:
   Environments: development, test, production, staging
