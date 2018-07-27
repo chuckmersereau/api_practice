@@ -10,7 +10,7 @@ class NotificationType::SmallerGift < NotificationType
   def smaller_gift?(contact)
     return unless contact.pledge_frequency&.positive? && contact.pledge_amount
 
-    donations = contact.donations.without_gift_aid.order(donation_date: :asc)
+    donations = contact.donations.without_gift_aid.reorder(donation_date: :asc)
     return unless donations.any?
 
     last_donation_date = donations.last&.donation_date
