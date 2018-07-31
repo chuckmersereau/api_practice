@@ -23,7 +23,7 @@ gem 'carrierwave', '~> 0.11.2'
 gem 'charlock_holmes', '~> 0.7.6'
 gem 'cloudinary', '~> 1.8.1'
 gem 'country_select', git: 'https://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
-gem 'ddtrace', '~> 0.11.4'
+gem 'ddtrace', '~> 0.13.1'
 gem 'deadlock_retry', '~> 1.2.0'
 gem 'devise', '~> 4.4.3'
 gem 'display_case', '= 0.0.5'

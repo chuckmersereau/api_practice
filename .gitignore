@@ -44,3 +44,4 @@ _generated_examples.markdown
 /.byebug_history
 config/initializers/cache
 .vscode
+sandi_meter/*

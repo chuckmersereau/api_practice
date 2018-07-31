@@ -189,7 +189,7 @@ GEM
       addressable
     currencies (0.4.2)
     database_cleaner (1.7.0)
-    ddtrace (0.11.4)
+    ddtrace (0.13.1)
       msgpack
     deadlock_retry (1.2.0)
     declarative (0.0.10)
@@ -845,7 +845,7 @@ DEPENDENCIES
   country_select!
   coveralls (~> 0.8.21)
   database_cleaner (~> 1.7.0)
-  ddtrace (~> 0.11.4)
+  ddtrace (~> 0.13.1)
   deadlock_retry (~> 1.2.0)
   devise (~> 4.4.3)
   display_case (= 0.0.5)
