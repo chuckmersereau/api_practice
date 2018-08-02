@@ -59,7 +59,7 @@ class Person::GoogleAccount < ApplicationRecord
   end
 
   def token_expired?
-    (expires_at || Time.current) <= Time.current
+    (expires_at || Time.current) <= Time.current ? !refresh_token! : false
   end
 
   def token_failure?
@@ -81,7 +81,7 @@ class Person::GoogleAccount < ApplicationRecord
   end
 
   def contacts_api_user
-    raise Person::GoogleAccount::MissingRefreshToken if token_expired? && !refresh_token!
+    raise Person::GoogleAccount::MissingRefreshToken if token_expired?
 
     unless @contact_api_user
       client = OAuth2::Client.new(ENV.fetch('GOOGLE_KEY'), ENV.fetch('GOOGLE_SECRET'))
@@ -92,7 +92,7 @@ class Person::GoogleAccount < ApplicationRecord
   end
 
   def authorization
-    return false if token_expired? && !refresh_token!
+    return false if token_expired?
     @authorization ||= Signet::OAuth2::Client.new(authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
                                                   token_credential_uri: 'https://www.googleapis.com/oauth2/v3/token',
                                                   client_id: ENV.fetch('GOOGLE_KEY'),

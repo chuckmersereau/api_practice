@@ -94,7 +94,7 @@ class Person::GmailAccount
   attr_accessor :email_collection, :blacklisted_emails
 
   def token?
-    !google_account.token_expired? || google_account.refresh_token!
+    !google_account.token_expired?
   end
 
   def fetch_account_email_data(email_address)

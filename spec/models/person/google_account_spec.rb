@@ -50,16 +50,45 @@ describe Person::GoogleAccount do
   end
 
   describe '#token_expired?' do
-    it 'is expired if expires_at is in the past' do
-      expect(build(:google_account, expires_at: 1.minute.ago).token_expired?).to eq(true)
+    context 'expires_at is in the future' do
+      subject { build(:google_account, expires_at: 1.minute.from_now) }
+
+      it 'does not attempt to refresh token' do
+        expect(subject).to_not receive(:refresh_token!)
+        expect(subject.token_expired?).to eq false
+      end
+
+      it 'returns false' do
+        expect(subject.token_expired?).to eq false
+      end
     end
 
-    it 'is not expired if expires_at is in the future' do
-      expect(build(:google_account, expires_at: 1.minute.from_now).token_expired?).to eq(false)
+    context 'expires_at is in the past' do
+      subject { build(:google_account, expires_at: 1.minute.ago) }
+
+      it 'attempts to refresh token' do
+        expect(subject).to receive(:refresh_token!).and_return(true)
+        expect(subject.token_expired?).to eq false
+      end
+
+      it 'returns true' do
+        expect(subject).to receive(:refresh_token!).and_return(false)
+        expect(subject.token_expired?).to eq true
+      end
     end
 
-    it 'is expired if expires_at is nil' do
-      expect(build(:google_account, expires_at: nil).token_expired?).to eq(true)
+    context 'expires_at is nil' do
+      subject { build(:google_account, expires_at: nil) }
+
+      it 'attempts to refresh token' do
+        expect(subject).to receive(:refresh_token!).and_return(true)
+        expect(subject.token_expired?).to eq false
+      end
+
+      it 'returns true' do
+        expect(subject).to receive(:refresh_token!).and_return(false)
+        expect(subject.token_expired?).to eq true
+      end
     end
   end
 
