@@ -82,6 +82,7 @@ gem 'versionist', '~> 1.2.1'
 gem 'virtus', '~> 1.0.5'
 gem 'nameable', '~> 1.1.3'
 gem 'adobe-campaign', '~> 0.1.1'
+gem 'strong_migrations', '~> 0.2.3'
 
 group :development do
   gem 'bluepill', '~> 0.1.2'
