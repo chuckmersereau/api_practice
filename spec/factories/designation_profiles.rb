@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :designation_profile do
     remote_id 1
     name 'foo'

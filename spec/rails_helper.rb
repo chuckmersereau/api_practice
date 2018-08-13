@@ -88,7 +88,7 @@ RSpec.configure do |config|
   config.filter_run_excluding :deprecated
 
   config.include Devise::Test::ControllerHelpers, type: :controller
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include HeaderHelpers, type: :controller
   config.include JsonApiHelper, type: :acceptance
   config.include JsonApiHelper, type: :controller

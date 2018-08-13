@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :currency_alias do
     sequence(:alias_code) { |n| (65 + n).chr }
     sequence(:rate_api_code) { |n| (65 + n).chr }

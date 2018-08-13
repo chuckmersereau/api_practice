@@ -97,7 +97,7 @@ group :development, :test do
   gem 'awesome_print', '~> 1.8.0'
   gem 'equivalent-xml', '~> 0.6.0'
   gem 'dotenv-rails', '~> 2.2.1', require: 'dotenv/rails-now'
-  gem 'factory_girl_rails', '~> 4.9.0'
+  gem 'factory_bot_rails', '~> 4.10.0'
   gem 'gettext', '~> 3.1.6', require: false, group: :development
   gem 'guard-brakeman'
   gem 'guard-bundler'

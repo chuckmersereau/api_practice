@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :organization_account, class: 'Person::OrganizationAccount' do
     association :person
     association :organization, factory: :fake_org

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :background_batch do
     batch_id 'MyString'
     user

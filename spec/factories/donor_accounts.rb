@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :donor_account do
     association :organization
     account_number 'MyString'

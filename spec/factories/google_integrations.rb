@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :google_integration do
     calendar_integration true
     calendar_id 'cal1'

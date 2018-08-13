@@ -13,7 +13,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
 
   # This is required!
   let(:factory_type) do
-    # This is the type used to auto-generate a resource using FactoryGirl,
+    # This is the type used to auto-generate a resource using FactoryBot,
     # ex: The type `:email_address` would be used as create(:email_address)
     :contact_referral
   end

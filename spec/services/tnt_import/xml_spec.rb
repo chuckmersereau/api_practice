@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe TntImport::Xml do
-  let(:tnt_import) { FactoryGirl.build_stubbed(:tnt_import, override: true) }
+  let(:tnt_import) { FactoryBot.build_stubbed(:tnt_import, override: true) }
   let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
 
   describe 'initialize' do

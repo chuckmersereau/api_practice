@@ -11,7 +11,7 @@ describe Person::TwitterAccount do
 
   describe 'create from auth' do
     it 'should create an account linked to a person' do
-      person = FactoryGirl.create(:person)
+      person = FactoryBot.create(:person)
       expect do
         @account = Person::TwitterAccount.find_or_create_from_auth(auth_hash, person)
       end.to change(Person::TwitterAccount, :count).from(0).to(1)
@@ -20,7 +20,7 @@ describe Person::TwitterAccount do
   end
   describe 'update from auth' do
     it 'should update an account that already exists' do
-      person = FactoryGirl.create(:person)
+      person = FactoryBot.create(:person)
       Person::TwitterAccount.find_or_create_from_auth(auth_hash, person)
       expect do
         @account = Person::TwitterAccount.find_or_create_from_auth(auth_hash, person)

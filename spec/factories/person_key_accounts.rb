@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :key_account, class: 'Person::KeyAccount' do
     association :person
     sequence(:remote_id) { |n| n }

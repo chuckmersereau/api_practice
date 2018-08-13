@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :account_list do
     name { Faker::Company.name }
     currency 'USD'

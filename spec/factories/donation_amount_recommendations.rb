@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :donation_amount_recommendation do
     suggested_pledge_amount 25
     suggested_special_amount 50

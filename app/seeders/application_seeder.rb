@@ -1,4 +1,4 @@
-require 'factory_girl'
+require 'factory_bot'
 
 class ApplicationSeeder
   ALLOWED_ENV = %w(test development).freeze
@@ -39,7 +39,7 @@ class ApplicationSeeder
   def intro
     return if quiet
     Rails.logger.info '== Starting database seeding... ==============================================='
-    Rails.logger.info "The database will be seeded using FactoryGirl factories.\nPrinting the name of each factory as it's created:"
+    Rails.logger.info "The database will be seeded using FactoryBot factories.\nPrinting the name of each factory as it's created:"
   end
 
   def outro
@@ -49,7 +49,7 @@ class ApplicationSeeder
 
   def create(*args)
     Rails.logger.info "#{args.first}... " unless quiet
-    FactoryGirl.create(*args)
+    FactoryBot.create(*args)
   end
 
   def seed_all_models

@@ -20,13 +20,13 @@ describe User do
 
   describe 'fundraiser role' do
     before(:each) do
-      @org = FactoryGirl.create(:organization)
-      @user = FactoryGirl.create(:user)
-      FactoryGirl.create(:designation_profile, organization: @org, user: @user)
-      @account = FactoryGirl.create(:designation_account, organization: @org)
-      @account_list = FactoryGirl.create(:account_list)
-      FactoryGirl.create(:account_list_entry, account_list: @account_list, designation_account: @account)
-      FactoryGirl.create(:account_list_user, account_list: @account_list, user: @user)
+      @org = FactoryBot.create(:organization)
+      @user = FactoryBot.create(:user)
+      FactoryBot.create(:designation_profile, organization: @org, user: @user)
+      @account = FactoryBot.create(:designation_account, organization: @org)
+      @account_list = FactoryBot.create(:account_list)
+      FactoryBot.create(:account_list_entry, account_list: @account_list, designation_account: @account)
+      FactoryBot.create(:account_list_user, account_list: @account_list, user: @user)
     end
 
     it 'should return a list of account numbers from a given org' do

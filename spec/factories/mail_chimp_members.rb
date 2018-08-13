@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mail_chimp_member do
     association :mail_chimp_account
 

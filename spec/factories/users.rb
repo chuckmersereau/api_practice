@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     association :master_person
     first_name { Faker::Name.first_name }

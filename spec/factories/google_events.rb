@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :google_event do
     association :activity
     association :google_integration

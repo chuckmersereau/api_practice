@@ -1,13 +1,13 @@
 require_relative '../support/fake_api'
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence :query_ini_url do |n|
     n
   end
 
   factory :organization do
     sequence(:name) { |n| "Organization#{n}" }
-    query_ini_url { FactoryGirl.generate(:query_ini_url) }
+    query_ini_url { FactoryBot.generate(:query_ini_url) }
     api_class 'DataServer'
     profiles_url 'http://example.com/profiles'
     profiles_params 'UserName=test@test.com&Password=Test1234&Action=Profiles'

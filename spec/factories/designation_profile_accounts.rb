@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :designation_profile_account do
     designation_profile nil
     designation_account nil

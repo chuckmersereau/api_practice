@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :donation do
     sequence(:remote_id, 1) { |n| n&.to_s }
     amount '9.99'

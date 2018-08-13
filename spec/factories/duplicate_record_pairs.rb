@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :duplicate_contacts_pair, class: 'DuplicateRecordPair' do
     association :account_list
     reason 'Just testing'

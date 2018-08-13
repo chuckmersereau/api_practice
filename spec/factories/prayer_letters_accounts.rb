@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :prayer_letters_account do
     token 'MyString'
     oauth2_token 'MyString'

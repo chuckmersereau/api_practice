@@ -8,9 +8,9 @@ class RunOncePreview < ApplicationPreview
   end
 
   def gdpr_unsubscribes
-    contact = account_list.contacts.first || FactoryGirl.create(:contact, account_list: account_list)
-    person = contact.people.first || FactoryGirl.create(:person, contacts: [contact])
-    email = person.primary_email_address || FactoryGirl.create(:email_address, primary: true, person: person)
+    contact = account_list.contacts.first || FactoryBot.create(:contact, account_list: account_list)
+    person = contact.people.first || FactoryBot.create(:person, contacts: [contact])
+    email = person.primary_email_address || FactoryBot.create(:email_address, primary: true, person: person)
     unsubscribe = RunOnce::SendGDPRUnsubscribesWorker.new.build_unsubscribes_list(account_list, [email]).first
 
     RunOnceMailer.gdpr_unsubscribes('bill@cru.org', account_list.name, unsubscribe)

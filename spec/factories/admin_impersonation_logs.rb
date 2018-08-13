@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :admin_impersonation_log, class: 'Admin::ImpersonationLog' do
     association :impersonator
     association :impersonated

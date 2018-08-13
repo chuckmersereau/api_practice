@@ -134,7 +134,7 @@ describe Admin::AccountListResetWorker do
           end
 
           def new_account_list
-            @new_account_list = FactoryGirl.create(:account_list)
+            @new_account_list = FactoryBot.create(:account_list)
           end
 
           def import_profiles

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :version do
     association :item
     association :related_object

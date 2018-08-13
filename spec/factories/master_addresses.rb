@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :master_address do
     street 'MyText'
     city 'MyString'

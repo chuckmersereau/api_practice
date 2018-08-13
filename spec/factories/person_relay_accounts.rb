@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :relay_account, class: Person::RelayAccount do
     association :person
     remote_id { SecureRandom.uuid }

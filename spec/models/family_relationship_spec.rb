@@ -3,8 +3,8 @@ require 'rails_helper'
 describe FamilyRelationship do
   describe 'adding a family relationship to a person' do
     before(:each) do
-      @person = FactoryGirl.create(:person)
-      @wife = FactoryGirl.create(:person)
+      @person = FactoryBot.create(:person)
+      @wife = FactoryBot.create(:person)
       @relationship = 'wife'
       @attributes = { related_person_id: @wife.id, relationship: @relationship }
     end

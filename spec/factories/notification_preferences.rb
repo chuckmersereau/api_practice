@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :notification_preference do
     association :notification_type
     association :account_list

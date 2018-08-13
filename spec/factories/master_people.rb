@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :master_person do
   end
 end

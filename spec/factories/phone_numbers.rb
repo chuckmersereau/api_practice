@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :phone_number do
     association :person
     number '+12134567890'

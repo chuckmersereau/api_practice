@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :address do
     association :addressable, factory: :contact
     association :master_address

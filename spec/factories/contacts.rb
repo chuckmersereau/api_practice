@@ -1,6 +1,6 @@
 require 'faker'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :contact do
     account_list
     locale 'en'

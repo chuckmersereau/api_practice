@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :pledge_donation do
     pledge
     donation

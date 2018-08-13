@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :appeal do
     account_list
     amount 1000.0

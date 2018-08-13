@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :master_person_donor_account do
     association :master_person
     association :donor_account

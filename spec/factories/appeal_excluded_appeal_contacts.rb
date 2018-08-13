@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :appeal_excluded_appeal_contact, class: 'Appeal::ExcludedAppealContact' do
     appeal
     contact do |appeal_excluded_appeal_contact|

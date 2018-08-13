@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :export_log do
     type 'Contacts Export'
     params 'filter[account_list_id]=1'

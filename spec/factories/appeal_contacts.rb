@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :appeal_contact do
     appeal
     contact do |appeal_contact|

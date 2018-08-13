@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :donation_amount_recommendation_remote, class: 'DonationAmountRecommendation::Remote' do
     organization
     donor_number 'MyString'

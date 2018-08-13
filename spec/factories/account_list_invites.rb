@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :account_list_invite do
     code 'abc'
     account_list

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :company_position do
     person nil
     company nil

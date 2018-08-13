@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :task do
     association :account_list
     starred false

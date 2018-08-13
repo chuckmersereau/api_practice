@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :deleted_record do
     deleted_at Date.current - 1.day
     deleted_from { |a| a.association(:account_list) }

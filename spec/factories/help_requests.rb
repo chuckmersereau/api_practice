@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :help_request do
     name 'MyString'
     browser 'MyText'

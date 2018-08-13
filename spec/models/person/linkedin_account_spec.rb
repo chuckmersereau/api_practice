@@ -16,7 +16,7 @@ describe Person::LinkedinAccount do
                                    credentials: { token: 'a', secret: 'b' },
                                    extra: { access_token: { params: { oauth_expires_in: 2, oauth_authorization_expires_in: 5 } } },
                                    info: { first_name: 'John', last_name: 'Doe' })
-      person = FactoryGirl.create(:person)
+      person = FactoryBot.create(:person)
       expect do
         @account = Person::LinkedinAccount.find_or_create_from_auth(auth_hash, person)
       end.to change(Person::LinkedinAccount, :count).from(0).to(1)
