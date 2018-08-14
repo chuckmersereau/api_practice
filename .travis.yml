@@ -12,10 +12,11 @@ before_install:
 - gem update --system # https://github.com/travis-ci/travis-ci/issues/8978
 - gem install bundler
 before_script:
-- psql -c 'create database mpdx_test;' -U postgres
-- psql -c 'create database mpdx_test2;' -U postgres
-- psql -U postgres -q -d mpdx_test -f db/structure.sql
-- psql -U postgres -q -d mpdx_test2 -f db/structure.sql
+- psql -c 'create database mpdx_test;'
+- psql -c 'create database mpdx_test2;'
+- psql -q -d mpdx_test -f db/structure.sql
+- psql -q -d mpdx_test2 -f db/structure.sql
+- psql -c "CREATE ROLE mpdx PASSWORD 'mpdx_db_password' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;"
 script:
 - bin/travis_parallel_test.sh
 - bin/travis_rubocop.sh
@@ -30,12 +31,26 @@ env:
   global:
     - ENCRYPTION_LABEL: "badb2a42c21a"
     - COMMIT_AUTHOR_EMAIL: "tataihono.nikora@gmail.com"
+    # https://github.com/travis-ci/travis-ci/issues/8537
+    # Travis base image does not support adding in Postgres 10 by default. Once this support is added, we can
+    # expect the port 5432 to be restored and for these variables to be removed.
+    - PGPORT: 5433
+    - DB_PORT_5432_TCP_PORT: 5433
+    - DB_ENV_POSTGRESQL_USER: mpdx
+    - DB_ENV_POSTGRESQL_PASS: mpdx_db_password
   matrix:
     - TEST_SUITE=1
     - TEST_SUITE=2
     - TEST_SUITE=3
     - TEST_SUITE=4
 addons:
-  postgresql: "9.6"
+  postgresql: "10"
+  apt:
+    packages:
+    # https://github.com/travis-ci/travis-ci/issues/8537
+    # Travis base image does not support adding in Postgres 10 by default. Once this support is added, we can
+    # expect these packages to be installed by default.
+    - postgresql-10
+    - postgresql-client-10
 notifications:
   webhooks: https://coveralls.io/webhook?repo_token=COVERALLS_REPO_TOKEN
