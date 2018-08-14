@@ -47,7 +47,7 @@ class Address < ApplicationRecord
                           :valid_values].freeze
 
   assignable_values_for :location, allow_blank: true do
-    %w(Home Business Mailing Seasonal Other Temporary)
+    ['Home', 'Business', 'Mailing', 'Seasonal', 'Other', 'Temporary', 'Rep Address']
   end
 
   def record_paper_trail?

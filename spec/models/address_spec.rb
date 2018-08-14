@@ -327,6 +327,16 @@ describe Address do
     end.to change { address.reload.location }.from('Home').to('Business')
   end
 
+  describe '#location' do
+    it 'should allow a valid location to be set' do
+      expect { create(:address, location: 'Rep Address') }.to_not raise_error
+    end
+
+    it 'should not allow an invalid location to be set' do
+      expect { create(:address, location: 'Invalid Location') }.to raise_error
+    end
+  end
+
   describe '#set_valid_values' do
     it "sets valid_values to true if this is the person's only address, or the source is manual" do
       address_one = create(:address, source: 'not mpdx')
