@@ -23,8 +23,10 @@ describe NotificationType::SmallerGift do
 
     context 'two small gifts add up to at least pledge come in at same time' do
       before do
-        create(:donation, donor_account: donor_account, designation_account: da,
-                          donation_date: Date.today)
+        create(:donation, donor_account: donor_account,
+                          designation_account: da,
+                          donation_date: Date.today,
+                          payment_method: Donation::GIFT_AID)
       end
 
       it 'does not add a notfication' do
@@ -83,18 +85,6 @@ describe NotificationType::SmallerGift do
         it 'does not add a notification' do
           expect(subject.check(account_list)).to be_empty
         end
-      end
-    end
-
-    context 'all donations are by GIFT_AID' do
-      before { donation.update!(payment_method: Donation::GIFT_AID) }
-
-      it 'does not raise an error' do
-        contact.update!(pledge_frequency: 0.5)
-
-        expect do
-          expect(subject.check(account_list)).to be_empty
-        end.not_to raise_error
       end
     end
 
