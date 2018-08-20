@@ -1,11 +1,14 @@
+# This class has the potential to be broken out into several classes to handle
+# gmail account importing. It could then be packaged up into a library/gem.
 class Person::GmailAccount
-  attr_reader :google_account
+  attr_reader :google_account, :since
 
   def initialize(google_account)
     @google_account = google_account
+    @since = (google_account.last_email_sync || 1.day.ago).to_date
   end
 
-  def gmail
+  def gmail_connection
     return false unless token?
 
     Gmail.connect(:xoauth2, google_account.email, google_account.token) do |gmail_client|
@@ -16,39 +19,16 @@ class Person::GmailAccount
   def import_emails(account_list, blacklisted_emails = [])
     return false unless token?
     self.blacklisted_emails = (blacklisted_emails.presence || []).collect(&:strip)
-
-    since = (google_account.last_email_sync || 1.day.ago).to_date
-
     self.email_collection = AccountList::EmailCollection.new(account_list)
 
-    gmail do |g|
+    gmail_connection do |gmail|
       begin
-        sent_mailbox     = g.mailbox('[Gmail]/Sent Mail')
-        received_mailbox = g.mailbox('[Gmail]/All Mail')
+        sent_mailbox     = gmail.mailbox('[Gmail]/Sent Mail')
+        received_mailbox = gmail.mailbox('[Gmail]/All Mail')
 
         (since..Date.today).each do |date|
-          sent_uids = sent_mailbox.fetch_uids(on: date) || []
-
-          sent_uids.each_slice(20) do |uid_group|
-            g.conn.uid_fetch(uid_group, Gmail::Message::PREFETCH_ATTRS).each do |imap_data|
-              next unless imap_data
-
-              gmail_message = Gmail::Message.new(sent_mailbox, nil, imap_data)
-              log_sent_email(message: gmail_message)
-            end
-          end
-
-          received_uids = received_mailbox.fetch_uids(on: date) || []
-
-          received_uids.each_slice(20) do |uid_group|
-            g.conn.uid_fetch(uid_group, Gmail::Message::PREFETCH_ATTRS).each do |imap_data|
-              next unless imap_data
-
-              gmail_message = Gmail::Message.new(received_mailbox, nil, imap_data)
-              log_received_email(message: gmail_message)
-            end
-          end
-
+          process_sent_emails(gmail, sent_mailbox, date)
+          process_received_emails(gmail, received_mailbox, date)
           google_account.update_attributes(last_email_sync: date)
         end
       rescue Net::IMAP::NoResponseError => e
@@ -58,25 +38,14 @@ class Person::GmailAccount
     end
   end
 
-  def log_email(gmail_message, account_list_id, contact_id, person_id, result)
+  def record_email(gmail_message, account_list_id, contact_id, person_id, result)
     contact = Contact.find(contact_id)
-
-    subject = format_subject(gmail_message.subject)
     body    = format_message_body(gmail_message.message)
     return unless body
 
     google_email = google_account.google_emails.find_or_create_by!(google_email_id: gmail_message.msg_id)
     return if contact.tasks.exists?(id: google_email.activities.ids)
-
-    task = contact.tasks.create!(subject: subject,
-                                 start_at: gmail_message.envelope.date,
-                                 completed: true,
-                                 completed_at: gmail_message.envelope.date,
-                                 account_list_id: account_list_id,
-                                 activity_type: 'Email',
-                                 result: result,
-                                 remote_id: gmail_message.envelope.message_id,
-                                 source: 'gmail')
+    task = create_task_for_contact(gmail_message, account_list_id, contact, result)
 
     task.comments.create!(body: body, person_id: person_id)
     google_email.activities << task
@@ -139,25 +108,25 @@ class Person::GmailAccount
     end
   end
 
-  def log_received_email(message:)
+  def record_received_email(message:)
     account_list_id      = email_collection.account_list.id
     sender_email_address = sender_email_address_from_envelope(message.envelope)
     account_email_data   = fetch_account_email_data(sender_email_address)
 
-    return unless account_email_data.present? && log_emails_for_email_address?(account_email_data[:email])
+    return unless account_email_data.present? && not_blacklisted?(account_email_data[:email])
 
-    log_email(message, account_list_id, account_email_data[:contact_id], account_email_data[:person_id], 'Received')
+    record_email(message, account_list_id, account_email_data[:contact_id], account_email_data[:person_id], 'Received')
   end
 
-  def log_sent_email(message:)
+  def record_sent_email(message:)
     account_list_id           = email_collection.account_list.id
     recipient_email_addresses = recipient_email_addresses_from_envelope(message.envelope)
 
     recipient_email_addresses.each do |recipient_email_address|
       account_email_data = fetch_account_email_data(recipient_email_address)
-      next unless account_email_data.present? && log_emails_for_email_address?(account_email_data[:email])
+      next unless account_email_data.present? && not_blacklisted?(account_email_data[:email])
 
-      log_email(message, account_list_id, account_email_data[:contact_id], account_email_data[:person_id], 'Done')
+      record_email(message, account_list_id, account_email_data[:contact_id], account_email_data[:person_id], 'Done')
     end
   end
 
@@ -175,8 +144,56 @@ class Person::GmailAccount
     "#{address.mailbox}@#{address.host}"
   end
 
-  def log_emails_for_email_address?(email)
+  def not_blacklisted?(email)
     return false unless email
-    !blacklisted_emails.include?(email)
+    !blacklisted_domain?(email) && !blacklisted_emails.include?(email)
+  end
+
+  def blacklisted_domains
+    @blacklisted_domains ||= begin
+      blacklisted_emails.select { |email| email.starts_with?('*') }
+                        .map { |domain| domain.split('@').last }
+    end
+  end
+
+  def blacklisted_domain?(email)
+    blacklisted_domains.include?(email.split('@').last)
+  end
+
+  def process_sent_emails(gmail, sent_mailbox, date)
+    sent_uids = sent_mailbox.fetch_uids(on: date) || []
+    process_each_message(sent_uids, sent_mailbox, gmail) do |gmail_message|
+      record_sent_email(message: gmail_message)
+    end
+  end
+
+  def process_received_emails(gmail, received_mailbox, date)
+    received_uids = received_mailbox.fetch_uids(on: date) || []
+    process_each_message(received_uids, received_mailbox, gmail) do |gmail_message|
+      record_received_email(message: gmail_message)
+    end
+  end
+
+  def process_each_message(uids, mailbox, gmail)
+    uids.each_slice(20) do |uid_group|
+      gmail.conn.uid_fetch(uid_group, Gmail::Message::PREFETCH_ATTRS).each do |imap_data|
+        next unless imap_data
+
+        gmail_message = Gmail::Message.new(mailbox, nil, imap_data)
+        block_given? ? yield(gmail_message) : gmail_message
+      end
+    end
+  end
+
+  def create_task_for_contact(gmail_message, account_list_id, contact, result)
+    contact.tasks.create!(subject: format_subject(gmail_message.subject),
+                          start_at: gmail_message.envelope.date,
+                          completed: true,
+                          completed_at: gmail_message.envelope.date,
+                          account_list_id: account_list_id,
+                          activity_type: 'Email',
+                          result: result,
+                          remote_id: gmail_message.envelope.message_id,
+                          source: 'gmail')
   end
 end

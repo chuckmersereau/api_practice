@@ -13,7 +13,7 @@ describe Person::GmailAccount do
       google_account.expires_at = 1.hour.ago
 
       expect(google_account).to receive(:refresh_token!).once
-      gmail_account.gmail {}
+      gmail_account.gmail_connection {}
     end
   end
 
@@ -46,40 +46,48 @@ describe Person::GmailAccount do
       allow(client_conn).to receive(:uid_fetch).with([], kind_of(Array)).and_return([])
     end
 
-    it 'logs a sent email' do
+    it 'records a sent email' do
       expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
       expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
-      expect(gmail_account).to receive(:log_email).once
+      expect(gmail_account).to receive(:record_email).once
 
       gmail_account.import_emails(account_list)
     end
 
-    it 'logs a received email' do
+    it 'records a received email' do
       expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
       expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
-      expect(gmail_account).to receive(:log_email).once
+      expect(gmail_account).to receive(:record_email).once
 
       gmail_account.import_emails(account_list)
     end
 
-    it 'does not log a blacklisted received email' do
+    it 'does not record a blacklisted received email' do
       expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
       expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
-      expect(gmail_account).to_not receive(:log_email)
+      expect(gmail_account).to_not receive(:record_email)
 
       gmail_account.import_emails(account_list, [sender_email.email])
     end
 
-    it 'does not log a blacklisted sent email' do
+    it 'does not record a blacklisted sent email' do
       expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
       expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
-      expect(gmail_account).to_not receive(:log_email)
+      expect(gmail_account).to_not receive(:record_email)
 
       gmail_account.import_emails(account_list, [recipient_email.email])
     end
+
+    it 'does not record blacklisted email from a specific domain' do
+      expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
+      expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
+      expect(gmail_account).to_not receive(:record_email)
+
+      gmail_account.import_emails(account_list, ['*@example.com'])
+    end
   end
 
-  context '#log_email' do
+  context '#record_email' do
     let(:gmail_message) { mock_gmail_message('message body') }
     let(:google_email)  { build(:google_email, google_email_id: gmail_message.msg_id, google_account: google_account) }
 
@@ -92,7 +100,7 @@ describe Person::GmailAccount do
     it 'creates a completed task' do
       expect do
         expect do
-          gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
+          gmail_account.record_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
         end.to change(Task, :count).by(1)
       end.to change(ActivityComment, :count).by(1)
 
@@ -107,14 +115,14 @@ describe Person::GmailAccount do
     it "creates a task even if the email doesn't have a subject" do
       expect(gmail_message).to receive(:subject).and_return('')
 
-      task = gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
+      task = gmail_account.record_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       expect(task.subject).to eq('No Subject')
     end
 
     it 'truncates the subject if the subject is more than 2000 chars' do
       expect(gmail_message).to receive(:subject).once.and_return('x' * 2001)
 
-      task = gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
+      task = gmail_account.record_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       expect(task.subject).to eq('x' * 2000)
     end
 
@@ -125,13 +133,13 @@ describe Person::GmailAccount do
       create(:google_email_activity, google_email: google_email, activity: task)
 
       expect do
-        gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
+        gmail_account.record_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       end.not_to change(Task, :count)
     end
 
     it 'creates a google_email' do
       expect do
-        gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
+        gmail_account.record_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       end.to change(GoogleEmail, :count).by(1)
 
       task = GoogleEmail.last
@@ -142,13 +150,13 @@ describe Person::GmailAccount do
       google_email.save
 
       expect do
-        gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
+        gmail_account.record_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       end.not_to change(GoogleEmail, :count)
     end
 
     it 'handles messages with null bytes' do
       expect do
-        gmail_account.log_email(mock_gmail_message("\0null\0!"), account_list.id, contact.id, person.id, 'Done')
+        gmail_account.record_email(mock_gmail_message("\0null\0!"), account_list.id, contact.id, person.id, 'Done')
       end.to change(Task, :count).by(1)
 
       expect(Task.last.comments.first.body).to eq 'null!'
