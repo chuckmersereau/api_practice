@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-07-05 20:16+0000\n"
-"PO-Revision-Date: 2018-07-05 20:16+0000\n"
+"POT-Creation-Date: 2018-07-12 20:04+0000\n"
+"PO-Revision-Date: 2018-07-12 20:04+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -199,7 +199,7 @@ msgid "Balance: %{balance}"
 msgstr "Kontostand: %{balance}"
 
 msgid "Both"
-msgstr "Beide"
+msgstr "beide"
 
 msgid "Both Only"
 msgstr "Nur beide"
@@ -361,7 +361,7 @@ msgid "Email Only"
 msgstr "Nur E-Mail"
 
 msgid "Email and Both"
-msgstr "E-Mail und Beide"
+msgstr "E-Mail und beide"
 
 #. This is a marital status. The person is pledged to be married
 msgid "Engaged"
@@ -832,7 +832,7 @@ msgid "Physical Only"
 msgstr "Nur Papier"
 
 msgid "Physical and Both"
-msgstr "Papier an Beide"
+msgstr "Papier und beide"
 
 msgid "Please try updating it here: %{link}"
 msgstr "Bitte versuchen Sie hier die Aktualisierung: %{link}"

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-04-23 19:20+0000\n"
-"PO-Revision-Date: 2018-04-23 19:20+0000\n"
+"POT-Creation-Date: 2018-07-12 20:06+0000\n"
+"PO-Revision-Date: 2018-07-12 20:06+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: fr_CA\n"
@@ -17,14 +17,59 @@ msgstr " est alloué à l'appel \"%{appeal_name}\"."
 msgid "\"%{name}\" (donor #%{account_number})"
 msgstr "« %{name} » (donateur %{account_number})"
 
+msgid "%(This task was given the type \"#{unsupported_type_name}\" in TntConnect.)"
+msgstr "%(Cette tâche est décrite comme \"#{unsupported_type_name} dans TntConnect.)"
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} a fait un don spécial de %{amount} le %{date} à %{designation}. Remerciez cette personne."
+
+msgid "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} a fait un don spécial de %{amount} le %{date}. Remerciez cette personne."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date} to %{designation}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name} a fait un don de %{amount} le %{date} à %{designation}, dont le montant diffère de sa promesse. Enquêtez sur le don."
+
+msgid "%{contact_name} gave a gift of %{amount} on %{date}, which is different from their pledge. Research the gift."
+msgstr "%{contact_name} a fait un don de %{amount} le %{date}, dont le montant diffère de sa promesse. Enquêtez sur le don."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} a fait un don plus élevé que d'habitude de %{amount} le %{date} à %{designation}. Remerciez cette personne."
+
+msgid "%{contact_name} gave a larger than usual gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} a fait un don plus élevé que d'habitude de %{amount} le %{date}. Remerciez cette personne."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} a fait son don %{frequency} de %{amount} le %{date} à %{designation}. Remerciez cette personne."
+
+msgid "%{contact_name} gave their %{frequency} gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} a fait son don %{frequency} de %{amount} le %{date}. Remerciez cette personne."
+
 msgid "%(This task was given the type \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" in TntConnect.)"
 msgstr "%(Cette tâche est décrite comme \"#{::TntImport::TntCodes::UNSUPPORTED_TNT_TASK_CODES[tnt_task_type_id]}\" dans TntConnect.)"
 
 msgid "%{contact_name} have an expected gift in one month. Contact to follow up."
 msgstr "%{contact_name} a promis de faire un don dans un mois. Contactez cette personne pour faire un suivi."
 
+msgid "%{contact_name} have not had a thank you note logged in the past year.  Send them a Thank You note."
+msgstr "Aucune tâche de remerciements n'a été enregistrée pour %{contact_name} dans la dernière année. Remerciez cette personne."
+
+msgid "%{contact_name} have not had an attempted call logged in the past year. Call them."
+msgstr "Aucune tâche d'appel tenté n'a été enregistrée pour %{contact_name} dans la dernière année. Appelez ce contact."
+
+msgid "%{contact_name} is on the email newsletter but lacks a valid email address."
+msgstr "%{contact_name} est inscrit(e) à la lettre de nouvelles électronique, mais n'a pas d'adresse courriel valide."
+
+msgid "%{contact_name} is on the physical newsletter but lacks a current mailing address."
+msgstr "%{contact_name} est inscrit(e) à la lettre de nouvelles papier, mais n'a pas d'adresse postale actuelle."
+
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
 msgstr "%{contact_name} vient de faire son premier don. Remerciez cette personne."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date} to %{designation}. Send them a Thank You."
+msgstr "%{contact_name} a recommencé à faire des dons avec un don de %{amount} le %{date} à %{designation}. Remerciez cette personne."
+
+msgid "%{contact_name} recontinued their giving with a gift of %{amount} on %{date}. Send them a Thank You."
+msgstr "%{contact_name} a recommencé à faire des dons avec un don de %{amount} le %{date}. Remerciez cette personne."
 
 msgid "%{contact_name} seems to have missed a gift. Call to follow up."
 msgstr "%{contact_name} semble avoir manqué un don. Appelez cette personne pour faire un suivi."
@@ -95,6 +140,9 @@ msgstr "Liste des comptes"
 msgid "Action"
 msgstr "Action"
 
+msgid "Active"
+msgstr "Actif"
+
 msgid "Add an Account"
 msgstr "Ajouter un compte"
 
@@ -106,6 +154,9 @@ msgstr "Adresse"
 
 msgid "Address No Longer Valid"
 msgstr "Cette adresse n'est plus valide"
+
+msgid "Address Type"
+msgstr "Type d'adresse"
 
 msgid "All"
 msgstr "Tout"
@@ -237,8 +288,20 @@ msgstr "Type de contact"
 msgid "Contact for Appointment"
 msgstr "Contacter pour un rendez-vous"
 
+msgid "Contact is on the email newsletter but has no people with a valid email address."
+msgstr "Le contact est inscrit à la lettre de nouvelles électronique, mais n'a aucune personne ayant une adresse courriel valide."
+
+msgid "Contact is on the physical newsletter but has no mailing address."
+msgstr "Le contact est inscrit à la lettre de nouvelles papier, mais n'a aucune adresse postale."
+
 msgid "Contacts"
 msgstr "Contacts"
+
+msgid "Contacts missing a mailing address"
+msgstr "Les contacts n'ayant pas d'adresse postale"
+
+msgid "Contacts missing an email address"
+msgstr "Les contacts n'ayant pas d'adresse courriel"
 
 msgid "Country"
 msgstr "Pays"
@@ -260,6 +323,9 @@ msgstr "Fille"
 
 msgid "Dear Donation Services"
 msgstr "À l'attention des services de dons"
+
+msgid "Designation Acccount"
+msgstr "Compte d'affectation"
 
 msgid "Details"
 msgstr "Détails"
@@ -417,6 +483,9 @@ msgstr "Mari"
 msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
 msgstr "Si vous souhaitez conserver votre liste existante, ce champ supplémentaire de fusion ne doit pas être paramétré en tant que champ requis."
 
+msgid "Inactive"
+msgstr "Inactif"
+
 msgid "Increase Gift Recommendation"
 msgstr "Recommandation d'augmentation de don"
 
@@ -425,6 +494,12 @@ msgstr "A augmenté son don au cours des 3 derniers mois"
 
 msgid "Insights for "
 msgstr "Aperçu pour "
+
+msgid "It is important to remind our financial partners who give on a less frequent basis of their upcoming gift. MPDX shows financial partners who have expected donations one month from now. Now would be a great time to remind them."
+msgstr "Il est important de rappeler à nos partenaires financiers qui donnent moins fréquemment leur prochain don. MPDX montre les partenaires financiers ayant des dons prévus dans le mois à venir. Il serait maintenant le temps idéal de leur faire un rappel."
+
+msgid "It is so important to connect with our financial partners personally, but it is easy for time to get away from us. MPDX does not show a phone call to your financial partner in the past year. Now would be a great time to connect with them!​"
+msgstr "Il est très important de communiquer avec nos partenaires financiers personnellement, mais il est facile de ne pas voir le temps passer. MPDX ne montre aucun appel téléphonique à votre partenaire financier dans la dernière année. Il serait maintenant le temps idéal de contacter cette personne!"
 
 msgid "Joined my team in the last 3 months"
 msgstr "S'est joint(e) à mon équipe au cours des 3 derniers mois"
@@ -657,6 +732,9 @@ msgstr "Notifications de MPDX"
 msgid "One of my donors, %{donor} has a new current address."
 msgstr "Un de mes donateurs, %{donor} a une nouvelle adresse."
 
+msgid "One of the most important things we can do is thank our partners, but it is easy for time to get away from us. MPDX does not show a thank you note for your financial partner in the past year. Now would be a great time to let them know how much you appreciate them!​"
+msgstr "L'une des choses les plus importantes que nous puissions faire est remercier nos partenaires, mais il est facile de ne pas voir le temps passer. MPDX ne montre aucune forme de remerciements à votre partenaire financier dans la dernière année. Il serait maintenant le temps idéal de lui faire savoir à quel point vous l'appréciez!"
+
 msgid "One or More Gifts"
 msgstr "Un ou plusieurs dons"
 
@@ -678,6 +756,9 @@ msgstr "En retard"
 msgid "Partner"
 msgstr "Partenaire"
 
+msgid "Partner (semiannual, annual, etc) has an expected donation one month from now. Send them a reminder."
+msgstr "Le partenaire (semi-annuel, annuel, etc.) a un don prévu dans le prochain mois. Envoyez-lui un rappel."
+
 msgid "Partner - Financial"
 msgstr "Partenaire - Financier"
 
@@ -686,6 +767,48 @@ msgstr "Partenaire - Prière"
 
 msgid "Partner - Special"
 msgstr "Partenaire - Spécial"
+
+msgid "Partner gave a Special Gift"
+msgstr "Le partenaire a fait un don spécial"
+
+msgid "Partner gave a Special Gift: This notification is triggered anytime someone who does not have a status of 'Partner - Financial' gives a gift. If one or more of the people below are financial partners, please log into MPDX, edit that contact, and set their status to 'Partner - Financial'."
+msgstr "Le partenaire a fait un don spécial : Cette notification est envoyée chaque fois qu'un contact n'ayant pas l'état de Partenaire - Financier fait un don. Si un ou plusieurs des contacts ci-dessous sont partenaires financiers, connectez-vous dans MPDX, modifiez ce contact et changez leur état à Partenaire - Financier."
+
+msgid "Partner gave a gift that averages out to less than their commitment"
+msgstr "Le partenaire a fait un don dont le montant est supérieur à sa promesse."
+
+msgid "Partner gave a gift to recontinue their giving after being two or more months late"
+msgstr "Le partenaire a fait un don pour recommencer à donner après un retard de deux mois ou plus."
+
+msgid "Partner gave a gift with a long time frame (semi-annual, annual, or biennial"
+msgstr "Le partenaire a fait un don d'une longue durée (semi-annuel, annuel, ou biennal)."
+
+msgid "Partner gave a larger gift than commitment"
+msgstr "Le partenaire a fait un don dont le montant est supérieur à sa promesse."
+
+msgid "Partner gave a larger gift than the commitment recorded in MPDX"
+msgstr "Le partenaire a fait un don dont le montant est supérieur à la promesse enregistrée dans MPDX."
+
+msgid "Partner gave less than commitment"
+msgstr "Le partenaire a fait un don dont le montant est inférieur à sa promesse."
+
+msgid "Partner gave with commitment of semi-annual or more"
+msgstr "Le partenaire a fait un don avec une promesse semi-annuelle ou plus."
+
+msgid "Partner have not had a thank you note logged in the past year"
+msgstr "Aucune forme de remerciements n'a été enregistrée pour le partenaire dans la dernière année."
+
+msgid "Partner have not had an attempted call logged in the past year"
+msgstr "Aucun appel tenté n'a été enregistré pour le partenaire dans la dernière année."
+
+msgid "Partner missed a gift"
+msgstr "Le partenaire a raté un don."
+
+msgid "Partner recontinued giving"
+msgstr "Le partenaire a recommencé à donner."
+
+msgid "Partner started giving"
+msgstr "Le partenaire a commencé à donner."
 
 msgid "Pending"
 msgstr "En attente"
@@ -723,11 +846,17 @@ msgstr "Promesse"
 msgid "Pledge Status"
 msgstr "État de la promesse"
 
+msgid "Prayer Letters Integration Settings"
+msgstr "Paramètres d'intégration de Prayer Letters"
+
 msgid "Prayer Request"
 msgstr "Requête de prière"
 
 msgid "Pre Call Letter"
 msgstr "Lettre pré-appel"
+
+msgid "Primary"
+msgstr "Principal(e)"
 
 msgid "Primary Email"
 msgstr "Adresse courriel principale"
@@ -771,6 +900,12 @@ msgstr "Recherche abandonnée"
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "Pasteur"
+
+msgid "Search Notes"
+msgstr "Rechercher des remarques"
+
+msgid "Search note contents"
+msgstr "Rechercher dans le contenu des remarques"
 
 msgid "Seasonal"
 msgstr "Saisonnier"
@@ -863,6 +998,12 @@ msgstr "La liste d'envoi MailChimp associée à votre compte MPDX a un champ de 
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "La connexion à votre compte LinkedIn doit être renouvelée."
 
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link} and click on 'Edit', 'Setup',\n  and then click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "Le lien entre MPDX et votre compte Google a cessé de fonctionner. Si vous souhaitez que MPDX continue à se synchroniser automatiquement à votre compte Google, veuillez vous rendre à %{link} et cliquer sur « Modifier », « Configurer » et ensuite sur le bouton « Actualiser le compte Google ». Ensuite, vous devrez réactiver manuellement toute intégration que vous aviez déjà configurée."
+
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to %{link}\n  and click the 'Enable' button"
+msgstr "Le lien entre MPDX et votre compte prayerletters.com a cessé de fonctionner. Si vous souhaitez que MPDX continue à transférer automatiquement les modifications à prayerletters.com, veuillez vous rendre à %{link} et cliquer sur le bouton « Activer »."
+
 msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
 msgstr "Le lien entre MPDX et votre compte Google a cessé de fonctionner. Si vous souhaitez que MPDX continue à se synchroniser automatiquement à votre compte Google, veuillez vous rendre sur %{link} et cliquer sur le bouton « Actualiser le compte Google ».  Ensuite, vous devrez réactiver manuellement toutes les intégrations déjà définies."
 
@@ -931,6 +1072,9 @@ msgstr "Oncle"
 
 msgid "Unknown"
 msgstr "Inconnu"
+
+msgid "Unnamed Designation"
+msgstr "Affectation sans titre"
 
 msgid "Unresponsive"
 msgstr "Ne répond pas"

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2018-02-27 21:05+0000\n"
-"PO-Revision-Date: 2018-02-27 21:05+0000\n"
+"POT-Creation-Date: 2017-06-08 14:36+0000\n"
+"PO-Revision-Date: 2017-06-08 14:36+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: my\n"
@@ -11,11 +11,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "1 day before"
-msgstr "1 နေ့ကမတိုင်မီ"
+msgid "... Show More"
+msgstr "နောက်ထပ်ပြရန်"
 
 msgid "1 hour before"
 msgstr "1 နာရီမတိုင်မီ"
+
+msgid "1 day before"
+msgstr "1 နေ့ကမတိုင်မီ"
 
 msgid "1 week before"
 msgstr " ရက်သတ္တပတ်မတိုင်မီ"
@@ -26,17 +29,23 @@ msgstr "15 မိနစ်မတိုင်မီ"
 msgid "2 days before"
 msgstr "2 ရက်မတိုင်မီ"
 
-msgid "2 hours before"
-msgstr "2 နာရီမတိုင်မီ"
-
 msgid "30 minutes before"
 msgstr "မိနစ် 30 မတိုင်မီ"
+
+msgid "2 hours before"
+msgstr "2 နာရီမတိုင်မီ"
 
 msgid "5 minutes before"
 msgstr "မိနစ် 30 မတိုင်မီ"
 
+msgid "Accept MPDX Account Invite"
+msgstr "MPDX အကောင့် ဖိတ်ခေါ်ကိုလက်ခံ"
+
 msgid "Account List"
 msgstr "အကောင့်စာရင်း"
+
+msgid "Account List Settings:"
+msgstr "အကောင့်စာရင်း၏ Settings များ"
 
 msgid "Add an Account"
 msgstr "အကောင့်တခုဖွင် ပါ"
@@ -53,24 +62,30 @@ msgstr "အယူခံဝင် Appeal"
 msgid "Appointment"
 msgstr "ရက်ချိန်းဆိုမှု"
 
-msgid "Appointment Scheduled"
-msgstr "ချိန်းဆိုချက်ဇယား"
-
 msgid "Are marked as do not ask for appeals"
 msgstr "Are marked as do not ask for appeals"
-
-msgid "Ask in Future"
-msgstr "အနာဂတ်တွင်မေးပါ"
 
 msgid "Aunt"
 msgstr "အဒေါ်"
 
+msgid "Ask in Future"
+msgstr "အနာဂတ်တွင်မေးပါ"
+
+msgid "Appointment Scheduled"
+msgstr "ချိန်းဆိုချက်ဇယား"
+
 msgid "Average"
 msgstr "ပျမ်းမျှ"
+
+msgid "Arabic"
+msgstr "Arabic"
 
 #. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "Avg."
+
+msgid "Belarusian"
+msgstr "ဘီလာရု"
 
 msgid "Both"
 msgstr "နှစ်ခုလုံး"
@@ -78,14 +93,26 @@ msgstr "နှစ်ခုလုံး"
 msgid "Brother"
 msgstr "ညီအစ်ကို"
 
+msgid "Browser:"
+msgstr "Browser:"
+
 msgid "Business"
 msgstr "စီးပွားရေးလုပ်ငန်း"
 
-msgid "Every 2 Months"
-msgstr "2 လတစ်ကြိမ်"
+msgid "Email:"
+msgstr "အီးမေးလ်"
+
+msgid "English"
+msgstr "အင်္ဂလိပ်"
+
+msgid "Error connecting to %{org_name} server"
+msgstr "\nError connecting to %{org_name} server            \n"
 
 msgid "Every 2 Weeks"
 msgstr "2 ပတ်တစ်ကြိမ်"
+
+msgid "Every 2 Months"
+msgstr "2 လတစ်ကြိမ်"
 
 msgid "Every 2 Years"
 msgstr "2 နှစ်တစ်ကြိမ်"
@@ -102,8 +129,14 @@ msgstr "Facebook Profile"
 msgid "Father"
 msgstr "ဖခင်"
 
+msgid "French (France)"
+msgstr "ပြင်သစ်(France)"
+
 msgid "Future"
 msgstr "အနာဂတ်"
+
+msgid "German"
+msgstr "ဂျာမန်"
 
 msgid "Gave a special gift in the last 3 months"
 msgstr "ပြီးခဲ့သည့် 3 လအတွင်း အထူးလက်ဆောင်ပေးခဲ့"
@@ -120,29 +153,32 @@ msgstr "လက်ဆောင်ပေးမယ်နေ့စွဲ"
 msgid "Gift Details"
 msgstr "Gift Details"
 
-msgid "Google account needs to be refreshed"
-msgstr "Google account needs to be refreshed"
+msgid "Granddaughter"
+msgstr "မြေး"
 
 msgid "Google import"
 msgstr "Google Import"
 
+msgid "Google account needs to be refreshed"
+msgstr "Google account needs to be refreshed"
+
 msgid "Google sync"
 msgstr "Google sync"
-
-msgid "Granddaughter"
-msgstr "မြေး"
 
 msgid "Grandfather"
 msgstr "အဘိုး"
 
-msgid "Grandmother"
-msgstr "အဖွါး"
-
 msgid "Grandson"
 msgstr "မြေး"
 
+msgid "Grandmother"
+msgstr "အဖွါး"
+
 msgid "MPDX has finished importing your %{source} contacts."
 msgstr "MPDXခြင်းပြီးဆုံး importing your %{source} contacts."
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts.\n\n%{explanation}\n\nThanks!\nMPDX Support Team"
+msgstr "MPDX encountered errors while trying to import your %{source} contacts.\n\n%{explanation}\n\nကျေးဇူးတင်ပါတယ်\nMPDX Support Team"
 
 msgid "MailChimp subscriber email bounced"
 msgstr "MailChimp subscriber email bounced"
@@ -150,14 +186,14 @@ msgstr "MailChimp subscriber email bounced"
 msgid "Mailchimp API Key no longer valid"
 msgstr "Mailchimp API Key မရှိတော့"
 
-msgid "Mailchimp List is requiring an additional merge field"
-msgstr "Mailchimp List is requiring an additional merge field"
-
 msgid "Mailing"
 msgstr "စာပို့"
 
 msgid "Mailing City"
 msgstr "စာပို့ထားသောမြို့"
+
+msgid "Mailchimp List is requiring an additional merge field"
+msgstr "Mailchimp List is requiring an additional merge field"
 
 msgid "Mailing Country"
 msgstr "စာပို့ထားသောတိုင်းပြည်"
@@ -186,6 +222,9 @@ msgstr " ရက်ပေါင်း 60 ကျော်နောက်ကျ"
 msgid "More than 90 days late"
 msgstr "90 ရက်ကျော် နောက်ကျ"
 
+msgid "More than one user found for that lookup"
+msgstr "lookup ပြုလုပ်နေသူတစ်ဦးထက်ပိုအသုံးပြုကြောင်းတွေ့ရှိခဲ့"
+
 msgid "Most Likely"
 msgstr "လောက်နီးပါး"
 
@@ -195,17 +234,20 @@ msgstr "မိခင်"
 msgid "Mr."
 msgstr "Mr."
 
-msgid "Nephew"
-msgstr "တူ"
+msgid "Name:"
+msgstr "အမည်"
 
 msgid "Never Ask"
 msgstr "ဘယ်တော့မှမမေးပါ"
 
-msgid "Never Contacted"
-msgstr "ဘယ်တော့မှဆက်သွယ်"
-
 msgid "New Donation"
 msgstr "အသစ်လှူဒါန်းခြင်း"
+
+msgid "Nephew"
+msgstr "တူ"
+
+msgid "Never Contacted"
+msgstr "ဘယ်တော့မှဆက်သွယ်"
 
 msgid "Newsletter"
 msgstr "သတင်းလွှာ Newsletter"
@@ -222,6 +264,9 @@ msgstr "သတိပေးစာ"
 #. "Rev." is an abbreviated title for Reverend.
 msgid "Rev."
 msgstr "Rev."
+
+msgid "Romanian"
+msgstr "ရိုမေးနီးယား"
 
 #. this is a relationship status
 msgid "Single"
@@ -242,11 +287,20 @@ msgstr "အိမ်ထောင်ဖက်၏ပဌမ နာမည်"
 msgid "State"
 msgstr "ပြည်နယ်"
 
+msgid "Support Letter"
+msgstr "ထောက်ပံ့မှု ပေးစာ"
+
 msgid "Stopped giving for the last 2 months"
 msgstr "ပေးကမ်းခြင်းရပ်တန့်သည်မှာ 2 လကြာ"
 
-msgid "Support Letter"
-msgstr "ထောက်ပံ့မှု ပေးစာ"
+msgid "Swahili"
+msgstr "ဆွာဟီလီ Swahili"
+
+msgid "Swedish"
+msgstr "ဆွီဒင် Swedish"
+
+msgid "Tamil"
+msgstr "တမီး"
 
 msgid "Tags"
 msgstr "Tags"
@@ -262,6 +316,9 @@ msgstr "ယာယီ"
 
 msgid "Text Message"
 msgstr "Text Message"
+
+msgid "Thai"
+msgstr "ထိုင်း"
 
 msgid "Thank"
 msgstr "ကျေးဇူးတင်ပါသည်"

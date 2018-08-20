@@ -92,3 +92,8 @@ _('Mailing')
 _('Other')
 _('Seasonal')
 _('Temporary')
+
+# Placeholders & Labels
+_('Add a tag')
+_('Select an Option')
+_('Minutes')
