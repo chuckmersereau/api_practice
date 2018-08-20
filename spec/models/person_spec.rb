@@ -189,6 +189,54 @@ describe Person do
         contact.save # Used to cause a stack overflow
       end
     end
+
+    context 'when all people of the contact are deceased' do
+      let!(:contact) { create(:contact, name: 'Smith, Jack', status: 'Not Interested', no_appeals: false, send_newsletter: 'Email') }
+
+      before do
+        contact.people << person
+        contact.save
+        person.update(deceased: true, first_name: 'Jack', last_name: 'Smith')
+        contact.reload
+      end
+
+      it 'should set the partner status to Never Ask' do
+        expect(contact.status).to eq 'Never Ask'
+      end
+
+      it 'should set the no appeals to true' do
+        expect(contact.no_appeals).to be true
+      end
+
+      it 'should set the send newsletter to none' do
+        expect(contact.send_newsletter).to eq 'None'
+      end
+    end
+
+    context 'when only some people of a contact are deceased' do
+      let!(:contact) { create(:contact, name: 'Smith, Jack', status: 'Not Interested', no_appeals: false, send_newsletter: 'Email') }
+      let!(:bob) { create(:person) }
+
+      before do
+        contact.people << bob
+        contact.people << person
+        contact.save
+        person.update(deceased: true, first_name: 'Jack', last_name: 'Smith')
+        contact.reload
+      end
+
+      it 'should not set the partner status to Never Ask' do
+        expect(contact.status).to eq 'Not Interested'
+      end
+
+      it 'should not set the no appeals to true' do
+        expect(contact.no_appeals).to be false
+      end
+
+      it 'should not set the send newsletter to none' do
+        expect(contact.send_newsletter).to eq 'Email'
+      end
+    end
   end
 
   context '#email=' do

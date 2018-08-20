@@ -1,6 +1,7 @@
 class Person < ApplicationRecord
   include BetweenScopeable
   include YearCompletable
+  include Deceased
 
   PAPER_TRAIL_IGNORED_FIELDS = [
     :updated_at, :global_registry_id, :global_registry_mdm_id, :sign_in_count,
@@ -278,7 +279,7 @@ class Person < ApplicationRecord
   before_create :find_master_person
   after_destroy :clean_up_master_person
 
-  before_save :deceased_check, :check_state_for_mail_chimp_sync
+  before_save :check_state_for_mail_chimp_sync
   after_save :trigger_mail_chimp_syncs_to_relevant_contacts, if: :sync_with_mail_chimp_required?
 
   validates :first_name, presence: true
@@ -347,44 +348,6 @@ class Person < ApplicationRecord
 
   def email
     primary_email_address || email_addresses.first
-  end
-
-  def deceased_check
-    return unless deceased_changed? && deceased?
-
-    self.optout_enewsletter = true
-
-    contacts.each do |c|
-      # Only update the greeting, etc. if this contact has a non-deceased other person (e.g. a spouse)
-      next unless c.people.where(deceased: false).where('people.id <> ?', id).exists?
-
-      contact_updates = {}
-
-      # We need to access the field value directly via c[:greeting] because c.greeting defaults to the first name
-      # even if the field is nil. That causes an infinite loop here where it keeps trying to remove the first name
-      # from the greeting but it keeps getting defaulted back to having it.
-      if c[:greeting].present? && c[:greeting].include?(first_name)
-        contact_updates[:greeting] = c.greeting.sub(first_name, '').sub(/ #{_('and')} /, ' ').strip
-      end
-
-      contact_updates[:envelope_greeting] = '' if c[:envelope_greeting].present?
-
-      if c.name.include?(first_name)
-        contact_updates[:name] = c.name.sub(first_name, '').sub(/ & | #{_('and')} /, '').strip
-      end
-
-      if c.primary_person_id == id && c.people.count > 1
-        # This only modifies associated people via update_column, so we can call it directly
-        c.clear_primary_person
-      end
-
-      next if contact_updates == {}
-
-      contact_updates[:updated_at] = Time.now
-      # Call update_columns instead of save because a save of a contact can trigger saving its people which
-      # could eventually call this very deceased_check method and cause an infinite recursion.
-      c.update_columns(contact_updates)
-    end
   end
 
   def facebook_accounts_attributes=(attributes_data)
