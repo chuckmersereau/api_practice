@@ -28,7 +28,7 @@ class MailChimp::BatchResults
     errored_operations = operations.select { |op| op['status_code'] == 400 }
     emails_with_person_ids = errored_operations.each_with_object({}) do |operation, hash|
       email, people = process_failed_op(operation)
-      hash[email] = people if people.any?
+      hash[email] = people if people&.any?
     end
 
     send_email(emails_with_person_ids)
@@ -43,7 +43,11 @@ class MailChimp::BatchResults
   end
 
   def gibbon
-    @gibbon ||= MailChimp::GibbonWrapper.new(mail_chimp_account).gibbon
+    wrapper.gibbon
+  end
+
+  def wrapper
+    @wrapper ||= MailChimp::GibbonWrapper.new(mail_chimp_account)
   end
 
   def load_batch_json(url)
@@ -64,11 +68,37 @@ class MailChimp::BatchResults
 
   def process_failed_op(operation)
     detail = JSON.parse(operation['response'])['detail']
-    invalid_email(detail) if detail.match?(/ looks fake or invalid, please enter a real email address.$/)
+    return invalid_email(detail) if matches_invalid(detail) || matches_cleaned(detail)
+    unknown_failure(detail)
+  end
+
+  def matches_invalid(detail)
+    detail.match?(/ looks fake or invalid, please enter a real email address.$/)
+  end
+
+  def matches_cleaned(detail)
+    compliance_message = ' is in a compliance state due to unsubscribe, bounce, '\
+                          'or compliance review and cannot be subscribed.'
+    return false unless detail.match?(/#{compliance_message}$/)
+    status = wrapper.list_member_info(@mail_chimp_account.primary_list_id, extract_email(detail)).dig(0, 'status')
+    status == 'cleaned'
+  rescue Gibbon::MailChimpError
+    false
+  end
+
+  def extract_email(detail)
+    detail.split(' ', 2)[0]
+  end
+
+  def unknown_failure(detail)
+    email, message = detail.split(' ', 2)
+    Rollbar.info(UncaughtMailchimpSubFailure.new(message),
+                 email: email,
+                 mail_chimp_account_id: @mail_chimp_account.id)
   end
 
   def invalid_email(detail)
-    email = detail.split(' ', 2)[0]
+    email = extract_email(detail)
     person_ids = account_list.people.joins(:primary_email_address).where(email_addresses: { email: email }).ids
     EmailAddress.where(person_id: person_ids, email: email).find_each { |e| e.update(historic: true) }
     [email, person_ids]
@@ -80,4 +110,6 @@ class MailChimp::BatchResults
       MailChimpMailer.delay.invalid_email_addresses(account_list, user, emails_with_person_ids)
     end
   end
+
+  class UncaughtMailchimpSubFailure < StandardError; end
 end

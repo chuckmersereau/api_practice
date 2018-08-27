@@ -41,9 +41,6 @@ RSpec.describe MailChimp::BatchResults do
           end
         end
 
-        before do
-        end
-
         it 'mark emails as historic' do
           subject.check_batch(batch_id)
 
@@ -70,6 +67,58 @@ RSpec.describe MailChimp::BatchResults do
         it 'sends an email to users on account list' do
           account_list.users << create(:user)
           expect { subject.check_batch(batch_id) }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(2)
+        end
+      end
+
+      context 'compliance error' do
+        let!(:contact) do
+          create(:contact_with_person, account_list: account_list).tap do |c|
+            c.primary_person.update(email: invalid_email)
+          end
+        end
+
+        before do
+          mock_json = [
+            {
+              'status_code' => 400,
+              'operation_id' => nil,
+              'response' => "{\"status\":400,\"detail\":\"#{invalid_email} is in a compliance state "\
+                             'due to unsubscribe, bounce, or compliance review and cannot be subscribed."}'
+            }
+          ]
+          allow(subject).to receive(:load_batch_json).and_return(mock_json)
+
+          member_info = [{ 'status' => 'cleaned' }]
+          allow(subject.send(:wrapper)).to receive(:list_member_info).and_return(member_info)
+        end
+
+        it 'sends an email to users on account list' do
+          expect { subject.check_batch(batch_id) }.to change { Sidekiq::Extensions::DelayedMailer.jobs.size }.by(1)
+        end
+      end
+
+      context 'unknown error' do
+        let!(:contact) do
+          create(:contact_with_person, account_list: account_list).tap do |c|
+            c.primary_person.update(email: invalid_email)
+          end
+        end
+
+        before do
+          mock_json = [
+            {
+              'status_code' => 400,
+              'operation_id' => nil,
+              'response' => '{"status":400,"detail":"Some un-expected error from MailChimp"}'
+            }
+          ]
+          allow(subject).to receive(:load_batch_json).and_return(mock_json)
+        end
+
+        it 'notifies Rollbar' do
+          expect(Rollbar).to receive(:info)
+
+          subject.check_batch(batch_id)
         end
       end
 
