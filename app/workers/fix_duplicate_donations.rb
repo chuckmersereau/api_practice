@@ -1,7 +1,7 @@
 class FixDuplicateDonations
   include Sidekiq::Worker
 
-  sidekiq_options queue: :api_default, retry: 3
+  sidekiq_options queue: :default, retry: 3
 
   MATCH_ATTRIBUTES = %i(amount donation_date tendered_currency).freeze
 

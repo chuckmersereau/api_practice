@@ -3,7 +3,7 @@ class DuplicateTasksPerContact
 
   LOG_DIR = 'worker_results'.freeze
 
-  sidekiq_options queue: :api_default, unique: :until_executed
+  sidekiq_options queue: :default, unique: :until_executed
 
   # @param account_list [AccountList, Integer, nil] an optional +AccountList+
   #  (or its ID) that owns the Tasks duplicate

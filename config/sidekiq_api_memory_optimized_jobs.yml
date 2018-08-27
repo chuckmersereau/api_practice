@@ -7,12 +7,11 @@
 :verbose: false
 :concurrency: 20
 :queues:
+  - ["mailers",                                      10]
   - ["api_account_list_import_data_enqueuer_worker", 1]
+  - ["api_audit_change_worker",                      1]
   - ["api_contact_suggested_changes_updater_worker", 1]
   - ["api_csv_import_contact_worker",                1]
   - ["api_google_email_sync_enqueuer_worker",        1]
   - ["api_google_plus_account_fetcher_worker",       1]
-  - ["api_import_csv",                               1]
-  - ["mailers",                                      10]
-  - ["api_audit_change_worker",                      1]
   - ["api_user_adobe_campaign_subscriber",           1]

@@ -1,9 +1,7 @@
 # This is the default mpdx_api Sidekiq worker config.
-#
-# It should contain most queues for mpdx_api (but not Classic).
-#
-# Jobs that are known to be memory gluttons should be excluded from this config (like Tnt import).
-#
+# It should contain most queues for mpdx_api.
+# Jobs that are known to be memory gluttons / memory optimized should be excluded from this config.
+
 # The thread count (concurrency) is moderate, to support jobs that need moderate memory.
 #
 # Queue Weights (priority):
@@ -15,37 +13,11 @@
 :verbose: false
 :concurrency: 5
 :queues:
-  - ["api_background_batch_request",                     1]
-  - ["api_account_list",                                 2]
-  - ["api_account_list_import_data",                     1]
-  - ["api_account_list_import_data_enqueuer_worker",     10]
-  - ["api_admin_account_list_reset_worker",              10]
-  - ["api_admin_fix_worker",                             2]
-  - ["api_contact_dup_contacts_merge_worker",            2]
-  - ["api_contact_suggested_changes_updater_worker",     2]
-  - ["api_csv_import_contact_worker",                    10]
-  - ["api_currency_rates_fetcher_worker",                2]
-  - ["api_default",                                      2]
-  - ["api_google_contacts_sync_enqueuer_worker",         10]
-  - ["api_google_email_sync_enqueuer_worker",            10]
-  - ["api_google_plus_account_fetcher_worker",           1]
-  - ["api_google_sync_data_worker",                      1]
-  - ["api_import",                                       10]
-  - ["api_import_csv",                                   10]
-  - ["api_import_google",                                10]
-  - ["api_import_tnt_data_sync",                         10]
-  - ["api_lower_retry_worker",                           2]
-  - ["api_org_donor_accounts_address_cleaner",           2]
-  - ["api_organization",                                 2]
+  - ["api_background_batch_request",                     10]
+  - ["api_donation_amount_recommendation_remote_worker", 2]
   - ["api_organization_from_query_url_worker",           2]
   - ["api_organizations_from_csv_url_worker",            2]
-  - ["api_person_facebook_account",                      2]
-  - ["api_person_organization_account",                  2]
-  - ["api_pls_account",                                  2]
-  - ["api_prayer_letters_account",                       2]
   - ["api_sidekiq_cron_worker",                          2]
   - ["api_task",                                         2]
   - ["api_task_notifications_worker",                    2]
-  - ["mailers",                                          10]
-  - ["api_donation_amount_recommendation_remote_worker", 10]
-  - ["api_user_adobe_campaign_subscriber",               1]
+  - ["default",                                          1]
