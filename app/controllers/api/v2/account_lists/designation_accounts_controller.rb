@@ -14,6 +14,12 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
     render_designation_account
   end
 
+  def update
+    load_designation_account
+    authorize_designation_account
+    persist_designation_account
+  end
+
   private
 
   def load_designation_accounts
@@ -34,6 +40,31 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
 
   def render_designation_account
     render json: @designation_account, include: include_params, fields: field_params
+  end
+
+  def persist_designation_account
+    build_designation_account
+    authorize_designation_account
+
+    if save_designation_account
+      render_designation_account
+    else
+      render_with_resource_errors(@designation_account)
+    end
+  end
+
+  def build_designation_account
+    @designation_account.assign_attributes(designation_account_params)
+  end
+
+  def save_designation_account
+    @designation_account.save(context: persistence_context)
+  end
+
+  def designation_account_params
+    params
+      .require(:designation_account)
+      .permit(DesignationAccount::PERMITTED_ATTRIBUTES)
   end
 
   def designation_account_scope

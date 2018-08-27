@@ -1,0 +1,90 @@
+attributes: &attrs
+  active:
+    description:
+      If this designation_account is active then the balance should be added into the profile total
+    type: boolean
+  designation_number:
+    description:
+      The remote system designation number
+    type: string
+  display_name:
+    description:
+      The name to display
+    type: string
+  name:
+    description:
+      The name of the designation
+    type: float
+  organization_name:
+    description:
+      The name of the organization this designation belongs to
+    type: string
+  balance:
+    description:
+      The balance in its native currency
+    type: number
+  converted_balance:
+    description:
+      The balance in the account_list default currency
+    type: number
+  balance_updated_at:
+    description:
+      The DateTime when the balance was updated
+    type: string
+  currency:
+    description:
+      The native currency of the designation_account
+    type: string
+  currency_symbol:
+    description:
+      The native currency symbol of the designation_account
+    type: string
+  exchange_rate:
+    description:
+      The exchange rate from the native currency to the account_list default currency
+    type: number
+
+relationships: &rels
+  organization:
+    data:
+      description:
+        The Organization the designation account belongs to
+      type: 'Organization'
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+mutation_attributes: &mutation_attrs
+  active:
+    description:
+      If this designation_account is active then the balance should be added into the profile total
+    type: boolean
+
+parameters:
+  index:
+    filters:
+      account_list_id:
+        description:
+          Filter by Account List; accepts an Account List `id`
+        type: id string
+      wildcard_search:
+        description:
+          where name contains or designation_number starts with wildcard_search
+        type: string
+  update:
+    attributes:
+      <<: *mutation_attrs
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Designation Account Objects
+      type: '[Designation Account]'
+  show:
+    <<: *obj
+  update:
+    <<: *obj

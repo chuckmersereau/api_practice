@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+# 17 August 2018
+- Added PUT account_list/designation_accounts/:id allowing active to be updated
+
 # 4 May 2018
 - Added reports/pledge_histories endpoint
 - Added reports/appointment_results endpoint

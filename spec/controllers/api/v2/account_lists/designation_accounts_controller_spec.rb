@@ -14,10 +14,17 @@ describe Api::V2::AccountLists::DesignationAccountsController, type: :controller
   let(:resource) { designation_account }
   let(:parent_param) { { account_list_id: account_list_id } }
   let(:correct_attributes) { attributes_for(:designation_account) }
+  let(:given_update_reference_key)   { :active }
+  let(:given_update_reference_value) { false }
+  let(:correct_attributes) { attributes_for(:designation_account, active: false) }
+  let(:unpermitted_attributes) { attributes_for(:designation_account, name: 'Appeal 3') }
+  let(:dont_run_incorrect_update) { true }
 
   include_examples 'index_examples'
 
   include_examples 'show_examples'
+
+  include_examples 'update_examples'
 
   describe '#index' do
     before { api_login(user) }

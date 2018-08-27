@@ -15,6 +15,14 @@ class DesignationAccount < ApplicationRecord
 
   audited except: [:updated_at, :balance, :balance_updated_at]
 
+  PERMITTED_ATTRIBUTES = [
+    :active,
+    :overwrite,
+    :updated_at,
+    :updated_in_db_at,
+    :id
+  ].freeze
+
   def to_s
     designation_number
   end
