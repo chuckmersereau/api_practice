@@ -5,6 +5,11 @@ class Reports::AppointmentResultsPeriod < ActiveModelSerializers::Model
     appointments_during_dates.count
   end
 
+  # default that Jimmy wants used for now
+  def weekly_individual_appointment_goal
+    10
+  end
+
   def group_appointments
     0
   end

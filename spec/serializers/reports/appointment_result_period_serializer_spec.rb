@@ -14,6 +14,7 @@ describe Reports::AppointmentResultsPeriodSerializer do
     expect(subject.keys).to match_array [:start_date,
                                          :end_date,
                                          :individual_appointments,
+                                         :weekly_individual_appointment_goal,
                                          :group_appointments,
                                          :new_monthly_partners,
                                          :new_special_pledges,
