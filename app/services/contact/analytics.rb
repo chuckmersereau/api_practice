@@ -48,7 +48,7 @@ class Contact::Analytics
     contacts
       .active
       .joins(:contact_people)
-      .where(contact_people: { person_id: person_ids })
+      .where(contact_people: { person_id: person_ids }).uniq
   end
 
   def fetch_contact_people_with_birthdays_this_week_who_are_alive_from_active_contacts

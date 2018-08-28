@@ -175,6 +175,12 @@ RSpec.describe Contact::Analytics, type: :model do
                       anniversary_year: (today + 10.years).year)
     end
 
+    let(:wife_with_anniversary_this_week) do
+      create(:person, anniversary_month: today.month,
+                      anniversary_day: today.day,
+                      anniversary_year: (today + 10.years).year)
+    end
+
     let(:deceased_person_with_anniversary_this_week) do
       create(:person, anniversary_month: today.month,
                       anniversary_day: today.day,
@@ -232,6 +238,7 @@ RSpec.describe Contact::Analytics, type: :model do
 
     before do
       active_contact_with_person_with_anniversary_this_week.people          << person_with_anniversary_this_week
+      active_contact_with_person_with_anniversary_this_week.people          << wife_with_anniversary_this_week
       active_contact_with_deceased_person_with_anniversary_this_week.people << deceased_person_with_anniversary_this_week
       active_contact_with_person_with_anniversary_next_week.people          << person_with_anniversary_next_week
       active_contact_with_person_with_anniversary_last_week.people          << person_with_anniversary_last_week
