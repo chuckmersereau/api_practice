@@ -30,6 +30,11 @@ describe DesignationAccountSerializer do
     it 'returns symbol for total currency' do
       expect(serializer.total_currency).to eq(account_list.salary_currency_or_default)
     end
+
+    it 'when list is null' do
+      account_list.delete
+      expect(serializer.total_currency).to eq nil
+    end
   end
 
   describe '#exchange_rate' do
@@ -63,6 +68,11 @@ describe DesignationAccountSerializer do
         it 'returns false' do
           expect(serializer.active).to be_falsy
         end
+      end
+
+      it 'when list does not exist' do
+        account_list.delete
+        expect(serializer.active).to be(false)
       end
     end
     context 'object inactive' do

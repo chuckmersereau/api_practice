@@ -28,7 +28,7 @@ class DesignationAccountSerializer < ApplicationSerializer
   end
 
   def total_currency
-    list.salary_currency_or_default
+    list&.salary_currency_or_default
   end
 
   def exchange_rate
@@ -39,7 +39,7 @@ class DesignationAccountSerializer < ApplicationSerializer
   end
 
   def active
-    object.active && object.organization_id == list.salary_organization_id
+    object.active && object.organization_id == list&.salary_organization_id
   end
 
   private
