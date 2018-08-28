@@ -14,10 +14,16 @@
 :concurrency: 5
 :queues:
   - ["api_background_batch_request",                     10]
+  - ["api_mail_chimp_sync_worker",                       10]
   - ["api_donation_amount_recommendation_remote_worker", 2]
   - ["api_organization_from_query_url_worker",           2]
   - ["api_organizations_from_csv_url_worker",            2]
+  - ["api_person_facebook_account",                      2]
+  - ["api_pls_account",                                  2]
+  - ["api_prayer_letters_account",                       2]
   - ["api_sidekiq_cron_worker",                          2]
   - ["api_task",                                         2]
   - ["api_task_notifications_worker",                    2]
+  - ["api_google_sync_data_worker",                      1]
   - ["default",                                          1]
+
