@@ -105,10 +105,10 @@ describe ConstantListSerializer do
     end
   end
 
-  context '#notification_translated_hashes' do
+  context '#notification_hashes' do
     let!(:notification_type) { create(:notification_type) }
 
-    it { expect(subject.notification_translated_hashes.first).to be_a_hash_with_types Symbol, String }
+    it { expect(subject.notification_hashes.first).to be_a_hash_with_types Symbol, String }
   end
 
   %w(

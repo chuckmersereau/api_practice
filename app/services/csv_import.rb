@@ -51,12 +51,12 @@ class CsvImport
   def self.constants
     constants_exhibit = ConstantList.new.to_exhibit
     {
-      pledge_currency: constants_exhibit.pledge_currencies_translated_hashes,
-      pledge_frequency: constants_exhibit.pledge_frequency_translated_hashes,
-      likely_to_give: constants_exhibit.assignable_likely_to_give_translated_hashes,
-      newsletter: constants_exhibit.assignable_send_newsletter_translated_hashes,
-      send_appeals: constants_exhibit.send_appeals_translated_hashes,
-      status: constants_exhibit.status_translated_hashes
+      pledge_currency: constants_exhibit.pledge_currency_hashes,
+      pledge_frequency: constants_exhibit.pledge_frequency_hashes,
+      likely_to_give: constants_exhibit.assignable_likely_to_give_hashes,
+      newsletter: constants_exhibit.assignable_send_newsletter_hashes,
+      send_appeals: constants_exhibit.send_appeals_hashes,
+      status: constants_exhibit.status_hashes
     }
   end
 

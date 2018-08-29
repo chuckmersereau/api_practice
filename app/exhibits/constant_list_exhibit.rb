@@ -5,31 +5,79 @@ class ConstantListExhibit < DisplayCase::Exhibit
     object.class.name == 'ConstantList'
   end
 
-  def date_formats_map
+  def bulk_update_options
+    {
+      'likely_to_give' => translate_array_to_strings(assignable_likely_to_give),
+      'send_newsletter' => translate_array_to_strings(assignable_send_newsletter),
+      'pledge_currency' => pledge_currencies,
+      'pledge_received' => translate_array_to_strings(pledge_received),
+      'status' => translate_array_to_strings(assignable_statuses)
+    }
+  end
+
+  def dates
     Hash[DATE_FORMATS]
   end
 
-  def languages_map
+  def languages
     Hash[LANGUAGES_CONSTANT]
   end
 
-  def locale_name_map
-    locales.each_with_object({}) do |(name, code), hash|
+  def locales
+    super.each_with_object({}) do |(name, code), hash|
       native_name = TwitterCldr::Shared::Languages.translate_language(name, :en, code)
       hash[code] = {
         native_name: native_name,
-        english_name: locale_display_name(name, code)
+        english_name: format('%s (%s)', name, code)
       }
     end
   end
 
-  def pledge_currencies_code_symbol_map
+  def pledge_currencies
     Hash[
       codes.map { |code| [code.upcase, currency_information(code.upcase)] }
     ]
   end
 
-  def pledge_currencies_translated_hashes
+  def pledge_received
+    %w(Yes No)
+  end
+
+  def activity_hashes
+    translate_array(activities)
+  end
+
+  def assignable_likely_to_give_hashes
+    translate_array(assignable_likely_to_give)
+  end
+
+  def assignable_location_hashes
+    translate_array(assignable_locations)
+  end
+
+  def assignable_send_newsletter_hashes
+    translate_array(assignable_send_newsletter)
+  end
+
+  def assignable_status_hashes
+    translate_array(assignable_statuses)
+  end
+
+  def bulk_update_option_hashes
+    {
+      'likely_to_give' => assignable_likely_to_give_hashes,
+      'pledge_currency' => pledge_currency_hashes,
+      'pledge_received' => pledge_received_hashes,
+      'send_newsletter' => assignable_send_newsletter_hashes,
+      'status' => assignable_status_hashes
+    }
+  end
+
+  def notification_hashes
+    translate_hash_with_key(notifications)
+  end
+
+  def pledge_currency_hashes
     codes.map do |code|
       currency = currency_information(code.upcase)
       {
@@ -40,66 +88,20 @@ class ConstantListExhibit < DisplayCase::Exhibit
     end
   end
 
-  def locale_display_name(name, code)
-    format '%s (%s)', name, code
+  def pledge_frequency_hashes
+    translate_hash_with_key(pledge_frequencies)
   end
 
-  def bulk_update_options
-    {}.tap do |options|
-      options['likely_to_give'] = translate_array_to_strings(assignable_likely_to_give)
-      options['status'] = translate_array_to_strings(assignable_statuses)
-      options['send_newsletter'] = translate_array_to_strings(assignable_send_newsletter)
-      options['pledge_received'] = [_('Yes'), _('No')]
-      options['pledge_currency'] = pledge_currencies_code_symbol_map
-    end
+  def pledge_received_hashes
+    translate_array(pledge_received)
   end
 
-  def activity_translated_hashes
-    translate_array(activities)
-  end
-
-  def assignable_likely_to_give_translated_hashes
-    translate_array(assignable_likely_to_give)
-  end
-
-  def assignable_send_newsletter_translated_hashes
-    translate_array(assignable_send_newsletter)
-  end
-
-  def status_translated_hashes
-    translate_array(statuses)
-  end
-
-  def pledge_frequency_translated_hashes
-    pledge_frequencies.map do |key, value|
-      {
-        id: value,
-        key: key,
-        value: _(value)
-      }
-    end
-  end
-
-  def notification_translated_hashes
-    notifications.dup.map do |key, value|
-      {
-        id: value,
-        key: key,
-        value: _(value)
-      }
-    end
-  end
-
-  def pledge_frequencies_translated_hashes
-    translate_hash(pledge_frequencies)
-  end
-
-  def send_appeals_translated_hashes
+  def send_appeals_hashes
     translate_hash(send_appeals)
   end
 
-  def assignable_location_translated_hashes
-    translate_array(assignable_locations)
+  def status_hashes
+    translate_array(statuses)
   end
 
   private
@@ -127,6 +129,16 @@ class ConstantListExhibit < DisplayCase::Exhibit
     hash.collect do |key, value|
       {
         id: key,
+        value: _(value)
+      }
+    end
+  end
+
+  def translate_hash_with_key(hash)
+    hash.collect do |key, value|
+      {
+        id: value,
+        key: key,
         value: _(value)
       }
     end

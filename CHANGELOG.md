@@ -2,6 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+# 23 August 2018
+- Added bulk_update_option_hashes and notification_hashes to list of constants at '/api/v2/constants'.
+- DEPRACATED notification_translated_hashes. This was a mistake and should not have had \_translated_ present in the name.
+
 # 17 August 2018
 - Added PUT account_list/designation_accounts/:id allowing active to be updated
 
@@ -185,8 +189,8 @@ This changelog covers what's changed in the MPDX APIs.
 
 ## 09 May 2017
 - Added translated constant hashes to list of constants at '/api/v2/constants'.
-  - 'activity_translated_hashes', 'assignable_likely_to_give_translated_hashes',
-    'assignable_send_newsletter_translated_hashes' and 'status_translated_hashes' were added.
+  - 'activity_hashes', 'assignable_likely_to_give_hashes',
+    'assignable_send_newsletter_hashes' and 'status_hashes' were added.
   - They contain hashes with the english and translated version of each constant.
 
 ## 08 May 2017

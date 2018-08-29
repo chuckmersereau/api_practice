@@ -7,157 +7,147 @@ resource 'Constants' do
   documentation_scope = :entities_constants
 
   let(:user) { create(:user_with_account) }
+  before { NotificationTypesSeeder.new.seed }
+  before { api_login(user) }
 
-  context 'authorized user' do
-    before { NotificationTypesSeeder.new.seed }
-    before { api_login(user) }
+  get '/api/v2/constants' do
+    let(:resource_type) { 'constants' }
 
-    # Activities
-    get '/api/v2/constants' do
-      let(:resource_type) { 'constants' }
+    let(:array_hash_value_keys) do
+      %w(
+        activity_hashes
+        assignable_likely_to_give_hashes
+        assignable_location_hashes
+        assignable_send_newsletter_hashes
+        assignable_status_hashes
+        notification_hashes
+        notification_translated_hashes
+        pledge_currency_hashes
+        pledge_frequency_hashes
+        pledge_received_hashes
+        send_appeals_hashes
+        status_hashes
+      )
+    end
 
-      let(:contact_attribute_keys) do
-        %w(
-          assignable_likely_to_give
-          assignable_send_newsletter
-          statuses
-        )
+    let(:array_value_keys) do
+      %w(
+        activities
+        assignable_likely_to_give
+        assignable_locations
+        assignable_send_newsletter
+        assignable_statuses
+        codes
+        pledge_received
+        statuses
+      )
+    end
+
+    let(:hash_array_hash_value_keys) do
+      %w(
+        bulk_update_option_hashes
+      )
+    end
+
+    let(:hash_array_value_keys) do
+      %w(
+        next_actions
+        results
+        sources
+      )
+    end
+
+    let(:hash_hash_value_keys) do
+      %w(
+        locales
+        organizations_attributes
+        pledge_currencies
+      )
+    end
+
+    let(:hash_value_keys) do
+      %w(
+        alert_frequencies
+        dates
+        languages
+        mobile_alert_frequencies
+        notifications
+        organizations
+        pledge_frequencies
+      )
+    end
+
+    let(:key_collections) do
+      %w(
+        array_hash_value_keys
+        array_value_keys
+        hash_array_hash_value_keys
+        hash_array_value_keys
+        hash_hash_value_keys
+        hash_value_keys
+      )
+    end
+
+    let(:custom_keys) do
+      %w(
+        bulk_update_options
+        csv_import
+        tnt_import
+      )
+    end
+
+    let(:keys) do
+      keys = custom_keys
+      key_collections.each do |key_collection|
+        keys += send(key_collection)
       end
+      keys
+    end
 
-      let(:expected_attribute_keys) do
-        %w(
-          activities
-          activity_hashes
-          alert_frequencies
-          assignable_likely_to_give_hashes
-          assignable_locations
-          assignable_location_hashes
-          assignable_send_newsletter_hashes
-          assignable_statuses
-          bulk_update_options
-          csv_import
-          dates
-          languages
-          locales
-          mobile_alert_frequencies
-          next_actions
-          notification_translated_hashes
-          notifications
-          organizations
-          organizations_attributes
-          pledge_currencies
-          pledge_frequencies
-          pledge_frequency_hashes
-          results
-          send_appeals_hashes
-          sources
-          status_hashes
-          tnt_import
-        ) + contact_attribute_keys
-      end
+    example 'List constants', document: documentation_scope do
+      explanation 'List of Constants'
+      do_request
 
-      example 'List constants', document: documentation_scope do
-        explanation 'List of Constants'
-        do_request
+      expect(response_status).to eq 200
+      expect(resource_object.keys).to match_array keys
 
-        expect(response_status).to eq 200
-        expect(resource_object.keys).to match_array expected_attribute_keys
-
-        resource_object['activities'].each do |activity|
-          expect(activity).to be_a(String)
-        end
-
-        resource_object['activity_hashes'].each do |activity|
-          expect(activity).to be_a(Hash)
-        end
-
-        resource_object['assignable_likely_to_give_hashes'].each do |activity|
-          expect(activity).to be_a(Hash)
-        end
-
-        resource_object['assignable_send_newsletter_hashes'].each do |activity|
-          expect(activity).to be_a(Hash)
-        end
-
-        resource_object['notification_translated_hashes'].each do |activity|
-          expect(activity).to be_a(Hash)
-        end
-
-        resource_object['status_hashes'].each do |activity|
-          expect(activity).to be_a(Hash)
-        end
-
-        resource_object['pledge_frequency_hashes'].each do |pledge_frequency|
-          expect(pledge_frequency).to be_a(Hash)
-        end
-
-        expect(resource_object['alert_frequencies']).to be_a_hash_with_types String, String
-
-        expect(resource_object['csv_import'].keys.size).to eq 4
-
-        expect(resource_object['tnt_import'].keys.size).to eq 1
-
-        resource_object['dates'].each do |date_format|
-          expect(date_format.size).to eq 2
-          expect(date_format.first).to be_a(String)
-          expect(date_format.second).to be_a(String)
-        end
-
-        resource_object['languages'].each do |language|
-          expect(language.size).to eq 2
-          expect(language.first).to be_a(String)
-          expect(language.second).to be_a(String)
-        end
-
-        resource_object['locales'].each do |currency|
-          expect(currency.size).to eq 2
-          expect(currency.first).to be_a(String)
-          expect(currency.second).to be_a(Hash)
-        end
-
-        expect(resource_object['mobile_alert_frequencies']).to be_a_hash_with_types String, String
-
-        resource_object['notifications'].each do |notification|
-          expect(notification.size).to eq 2
-          expect(notification.first).to be_a(String)
-          expect(notification.second).to be_a(String)
-        end
-
-        resource_object['organizations'].each do |organization|
-          expect(organization.size).to eq 2
-          expect(organization.first).to be_a(String)
-          expect(organization.second).to be_a(String)
-        end
-
-        resource_object['organizations_attributes'].each do |organization_attributes|
-          expect(organization_attributes.size).to eq 2
-          expect(organization_attributes.first).to be_a(String)
-          expect(organization_attributes.second).to be_a(Hash)
-        end
-
-        resource_object['pledge_frequencies'].each do |frequency|
-          expect(frequency.size).to eq 2
-          expect(frequency.first).to be_a(String)
-          expect(frequency.second).to be_a(String)
-        end
-
-        resource_object['pledge_currencies'].each do |currency|
-          expect(currency.size).to eq 2
-          expect(currency.first).to be_a(String)
-          expect(currency.second).to be_a(Hash)
-        end
-
-        expect(resource_object['sources'].size).to eq 3
-        resource_object['sources'].each do |source|
-          expect(source.second).to be_a(Array)
-        end
-
-        contact_attribute_keys.each do |key|
-          resource_object[key].each do |val|
-            expect(val).to be_a(String)
-          end
+      expect(resource_object['bulk_update_options'].keys).to eq(
+        %w(likely_to_give send_newsletter pledge_currency pledge_received status)
+      )
+      expect(resource_object['csv_import'].keys).to eq(
+        %w(constants max_file_size_in_bytes required_headers supported_headers)
+      )
+      expect(resource_object['tnt_import'].keys).to eq(
+        %w(max_file_size_in_bytes)
+      )
+      key_collections.each do |key_collection|
+        send(key_collection).each do |key|
+          object_type_tester(resource_object[key], key_collection)
         end
       end
     end
+  end
+
+  def object_type_tester(object, types)
+    current, descendents = types.split('_', 2)
+    send("#{current}?", object, descendents)
+  end
+
+  def array?(array, descendents)
+    expect(array).to be_a(Array)
+    array.each do |object|
+      object_type_tester(object, descendents)
+    end
+  end
+
+  def hash?(hash, descendents)
+    expect(hash).to be_a(Hash)
+    hash.each_value do |object|
+      object_type_tester(object, descendents)
+    end
+  end
+
+  def value?(value, _descendents)
+    expect(%(TrueClass FalseClass NilClass String)).to include(value.class.name)
   end
 end
