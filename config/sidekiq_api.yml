@@ -15,6 +15,7 @@
 :queues:
   - ["api_background_batch_request",                     10]
   - ["api_mail_chimp_sync_worker",                       10]
+  - ["api_account_list_import_data",                     2]
   - ["api_donation_amount_recommendation_remote_worker", 2]
   - ["api_organization_from_query_url_worker",           2]
   - ["api_organizations_from_csv_url_worker",            2]
