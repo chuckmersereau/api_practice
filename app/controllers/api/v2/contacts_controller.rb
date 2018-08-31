@@ -70,7 +70,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def build_contact
-    @contact ||= Contact.new(prefill_attributes_on_create: true)
+    @contact ||= Contact.new(prefill_attributes_on_create: create_default_person)
     @contact.assign_attributes(contact_params)
   end
 
@@ -108,5 +108,10 @@ class Api::V2::ContactsController < Api::V2Controller
 
   def default_sort_param
     Contact.arel_table[:created_at].asc
+  end
+
+  def create_default_person
+    return false if params[:contact][:create_default_person] == false
+    true
   end
 end

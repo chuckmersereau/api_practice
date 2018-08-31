@@ -205,9 +205,9 @@ class Contact < ApplicationRecord
   accepts_nested_attributes_for :contacts_referred_by_me, reject_if: :all_blank, allow_destroy: false
 
   before_save :set_notes_saved_at, :update_late_at, :check_state_for_mail_chimp_sync, :set_status_confirmed_at
+  after_create :create_people_from_contact, if: :prefill_attributes_on_create
   after_commit :sync_with_mail_chimp, if: :sync_with_mail_chimp_required?
   after_commit :sync_with_letter_services, :sync_with_google_contacts
-  after_create :create_people_from_contact, if: :prefill_attributes_on_create
   before_destroy :delete_from_letter_services, :delete_people
   LETTER_SERVICES = [:pls, :prayer_letters].freeze
 

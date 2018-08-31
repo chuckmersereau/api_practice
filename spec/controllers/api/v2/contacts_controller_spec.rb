@@ -109,6 +109,35 @@ describe Api::V2::ContactsController, type: :controller do
     end
   end
 
+  describe 'Creating a new contact with a default person' do
+    it 'will create a default person' do
+      api_login(user)
+      full_correct_attributes[:data][:attributes][:create_default_person] = true
+
+      expect do
+        post :create, full_correct_attributes
+      end.to change { Person.count }.by(1)
+    end
+
+    it 'will not create a default person' do
+      api_login(user)
+      full_correct_attributes[:data][:attributes][:create_default_person] = false
+
+      expect do
+        post :create, full_correct_attributes
+      end.to change { Person.count }.by(0)
+    end
+
+    it 'will create a default person if create_default_person is nil' do
+      api_login(user)
+      full_correct_attributes[:data][:attributes][:create_default_person] = nil
+
+      expect do
+        post :create, full_correct_attributes
+      end.to change { Person.count }.by(1)
+    end
+  end
+
   describe 'Nested Creating / Updating of Resources' do
     describe 'Created a nested Referral with an Account List' do
       lock_time_around
