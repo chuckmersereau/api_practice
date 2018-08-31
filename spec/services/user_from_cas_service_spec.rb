@@ -53,9 +53,9 @@ RSpec.describe UserFromCasService, type: :service do
     context 'When a User with the GUID already exists' do
       let!(:user) do
         create(:user_with_account).tap do |user|
-          relay_account = user.relay_accounts.first
+          key_account = user.key_accounts.first
 
-          relay_account.update(relay_remote_id: service.guids.first)
+          key_account.update(remote_id: service.guids.first, authenticated: true)
         end
       end
 

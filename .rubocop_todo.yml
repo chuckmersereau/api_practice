@@ -202,8 +202,6 @@ Performance/RegexpMatch:
 # Cop supports --auto-correct.
 Rails/ApplicationRecord:
   Exclude:
-    - 'dev/migrate/2016_03_31_merge_key_relay.rb'
-    - 'dev/migrate/2016_05_13_move_old_key_users.rb'
     - 'spec/migrations/update_all_timestamp_columns_to_be_non_null_spec.rb'
 
 # Offense count: 54

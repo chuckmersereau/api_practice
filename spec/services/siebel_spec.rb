@@ -24,7 +24,7 @@ describe Siebel do
   end
 
   context '#import_profiles' do
-    let!(:relay) { create(:relay_account, person: person) }
+    let!(:relay) { create(:key_account, person: person) }
 
     it 'imports profiles for a relay guid' do
       stub_request(:get, "#{wsapi}/profiles?response_timeout=600&ssoGuid=#{org_account.remote_id}")

@@ -10,7 +10,7 @@ resource 'User > Authenticate' do
   let!(:cru_usa_org) { create(:ccc) }
 
   before do
-    user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
+    user.key_accounts << create(:key_account, remote_id: 'B163530-7372-551R-KO83-1FR05534129F', authenticated: true)
     stub_request(
       :get,
       "#{ENV['CAS_BASE_URL']}/p3/serviceValidate?"\
@@ -27,7 +27,7 @@ resource 'User > Authenticate' do
 
   post '/api/v2/user/authenticate' do
     with_options scope: [:data, :attributes] do
-      parameter 'cas_ticket',          'A valid CAS Ticket from The Key or Relay', type: 'String'
+      parameter      'cas_ticket',     'A valid CAS Ticket from The Key',          type: 'String'
       response_field 'json_web_token', 'JSON Web Token',                           type: 'String'
     end
 

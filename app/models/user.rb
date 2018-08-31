@@ -79,53 +79,11 @@ class User < Person
     designation_accounts.where(organization_id: organization_id).pluck('designation_number')
   end
 
-  def self.from_access_token(token)
-    return unless token.present?
-    get_user_from_access_token(token) ||
-      get_user_from_cas_oauth(token)
-  end
-
-  def self.get_user_from_access_token(token)
-    user = User.find_by(access_token: token)
-    return if user.blank?
-    return user if user.relay_accounts.any?
-    real_user = get_relay_account_user_from_token(token)
-
-    return user unless real_user && real_user.id != user.id
-    real_user.merge(user)
-    real_user
-  end
-
-  def self.get_user_from_cas_oauth(token)
-    user = get_relay_account_user_from_token(token)
-    return unless user
-    user.update(access_token: token)
-    user
-  end
-
-  def self.get_relay_account_user_from_token(token)
-    begin
-      response = RestClient.get("http://oauth.ccci.us/users/#{token}")
-    rescue RestClient::Unauthorized
-      return
-    end
-
-    return if response.blank?
-    guid = JSON.parse(response.to_s)['guid']
-    return unless guid.present?
-    relay_account = Person::RelayAccount.find_by('lower(relay_remote_id) = ?', guid.downcase)
-    return unless relay_account&.person
-    relay_account.person.to_user
-  end
-
-  # Find a user from a guid, regardless of whether they have a Relay or a Key account,
-  # `Person::KeyAccount` and `Person::RelayAccount` both use the same db table,
-  # so we only need one query.
   def self.find_by_guid(guid)
     account = if guid.is_a?(Array)
-                Person::RelayAccount.find_by('lower(relay_remote_id) IN (?)', guid.map(&:downcase))
+                Person::KeyAccount.find_by('lower(remote_id) IN (?)', guid.map(&:downcase))
               else
-                Person::RelayAccount.find_by('lower(relay_remote_id) = ?', guid.downcase)
+                Person::KeyAccount.find_by('lower(remote_id) = ?', guid.downcase)
               end
     account&.person&.to_user
   end

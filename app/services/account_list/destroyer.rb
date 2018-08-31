@@ -85,7 +85,6 @@ class AccountList::Destroyer
     Person::FacebookAccount.where(person: people).delete_all
     Person::LinkedinAccount.where(person: people).delete_all
     Person::Website.where(person: people).delete_all
-    Person::RelayAccount.where(person: people).delete_all
     Person::KeyAccount.where(person: people).delete_all
     ContactPerson.where(person: people).delete_all
     Message.where(from_id: people).delete_all

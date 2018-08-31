@@ -75,7 +75,6 @@ RSpec.describe AccountList::Destroyer do
         account_list.people.collect(&:linkedin_accounts).flatten,
         account_list.people.collect(&:phone_numbers).flatten,
         account_list.people.collect(&:pictures).flatten,
-        account_list.people.collect(&:relay_accounts).flatten,
         account_list.people.collect(&:twitter_accounts).flatten,
         account_list.people.collect(&:websites).flatten,
         account_list.people.collect(&:email_addresses).flatten,

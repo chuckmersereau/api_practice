@@ -23,7 +23,7 @@ class Admin::UserFinder
     end
 
     def users_by_login_email(email)
-      User.where(id: user_id_by_relay(email) || user_id_by_key(email))
+      User.where(id: user_id_by_email(email))
     end
 
     def users_by_name(name)
@@ -43,17 +43,7 @@ class Admin::UserFinder
     end
 
     def user_id_by_email(email)
-      user_id_by_relay(email) || user_id_by_key(email)
-    end
-
-    def user_id_by_relay(email)
-      Person::RelayAccount.where('lower(username) = ?', email.downcase)
-                          .try(:first).try(:person_id)
-    end
-
-    def user_id_by_key(email)
-      Person::KeyAccount.where('lower(email) = ?', email.downcase)
-                        .try(:first).try(:person_id)
+      Person::KeyAccount.where('lower(email) = ?', email.downcase).pluck(:person_id)
     end
   end
 end

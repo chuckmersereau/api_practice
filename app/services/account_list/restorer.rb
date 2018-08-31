@@ -20,7 +20,7 @@ class AccountList::Restorer
     company_positions
     person_facebook_accounts
     person_google_accounts
-    person_relay_accounts
+    person_key_accounts
     person_linkedin_accounts
     person_twitter_accounts
     person_websites
@@ -199,15 +199,11 @@ class AccountList::Restorer
     )
     add_to_store(
       Person::KeyAccount,
-      account_list.people.joins(:key_accounts).pluck('person_relay_accounts.id')
+      account_list.people.joins(:key_accounts).pluck('person_key_accounts.id')
     )
     add_to_store(
       Person::LinkedinAccount,
       account_list.people.joins(:linkedin_accounts).pluck('person_linkedin_accounts.id')
-    )
-    add_to_store(
-      Person::RelayAccount,
-      account_list.people.joins(:relay_accounts).pluck('person_relay_accounts.id')
     )
     add_to_store(
       Person::TwitterAccount,

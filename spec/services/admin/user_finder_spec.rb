@@ -19,15 +19,6 @@ describe Admin::UserFinder do
       expect(found_users.to_set).to eq [john1, john2].to_set
     end
 
-    it 'finds user by relay account' do
-      account = create(:relay_account, username: 'john@t.co')
-
-      found_user = Admin::UserFinder.find_users('John@T.co').first
-
-      expect(found_user).to be_a User
-      expect(found_user.id).to eq account.person.id
-    end
-
     it 'finds user by key account' do
       account = create(:key_account, email: 'john2@t.co')
 

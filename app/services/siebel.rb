@@ -159,7 +159,7 @@ class Siebel < DataServer
 
   def profiles
     unless @profiles
-      if @org_account.user.relay_accounts.none?
+      if @org_account.user.key_accounts.none?
         # This org account is no longer useful
         @org_account.destroy
         return []

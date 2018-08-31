@@ -89,10 +89,6 @@ class Person < ApplicationRecord
            foreign_key: :person_id,
            dependent: :destroy, autosave: true
   has_many :google_integrations, through: :google_accounts
-  has_many :relay_accounts,
-           class_name: 'Person::RelayAccount',
-           foreign_key: :person_id,
-           dependent: :delete_all
   has_many :organization_accounts,
            class_name: 'Person::OrganizationAccount',
            foreign_key: :person_id,
@@ -490,7 +486,7 @@ class Person < ApplicationRecord
 
       # handle a few things separately to check for duplicates
       %w(twitter_accounts facebook_accounts linkedin_accounts
-         google_accounts relay_accounts organization_accounts).each do |relationship|
+         google_accounts key_accounts organization_accounts).each do |relationship|
         other.send(relationship).each do |record|
           next if send(relationship).where(person_id: id, remote_id: record.remote_id).any?
           record.update_attribute(:person_id, id)

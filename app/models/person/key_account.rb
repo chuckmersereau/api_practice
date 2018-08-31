@@ -1,8 +1,6 @@
 class Person::KeyAccount < ApplicationRecord
   include Person::Account
 
-  self.table_name = 'person_relay_accounts'
-
   validates :remote_id, :email, :person_id, presence: true
   validates :remote_id, uniqueness: true
 
@@ -46,12 +44,6 @@ class Person::KeyAccount < ApplicationRecord
 
   def self.find_related_account(rel, attributes)
     account = rel.authenticated.find_by('upper(remote_id) = ?', attributes[:remote_id])
-
-    if attributes && attributes[:relay_remote_id]
-      # see comment inside self.find_authenticated_user
-      account ||= rel.find_by('upper(relay_remote_id) = ?', attributes[:relay_remote_id].upcase)
-    end
-
     account
   end
 
@@ -66,14 +58,8 @@ class Person::KeyAccount < ApplicationRecord
 
   def self.find_authenticated_user(auth_hash)
     extra_attributes = auth_hash.extra.attributes.first
-    key_guid         = extra_attributes.ssoGuid.upcase
-    relay_guid       = extra_attributes.relayGuid&.upcase
-    user_id          = authenticated.where('upper(remote_id) = ?', key_guid).pluck(:person_id).first
-
-    # this is a fall back to cover the time while remote_id's are nil between when they are moved to
-    # relay_remote_id's and when dev/migrate/2016_03_31_merge_key_relay.rb is run. During that time
-    # remote_id will be nil
-    user_id ||= authenticated.where('upper(relay_remote_id) = ?', relay_guid).pluck(:person_id).first
+    remote_id        = extra_attributes.ssoGuid.upcase
+    user_id          = authenticated.where('upper(remote_id) = ?', remote_id).pluck(:person_id).first
     User.find_by(id: user_id)
   end
 

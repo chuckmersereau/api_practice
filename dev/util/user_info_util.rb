@@ -8,9 +8,6 @@ def user_info(u)
       a_u.key_accounts.each do |ka|
         puts '    ' + key_account_str(ka)
       end
-      a_u.relay_accounts.each do |ra|
-        puts '    ' + relay_account_str(ra)
-      end
     end
     a.designation_accounts.each do |da|
       puts '  ' + designation_account_str(da)
@@ -31,10 +28,6 @@ end
 
 def key_account_str(ka)
   "key #{ka.email}"
-end
-
-def relay_account_str(ra)
-  "relay #{ra.username}"
 end
 
 def account_list_str(a)

@@ -39,7 +39,6 @@ JsonApiService.configure do |config|
       :calendar_id
     ],
     key_accounts: [
-      :relay_remote_id,
       :remote_id
     ],
     linkedin_accounts: [

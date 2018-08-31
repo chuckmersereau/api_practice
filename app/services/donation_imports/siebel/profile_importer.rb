@@ -52,7 +52,7 @@ class DonationImports::Siebel
     end
 
     def organization_account_is_valid?
-      organization_account.user.relay_accounts.any?
+      organization_account.user.key_accounts.any?
     end
 
     def link_account_list(designation_profile)

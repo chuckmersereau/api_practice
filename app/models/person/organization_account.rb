@@ -41,7 +41,7 @@ class Person::OrganizationAccount < ApplicationRecord
 
   def to_s
     str = organization.to_s
-    employee_id = user.relay_accounts.where(remote_id: remote_id).pluck(:employee_id).first
+    employee_id = user.key_accounts.where(remote_id: remote_id).pluck(:employee_id).first
     postfix = username || employee_id || remote_id
     str += ': ' + postfix if postfix
     str

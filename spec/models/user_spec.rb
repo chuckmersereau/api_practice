@@ -55,26 +55,10 @@ describe User do
     end
   end
 
-  context '.get_user_from_cas_oauth' do
-    it 'looks up the user by guid case-insensitive' do
-      user = create(:user)
-      relay_account = create(:relay_account, relay_remote_id: 'AAAA-0000')
-      user.relay_accounts << relay_account
-      token = 'token123'
-      allow(RestClient).to receive(:get).with('http://oauth.ccci.us/users/token123')
-        .and_return('{"guid":"aaaa-0000"}')
-
-      result_user = User.get_user_from_cas_oauth(token)
-
-      expect(result_user.access_token).to eq 'token123'
-      expect(result_user.id).to eq user.id
-    end
-  end
-
   context '.find_by_guid' do
     it 'finds a person with a relay account' do
       user = create(:user)
-      user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
+      user.key_accounts << create(:key_account, remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
       found_user = User.find_by_guid('B163530-7372-551R-KO83-1FR05534129F')
       expect(found_user.id).to eq user.id
       expect(found_user).to be_a User
@@ -83,7 +67,7 @@ describe User do
     it 'finds a person with a key account' do
       user = create(:user)
       # Key and relay account models both use the same db table
-      user.key_accounts << create(:key_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
+      user.key_accounts << create(:key_account, remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
       found_user = User.find_by_guid('B163530-7372-551R-KO83-1FR05534129F')
       expect(found_user.id).to eq user.id
       expect(found_user).to be_a User
@@ -171,7 +155,7 @@ describe User do
 
   describe '#find_by_email' do
     let!(:user) { create(:user) }
-    let!(:relay_account) { create(:relay_account, email: 'test@email.com', person: user) }
+    let!(:key_account) { create(:key_account, email: 'test@email.com', person: user) }
 
     it 'returns the user with a relay account associated to a provided email' do
       expect(User.find_by_email('test@email.com')).to eq(user)

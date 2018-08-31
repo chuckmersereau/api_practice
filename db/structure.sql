@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.4
--- Dumped by pg_dump version 10.4
+-- Dumped from database version 10.3
+-- Dumped by pg_dump version 10.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1309,16 +1309,20 @@ CREATE TABLE public.person_google_accounts (
 CREATE TABLE public.person_key_accounts (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     person_id uuid,
-    remote_id character varying,
+    relay_remote_id character varying,
     first_name character varying,
     last_name character varying,
     email character varying,
+    designation character varying,
+    employee_id character varying,
+    username character varying,
     authenticated boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
-    last_download timestamp without time zone
+    last_download timestamp without time zone,
+    remote_id character varying NOT NULL
 );
 
 
@@ -3762,27 +3766,6 @@ CREATE INDEX index_person_google_accounts_on_remote_id ON public.person_google_a
 
 
 --
--- Name: index_person_key_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_person_key_accounts_on_created_at ON public.person_key_accounts USING btree (created_at);
-
-
---
--- Name: index_person_key_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_person_key_accounts_on_person_id ON public.person_key_accounts USING btree (person_id);
-
-
---
--- Name: index_person_key_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_person_key_accounts_on_remote_id ON public.person_key_accounts USING btree (remote_id);
-
-
---
 -- Name: index_person_linkedin_accounts_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4116,6 +4099,41 @@ CREATE UNIQUE INDEX organization_remote_id ON public.master_person_sources USING
 --
 
 CREATE UNIQUE INDEX person_account ON public.master_person_donor_accounts USING btree (master_person_id, donor_account_id);
+
+
+--
+-- Name: person_key_accounts_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX person_key_accounts_created_at_idx ON public.person_key_accounts USING btree (created_at);
+
+
+--
+-- Name: person_key_accounts_lower_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX person_key_accounts_lower_idx ON public.person_key_accounts USING btree (lower((remote_id)::text));
+
+
+--
+-- Name: person_key_accounts_lower_idx1; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX person_key_accounts_lower_idx1 ON public.person_key_accounts USING btree (lower((relay_remote_id)::text));
+
+
+--
+-- Name: person_key_accounts_person_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX person_key_accounts_person_id_idx ON public.person_key_accounts USING btree (person_id);
+
+
+--
+-- Name: person_key_accounts_relay_remote_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX person_key_accounts_relay_remote_id_idx ON public.person_key_accounts USING btree (relay_remote_id);
 
 
 --
@@ -5133,4 +5151,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180710220521');
 INSERT INTO schema_migrations (version) VALUES ('20180726135630');
 
 INSERT INTO schema_migrations (version) VALUES ('20180726140120');
+
+INSERT INTO schema_migrations (version) VALUES ('20180809035815');
 

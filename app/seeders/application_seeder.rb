@@ -169,7 +169,6 @@ class ApplicationSeeder
     create :facebook_account, person: person
     create :key_account, person: person
     create :linkedin_account, person: person
-    create :relay_account, person: person
     create :twitter_account, person: person
     create :website, person: person
 

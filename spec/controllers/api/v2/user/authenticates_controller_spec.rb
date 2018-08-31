@@ -33,7 +33,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
           ).read
         )
 
-        user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
+        user.key_accounts << create(:key_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
 
         allow(UserFromCasService)
           .to receive(:find_or_create)
@@ -73,7 +73,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
 
     context 'invalid ticket' do
       before do
-        user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
+        user.key_accounts << create(:key_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
         stub_request(
           :get,
           "#{ENV['CAS_BASE_URL']}/p3/serviceValidate?"\

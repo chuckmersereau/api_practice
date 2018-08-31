@@ -16,7 +16,7 @@ FactoryBot.define do
     after :create do |u|
       create(:organization_account, person: u)
       account_list = u.reload.account_lists.order(:created_at).first
-      create(:relay_account, person: u)
+      create(:key_account, person: u)
       create(:designation_profile, user: u, account_list: account_list)
     end
   end
@@ -29,7 +29,7 @@ FactoryBot.define do
     after :create do |u|
       create(:organization_account, person: u)
       account_list = u.reload.account_lists.order(:created_at).first
-      create(:relay_account, person: u)
+      create(:key_account, person: u)
       create(:designation_profile, user: u, account_list: account_list)
     end
   end
