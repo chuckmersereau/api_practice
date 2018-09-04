@@ -38,7 +38,7 @@ Sidekiq.default_worker_options = {
   unique_expiration: 24.hours
 }
 
-unless Rails.env.development?
+unless Rails.env.development? || Rails.env.test?
   Sidekiq::Pro.dogstatsd = -> { Datadog::Statsd.new(ENV['DATADOG_HOST'], ENV['DATADOG_PORT']) }
 end
 
