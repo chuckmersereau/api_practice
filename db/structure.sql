@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.3
--- Dumped by pg_dump version 10.3
+-- Dumped from database version 10.5
+-- Dumped by pg_dump version 10.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -441,6 +441,37 @@ CREATE TABLE public.contact_people (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: contact_prayer_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.contact_prayer_requests (
+    id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: contact_prayer_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.contact_prayer_requests_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: contact_prayer_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.contact_prayer_requests_id_seq OWNED BY public.contact_prayer_requests.id;
 
 
 --
@@ -1252,7 +1283,8 @@ CREATE TABLE public.people (
     deprecated_not_duplicated_with character varying(2000),
     global_registry_id uuid,
     global_registry_mdm_id uuid,
-    default_account_list uuid
+    default_account_list uuid,
+    age integer
 );
 
 
@@ -1640,6 +1672,13 @@ CREATE TABLE public.wv_donation_amt_recommendation (
 
 
 --
+-- Name: contact_prayer_requests id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.contact_prayer_requests ALTER COLUMN id SET DEFAULT nextval('public.contact_prayer_requests_id_seq'::regclass);
+
+
+--
 -- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1828,6 +1867,14 @@ ALTER TABLE ONLY public.contact_notes_logs
 
 ALTER TABLE ONLY public.contact_people
     ADD CONSTRAINT contact_people_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contact_prayer_requests contact_prayer_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.contact_prayer_requests
+    ADD CONSTRAINT contact_prayer_requests_pkey PRIMARY KEY (id);
 
 
 --
@@ -4112,14 +4159,14 @@ CREATE INDEX person_key_accounts_created_at_idx ON public.person_key_accounts US
 -- Name: person_key_accounts_lower_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX person_key_accounts_lower_idx ON public.person_key_accounts USING btree (lower((remote_id)::text));
+CREATE UNIQUE INDEX person_key_accounts_lower_idx ON public.person_key_accounts USING btree (lower((relay_remote_id)::text));
 
 
 --
 -- Name: person_key_accounts_lower_idx1; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX person_key_accounts_lower_idx1 ON public.person_key_accounts USING btree (lower((relay_remote_id)::text));
+CREATE UNIQUE INDEX person_key_accounts_lower_idx1 ON public.person_key_accounts USING btree (lower((remote_id)::text));
 
 
 --
@@ -5153,4 +5200,8 @@ INSERT INTO schema_migrations (version) VALUES ('20180726135630');
 INSERT INTO schema_migrations (version) VALUES ('20180726140120');
 
 INSERT INTO schema_migrations (version) VALUES ('20180809035815');
+
+INSERT INTO schema_migrations (version) VALUES ('20180910155906');
+
+INSERT INTO schema_migrations (version) VALUES ('20180913185651');
 

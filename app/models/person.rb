@@ -164,6 +164,7 @@ class Person < ApplicationRecord
 
   PERMITTED_ATTRIBUTES = [
     :id,
+    :age,
     :anniversary_day,
     :anniversary_month,
     :anniversary_year,
@@ -289,7 +290,8 @@ class Person < ApplicationRecord
   alias_attribute :deceased_flag, :deceased
 
   global_registry_bindings mdm_id_column: :global_registry_mdm_id,
-                           fields: { birth_year: :integer,
+                           fields: { age: :integer,
+                                     birth_year: :integer,
                                      birth_month: :integer,
                                      birth_day: :integer,
                                      marriage_year: :integer,
