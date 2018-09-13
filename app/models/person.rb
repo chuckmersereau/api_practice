@@ -316,6 +316,10 @@ class Person < ApplicationRecord
     [last_name, first_name].join(', ')
   end
 
+  def age
+    @age = Time.current.year - birthday_year
+  end
+
   def add_spouse(spouse)
     relationship = case spouse.gender
                    when 'male'
