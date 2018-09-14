@@ -20,7 +20,8 @@ class PersonSerializer < ApplicationSerializer
              :optout_enewsletter,
              :parent_contacts,
              :suffix,
-             :title
+             :title,
+             :age
 
   has_many :email_addresses
   has_many :facebook_accounts

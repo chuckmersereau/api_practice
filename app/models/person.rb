@@ -163,7 +163,7 @@ class Person < ApplicationRecord
                                 allow_destroy: true
 
   PERMITTED_ATTRIBUTES = [
-    :id,
+    #:id,
     :age,
     :anniversary_day,
     :anniversary_month,
@@ -290,8 +290,7 @@ class Person < ApplicationRecord
   alias_attribute :deceased_flag, :deceased
 
   global_registry_bindings mdm_id_column: :global_registry_mdm_id,
-                           fields: { age: :integer,
-                                     birth_year: :integer,
+                           fields: { birth_year: :integer,
                                      birth_month: :integer,
                                      birth_day: :integer,
                                      marriage_year: :integer,
@@ -316,9 +315,6 @@ class Person < ApplicationRecord
     [last_name, first_name].join(', ')
   end
 
-  def age
-    @age = Time.current.year - birthday_year
-  end
 
   def add_spouse(spouse)
     relationship = case spouse.gender
@@ -585,6 +581,13 @@ class Person < ApplicationRecord
 
   def to_person
     self
+  end
+
+  def age
+      @birthday_year = birthday_year
+      if @birthday_year != nil
+        age = Time.current.year - @birthday_year
+      end
   end
 
   def birthday_year
