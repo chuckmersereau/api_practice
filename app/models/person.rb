@@ -290,8 +290,7 @@ class Person < ApplicationRecord
   alias_attribute :deceased_flag, :deceased
 
   global_registry_bindings mdm_id_column: :global_registry_mdm_id,
-                           fields: { age: :integer,
-                                     birth_year: :integer,
+                           fields: { birth_year: :integer,
                                      birth_month: :integer,
                                      birth_day: :integer,
                                      marriage_year: :integer,
@@ -584,12 +583,16 @@ class Person < ApplicationRecord
     self
   end
 
+  def age=(value)
+      @age = value
+  end
+
   def age
-      @birthday_year = birthday_year
-      if @birthday_year != nil
-        #@age = 
-        return Time.current.year - @birthday_year
-      end
+    @birthday_year = birthday_year
+    if @birthday_year != nil && @age == nil
+      @age = Time.current.year - @birthday_year
+    end
+      return @age
   end
 
   def birthday_year
