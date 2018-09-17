@@ -163,7 +163,7 @@ class Person < ApplicationRecord
                                 allow_destroy: true
 
   PERMITTED_ATTRIBUTES = [
-    #:id,
+    :id,
     :age,
     :anniversary_day,
     :anniversary_month,
@@ -290,7 +290,8 @@ class Person < ApplicationRecord
   alias_attribute :deceased_flag, :deceased
 
   global_registry_bindings mdm_id_column: :global_registry_mdm_id,
-                           fields: { birth_year: :integer,
+                           fields: { age: :integer,
+                                     birth_year: :integer,
                                      birth_month: :integer,
                                      birth_day: :integer,
                                      marriage_year: :integer,
@@ -524,7 +525,7 @@ class Person < ApplicationRecord
       end
 
       # Copy fields over updating any field that's blank on the winner
-      [:first_name, :last_name, :legal_first_name, :birthday_month, :birthday_year, :birthday_day, :anniversary_month,
+      [:first_name, :last_name, :age, :legal_first_name, :birthday_month, :birthday_year, :birthday_day, :anniversary_month,
        :anniversary_year, :anniversary_day, :title, :suffix, :gender, :marital_status,
        :middle_name, :access_token].each do |field|
         next unless send(field).blank? && other.send(field).present?
@@ -586,7 +587,8 @@ class Person < ApplicationRecord
   def age
       @birthday_year = birthday_year
       if @birthday_year != nil
-        age = Time.current.year - @birthday_year
+        #@age = 
+        return Time.current.year - @birthday_year
       end
   end
 
