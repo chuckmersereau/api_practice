@@ -1,6 +1,6 @@
 class Api::V2::Reports::WeekliesController < Api::V2Controller
   def index
-    render json: "Hello World"
+    render json: "@message"
   end
 
   def show
