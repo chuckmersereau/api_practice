@@ -1,5 +1,5 @@
 class Api::V2::Reports::WeekliesController < Api::V2Controller
-  def show
+  def index
     render json: @message
   end
 end
