@@ -1576,6 +1576,39 @@ CREATE TABLE public.prayer_letters_accounts (
 
 
 --
+-- Name: questions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.questions (
+    id integer NOT NULL,
+    question_id integer,
+    question text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: questions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.questions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: questions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.questions_id_seq OWNED BY public.questions.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1707,6 +1740,13 @@ CREATE TABLE public.wv_donation_amt_recommendation (
 --
 
 ALTER TABLE ONLY public.contact_prayer_requests ALTER COLUMN id SET DEFAULT nextval('public.contact_prayer_requests_id_seq'::regclass);
+
+
+--
+-- Name: questions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.questions ALTER COLUMN id SET DEFAULT nextval('public.questions_id_seq'::regclass);
 
 
 --
@@ -2361,6 +2401,14 @@ ALTER TABLE ONLY public.pls_accounts
 
 ALTER TABLE ONLY public.prayer_letters_accounts
     ADD CONSTRAINT prayer_letters_accounts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: questions questions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.questions
+    ADD CONSTRAINT questions_pkey PRIMARY KEY (id);
 
 
 --
@@ -5252,4 +5300,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180910155906');
 INSERT INTO schema_migrations (version) VALUES ('20180913185651');
 
 INSERT INTO schema_migrations (version) VALUES ('20180918143440');
+
+INSERT INTO schema_migrations (version) VALUES ('20180918174402');
 
