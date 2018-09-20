@@ -1688,7 +1688,9 @@ ALTER SEQUENCE public.versions_id_seq OWNED BY public.versions.id;
 CREATE TABLE public.weeklies (
     id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    answer text,
+    question_id integer
 );
 
 
@@ -5302,4 +5304,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180913185651');
 INSERT INTO schema_migrations (version) VALUES ('20180918143440');
 
 INSERT INTO schema_migrations (version) VALUES ('20180918174402');
+
+INSERT INTO schema_migrations (version) VALUES ('20180918195809');
 

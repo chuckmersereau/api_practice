@@ -191,7 +191,11 @@ Rails.application.routes.draw do
           resource :monthly_giving_graph, only: :show
           resource :salary_currency_donations, only: :show
           resource :year_donations, only: :show
-          resources :weeklies, only: :index
+          resources :questions, only: :index do
+            resources :weeklies, only: :index
+          end
+          #   resources :account_lists, only: :show
+          # end
           #get :weeklies, to: 'weeklies#index'
 
           resources :monthly_losses_graphs, only: :show
