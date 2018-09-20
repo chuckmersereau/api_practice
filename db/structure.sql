@@ -1690,7 +1690,8 @@ CREATE TABLE public.weeklies (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     answer text,
-    question_id integer
+    question_id integer,
+    session_id integer
 );
 
 
@@ -5306,4 +5307,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180918143440');
 INSERT INTO schema_migrations (version) VALUES ('20180918174402');
 
 INSERT INTO schema_migrations (version) VALUES ('20180918195809');
+
+INSERT INTO schema_migrations (version) VALUES ('20180920145842');
 

@@ -9,7 +9,8 @@ class Question < ApplicationRecord
                                weeklies_attributes: [
                                    :id,
                                    :answer,
-                                   :question_id
+                                   :question_id,
+                                   :session_id
                                ]
                            }
 
