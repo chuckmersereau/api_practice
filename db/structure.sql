@@ -1686,33 +1686,13 @@ ALTER SEQUENCE public.versions_id_seq OWNED BY public.versions.id;
 --
 
 CREATE TABLE public.weeklies (
-    id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    answer text,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     question_id integer,
-    session_id integer
+    answer text,
+    session_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: weeklies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.weeklies_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: weeklies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.weeklies_id_seq OWNED BY public.weeklies.id;
 
 
 --
@@ -1757,13 +1737,6 @@ ALTER TABLE ONLY public.questions ALTER COLUMN id SET DEFAULT nextval('public.qu
 --
 
 ALTER TABLE ONLY public.versions ALTER COLUMN id SET DEFAULT nextval('public.versions_id_seq'::regclass);
-
-
---
--- Name: weeklies id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.weeklies ALTER COLUMN id SET DEFAULT nextval('public.weeklies_id_seq'::regclass);
 
 
 --

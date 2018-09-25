@@ -10,5 +10,10 @@ class Weekly < ApplicationRecord
     @message = "Hello world"
   end
 
+  @@session_num = 0
+  def self.session_num
+    @@session_num
+  end
+
 
 end

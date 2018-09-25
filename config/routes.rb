@@ -194,10 +194,6 @@ Rails.application.routes.draw do
           resources :questions, only: :index
           resources :weeklies, only: [:index, :show]
 
-          #   resources :account_lists, only: :show
-          # end
-          #get :weeklies, to: 'weeklies#index'
-
           resources :monthly_losses_graphs, only: :show
           resources :pledge_histories, only: :index
           resources :appointment_results, only: :index
