@@ -193,6 +193,7 @@ Rails.application.routes.draw do
           resource :year_donations, only: :show
           resources :questions, only: :index
           resources :weeklies, only: [:index, :show]
+          resources :bulk, only: :create, controller: :bulk
 
           resources :monthly_losses_graphs, only: :show
           resources :pledge_histories, only: :index

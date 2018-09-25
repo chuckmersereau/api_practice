@@ -1,7 +1,7 @@
 class WeeklyPolicy < ApplicationPolicy
 
   def show?
-    true
+    1 == 1
   end
 
 
