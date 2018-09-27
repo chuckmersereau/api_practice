@@ -192,8 +192,8 @@ Rails.application.routes.draw do
           resource :salary_currency_donations, only: :show
           resource :year_donations, only: :show
           resources :questions, only: :index
-          resource :weeklies, only: [:index, :show, :create]
-          resources :bulk, only: :create, controller: :bulk
+          resources :weeklies, only: [:index, :show, :create]
+          resource :bulk, only: :create, controller: :bulk
 
           resources :monthly_losses_graphs, only: :show
           resources :pledge_histories, only: :index

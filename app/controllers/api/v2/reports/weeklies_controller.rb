@@ -11,7 +11,7 @@ class Api::V2::Reports::WeekliesController < Api::V2Controller
   end
 
   def create
-    @report = Weekly.new(params.require(:weekly).permit(weekly_attributes))
+    @report = Weekly.new(weekly_params)
     @report.save
     authorize(@report)
     render jason: @report

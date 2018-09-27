@@ -3,11 +3,9 @@ class Api::V2::Reports::BulkController < Api::V2::BulkController
   def create
     @reports = params.require(:data).map { |data| Weekly.new(id: data['data']['id']) }
     build_weeklies
-    bulk_authorize(@reports, :bulk_create?)
+    # bulk_authorize(@reports, :bulk_create?)
     @reports.each { |weekly| weekly.save(context: persistence_context) }
     render_weeklies(@reports)
-    #render json: "hello"
-
   end
 
   private
