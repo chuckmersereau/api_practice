@@ -1,13 +1,16 @@
-class Api::V2::reports::BulkController < Api::V2::BulkController
-
+class Api::V2::Reports::BulkController < Api::V2::BulkController
+  resource_type :weeklies
   def create
-    @reports = params.require(:data).map { |data| Weekly.new(id: data['weekly']['id']) }
+    @reports = params.require(:data).map { |data| Weekly.new(id: data['data']['id']) }
     build_weeklies
     bulk_authorize(@reports, :bulk_create?)
     @reports.each { |weekly| weekly.save(context: persistence_context) }
     render_weeklies(@reports)
+    #render json: "hello"
 
   end
+
+  private
 
   def render_weeklies(weeklies)
     render json: BulkResourceSerializer.new(resources: weeklies),
@@ -24,6 +27,10 @@ class Api::V2::reports::BulkController < Api::V2::BulkController
           weekly_params(attributes)
       )
       end
+  end
+
+  def new_session
+    Weekly.maximum(:session_id) + 1
   end
 
   def data_attribute_index(weekly)

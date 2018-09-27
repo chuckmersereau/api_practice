@@ -1,7 +1,11 @@
 class WeeklyPolicy < ApplicationPolicy
 
   def show?
-    1 == 1
+    true
+  end
+
+  def create?
+    true
   end
 
 

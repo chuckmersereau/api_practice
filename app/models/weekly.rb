@@ -6,14 +6,10 @@ class Weekly < ApplicationRecord
                            :session_id
   ].freeze
 
-  def message
-    @message = "Hello world"
-  end
-
-  @@session_num = 0
-  def self.session_num
-    @@session_num
-  end
-
+  # def session_id=(x)
+  #   @session_id = x
+  #   @session_id = Weekly.maximum(:session_id) + 1
+  #   self.session_id = @session_id
+  # end
 
 end
