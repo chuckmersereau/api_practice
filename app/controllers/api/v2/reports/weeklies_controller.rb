@@ -1,6 +1,6 @@
 class Api::V2::Reports::WeekliesController < Api::V2Controller
   def index
-    @sessions = Weekly.select('distinct on (session_id) *')
+    @sessions = Weekly.select('distinct on (sid) *')
     render json: @sessions
   end
 
@@ -28,7 +28,7 @@ class Api::V2::Reports::WeekliesController < Api::V2Controller
   end
 
   def load_report
-    @report = Weekly.where(:session_id => params[:session_id])
+    @report = Weekly.where(:sid => params[:session_id])
     #@report = @report.sort_by{|x| x.question_id}
   end
 

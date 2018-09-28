@@ -3,7 +3,7 @@ class CreateWeeklies < ActiveRecord::Migration
     create_table :weeklies, id: :uuid do |t|
       t.integer :question_id
       t.text :answer
-      t.integer :session_id
+      t.integer :sid
 
       t.timestamps null: false
     end

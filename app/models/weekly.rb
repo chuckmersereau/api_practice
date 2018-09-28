@@ -1,15 +1,14 @@
 class Weekly < ApplicationRecord
 
-  PERMITTED_ATTRIBUTES = [ :id,
-                           :answer,
+  PERMITTED_ATTRIBUTES = [ :answer,
                            :question_id,
-                           :session_id
+                           :sid
   ].freeze
 
-  # def session_id=(x)
-  #   @session_id = x
-  #   @session_id = Weekly.maximum(:session_id) + 1
-  #   self.session_id = @session_id
-  # end
+
+  def serializer_class
+    WeeklySerializer
+  end
+
 
 end

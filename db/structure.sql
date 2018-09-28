@@ -1689,7 +1689,7 @@ CREATE TABLE public.weeklies (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     question_id integer,
     answer text,
-    session_id integer,
+    sid integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
