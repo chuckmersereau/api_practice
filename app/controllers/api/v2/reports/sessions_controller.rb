@@ -1,6 +1,7 @@
 class Api::V2::Reports::SessionsController < Api::V2Controller
   def show
-    @sessions = Session.where(:user => params[:user])
+    @sessions = Session.where(:user => params[:id])
+    authorize(@sessions)
     render json: @sessions
   end
 
