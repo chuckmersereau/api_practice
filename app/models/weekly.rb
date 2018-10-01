@@ -6,6 +6,14 @@ class Weekly < ApplicationRecord
   ].freeze
 
 
+  before_save :set_nil
+
+  def set_nil
+    if self.sid == nil
+      self.sid = 1
+    end
+  end
+
   def serializer_class
     WeeklySerializer
   end

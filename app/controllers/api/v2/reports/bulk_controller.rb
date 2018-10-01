@@ -2,6 +2,7 @@ class Api::V2::Reports::BulkController < Api::V2::BulkController
   resource_type :weeklies
 
   def create
+    # binding.pry
     @reports = params.require(:data).map { |data| Weekly.new(id: data['weekly']['id']) }
     build_weeklies
     bulk_authorize(@reports)

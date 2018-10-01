@@ -1618,6 +1618,19 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sessions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    "user" uuid,
+    sid integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: taggings; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2385,6 +2398,14 @@ ALTER TABLE ONLY public.prayer_letters_accounts
 
 ALTER TABLE ONLY public.questions
     ADD CONSTRAINT questions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
 
 
 --
@@ -5282,4 +5303,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180918174402');
 INSERT INTO schema_migrations (version) VALUES ('20180918195809');
 
 INSERT INTO schema_migrations (version) VALUES ('20180920145842');
+
+INSERT INTO schema_migrations (version) VALUES ('20181001171217');
 
