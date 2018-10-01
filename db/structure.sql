@@ -1581,7 +1581,6 @@ CREATE TABLE public.prayer_letters_accounts (
 
 CREATE TABLE public.questions (
     id integer NOT NULL,
-    question_id integer,
     question text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
